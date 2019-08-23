@@ -9,7 +9,8 @@
 	</parent>
 	<artifactId>compiler</artifactId>
 	
-	<description>Contains code related to compiler component</description>
+	<name>Javamm compiler</name>
+	<description>Default compiler for javamm programming language</description>
 	
 	<dependencies>
 		<dependency>

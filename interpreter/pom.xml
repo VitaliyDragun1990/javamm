@@ -7,7 +7,8 @@
   </parent>
   <artifactId>interpreter</artifactId>
   
-  <description>Contains code related to interpretator component</description>
+  <name>Javamm interpreter</name>
+  <description>Default interpreter fro javamm programming language</description>
   
   	<dependencies>
 		<dependency>

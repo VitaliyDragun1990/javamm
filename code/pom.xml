@@ -9,5 +9,6 @@
   
   <artifactId>code</artifactId>
   
-  <description>Contains core classes common to other modules</description>
+  <name>Javamm code</name>
+  <description>Code base module for javamm programming language</description>
 </project>

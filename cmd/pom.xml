@@ -9,8 +9,8 @@
 	</parent>
 	<artifactId>cmd</artifactId>
 
-	<description>Contains command line interface wrapper upon java-- virtual machine in order to be able to run
-  	java-- virtual machine from terminal</description>
+	<name>Javamm cmd</name>
+	<description>Console tool for javamm programming language</description>
   	
   		<dependencies>
 		<dependency>

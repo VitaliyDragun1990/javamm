@@ -8,7 +8,8 @@
   <artifactId>release</artifactId>
   <packaging>pom</packaging>
   
-  <description>Aggregational module wich declares rules for building project for end user</description>
+  <name>Release aggregator</name>
+  <description>Release aggregator for javamm project</description>
   
   	<dependencies>
 		<dependency>

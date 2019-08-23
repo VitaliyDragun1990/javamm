@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.revenat</groupId>
+		<artifactId>javamm</artifactId>
+		<version>1.0</version>
+	</parent>
+	<artifactId>cmd</artifactId>
+
+	<description>Contains command line interface wrapper upon java-- virtual machine in order to be able to run
+  	java-- virtual machine from terminal</description>
+  	
+  		<dependencies>
+		<dependency>
+			<groupId>com.revenat</groupId>
+			<artifactId>vm</artifactId>
+			<version>1.0</version>
+		</dependency>
+	</dependencies>
+</project>

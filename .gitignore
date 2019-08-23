@@ -1,0 +1,14 @@
+# Build results
+target
+
+# IntelliJ IDEA configurations
+.idea
+*.iml
+
+# Eclipse configurations
+.project
+.classpath
+.settings
+
+# Netbeans configurations
+nb*.xml

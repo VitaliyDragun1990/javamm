@@ -23,7 +23,7 @@ import com.revenat.javamm.code.fragment.SourceLine;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Represents wellknown 'println('text')' operation
+ * Represents well known 'println('text')' operation
  *
  * @author Vitaliy Dragun
  *

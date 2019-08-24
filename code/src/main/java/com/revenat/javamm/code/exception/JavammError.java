@@ -15,12 +15,21 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.code.exception;
+
+import static java.util.Objects.requireNonNull;
+
 /**
+ * Represents user error
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.exception;
-    exports com.revenat.javamm.code.fragment.operation;
+public class JavammError extends RuntimeException {
+    private static final long serialVersionUID = -1522137327290886414L;
+
+    public JavammError(final String message) {
+        super(requireNonNull(message), null, false, false);
+    }
+
 }

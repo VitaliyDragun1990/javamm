@@ -47,7 +47,7 @@ public class SourceLine implements CompiledCodeFragment, Comparable<SourceLine> 
         super();
         this.moduleName = moduleName;
         this.lineNumber = lineNumber;
-        this.tokens = tokens;
+        this.tokens = List.copyOf(tokens);
     }
 
     public String getCommand() {
@@ -85,7 +85,6 @@ public class SourceLine implements CompiledCodeFragment, Comparable<SourceLine> 
     public int indexOf(final String token) {
         return tokens.indexOf(token);
     }
-
 
     @Override
     public int hashCode() {

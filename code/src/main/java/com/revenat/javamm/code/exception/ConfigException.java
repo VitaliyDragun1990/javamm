@@ -15,12 +15,25 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.code.exception;
+
+import static java.util.Objects.requireNonNull;
+
 /**
+ * Represents Javamm virtual machine implementation-related system error.
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.exception;
-    exports com.revenat.javamm.code.fragment.operation;
+public class ConfigException extends RuntimeException {
+    private static final long serialVersionUID = 935842025597999348L;
+
+    public ConfigException(final String message) {
+        super(requireNonNull(message));
+    }
+
+    public ConfigException(final String message, final Throwable cause) {
+        super(requireNonNull(message), requireNonNull(cause));
+    }
+
 }

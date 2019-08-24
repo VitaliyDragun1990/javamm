@@ -15,11 +15,28 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.code.fragment.operation;
+
+import com.revenat.javamm.code.fragment.Operation;
+import com.revenat.javamm.code.fragment.SourceLine;
+
+import static java.util.Objects.requireNonNull;
+
 /**
+ * Represents wellknown 'println('text')' operation
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
+public class PrintlnOperation extends AbstractOperation implements Operation {
+    private final String text;
+
+    public PrintlnOperation(final SourceLine sourceLine, final String text) {
+        super(sourceLine);
+        this.text = requireNonNull(text);
+    }
+
+    public String getText() {
+        return text;
+    }
 }

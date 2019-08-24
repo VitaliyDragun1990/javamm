@@ -15,11 +15,17 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.code.fragment;
+
+import com.revenat.javamm.code.fragment.operation.Block;
+
 /**
+ * Represetns compiled suite of operations that can be executed by the interpreter.
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
+public interface ByteCode {
+
+    Block getCode();
 }

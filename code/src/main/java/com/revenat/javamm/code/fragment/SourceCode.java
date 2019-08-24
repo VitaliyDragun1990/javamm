@@ -15,11 +15,24 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.code.fragment;
+
+import java.util.List;
+
 /**
+ * Represents raw source code.
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
+public interface SourceCode {
+
+    /**
+     * Returns name of the module(file) which content this type represents.
+     */
+    String getModuleName();
+
+    /**
+     * Returns list of strings read from the module(file)
+     */
+    List<String> getLines();
 }

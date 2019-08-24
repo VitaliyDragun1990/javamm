@@ -15,11 +15,18 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.code.fragment;
+
 /**
+ * Represents minimum suite of commands that can be executed by the interpreter.
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
+public interface Operation extends CompiledCodeFragment {
+
+    /**
+     * Returns {@link SourceLine} where this operation is declared
+     */
+    SourceLine getSourceLine();
 }

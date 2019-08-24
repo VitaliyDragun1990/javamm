@@ -15,11 +15,15 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.code.fragment;
+
 /**
+ * Marker interface responsible for marking classes, which represents
+ * a part of the byte-code.
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
+public interface CompiledCodeFragment {
+
 }

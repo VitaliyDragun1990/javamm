@@ -15,11 +15,32 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.code.fragment.operation;
+
+import com.revenat.javamm.code.fragment.Operation;
+import com.revenat.javamm.code.fragment.SourceLine;
+
+import static java.util.Objects.requireNonNull;
+
 /**
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
+public abstract class AbstractOperation implements Operation {
+    private final SourceLine sourceLine;
+
+    public AbstractOperation(final SourceLine sourceLine) {
+        this.sourceLine = requireNonNull(sourceLine);
+    }
+
+    @Override
+    public final SourceLine getSourceLine() {
+        return sourceLine;
+    }
+
+    @Override
+    public String toString() {
+        return sourceLine.toString();
+    }
+
 }

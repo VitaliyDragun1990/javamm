@@ -15,13 +15,21 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.compiler;
+
+import com.revenat.javamm.code.exception.JavammError;
+
 /**
+ * Represents compiler syntax error
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.compiler {
-    requires transitive javamm.code;
-    exports com.revenat.javamm.compiler;
-    exports com.revenat.javamm.compiler.model;
-    exports com.revenat.javamm.compiler.component;
+public class JavammSyntaxError extends JavammError {
+    private static final long serialVersionUID = 1134297706983921468L;
+
+    protected JavammSyntaxError(final String message) {
+        super(message);
+    }
+
 }

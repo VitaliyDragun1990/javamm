@@ -15,13 +15,20 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.compiler.component;
+
+import com.revenat.javamm.compiler.model.TokenParserResult;
+
 /**
+ * Parses source code line into meaningful tokens taking into account multiline
+ * comment occurrence.
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.compiler {
-    requires transitive javamm.code;
-    exports com.revenat.javamm.compiler;
-    exports com.revenat.javamm.compiler.model;
-    exports com.revenat.javamm.compiler.component;
+public interface TokenParser {
+
+    TokenParserResult parseLine(String sourceCodeLine);
+
+    TokenParserResult parseLineWithStartedMultilineComment(String sourceCodeLine);
 }

@@ -15,13 +15,25 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.compiler.component;
+
+import com.revenat.javamm.code.fragment.SourceCode;
+import com.revenat.javamm.code.fragment.SourceLine;
+
+import java.util.List;
+
 /**
  * @author Vitaliy Dragun
  *
  */
-module javamm.compiler {
-    requires transitive javamm.code;
-    exports com.revenat.javamm.compiler;
-    exports com.revenat.javamm.compiler.model;
-    exports com.revenat.javamm.compiler.component;
+public interface SourceLineReader {
+
+    /**
+     * Reads source code and translates it into list of source lines with meaningful
+     * tokens.
+     *
+     * @param sourceCode source code to read
+     * @return list of source lines with meaningful tokens.
+     */
+    List<SourceLine> read(SourceCode sourceCode);
 }

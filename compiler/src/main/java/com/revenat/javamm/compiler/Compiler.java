@@ -15,13 +15,26 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.compiler;
+
+import com.revenat.javamm.code.fragment.ByteCode;
+import com.revenat.javamm.code.fragment.SourceCode;
+
 /**
+ * Represents compiler component, responsible for compiling source code into
+ * byte code.
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.compiler {
-    requires transitive javamm.code;
-    exports com.revenat.javamm.compiler;
-    exports com.revenat.javamm.compiler.model;
-    exports com.revenat.javamm.compiler.component;
+public interface Compiler {
+
+    /**
+     * Compiles given {@link SourceCode} into {@link ByteCode}
+     *
+     * @param sourceCode source code to compile
+     * @return byte code compiled from given source code
+     * @throws JavammSyntaxError if given source code contains any syntax error
+     */
+    ByteCode compile(SourceCode... sourceCode) throws JavammSyntaxError;
 }

@@ -21,9 +21,7 @@ import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.compiler.component.SourceLineReader;
 import com.revenat.javamm.compiler.component.TokenParser;
-import com.revenat.javamm.compiler.model.TokenParserResult;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,45 +29,13 @@ import java.util.List;
  *
  */
 public class SourceLineReaderImpl implements SourceLineReader {
-    private final TokenParser tokenParser;
 
-    public SourceLineReaderImpl(final TokenParser tokenParser) {
-        this.tokenParser = tokenParser;
+    public SourceLineReaderImpl(final TokenParser parser) {
     }
 
     @Override
     public List<SourceLine> read(final SourceCode sourceCode) {
-        final List<String> lines = sourceCode.getLines();
-        final String moduleName = sourceCode.getModuleName();
-
-        return List.copyOf(readLines(moduleName, lines));
+        return null;
     }
 
-    private List<SourceLine> readLines(final String moduleName, final List<String> lines) {
-        final List<SourceLine> sourceLines = new ArrayList<>();
-
-        boolean withinComment = false;
-        for (int i = 0; i < lines.size(); i++) {
-            final int lineNumber = i + 1;
-            final String sourceCodeLine = lines.get(i);
-
-            final TokenParserResult parserResult = parseLine(sourceCodeLine, withinComment);
-
-            if (parserResult.isNotEmpty()) {
-                sourceLines.add(new SourceLine(moduleName, lineNumber, parserResult.getTokens()));
-            }
-
-            withinComment = parserResult.isMultilineCommentStarted();
-        }
-
-        return sourceLines;
-    }
-
-    private TokenParserResult parseLine(final String sourceCodeLine, final boolean withinComment) {
-        if (withinComment) {
-            return tokenParser.parseLineWithStartedMultilineComment(sourceCodeLine);
-        } else {
-            return tokenParser.parseLine(sourceCodeLine);
-        }
-    }
 }

@@ -15,14 +15,36 @@
  * limitations under the License.
  */
 
+package com.revenat.temp;
+
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
 /**
  * @author Vitaliy Dragun
  *
  */
-module javamm.compiler {
-    requires transitive javamm.code;
-    exports com.revenat.javamm.compiler;
-    exports com.revenat.javamm.compiler.model;
-    exports com.revenat.javamm.compiler.component;
+@DisplayNameGeneration(IndicativeSentences.class)
+class StackTest {
+
+
+    @Nested
+    class ANewStack {
+
+        @Test
+        void isInstantiatedWitnNewStack() {
+        }
+
+        @Test
+        void isEmpty() {
+
+        }
+
+        @Test
+        void this1000DigitShouldBeSeparated() {
+
+        }
+    }
 
 }

@@ -15,14 +15,23 @@
  * limitations under the License.
  */
 
+package com.revenat.temp;
+
+import java.lang.reflect.Method;
+
 /**
  * @author Vitaliy Dragun
  *
  */
-module javamm.compiler {
-    requires transitive javamm.code;
-    exports com.revenat.javamm.compiler;
-    exports com.revenat.javamm.compiler.model;
-    exports com.revenat.javamm.compiler.component;
+public class IndicativeSentences extends ReplaceCamelCase {
 
+    @Override
+    public String generateDisplayNameForNestedClass(final Class<?> nestedClass) {
+        return super.generateDisplayNameForNestedClass(nestedClass) + "...";
+    }
+
+    @Override
+    public String generateDisplayNameForMethod(final Class<?> testClass, final Method testMethod) {
+        return replaceCamelCase(testClass.getSimpleName() + " " + testMethod.getName()) + ".";
+    }
 }

@@ -11,13 +11,7 @@
 
 	<description>Contains code related to study process not to the java-- development.</description>
 
-	<properties>
-		<junit.version>5.5.1</junit.version>
-		<hamcrest.version>2.1</hamcrest.version>
-	</properties>
-
 	<dependencies>
-
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
@@ -43,6 +37,19 @@
 			<artifactId>mockito-junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
+	
+		<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>
+						@{argLine}
+						--add-opens temp/com.revenat.temp=ALL-UNNAMED
+					</argLine>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

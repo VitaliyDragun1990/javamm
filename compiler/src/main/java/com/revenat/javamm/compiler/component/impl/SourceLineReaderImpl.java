@@ -21,21 +21,48 @@ import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.compiler.component.SourceLineReader;
 import com.revenat.javamm.compiler.component.TokenParser;
+import com.revenat.javamm.compiler.model.TokenParserResult;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-/**
- * @author Vitaliy Dragun
- *
- */
 public class SourceLineReaderImpl implements SourceLineReader {
+    private final TokenParser tokenParser;
 
-    public SourceLineReaderImpl(final TokenParser parser) {
+    public SourceLineReaderImpl(final TokenParser tokenParser) {
+        this.tokenParser = Objects.requireNonNull(tokenParser);
     }
 
     @Override
     public List<SourceLine> read(final SourceCode sourceCode) {
-        return null;
+        return List.copyOf(readLines(sourceCode.getLines(), sourceCode.getModuleName()));
+    }
+
+    private List<SourceLine> readLines(final List<String> sourceCodeLines, final String moduleName) {
+        final List<SourceLine> result = new ArrayList<>();
+
+        boolean isMultilineCommentStarted = false;
+
+        for (int i = 0; i < sourceCodeLines.size(); i++) {
+            final TokenParserResult parserResult = parseLine(sourceCodeLines.get(i), isMultilineCommentStarted);
+
+            if (parserResult.isNotEmpty()) {
+                result.add(new SourceLine(moduleName, i + 1, parserResult.getTokens()));
+            }
+
+            isMultilineCommentStarted = parserResult.isMultilineCommentStarted();
+        }
+
+        return result;
+    }
+
+    private TokenParserResult parseLine(final String codeLine, final boolean isMultilineCommentStarted) {
+        if (!isMultilineCommentStarted) {
+            return tokenParser.parseLine(codeLine);
+        } else {
+            return tokenParser.parseLineWithStartedMultilineComment(codeLine);
+        }
     }
 
 }

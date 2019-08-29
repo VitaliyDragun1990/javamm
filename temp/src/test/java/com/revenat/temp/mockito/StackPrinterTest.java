@@ -55,6 +55,8 @@ class StackPrinterTest {
     @Mock
     private PrintStream out;
 
+    private void test() {}
+
     @BeforeEach
     void beforeEach() {
         System.setOut(out);
@@ -78,6 +80,7 @@ class StackPrinterTest {
         verify(out).println(2);
         verify(out).println(3);
         verify(out, times(3)).println(anyInt());
+        test();
     }
 
     @AfterEach

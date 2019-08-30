@@ -23,6 +23,9 @@ import com.revenat.javamm.code.fragment.SourceLine;
 import java.util.List;
 
 /**
+ * Responsible for reading {@link SourceCode} and parsing it into list of
+ * {@link SourceLine}
+ *
  * @author Vitaliy Dragun
  *
  */

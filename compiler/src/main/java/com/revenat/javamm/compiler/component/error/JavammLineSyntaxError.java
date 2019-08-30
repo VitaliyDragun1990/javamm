@@ -15,17 +15,24 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.code.fragment;
+package com.revenat.javamm.compiler.component.error;
 
-import com.revenat.javamm.code.fragment.operation.Block;
+import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.compiler.JavammSyntaxError;
+
+import static java.util.Objects.requireNonNull;
 
 /**
- * Represents compiled suite of operations that can be executed by the interpreter.
+ * Signals that particular source line contains syntax error
  *
  * @author Vitaliy Dragun
  *
  */
-public interface ByteCode {
+public final class JavammLineSyntaxError extends JavammSyntaxError {
+    private static final long serialVersionUID = -529150170431648757L;
 
-    Block getCode();
+    public JavammLineSyntaxError(final String message, final SourceLine sourceLine) {
+        super(String.format("Syntax error in '%s' [Line: %s]: %s",
+                sourceLine.getModuleName(), sourceLine.getLineNumber(), requireNonNull(message)));
+    }
 }

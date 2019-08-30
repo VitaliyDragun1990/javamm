@@ -32,23 +32,36 @@ import java.util.stream.Collectors;
 public final class Block extends AbstractOperation implements Operation {
     private final List<Operation> operations;
 
+    /**
+     * Creates new byte code block which contains specified operations
+     *
+     * @param operations operations this block contains
+     * @param sourceLine source line where this block starts
+     */
     public Block(final List<Operation> operations, final SourceLine sourceLine) {
         super(sourceLine);
         this.operations = List.copyOf(operations);
     }
 
+    /**
+     * Creates new byte code block which contains specified operation
+     *
+     * @param operation operation this block contains
+     * @param sourceLine source line where this block starts
+     */
     public Block(final Operation operation, final SourceLine sourceLine) {
         this(List.of(operation), sourceLine);
     }
 
+    /**
+     * Returns operations this block contains
+     */
     public List<Operation> getOperations() {
         return operations;
     }
 
     @Override
     public String toString() {
-        return operations.stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(System.lineSeparator()));
+        return operations.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator()));
     }
 }

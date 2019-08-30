@@ -18,7 +18,8 @@
 package com.revenat.javamm.code.fragment;
 
 /**
- * Represents minimum suite of commands that can be executed by the interpreter.
+ * Represents byte code operation - minimum suite of commands that can be
+ * executed by the interpreter.
  *
  * @author Vitaliy Dragun
  *

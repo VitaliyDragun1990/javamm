@@ -62,6 +62,8 @@ public final class Block extends AbstractOperation implements Operation {
 
     @Override
     public String toString() {
-        return operations.stream().map(Object::toString).collect(Collectors.joining(System.lineSeparator()));
+        return operations.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(System.lineSeparator()));
     }
 }

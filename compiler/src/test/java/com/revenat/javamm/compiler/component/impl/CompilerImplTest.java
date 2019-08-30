@@ -67,10 +67,18 @@ class CompilerImplTest {
         final ByteCode byteCode = compiler.compile(sourceCodeStub);
 
         assertNotNull(byteCode, "compiled byte code can not be null");
-        assertThat("source line reader should have been called once",
-                sourceLineReaderSpy.getCallTimesFor(sourceCodeStub), equalTo(1));
+        assertCallToSourceLineReader();
+        assertCallToBlockOperationReader();
+    }
+
+    private void assertCallToBlockOperationReader() {
         assertThat("block operation reader should have been called once",
                 blockOperationReaderSpy.getCallTimesFor(COMPILED_SOURCE_LINES.listIterator()), equalTo(1));
+    }
+
+    private void assertCallToSourceLineReader() {
+        assertThat("source line reader should have been called once",
+                sourceLineReaderSpy.getCallTimesFor(sourceCodeStub), equalTo(1));
     }
 
     private class SourceCodeStub implements SourceCode {

@@ -34,7 +34,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 class CompilerConfiguratorTest {
     private CompilerConfigurator compilerConfigurator;
 
-
     @BeforeEach
     void setUp() {
         compilerConfigurator = new CompilerConfigurator();

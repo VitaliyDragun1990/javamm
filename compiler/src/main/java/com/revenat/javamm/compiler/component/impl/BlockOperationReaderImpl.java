@@ -51,17 +51,18 @@ public class BlockOperationReaderImpl implements BlockOperationReader {
 
         while (iterator.hasNext()) {
             final SourceLine sourceLine = iterator.next();
-            final Optional<OperationReader> operationReader = findOperationReaderFor(sourceLine);
 
-            if (operationReader.isPresent()) {
-                operations.add(operationReader.get().read(sourceLine, iterator));
-            } else {
-                // TODO: Replace with expression resolver
-                throw new JavammLineSyntaxError("Unsupported operation: " + sourceLine.getCommand(), sourceLine);
-            }
+            findOperationReaderFor(sourceLine).ifPresentOrElse(
+                operationReader -> operationReader.read(sourceLine, iterator),
+                () -> throwSyntaxError(sourceLine)
+            );
         }
 
         return operations;
+    }
+
+    private void throwSyntaxError(final SourceLine sourceLine) {
+        throw new JavammLineSyntaxError("Unsupported operation: " + sourceLine.getCommand(), sourceLine);
     }
 
     private Optional<OperationReader> findOperationReaderFor(final SourceLine sourceLine) {

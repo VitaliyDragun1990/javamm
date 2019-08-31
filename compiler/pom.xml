@@ -56,7 +56,9 @@
 				<configuration>
 					<argLine>
 						@{argLine}
+						--add-opens javamm.compiler/com.revenat.javamm.compiler=ALL-UNNAMED
 						--add-opens javamm.compiler/com.revenat.javamm.compiler.component.impl=ALL-UNNAMED
+						--add-opens javamm.compiler/com.revenat.javamm.compiler.component.impl.operation.simple=ALL-UNNAMED
 					</argLine>
 				</configuration>
 			</plugin>

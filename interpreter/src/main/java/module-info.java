@@ -20,5 +20,8 @@
  *
  */
 module javamm.interpreter {
-    requires javamm.code;
+    requires transitive javamm.code;
+
+    exports com.revenat.javamm.interpreter;
+    exports com.revenat.javamm.interpreter.component;
 }

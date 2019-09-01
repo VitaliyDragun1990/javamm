@@ -67,12 +67,12 @@ public class BlockOperationInterpreterImpl implements BlockOperationInterpreter 
     @Override
     public void interpret(final Block block) {
         for (final Operation operation : block.getOperations()) {
-            final OperationInterpreter operationInterpreter = findInterpreterFor(operation);
+            final OperationInterpreter operationInterpreter = getInterpreterFor(operation);
             operationInterpreter.interpret(operation);
         }
     }
 
-    private OperationInterpreter findInterpreterFor(final Operation operation) {
+    private OperationInterpreter getInterpreterFor(final Operation operation) {
         final OperationInterpreter interpreter = interpreterMap.get(operation.getClass());
         if (interpreter != null) {
             return interpreter;

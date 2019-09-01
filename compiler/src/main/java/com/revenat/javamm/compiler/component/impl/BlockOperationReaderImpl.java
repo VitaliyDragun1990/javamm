@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Optional;
 
 /**
  * @author Vitaliy Dragun
@@ -52,23 +51,20 @@ public class BlockOperationReaderImpl implements BlockOperationReader {
         while (iterator.hasNext()) {
             final SourceLine sourceLine = iterator.next();
 
-            findOperationReaderFor(sourceLine).ifPresentOrElse(
-                operationReader -> operationReader.read(sourceLine, iterator),
-                () -> throwSyntaxError(sourceLine)
-            );
+            final OperationReader operationReader = findOperationReaderFor(sourceLine);
+            operations.add(operationReader.read(sourceLine, iterator));
         }
 
         return operations;
     }
 
-    private void throwSyntaxError(final SourceLine sourceLine) {
-        throw new JavammLineSyntaxError("Unsupported operation: " + sourceLine.getCommand(), sourceLine);
-    }
-
-    private Optional<OperationReader> findOperationReaderFor(final SourceLine sourceLine) {
+    private OperationReader findOperationReaderFor(final SourceLine sourceLine) {
         return operationReaders.stream()
                 .filter(reader -> reader.canRead(sourceLine))
-                .findFirst();
+                .findFirst()
+                .orElseThrow(
+                        () -> new JavammLineSyntaxError("Unsupported operation: " + sourceLine.getCommand(), sourceLine)
+                 );
     }
 
 }

@@ -68,7 +68,7 @@ class BlockOperationInterpreterImplTest {
 
     @Test
     @Order(3)
-    void shouldFailIfTryToHandleUnknownOperation() {
+    void shouldFailIfTryToHandleUnsupportedOperation() {
         blockInterpreter = new BlockOperationInterpreterImpl(Set.of(OPERATION_A_INTERPRETER));
 
         assertThrows(ConfigException.class, () -> blockInterpreter.interpret(blockOf(new OperationDummyB())));
@@ -76,7 +76,7 @@ class BlockOperationInterpreterImplTest {
 
     @Test
     @Order(4)
-    void shouldInterpretBlockOfKnownOperations() {
+    void shouldInterpretBlockOfSupportedOperations() {
         blockInterpreter = new BlockOperationInterpreterImpl(Set.of(OPERATION_A_INTERPRETER, OPERATION_B_INTERPRETER));
 
         blockInterpreter.interpret(blockOf(new OperationDummyA(), new OperationDummyB()));

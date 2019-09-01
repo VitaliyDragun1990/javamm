@@ -18,12 +18,12 @@
 package com.revenat.javamm.interpreter.component.impl.operation;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.interpreter.component.impl.OperationDummyA;
 import com.revenat.javamm.interpreter.error.TerminateInterpreterException;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -38,7 +38,11 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @DisplayName("a abstract operation interpreter")
 class AbstractOperationInterpreterTest {
 
-    private final TestAbstractOperationInterpreter abstractInterpreter = new TestAbstractOperationInterpreter();
+    private final AbstractOperationInterpreterSpy abstractInterpreter = new AbstractOperationInterpreterSpy();
+
+    private void assertOperationInterpreted(final OperationDummyA operationToInterpret) {
+        assertThat(abstractInterpreter.getInterpretedOperation(), sameInstance(operationToInterpret));
+    }
 
     @Test
     @Order(1)
@@ -47,7 +51,7 @@ class AbstractOperationInterpreterTest {
 
         abstractInterpreter.interpret(operationToInterpret);
 
-        assertThat(abstractInterpreter.getInterpretedOperation(), Matchers.sameInstance(operationToInterpret));
+        assertOperationInterpreted(operationToInterpret);
     }
 
     @Test
@@ -58,7 +62,7 @@ class AbstractOperationInterpreterTest {
         assertThrows(TerminateInterpreterException.class, () -> abstractInterpreter.interpret(new OperationDummyA()));
     }
 
-    private class TestAbstractOperationInterpreter extends AbstractOperationInterpreter<OperationDummyA> {
+    private class AbstractOperationInterpreterSpy extends AbstractOperationInterpreter<OperationDummyA> {
         private boolean isTerimated = false;
         private  OperationDummyA interpretedOperation = null;
 

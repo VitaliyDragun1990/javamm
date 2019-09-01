@@ -64,6 +64,8 @@
 					<argLine>
 						@{argLine}
 						--add-opens
+						javamm.interpreter/com.revenat.javamm.interpreter=ALL-UNNAMED
+						--add-opens
 						javamm.interpreter/com.revenat.javamm.interpreter.component.impl=ALL-UNNAMED
 						--add-opens
 						javamm.interpreter/com.revenat.javamm.interpreter.component.impl.operation=ALL-UNNAMED

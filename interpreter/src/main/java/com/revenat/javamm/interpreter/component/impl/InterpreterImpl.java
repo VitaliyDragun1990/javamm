@@ -15,28 +15,27 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.cmd;
+package com.revenat.javamm.interpreter.component.impl;
 
 import com.revenat.javamm.code.fragment.ByteCode;
-import com.revenat.javamm.compiler.Compiler;
-import com.revenat.javamm.compiler.CompilerConfigurator;
 import com.revenat.javamm.interpreter.Interpreter;
-import com.revenat.javamm.interpreter.InterpreterConfigurator;
-
-import java.io.IOException;
+import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
 
 /**
+ * Simple interpreter
+ *
  * @author Vitaliy Dragun
  *
  */
-public final class JmmVmLauncher {
+public class InterpreterImpl implements Interpreter {
+    private final BlockOperationInterpreter blockOperationInterpreter;
 
-    public static void main(final String[] args) throws IOException {
-        final Compiler compiler = new CompilerConfigurator().getCompiler();
-        final Interpreter interpreter = new InterpreterConfigurator().getInterpreter();
-        final ByteCode byteCode = compiler.compile(new FileSourceCode("src/main/resources/test.javamm"));
-        interpreter.interpret(byteCode);
+    public InterpreterImpl(final BlockOperationInterpreter blockOperationInterpreter) {
+        this.blockOperationInterpreter = blockOperationInterpreter;
     }
 
-    private JmmVmLauncher () {}
+    @Override
+    public void interpret(final ByteCode byteCode) {
+        blockOperationInterpreter.interpret(byteCode.getCode());
+    }
 }

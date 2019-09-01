@@ -18,6 +18,7 @@
 package com.revenat.javamm.interpreter.component;
 
 import com.revenat.javamm.code.fragment.Operation;
+import com.revenat.javamm.interpreter.error.TerminateInterpreterException;
 
 /**
  * Responsible for interpreting particular type of byte-code operation
@@ -36,6 +37,8 @@ public interface OperationInterpreter<T extends Operation> {
      * Interprets provided byte code operation
      *
      * @param operation byte code operation to interpret
+     * @throws TerminateInterpreterException if interpreter has been terminated
+     *                                       before it can complete its job
      */
     void interpret(T operation);
 }

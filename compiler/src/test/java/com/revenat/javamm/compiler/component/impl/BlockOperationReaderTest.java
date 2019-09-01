@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.Block;
-import com.revenat.javamm.compiler.ReplaceCamelCase;
 import com.revenat.javamm.compiler.component.BlockOperationReader;
 import com.revenat.javamm.compiler.component.OperationReader;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
@@ -41,6 +40,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import com.revenat.juinit.addons.ReplaceCamelCase;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)

@@ -15,23 +15,15 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.compiler;
+package com.revenat.javamm.interpreter.component.impl;
 
-import java.lang.reflect.Method;
+import com.revenat.javamm.code.fragment.Operation;
+import com.revenat.javamm.code.fragment.SourceLine;
 
-/**
- * @author Vitaliy Dragun
- *
- */
-public class IndicativeSentences extends ReplaceCamelCase {
+class OperationDummyB implements Operation {
 
     @Override
-    public String generateDisplayNameForNestedClass(final Class<?> nestedClass) {
-        return super.generateDisplayNameForNestedClass(nestedClass) + "...";
-    }
-
-    @Override
-    public String generateDisplayNameForMethod(final Class<?> testClass, final Method testMethod) {
-        return replaceCamelCase(testClass.getSimpleName() + " " + testMethod.getName()) + ".";
+    public SourceLine getSourceLine() {
+        return null;
     }
 }

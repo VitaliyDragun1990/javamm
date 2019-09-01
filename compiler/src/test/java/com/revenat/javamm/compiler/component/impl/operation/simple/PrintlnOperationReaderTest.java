@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
-import com.revenat.javamm.compiler.ReplaceCamelCase;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 
 import java.util.List;
@@ -38,6 +37,8 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+
+import com.revenat.juinit.addons.ReplaceCamelCase;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)

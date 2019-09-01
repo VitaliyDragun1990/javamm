@@ -23,7 +23,6 @@ import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.code.fragment.SourceLine;
-import com.revenat.javamm.compiler.ReplaceCamelCase;
 import com.revenat.javamm.compiler.component.SourceLineReader;
 import com.revenat.javamm.compiler.component.TokenParser;
 import com.revenat.javamm.compiler.model.TokenParserResult;
@@ -40,6 +39,8 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+
+import com.revenat.juinit.addons.ReplaceCamelCase;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)

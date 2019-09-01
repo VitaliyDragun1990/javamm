@@ -26,9 +26,9 @@ import com.revenat.javamm.interpreter.component.OperationInterpreter;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BinaryOperator;
-import java.util.stream.Collectors;
 
 import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toUnmodifiableMap;
 
 /**
  * @author Vitaliy Dragun
@@ -38,6 +38,13 @@ import static java.util.function.Function.identity;
 public class BlockOperationInterpreterImpl implements BlockOperationInterpreter {
     private final Map<Class<? extends Operation>, OperationInterpreter> interpreterMap;
 
+    /**
+     * Creates new block operation interpreter with set of operation interpreters
+     * for defined operations
+     *
+     * @throws ConfigException if provided set of operation interpreters contains
+     *                         several interpreters for the same operation
+     */
     public BlockOperationInterpreterImpl(final Set<OperationInterpreter<?>> operationInterpreters) {
         this.interpreterMap = buildOperationInterpreterMap(operationInterpreters);
     }
@@ -45,9 +52,7 @@ public class BlockOperationInterpreterImpl implements BlockOperationInterpreter 
     private Map<Class<? extends Operation>, OperationInterpreter> buildOperationInterpreterMap(
             final Set<OperationInterpreter<?>> operationInterpreters) {
         return operationInterpreters.stream()
-                .collect(
-                    Collectors.toUnmodifiableMap(OperationInterpreter::getOperationClass, identity(), checkDuplicates())
-                 );
+                .collect(toUnmodifiableMap(OperationInterpreter::getOperationClass, identity(), checkDuplicates()));
     }
 
     private BinaryOperator<OperationInterpreter> checkDuplicates() {

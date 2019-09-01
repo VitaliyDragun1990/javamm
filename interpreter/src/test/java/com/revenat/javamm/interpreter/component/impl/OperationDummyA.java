@@ -15,25 +15,15 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component;
+package com.revenat.javamm.interpreter.component.impl;
 
-import com.revenat.javamm.code.exception.ConfigException;
-import com.revenat.javamm.code.fragment.operation.Block;
+import com.revenat.javamm.code.fragment.Operation;
+import com.revenat.javamm.code.fragment.SourceLine;
 
-/**
- * Interprets byte code block of operations
- *
- * @author Vitaliy Dragun
- *
- */
-public interface BlockOperationInterpreter {
+public class OperationDummyA implements Operation {
 
-    /**
-     * Interprets specified byte code block
-     *
-     * @param block byte code block of operations to interpret
-     * @throws ConfigException if doesn't know how to handle particular operation in
-     *                         the block
-     */
-    void interpret(Block block);
+    @Override
+    public SourceLine getSourceLine() {
+        return null;
+    }
 }

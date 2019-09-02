@@ -22,7 +22,8 @@
 module javamm.compiler {
     requires transitive javamm.code;
     exports com.revenat.javamm.compiler;
-    exports com.revenat.javamm.compiler.model;
-    exports com.revenat.javamm.compiler.component;
+    exports com.revenat.javamm.compiler.error;
+//    exports com.revenat.javamm.compiler.model;
+//    exports com.revenat.javamm.compiler.component;
 
 }

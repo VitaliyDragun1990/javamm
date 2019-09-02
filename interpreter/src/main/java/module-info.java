@@ -23,6 +23,6 @@ module javamm.interpreter {
     requires transitive javamm.code;
 
     exports com.revenat.javamm.interpreter;
-    exports com.revenat.javamm.interpreter.component;
     exports com.revenat.javamm.interpreter.error;
+//    exports com.revenat.javamm.interpreter.component;
 }

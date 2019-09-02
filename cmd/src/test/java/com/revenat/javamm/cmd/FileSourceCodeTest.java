@@ -18,16 +18,20 @@
 package com.revenat.javamm.cmd;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.fragment.SourceCode;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -37,11 +41,43 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import com.revenat.juinit.addons.ReplaceCamelCase;
 
+import static java.lang.String.format;
+import static java.lang.System.lineSeparator;
+
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a file source code")
 class FileSourceCodeTest {
-    private static final String TEST_FILE_NAME = "src/test/resources/test.javamm";
+    private static Path tempFile;
+
+    private SourceCode sourceCode;
+
+    @BeforeAll
+    static void createTempFile() throws IOException {
+        tempFile = Files.createTempFile("test", "javamm");
+        Files.writeString(tempFile, format("1%s2%s3", lineSeparator(), lineSeparator()), StandardCharsets.UTF_8);
+    }
+
+    @AfterAll
+    static void deleteTempFile() throws IOException {
+        if (tempFile != null) {
+            Files.deleteIfExists(tempFile);
+        }
+    }
+
+    @BeforeEach
+    void createSourceCode() throws IOException {
+        sourceCode = new FileSourceCode(getPathTo(tempFile));
+    }
+
+    private String getPathTo(final Path file) {
+        return file.toString();
+    }
+
+
+    private String getNameFor(final Path file) {
+        return file.getFileName().toString();
+    }
 
     @Test
     @Order(1)
@@ -51,27 +87,29 @@ class FileSourceCodeTest {
 
     @Test
     @Order(2)
-    void canBeCreatedForValidFile() throws IOException {
-        new FileSourceCode(TEST_FILE_NAME);
+    void shouldContainFileContent() throws IOException {
+        final List<String> fileContent = sourceCode.getLines();
+
+        assertThat(fileContent, equalTo(List.of("1", "2", "3")));
     }
 
     @Test
     @Order(3)
-    void shouldContainFileContent() throws IOException {
-        final SourceCode sourceCode = new FileSourceCode(TEST_FILE_NAME);
-
-        final List<String> fileContent = sourceCode.getLines();
-
-        assertThat(fileContent, hasSize(2));
-        assertThat(fileContent, hasItem(equalTo("test")));
-        assertThat(fileContent, hasItem(equalTo("")));
+    void shouldContainFileName() throws IOException {
+        assertThat(sourceCode.getModuleName(), equalTo(getNameFor(tempFile)));
     }
 
     @Test
     @Order(4)
-    void shouldContainFileName() throws IOException {
-        final SourceCode sourceCode = new FileSourceCode(TEST_FILE_NAME);
+    void shouldContainRelativePathToSourceFile() throws IOException {
+        assertPathToSourceFile(sourceCode);
+    }
 
-        assertThat(sourceCode.getModuleName(), equalTo("test.javamm"));
+    private void assertPathToSourceFile(final SourceCode sourceCode) {
+        assertThat(sourceCode.toString(), equalTo(relativePathFor(tempFile)));
+    }
+
+    private String relativePathFor(final Path file) {
+        return file.toString();
     }
 }

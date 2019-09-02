@@ -17,7 +17,7 @@
 
 package com.revenat.javamm.cmd;
 
-import com.revenat.javamm.compiler.JavammSyntaxError;
+import com.revenat.javamm.compiler.error.JavammSyntaxError;
 import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 import com.revenat.javamm.vm.VirtualMachine;
 import com.revenat.javamm.vm.VirtualMachineBuilder;

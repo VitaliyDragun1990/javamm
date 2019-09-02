@@ -18,7 +18,7 @@
 package com.revenat.javamm.vm;
 
 import com.revenat.javamm.code.fragment.SourceCode;
-import com.revenat.javamm.compiler.JavammSyntaxError;
+import com.revenat.javamm.compiler.error.JavammSyntaxError;
 import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 import com.revenat.javamm.interpreter.error.TerminateInterpreterException;
 

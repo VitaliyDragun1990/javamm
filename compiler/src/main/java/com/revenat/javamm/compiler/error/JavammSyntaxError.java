@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.compiler;
+package com.revenat.javamm.compiler.error;
 
 import com.revenat.javamm.code.exception.JavammError;
 

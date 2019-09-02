@@ -19,6 +19,7 @@ package com.revenat.javamm.compiler;
 
 import com.revenat.javamm.code.fragment.ByteCode;
 import com.revenat.javamm.code.fragment.SourceCode;
+import com.revenat.javamm.compiler.error.JavammSyntaxError;
 
 /**
  * Represents compiler component, responsible for compiling source code into

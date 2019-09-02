@@ -18,7 +18,7 @@
 package com.revenat.javamm.compiler.component.error;
 
 import com.revenat.javamm.code.fragment.SourceLine;
-import com.revenat.javamm.compiler.JavammSyntaxError;
+import com.revenat.javamm.compiler.error.JavammSyntaxError;
 
 import static java.util.Objects.requireNonNull;
 

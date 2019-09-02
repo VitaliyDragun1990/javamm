@@ -20,7 +20,9 @@
  *
  */
 module javamm.vm {
-    requires javamm.code;
+    requires transitive javamm.code;
     requires javamm.compiler;
     requires javamm.interpreter;
+
+    exports com.revenat.javamm.vm;
 }

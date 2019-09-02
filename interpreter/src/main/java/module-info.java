@@ -24,4 +24,5 @@ module javamm.interpreter {
 
     exports com.revenat.javamm.interpreter;
     exports com.revenat.javamm.interpreter.component;
+    exports com.revenat.javamm.interpreter.error;
 }

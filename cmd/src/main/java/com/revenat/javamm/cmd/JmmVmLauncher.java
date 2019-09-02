@@ -17,11 +17,10 @@
 
 package com.revenat.javamm.cmd;
 
-import com.revenat.javamm.code.fragment.ByteCode;
-import com.revenat.javamm.compiler.Compiler;
-import com.revenat.javamm.compiler.CompilerConfigurator;
-import com.revenat.javamm.interpreter.Interpreter;
-import com.revenat.javamm.interpreter.InterpreterConfigurator;
+import com.revenat.javamm.compiler.JavammSyntaxError;
+import com.revenat.javamm.interpreter.error.JavammRuntimeError;
+import com.revenat.javamm.vm.VirtualMachine;
+import com.revenat.javamm.vm.VirtualMachineBuilder;
 
 import java.io.IOException;
 
@@ -31,12 +30,16 @@ import java.io.IOException;
  */
 public final class JmmVmLauncher {
 
-    public static void main(final String[] args) throws IOException {
-        final Compiler compiler = new CompilerConfigurator().getCompiler();
-        final Interpreter interpreter = new InterpreterConfigurator().getInterpreter();
-        final ByteCode byteCode = compiler.compile(new FileSourceCode("src/main/resources/test.javamm"));
-        interpreter.interpret(byteCode);
+    private JmmVmLauncher() {
     }
 
-    private JmmVmLauncher () {}
+    public static void main(final String[] args) throws IOException {
+        final VirtualMachine vm = new VirtualMachineBuilder().build();
+
+        try {
+            vm.run(new FileSourceCode("src/main/resources/test.javamm"));
+        } catch (final JavammSyntaxError | JavammRuntimeError e) {
+            System.err.println(e.getMessage());
+        }
+    }
 }

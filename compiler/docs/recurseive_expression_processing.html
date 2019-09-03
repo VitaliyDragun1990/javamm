@@ -1,0 +1,199 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+	<div class="text-viewer--content--3hoqQ">
+		<div class="a1 mb-space-md">Рекурсивная обработка вложенных
+			выражений</div>
+		<div class="asset-container">
+			<div class="article-asset--article-content--1MwHd">
+				<p>
+					Каждый <strong>ExpressionBuilder</strong> должен иметь возможность
+					вызывать <strong>ExpressionResolver </strong><a
+						href="https://ru.wikipedia.org/wiki/%D0%A0%D0%B5%D0%BA%D1%83%D1%80%D1%81%D0%B8%D1%8F"
+						rel="noopener noreferrer" target="_blank"><strong>рекурсивно</strong></a>,
+					если это необходимо. Данная возможность позволит обрабатывать
+					выражение любой вложенности.
+				</p>
+				<p>Например дано следующее вложенное выражение:</p>
+				<div class="ud-component--base-components--code-block"
+					ng-non-bindable="">
+					<div>
+						<pre
+							class="prettyprint linenums prettyprint linenums prettyprinted"
+							role="presentation" style="">
+							<ol class="linenums">
+								<li class="L0"><span class="pln">println </span><span
+									class="pun">(</span><span class="pln">array </span><span
+									class="pun">[</span><span class="pln">factorial </span><span
+									class="pun">(</span><span class="lit">2</span><span class="pln"> </span><span
+									class="pun">*</span><span class="pln"> a</span><span
+									class="pun">)])</span></li>
+							</ol>
+						</pre>
+					</div>
+				</div>
+				<p>
+					Данное выражение выводит на консоль значение массива <strong>array
+					</strong>по индексу, который является результатом вызова функции <strong>factorial</strong>,
+					принимающей в качестве аргумента результат выражения умножения
+					константы <strong>2</strong> на значение переменной <strong>a</strong>.
+				</p>
+				<p>Данное вложенное выражение может быть представлено как
+					комбинация следующих простых:</p>
+				<div class="ud-component--base-components--code-block"
+					ng-non-bindable="">
+					<div>
+						<pre
+							class="prettyprint linenums prettyprint linenums prettyprinted"
+							role="presentation" style="">
+							<ol class="linenums">
+								<li class="L0"><span class="kwd">var</span><span
+									class="pln"> argument </span><span class="pun">=</span><span
+									class="pln"> </span><span class="lit">2</span><span class="pln"> </span><span
+									class="pun">*</span><span class="pln"> a</span></li>
+								<li class="L1"><span class="kwd">var</span><span
+									class="pln"> index </span><span class="pun">=</span><span
+									class="pln"> factorial </span><span class="pun">(</span><span
+									class="pln">argument</span><span class="pun">)</span></li>
+								<li class="L2"><span class="kwd">var</span><span
+									class="pln"> result </span><span class="pun">=</span><span
+									class="pln"> array </span><span class="pun">[</span><span
+									class="pln">index</span><span class="pun">]</span></li>
+								<li class="L3"><span class="pln">println </span><span
+									class="pun">(</span><span class="pln">result</span><span
+									class="pun">)</span></li>
+							</ol>
+						</pre>
+					</div>
+				</div>
+				<p>
+					Каждое такое простое выражение создается отдельным компонентом <strong>ExpressionBuilder</strong>,
+					потому что каждое выражение имеет отдельный тип:
+				</p>
+				<ol>
+					<li><p>первое выражение - "арифметическое бинарное
+							выражение";</p></li>
+					<li><p>второе - "вызов функции";</p></li>
+					<li><p>третье - "чтение элемента массива по индексу";</p></li>
+					<li><p>четвертое - "чтение значения переменной".</p></li>
+				</ol>
+				<p>Поэтому чтобы построить выражение "чтение элемента массива по
+					индексу", необходимо извлечь имя переменной массива и выражение
+					вычисления индекса.</p>
+				<p>Но в качестве выражения индекса может быть любое другое
+					выражение, например:</p>
+				<div class="ud-component--base-components--code-block"
+					ng-non-bindable="">
+					<div>
+						<pre
+							class="prettyprint linenums prettyprint linenums prettyprinted"
+							role="presentation" style="">
+							<ol class="linenums">
+								<li class="L0"><span class="pln">println </span><span
+									class="pun">(</span><span class="pln">array </span><span
+									class="pun">[</span><span class="lit">2</span><span class="pun">])</span><span
+									class="pln"> </span><span class="com">// индекс - выражение-константа;</span></li>
+								<li class="L1"><span class="pln">println </span><span
+									class="pun">(</span><span class="pln">array </span><span
+									class="pun">[</span><span class="lit">2</span><span class="pln"> </span><span
+									class="pun">*</span><span class="pln"> a</span><span
+									class="pun">])</span><span class="pln"> </span><span
+									class="com">// индекс - арифметическое бинарное выражение;</span></li>
+								<li class="L2"><span class="pln">println </span><span
+									class="pun">(</span><span class="pln">array </span><span
+									class="pun">[</span><span class="pln">factorial </span><span
+									class="pun">(</span><span class="lit">2</span><span class="pun">)])</span><span
+									class="pln"> </span><span class="com">// индекс - выражение вызова функции;</span></li>
+								<li class="L3"><span class="pln">println </span><span
+									class="pun">(</span><span class="pln">array </span><span
+									class="pun">[</span><span class="pln">array </span><span
+									class="pun">[</span><span class="lit">2</span><span class="pun">]])</span><span
+									class="pln"> </span><span class="com">// индекс - выражение чтение элемента массива по индексу;</span></li>
+							</ol>
+						</pre>
+					</div>
+				</div>
+				<p>
+					Так как выражением индекса может быть ЛЮБОЕ другое выражение <strong>ExpressionBuilder
+					</strong>должен рекурсивно обратиться к компоненту <strong>ExpressionResolver</strong>,
+					так как именно данный компонент умеет создавать
+					ЛЮБЫЕ&nbsp;поддерживаемые выражения.
+				</p>
+				<p>Для приведенного выше вложенного примера</p>
+				<div class="ud-component--base-components--code-block"
+					ng-non-bindable="">
+					<div>
+						<pre
+							class="prettyprint linenums prettyprint linenums prettyprinted"
+							role="presentation" style="">
+							<ol class="linenums">
+								<li class="L0"><span class="pln">println </span><span
+									class="pun">(</span><span class="pln">array </span><span
+									class="pun">[</span><span class="pln">factorial </span><span
+									class="pun">(</span><span class="lit">2</span><span class="pln"> </span><span
+									class="pun">*</span><span class="pln"> a</span><span
+									class="pun">)])</span></li>
+							</ol>
+						</pre>
+					</div>
+				</div>
+				<p>алгоритм построения данного выражения будет следующим:</p>
+				<ol>
+					<li><p>
+							<strong>PrintlnOperationReader </strong>извлекает набор токенов:
+							<code>array [factorial (2 * a)]</code>
+							и передает их на компонент <strong>ExpressionResolver</strong>;
+						</p></li>
+					<li><p>
+							<strong>ExpressionResolver </strong>для данного набора токенов
+							находит <strong>ExpressionBuilder</strong>, который умеет строить
+							выражение "чтение элемента массива по индексу";
+						</p></li>
+					<li><p>
+							<strong>ExpressionBuilder</strong> для построения выражения
+							индекса массива извлекает набор токенов между квадратными
+							скобками:
+							<code>factorial (2 * a)</code>
+							и передает их ОПЯТЬ на компонент <strong>ExpressionResolver;</strong>
+						</p></li>
+					<li><p>
+							<strong>ExpressionResolver </strong>для данного набора токенов
+							находит <strong>ExpressionBuilder</strong>, который умеет строить
+							выражение вызова функции;
+						</p></li>
+					<li><p>
+							<strong>ExpressionBuilder</strong> для построения выражения
+							параметров функции извлекает набор токенов между круглыми
+							скобками:
+							<code>2 * a</code>
+							и передает их ОПЯТЬ на компонент <strong>ExpressionResolver;</strong>
+						</p></li>
+					<li><p>
+							<strong>ExpressionResolver </strong>для данного набора токенов
+							находит <strong>ExpressionBuilder</strong>, который умеет строить
+							арифметическое бинарное выражение;
+						</p></li>
+					<li><p>
+							<strong>ExpressionBuilder</strong> строит арифметическое бинарное
+							выражение и возвращает результат по стеку рекурсивного вызова;
+						</p></li>
+					<li><p>В результате получается вложенное выражение.</p></li>
+				</ol>
+				<p>
+					Гарантией выхода из<a
+						href="https://ru.wikipedia.org/wiki/%D0%A0%D0%B5%D0%BA%D1%83%D1%80%D1%81%D0%B8%D1%8F"
+						rel="noopener noreferrer" target="_blank"> <strong>рекурсии</strong></a><strong>
+					</strong>является тот факт, что каждый <strong>ExpressionBuilder</strong>
+					при вызове компонента <strong>ExpressionResolver </strong>передает
+					ему МЕНЬШИЙ набор токенов, чем получил сам. Поэтому любой набор
+					токенов обязательно закончится в ходе обработки выражения ЛЮБОЙ
+					вложенности.
+				</p>
+			</div>
+		</div>
+		<div class="mt-space-sm"></div>
+	</div>
+</body>
+</html>

@@ -15,15 +15,21 @@
  * limitations under the License.
  */
 
-/**
- * @author Vitaliy Dragun
- *
- */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
-    exports com.revenat.javamm.code.fragment.expression;
-    exports com.revenat.javamm.code.component;
-    exports com.revenat.javamm.code.exception;
-    exports com.revenat.javamm.code.syntax;
+package com.revenat.javamm.code.fragment.expression;
+
+import com.revenat.javamm.code.component.ExpressionContext;
+import com.revenat.javamm.code.fragment.Expression;
+import com.revenat.javamm.code.fragment.UpdatableExpression;
+
+public class ExpressionContextDummy implements ExpressionContext {
+
+    @Override
+    public Object getValue(final Expression expression) {
+        return null;
+    }
+
+    @Override
+    public void setValue(final UpdatableExpression updatableExpression, final Object updatedValue) {
+    }
+
 }

@@ -15,15 +15,21 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.code.component;
+
+import com.revenat.javamm.code.fragment.Expression;
+import com.revenat.javamm.code.fragment.UpdatableExpression;
+
 /**
+ * Responsible for evaluating complex expressions
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
-    exports com.revenat.javamm.code.fragment.expression;
-    exports com.revenat.javamm.code.component;
-    exports com.revenat.javamm.code.exception;
-    exports com.revenat.javamm.code.syntax;
+public interface ExpressionContext {
+
+    Object getValue(Expression expression);
+
+    void setValue(UpdatableExpression updatableExpression, Object updatedValue);
+
 }

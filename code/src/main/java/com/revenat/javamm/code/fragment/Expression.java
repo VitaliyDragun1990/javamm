@@ -15,15 +15,22 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.code.fragment;
+
+import com.revenat.javamm.code.component.ExpressionContext;
+
 /**
+ * Represents any kind of expression
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
-    exports com.revenat.javamm.code.fragment.expression;
-    exports com.revenat.javamm.code.component;
-    exports com.revenat.javamm.code.exception;
-    exports com.revenat.javamm.code.syntax;
+public interface Expression {
+
+    /**
+     * Returns evaluated value of this expression
+     */
+    default Object getValue(final ExpressionContext expressionContext) {
+        return expressionContext.getValue(this);
+    }
 }

@@ -1,0 +1,126 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+	<div class="text-viewer--content--3hoqQ">
+		<div class="a1 mb-space-md">Структурная схема обработки
+			выражения на компиляторе</div>
+		<div class="asset-container">
+			<div class="article-asset--article-content--1MwHd">
+				<figure>
+					<img
+						src="images/2019-03-14_13-28-06-1cc9de0112f1472b57b338998c8d1932.png"
+						align="middle">
+				</figure>
+				<ol>
+					<li><p>
+							Обработка выражения на компиляторе возможна только в компонентах
+							<strong>OperationReader</strong>, потому что только они знают
+							какая часть токенов принадлежит к выражению, а какая часть
+							токенов является описанием операции, например:
+						</p>
+						<ol>
+							<li><p>
+									<strong><em>var a = 1 + b * 5</em></strong> — в операции
+									объявления переменной выражение - это набор токенов после
+									символа =;
+								</p></li>
+							<li><p>
+									<strong><em>println ( 2 + ( 5 - a) )</em></strong> — в операции
+									вывода на консоль выражение - это набор токенов между первой
+									открывающей и последней закрывающей круглыми скобками;
+								</p></li>
+						</ol></li>
+					<li><p>
+							<strong>OperationReader </strong>это один из компонентов
+							обработки операции, извлеченный из набора всех доступных операций
+							компонентом <strong>BlockOperationReader </strong>(см. <strong>Структурную
+								схему упрощенной версии компилятора</strong> в разделе 4 <strong>"Создание
+								упрощенной версии для вывода сообщения: Hello world"</strong>, лекция 3<strong>
+								"Структурные схемы компилятора и интерпретатора"</strong>;
+						</p></li>
+					<li><p>
+							Входными параметрами для <strong>OperationReader </strong>является
+							список наборов токенов полученных от <strong>SourceLineReader</strong>;
+						</p></li>
+					<li><p>
+							Выходным параметром для <strong>OperationReader </strong>является
+							объект <strong>Operation</strong>, который является частью
+							байт-кода;
+						</p></li>
+					<li><p>
+							Каждый <strong>OperationReader </strong>имеет вспомогательный
+							модуль <strong><em>extractor</em></strong>, который знает какая
+							часть токенов в исходной строке кода является выражением и умеет
+							извлекать этот набор токенов;
+						</p></li>
+					<li><p>
+							Каждый <strong>OperationReader </strong>имеет вспомогательный
+							модуль <strong><em>builder</em></strong>, который умеет
+							формировать объект <strong>Operation</strong>, добавляя в него <strong>Expression</strong>;
+						</p></li>
+				</ol>
+				<p>
+					<strong>Алгоритм обработки любого выражения на
+						компиляторе:</strong>
+				</p>
+				<ol>
+					<li><p>
+							Модуль <strong><em>extractor </em></strong>извлекает набор
+							токенов, который представляет анализируемое выражение и передает
+							этот набор компоненту <strong>ExpressionResolver</strong>;
+						</p></li>
+					<li><p>
+							<a
+								href="https://ru.wikipedia.org/wiki/%D0%9F%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF_%D0%B5%D0%B4%D0%B8%D0%BD%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B9_%D0%BE%D1%82%D0%B2%D0%B5%D1%82%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D0%B8"
+								rel="noopener noreferrer" target="_blank"><strong>Ответственность</strong></a><strong>
+							</strong>компонента <strong>ExpressionResolver</strong> принять набор
+							токенов и вернуть соответствующий этому набору объект <strong>Expression
+							</strong>или выбросить синтаксическую ошибку, информирующую о
+							невозможности построить выражение. (<em>Возможны два
+								варианта синтаксической ошибки: или выражение неподдерживаемое,
+								или допущена синтаксическая ошибка в известном выражении</em>);
+						</p></li>
+					<li><p>
+							Построить выражение любой сложности — большая и сложная задача,
+							поэтому компонент <strong>ExpressionResolver </strong>имеет
+							множество компонентов <strong>ExpressionBuilder</strong>, каждый
+							из которых умеет обрабатывать отдельный тип выражений и просто
+							делегирует создание выражения соответствующему компоненту;
+						</p></li>
+					<li><p>
+							Таким образом основными функциями <strong>ExpressionResolver&nbsp;
+							</strong>являются:
+						</p>
+						<ol>
+							<li><p>
+									Поиск подходящего компонента <strong>ExpressionBuilder</strong>,
+									который знает как из текущего набора токенов создать объект <strong>Expression</strong>;
+								</p></li>
+							<li><p>
+									Информирование об ошибке, если <strong>ExpressionBuilder</strong>,
+									способный обработать текущий набор токенов, не найден: <strong><em>Syntax
+											error: Unsupported expression</em></strong>.
+								</p></li>
+						</ol></li>
+					<li><p>
+							Если <strong>ExpressionBuilder </strong>найден, то набор токенов
+							передается ему;
+						</p></li>
+					<li><p>
+							<strong>ExpressionBuilder </strong>строит объект <strong>Expression
+							</strong>и возвращает его модулю <strong><em>builder</em></strong>;
+						</p></li>
+					<li><p>
+							Если набор токенов содержит синтаксическую ошибку, то <strong>ExpressionBuilder
+							</strong>информирует об этой ошибке: <strong><em>Syntax
+									error: Invalid expression</em></strong>;
+						</p></li>
+				</ol>
+			</div>
+		</div>
+		<div class="mt-space-sm"></div>
+	</div>
+</body>
+</html>

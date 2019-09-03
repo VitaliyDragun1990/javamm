@@ -15,15 +15,22 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.code.fragment;
+
+import com.revenat.javamm.code.component.ExpressionContext;
+
 /**
+ * Represents expression which value can be updated
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
-    exports com.revenat.javamm.code.fragment.expression;
-    exports com.revenat.javamm.code.component;
-    exports com.revenat.javamm.code.exception;
-    exports com.revenat.javamm.code.syntax;
+public interface UpdatableExpression {
+
+    /**
+     * Sets new value for this expression
+     */
+    default void setValue(final ExpressionContext expressionContext, final Object updatedValue) {
+        expressionContext.setValue(this, updatedValue);
+    }
 }

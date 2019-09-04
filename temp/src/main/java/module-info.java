@@ -20,4 +20,5 @@
  *
  */
 module temp {
+    requires javamm.code;
 }

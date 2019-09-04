@@ -17,19 +17,23 @@
 
 package com.revenat.javamm.code.fragment.expression;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.component.ExpressionContext;
+
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestMethodOrder;
-
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import com.revenat.juinit.addons.ReplaceCamelCase;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -38,44 +42,46 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 class ConstantExpressionTest {
     private static final ExpressionContext DUMMY_CONTEXT = new ExpressionContextDummy();
 
-    @Test
-    void canBeCreatedForStringLiteral() {
-        assertNotNull(ConstantExpression.valueOf("test"));
+    @ParameterizedTest
+    @Order(1)
+    @MethodSource("supportedLiterals")
+    void canBeCreatedSupportedLiteral(final Object literal) {
+        assertNotNull(ConstantExpression.valueOf(literal));
     }
 
-    @Test
-    void canBeCreatedForIntegerLiteral() {
-        assertNotNull(ConstantExpression.valueOf(1));
+    @ParameterizedTest
+    @Order(2)
+    @MethodSource("unsupportedLiterals")
+    void canNotBeCreatedForUnsupportedLiteral(final Object literal, final String errorMsg) {
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> ConstantExpression.valueOf(literal));
+        assertThat(exception.getMessage(), containsString(errorMsg));
     }
 
-    @Test
-    void canBeCreatedForDoubleLiteral() {
-        assertNotNull(ConstantExpression.valueOf(10.5));
+    @ParameterizedTest
+    @Order(3)
+    @MethodSource("supportedLiterals")
+    void shouldReturnValueFromWhichItHasBeenCreated(final Object literal) {
+        final ConstantExpression expression = ConstantExpression.valueOf(literal);
+
+        assertValue(expression, literal);
     }
-
-    @Test
-    void canBeCreatedForBooleanLiteral() {
-        assertNotNull(ConstantExpression.valueOf(true));
-        assertNotNull(ConstantExpression.valueOf(false));
+    
+    private static Stream<Arguments> supportedLiterals() {
+        return Stream.of(
+                Arguments.arguments("test"),
+                Arguments.arguments(1),
+                Arguments.arguments(10,5),
+                Arguments.arguments(true),
+                Arguments.arguments(false)
+                );
     }
-
-    @Test
-    void canNotBeCreatedForUnsupportedType() {
-        assertThrows(IllegalArgumentException.class, () -> ConstantExpression.valueOf(null));
-        assertThrows(IllegalArgumentException.class, () -> ConstantExpression.valueOf(new Object()));
-    }
-
-    @Test
-    void shouldReturnValueFromWhichItHasBeenCreated() {
-        final ConstantExpression boolExpression = ConstantExpression.valueOf(true);
-        final ConstantExpression intExpression = ConstantExpression.valueOf(1);
-        final ConstantExpression doubleExpression = ConstantExpression.valueOf(10.5);
-        final ConstantExpression stringExpression = ConstantExpression.valueOf("test");
-
-        assertValue(boolExpression, true);
-        assertValue(intExpression, 1);
-        assertValue(doubleExpression, 10.5);
-        assertValue(stringExpression, "test");
+    
+    private static Stream<Arguments> unsupportedLiterals() {
+        return Stream.of(
+                Arguments.arguments(null, "null value is not allowed"),
+                Arguments.arguments(10.5F, "Unsupported value type"),
+                Arguments.arguments(100L, "Unsupported value type")
+                );
     }
 
     private void assertValue(final ConstantExpression constantExpression, final Object value) {

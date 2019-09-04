@@ -18,9 +18,15 @@
 package com.revenat.javamm.code.fragment.expression;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.EnumSource;
+
+import com.revenat.javamm.code.syntax.Keywords;
+
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -28,6 +34,9 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import com.revenat.juinit.addons.ReplaceCamelCase;
 
@@ -35,60 +44,79 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a type expression")
 class TypeExpressionTest {
-    private static final String INTEGER = "integer";
-    private static final String DOUBLE = "double";
-    private static final String STRING = "string";
-    private static final String BOOLEAN = "boolean";
+    private static final String UNSUPPORTED = "long";
 
-    private static final String UNKNOOWN = "unknoown";
+    private void assertType(final TypeExpression expression, final Class<?> expectedType) {
+        assertThat(expression.getType(), is(expectedType));
+    }
 
-    @Test
+    private void assertDoesNotSupport(final String keyword) {
+        assertFalse(TypeExpression.is(keyword));
+    }
+
+    private void assertSupports(final String keyword) {
+        assertTrue(TypeExpression.is(keyword));
+    }
+
+    @ParameterizedTest
     @Order(1)
-    void shouldSupportInteger() {
-        assertThat(TypeExpression.of(INTEGER), is(notNullValue()));
+    @ValueSource(strings = {
+            Keywords.STRING,
+            Keywords.INTEGER,
+            Keywords.DOUBLE,
+            Keywords.BOOLEAN,
+    })
+    void shouldAllowToCheckIfTypeIsSupported(final String typeKeyword) {
+        assertSupports(typeKeyword);
     }
 
     @Test
     @Order(2)
-    void shouldSupportDouble() {
-        assertThat(TypeExpression.of(DOUBLE), is(notNullValue()));
+    void shouldAllowToCheckIfTypeIsUnsupported() {
+        assertDoesNotSupport(UNSUPPORTED);
     }
-
-    @Test
+    @ParameterizedTest
     @Order(3)
-    void shouldSupportString() {
-        assertThat(TypeExpression.of(STRING), is(notNullValue()));
+    @MethodSource("backendToSupportTypes")
+    void shouldHoldCorrectBackendTypeForEachSupportedType(final String typeKeyword, final Class<?> backendType) {
+        assertType(TypeExpression.of(typeKeyword), backendType);
     }
 
     @Test
     @Order(4)
-    void shouldSupportBoolean() {
-        assertThat(TypeExpression.of(BOOLEAN), is(notNullValue()));
-    }
-
-    @Test
-    @Order(5)
     void shouldFailForUnknownType() {
-        assertThrows(IllegalArgumentException.class, () -> TypeExpression.of(UNKNOOWN));
+        assertThrows(IllegalArgumentException.class, () -> TypeExpression.of(UNSUPPORTED));
     }
 
-    @Test
+    @ParameterizedTest
+    @Order(5)
+    @EnumSource(TypeExpression.class)
+    void shouldReturnItselfAsValue(final TypeExpression expression) {
+        assertSame(expression, expression.getValue(new ExpressionContextDummy()));
+    }
+
+    @ParameterizedTest
     @Order(6)
-    void shouldAllowToKnowIfTypeSupported() {
-        assertTrue(TypeExpression.is(BOOLEAN));
-        assertTrue(TypeExpression.is(INTEGER));
-        assertTrue(TypeExpression.is(DOUBLE));
-        assertTrue(TypeExpression.is(STRING));
-
-        assertFalse(TypeExpression.is(UNKNOOWN));
+    @MethodSource("typeExpressionToKeyword")
+    void shouldHoldKeywordWhichItRepresents(final TypeExpression expression, final String keyword) {
+        assertThat(expression.getKeyword(), is(keyword));
     }
 
-    @Test
-    @Order(7)
-    void shouldReturnItselfAsValue() {
-        final TypeExpression booleanExpression = TypeExpression.of(BOOLEAN);
-
-        assertSame(booleanExpression, booleanExpression.getValue(new ExpressionContextDummy()));
+    private static Stream<Arguments> backendToSupportTypes() {
+        return Stream.of(
+                arguments(Keywords.BOOLEAN, Boolean.class),
+                arguments(Keywords.INTEGER, Integer.class),
+                arguments(Keywords.DOUBLE, Double.class),
+                arguments(Keywords.STRING, String.class)
+                );
     }
 
+    private static Stream<Arguments> typeExpressionToKeyword() {
+        return Stream.of(
+                arguments(TypeExpression.BOOLEAN, Keywords.BOOLEAN),
+                arguments(TypeExpression.STRING, Keywords.STRING),
+                arguments(TypeExpression.INTEGER, Keywords.INTEGER),
+                arguments(TypeExpression.DOUBLE, Keywords.DOUBLE)
+                );
+    }
 }

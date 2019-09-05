@@ -21,6 +21,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
 
 import java.util.List;
@@ -38,26 +39,26 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a 'println' operation")
 class PrintlnOperationTest {
-    private static final String TEXT = "\'Hello Java\'";
-    private static final SourceLine OPERATION_SOURCE_LINE = new SourceLine("test", 1, List.of("println", "(", TEXT, ")"));
+    private static final Expression DUMMY_EXPRESSION = new Expression() {};
+    private static final SourceLine OPERATION_SOURCE_LINE = new SourceLine("test", 1, List.of("println", "(", "hello world", ")"));
 
     @Test
     @Order(1)
     void canNotBeCreatedWithoutSourceLine() {
-        assertThrows(NullPointerException.class, () -> new PrintlnOperation(null, TEXT));
+        assertThrows(NullPointerException.class, () -> new PrintlnOperation(null, DUMMY_EXPRESSION));
     }
 
     @Test
     @Order(2)
-    void canNotBeCreatedWithoutText() {
+    void canNotBeCreatedWithoutExpression() {
         assertThrows(NullPointerException.class, () -> new PrintlnOperation(OPERATION_SOURCE_LINE, null));
     }
 
     @Test
-    void shouldReturnTextToPrint() {
-        final PrintlnOperation operation = new PrintlnOperation(OPERATION_SOURCE_LINE, TEXT);
+    void shouldReturnExpressionToEvaluate() {
+        final PrintlnOperation operation = new PrintlnOperation(OPERATION_SOURCE_LINE, DUMMY_EXPRESSION);
 
-        assertThat(operation.getText(), equalTo(TEXT));
+        assertThat(operation.getExpression(), equalTo(DUMMY_EXPRESSION));
     }
 
 }

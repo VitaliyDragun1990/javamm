@@ -35,7 +35,6 @@ public class PrintlnOperationInterpreter extends AbstractOperationInterpreter<Pr
 
     @Override
     protected void interpretOperation(final PrintlnOperation operation) {
-        System.out.println(operation.getText());
+        System.out.println(operation.getExpression());
     }
-
 }

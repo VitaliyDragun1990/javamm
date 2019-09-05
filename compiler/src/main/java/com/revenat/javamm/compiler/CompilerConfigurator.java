@@ -18,11 +18,14 @@
 package com.revenat.javamm.compiler;
 
 import com.revenat.javamm.compiler.component.BlockOperationReader;
+import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.OperationReader;
 import com.revenat.javamm.compiler.component.SourceLineReader;
 import com.revenat.javamm.compiler.component.TokenParser;
 import com.revenat.javamm.compiler.component.impl.BlockOperationReaderImpl;
 import com.revenat.javamm.compiler.component.impl.CompilerImpl;
+import com.revenat.javamm.compiler.component.impl.ExpressionResolverImpl;
+import com.revenat.javamm.compiler.component.impl.SingleTokenExpressionBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.SourceLineReaderImpl;
 import com.revenat.javamm.compiler.component.impl.TokenParserImpl;
 import com.revenat.javamm.compiler.component.impl.operation.simple.PrintlnOperationReader;
@@ -41,8 +44,14 @@ public class CompilerConfigurator {
 
     private final SourceLineReader sourceLineReader = new SourceLineReaderImpl(tokenParser);
 
+    private final ExpressionResolver expressionResolver = new ExpressionResolverImpl(
+            Set.of(
+                    new SingleTokenExpressionBuilderImpl()
+            )
+    );
+
     private final Set<OperationReader> operationReaders = Set.of(
-            new PrintlnOperationReader()
+            new PrintlnOperationReader(expressionResolver)
     );
 
     private final BlockOperationReader blockOperationReader = new BlockOperationReaderImpl(operationReaders);

@@ -17,13 +17,18 @@
 
 package com.revenat.javamm.compiler.component.impl.operation.simple;
 
+import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
+import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.component.impl.operation.AbstractOperationReader;
 
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Responsible for reading {@code println} operation
@@ -32,11 +37,10 @@ import java.util.Optional;
  *
  */
 public class PrintlnOperationReader extends AbstractOperationReader<PrintlnOperation> {
+    private final ExpressionResolver expressionResolver;
 
-    @Override
-    protected PrintlnOperation get(final SourceLine startingLine, final ListIterator<SourceLine> compiledCodeIterator) {
-        final String text = startingLine.getToken(2);
-        return new PrintlnOperation(startingLine, text);
+    public PrintlnOperationReader(final ExpressionResolver expressionResolver) {
+        this.expressionResolver = requireNonNull(expressionResolver);
     }
 
     @Override
@@ -50,7 +54,17 @@ public class PrintlnOperationReader extends AbstractOperationReader<PrintlnOpera
     }
 
     @Override
+    protected PrintlnOperation get(final SourceLine sourceLine, final ListIterator<SourceLine> compiledCodeIterator) {
+        final Expression expression = expressionResolver.resolve(extractExpressionTokens(sourceLine), sourceLine);
+        return new PrintlnOperation(sourceLine, expression);
+    }
+
+    @Override
     protected Optional<String> getOperationDefiningKeyword() {
         return Optional.of("println");
+    }
+
+    private List<String> extractExpressionTokens(final SourceLine sourceLine) {
+        return sourceLine.subList(2, sourceLine.getTokenCount() - 1);
     }
 }

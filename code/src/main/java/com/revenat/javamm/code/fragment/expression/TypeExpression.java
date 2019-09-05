@@ -42,8 +42,6 @@ public enum TypeExpression implements Expression {
 
     DOUBLE(Double.class);
 
-    // TODO ARRAY
-
     private static final Map<String, TypeExpression> ALL_TYPES = Arrays
             .stream(TypeExpression.values())
             .collect(toUnmodifiableMap(TypeExpression::getKeyword, identity()));

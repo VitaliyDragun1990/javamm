@@ -20,6 +20,7 @@ package com.revenat.javamm.interpreter.component.impl.operation.simple;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
 
@@ -49,7 +50,6 @@ class PrintlnOperationInterpreterTest {
 
     private PrintlnOperationInterpreter interpreter;
 
-
     @BeforeEach
     void setUp() {
         System.setOut(new PrintStream(memoryOutput));
@@ -63,12 +63,12 @@ class PrintlnOperationInterpreterTest {
 
     @Test
     @Order(1)
-    void designatesThatItCanInterpretPrintlnOperation() {
+    void designatesItCanInterpretPrintlnOperation() {
         assertThat(interpreter.getOperationClass(), equalTo(PrintlnOperation.class));
     }
 
     @Test
-    void canInterpretPrintlnOperation() {
+    void shouldInterpretPrintlnOperation() {
         final PrintlnOperation operation = printlnOperation("Hello");
 
         interpreter.interpret(operation);
@@ -76,7 +76,7 @@ class PrintlnOperationInterpreterTest {
         assertOutput("Hello");
     }
 
-    private void assertOutput(String expectedOutput) {
+    private void assertOutput(final String expectedOutput) {
         assertThat(outputFrom(memoryOutput), equalTo(println(expectedOutput)));
     }
 
@@ -89,7 +89,22 @@ class PrintlnOperationInterpreterTest {
     }
 
     private PrintlnOperation printlnOperation(final String text) {
-        return new PrintlnOperation(new SourceLine("test", 1, List.of("println", "(", text, ")")), text);
+        return new PrintlnOperation(
+                new SourceLine("test", 1, List.of("println", "(", text, ")")),
+                new ExpressionDummy(text));
+    }
+
+    private static class ExpressionDummy implements Expression {
+        private final String text;
+
+        private ExpressionDummy(final String text) {
+            this.text = text;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
     }
 
 }

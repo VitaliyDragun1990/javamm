@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2019. http://devonline.academy
  *
@@ -14,22 +15,14 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.code.fragment;
-
-import com.revenat.javamm.code.component.ExpressionContext;
+package com.revenat.javamm.compiler.component;
 
 /**
- * Represents any kind of expression
+ * Responsible for building expressions that consist of one token only.
  *
  * @author Vitaliy Dragun
  *
  */
-public interface Expression {
+public interface SingleTokenExpressionBuilder extends ExpressionBuilder {
 
-    /**
-     * Returns evaluated value of this expression
-     */
-    default Object getValue(final ExpressionContext expressionContext) {
-        return expressionContext.getValue(this);
-    }
 }

@@ -21,6 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.interpreter.component.impl.OperationDummyA;
 import com.revenat.javamm.interpreter.error.TerminateInterpreterException;
 
@@ -38,7 +39,7 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @DisplayName("a abstract operation interpreter")
 class AbstractOperationInterpreterTest {
 
-    private final AbstractOperationInterpreterSpy abstractInterpreter = new AbstractOperationInterpreterSpy();
+    private final AbstractOperationInterpreterSpy abstractInterpreter = new AbstractOperationInterpreterSpy(new ExpressionContextDummy());
 
     private void assertOperationInterpreted(final OperationDummyA operationToInterpret) {
         assertThat(abstractInterpreter.getInterpretedOperation(), sameInstance(operationToInterpret));
@@ -46,6 +47,12 @@ class AbstractOperationInterpreterTest {
 
     @Test
     @Order(1)
+    void canNotBeCreatedWithoutExpressionContext() {
+        assertThrows(NullPointerException.class, () -> new AbstractOperationInterpreterSpy(null));
+    }
+
+    @Test
+    @Order(2)
     void shouldInterpretOperation() {
         final OperationDummyA operationToInterpret = new OperationDummyA();
 
@@ -55,7 +62,7 @@ class AbstractOperationInterpreterTest {
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     void shouldFailToInterpretIfTerminated() {
         abstractInterpreter.setTerimated(true);
 
@@ -65,6 +72,10 @@ class AbstractOperationInterpreterTest {
     private class AbstractOperationInterpreterSpy extends AbstractOperationInterpreter<OperationDummyA> {
         private boolean isTerimated = false;
         private  OperationDummyA interpretedOperation = null;
+
+        public AbstractOperationInterpreterSpy(final ExpressionContext expressionContext) {
+            super(expressionContext);
+        }
 
         OperationDummyA getInterpretedOperation() {
             return interpretedOperation;

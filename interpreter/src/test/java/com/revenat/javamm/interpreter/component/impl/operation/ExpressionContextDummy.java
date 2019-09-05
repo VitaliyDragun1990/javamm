@@ -15,31 +15,24 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.operation.simple;
+package com.revenat.javamm.interpreter.component.impl.operation;
 
 import com.revenat.javamm.code.component.ExpressionContext;
-import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
-import com.revenat.javamm.interpreter.component.impl.operation.AbstractOperationInterpreter;
+import com.revenat.javamm.code.fragment.Expression;
+import com.revenat.javamm.code.fragment.UpdatableExpression;
 
 /**
- * Default operation interpreter for 'println' operation
- *
  * @author Vitaliy Dragun
  *
  */
-public class PrintlnOperationInterpreter extends AbstractOperationInterpreter<PrintlnOperation> {
+public class ExpressionContextDummy implements ExpressionContext {
 
-    public PrintlnOperationInterpreter(final ExpressionContext expressionContext) {
-        super(expressionContext);
+    @Override
+    public Object getValue(final Expression expression) {
+        return null;
     }
 
     @Override
-    public Class<PrintlnOperation> getOperationClass() {
-        return PrintlnOperation.class;
-    }
-
-    @Override
-    protected void interpretOperation(final PrintlnOperation operation) {
-        System.out.println(operation.getExpression().getValue(expressionContext));
+    public void setValue(final UpdatableExpression updatableExpression, final Object updatedValue) {
     }
 }

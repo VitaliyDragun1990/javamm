@@ -17,15 +17,23 @@
 
 package com.revenat.javamm.interpreter.component.impl.operation;
 
+import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.interpreter.component.OperationInterpreter;
 import com.revenat.javamm.interpreter.error.TerminateInterpreterException;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
  *
  */
 public abstract class AbstractOperationInterpreter<T extends Operation> implements OperationInterpreter<T> {
+    protected final ExpressionContext expressionContext;
+
+    public AbstractOperationInterpreter(final ExpressionContext expressionContext) {
+        this.expressionContext = requireNonNull(expressionContext);
+    }
 
     @Override
     public final void interpret(final T operation) {

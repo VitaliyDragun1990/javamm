@@ -20,9 +20,11 @@ package com.revenat.javamm.interpreter.component.impl.operation.simple;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
+import com.revenat.javamm.interpreter.component.impl.operation.ExpressionContextDummy;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -53,7 +55,7 @@ class PrintlnOperationInterpreterTest {
     @BeforeEach
     void setUp() {
         System.setOut(new PrintStream(memoryOutput));
-        interpreter = new PrintlnOperationInterpreter();
+        interpreter = new PrintlnOperationInterpreter(new ExpressionContextDummy());
     }
 
     @AfterAll
@@ -91,20 +93,20 @@ class PrintlnOperationInterpreterTest {
     private PrintlnOperation printlnOperation(final String text) {
         return new PrintlnOperation(
                 new SourceLine("test", 1, List.of("println", "(", text, ")")),
-                new ExpressionDummy(text));
+                new ExpressionStub(text)
+        );
     }
 
-    private static class ExpressionDummy implements Expression {
+    private static class ExpressionStub implements Expression {
         private final String text;
 
-        private ExpressionDummy(final String text) {
+        private ExpressionStub(final String text) {
             this.text = text;
         }
 
         @Override
-        public String toString() {
+        public Object getValue(final ExpressionContext expressionContext) {
             return text;
         }
     }
-
 }

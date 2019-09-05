@@ -17,9 +17,13 @@
 
 package com.revenat.javamm.interpreter;
 
+import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
+import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
+import com.revenat.javamm.interpreter.component.ExpressionUpdater;
 import com.revenat.javamm.interpreter.component.OperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.BlockOperationInterpreterImpl;
+import com.revenat.javamm.interpreter.component.impl.ExpressionContextImpl;
 import com.revenat.javamm.interpreter.component.impl.InterpreterImpl;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.PrintlnOperationInterpreter;
 
@@ -33,7 +37,16 @@ import java.util.Set;
  *
  */
 public class InterpreterConfigurator {
-    private final Set<OperationInterpreter<?>> operationInterpreters = Set.of(new PrintlnOperationInterpreter());
+    private final Set<ExpressionEvaluator<?>> expressionEvaluators = Set.of();
+
+    private final Set<ExpressionUpdater<?>> expressionUpdaters = Set.of();
+
+    private final ExpressionContext expressionContext =
+            new ExpressionContextImpl(expressionEvaluators, expressionUpdaters);
+
+    private final Set<OperationInterpreter<?>> operationInterpreters = Set.of(
+            new PrintlnOperationInterpreter(expressionContext)
+    );
 
     private final BlockOperationInterpreter blockOperationInterpreter = new BlockOperationInterpreterImpl(
             operationInterpreters);

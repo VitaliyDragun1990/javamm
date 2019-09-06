@@ -22,7 +22,7 @@ import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
 import com.revenat.javamm.interpreter.component.impl.operation.AbstractOperationInterpreter;
 
 /**
- * Default operation interpreter for 'println' operation
+ * Default operation interpreter for {@code println} operation
  *
  * @author Vitaliy Dragun
  *

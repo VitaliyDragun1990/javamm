@@ -15,15 +15,12 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl;
+package com.revenat.javamm.test.doubles;
 
-import com.revenat.javamm.code.fragment.Operation;
-import com.revenat.javamm.code.fragment.SourceLine;
-
-public class OperationDummyA implements Operation {
+public class OperationInterpreterSpy extends AbstractOperationInterpreterSpy<OperationDummy> {
 
     @Override
-    public SourceLine getSourceLine() {
-        return null;
+    public Class<OperationDummy> getOperationClass() {
+        return OperationDummy.class;
     }
 }

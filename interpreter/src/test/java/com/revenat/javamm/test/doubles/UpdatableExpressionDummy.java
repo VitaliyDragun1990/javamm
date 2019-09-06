@@ -15,15 +15,10 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl;
+package com.revenat.javamm.test.doubles;
 
-import com.revenat.javamm.code.fragment.Operation;
-import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.UpdatableExpression;
 
-class OperationDummyB implements Operation {
+public class UpdatableExpressionDummy implements UpdatableExpression {
 
-    @Override
-    public SourceLine getSourceLine() {
-        return null;
-    }
 }

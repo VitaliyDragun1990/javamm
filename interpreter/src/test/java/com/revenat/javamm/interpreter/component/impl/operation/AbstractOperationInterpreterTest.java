@@ -22,8 +22,8 @@ import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.component.ExpressionContext;
-import com.revenat.javamm.interpreter.component.impl.OperationDummyA;
 import com.revenat.javamm.interpreter.error.TerminateInterpreterException;
+import com.revenat.javamm.test.doubles.OperationDummy;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -41,7 +41,7 @@ class AbstractOperationInterpreterTest {
 
     private final AbstractOperationInterpreterSpy abstractInterpreter = new AbstractOperationInterpreterSpy(new ExpressionContextDummy());
 
-    private void assertOperationInterpreted(final OperationDummyA operationToInterpret) {
+    private void assertOperationInterpreted(final OperationDummy operationToInterpret) {
         assertThat(abstractInterpreter.getInterpretedOperation(), sameInstance(operationToInterpret));
     }
 
@@ -54,7 +54,7 @@ class AbstractOperationInterpreterTest {
     @Test
     @Order(2)
     void shouldInterpretOperation() {
-        final OperationDummyA operationToInterpret = new OperationDummyA();
+        final OperationDummy operationToInterpret = new OperationDummy();
 
         abstractInterpreter.interpret(operationToInterpret);
 
@@ -66,18 +66,18 @@ class AbstractOperationInterpreterTest {
     void shouldFailToInterpretIfTerminated() {
         abstractInterpreter.setTerimated(true);
 
-        assertThrows(TerminateInterpreterException.class, () -> abstractInterpreter.interpret(new OperationDummyA()));
+        assertThrows(TerminateInterpreterException.class, () -> abstractInterpreter.interpret(new OperationDummy()));
     }
 
-    private class AbstractOperationInterpreterSpy extends AbstractOperationInterpreter<OperationDummyA> {
+    private class AbstractOperationInterpreterSpy extends AbstractOperationInterpreter<OperationDummy> {
         private boolean isTerimated = false;
-        private  OperationDummyA interpretedOperation = null;
+        private  OperationDummy interpretedOperation = null;
 
         public AbstractOperationInterpreterSpy(final ExpressionContext expressionContext) {
             super(expressionContext);
         }
 
-        OperationDummyA getInterpretedOperation() {
+        OperationDummy getInterpretedOperation() {
             return interpretedOperation;
         }
 
@@ -86,12 +86,12 @@ class AbstractOperationInterpreterTest {
         }
 
         @Override
-        public Class<OperationDummyA> getOperationClass() {
-            return OperationDummyA.class;
+        public Class<OperationDummy> getOperationClass() {
+            return OperationDummy.class;
         }
 
         @Override
-        protected void interpretOperation(final OperationDummyA operation) {
+        protected void interpretOperation(final OperationDummy operation) {
             this.interpretedOperation = operation;
         }
 

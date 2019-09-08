@@ -18,23 +18,40 @@
 package com.revenat.javamm.code.fragment.operation;
 
 import com.revenat.javamm.code.fragment.Expression;
-import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.Variable;
 
 import static java.util.Objects.requireNonNull;
 
 /**
- * Represents well known {@code println} operation
+ * Represents variable declaration operation
  *
  * @author Vitaliy Dragun
  *
  */
-public class PrintlnOperation extends AbstractOperation implements Operation {
+public final class VariableDeclarationOperation extends AbstractOperation {
+    private final boolean constant;
+
+    private final Variable variable;
+
     private final Expression expression;
 
-    public PrintlnOperation(final SourceLine sourceLine, final Expression expression) {
+    public VariableDeclarationOperation(final SourceLine sourceLine,
+                                        final boolean constant,
+                                        final Variable variable,
+                                        final Expression expression) {
         super(sourceLine);
+        this.constant = constant;
+        this.variable = requireNonNull(variable);
         this.expression = requireNonNull(expression);
+    }
+
+    public boolean isConstant() {
+        return constant;
+    }
+
+    public Variable getVariable() {
+        return variable;
     }
 
     public Expression getExpression() {

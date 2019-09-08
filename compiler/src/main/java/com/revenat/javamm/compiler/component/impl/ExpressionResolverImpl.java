@@ -55,6 +55,6 @@ public class ExpressionResolverImpl implements ExpressionResolver {
     }
 
     private JavammLineSyntaxError syntaxError(final List<String> expressionTokens, final SourceLine sourceLine) {
-        return new JavammLineSyntaxError("Unsupported expression: " + join("", expressionTokens), sourceLine);
+        return new JavammLineSyntaxError("Unsupported expression: " + join(" ", expressionTokens), sourceLine);
     }
 }

@@ -19,10 +19,13 @@ package com.revenat.javamm.compiler.component.impl;
 
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.Variable;
 import com.revenat.javamm.code.fragment.expression.ConstantExpression;
 import com.revenat.javamm.code.fragment.expression.NullValueExpression;
 import com.revenat.javamm.code.fragment.expression.TypeExpression;
+import com.revenat.javamm.code.fragment.expression.VariableExpression;
 import com.revenat.javamm.compiler.component.SingleTokenExpressionBuilder;
+import com.revenat.javamm.compiler.component.VariableBuilder;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 
 import java.util.List;
@@ -34,7 +37,7 @@ import static com.revenat.javamm.code.syntax.Keywords.NULL;
 import static com.revenat.javamm.code.syntax.Keywords.TRUE;
 import static com.revenat.javamm.code.syntax.SyntaxUtils.isValidSyntaxToken;
 
-import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 
 
 /**
@@ -42,6 +45,11 @@ import static java.lang.String.format;
  *
  */
 public class SingleTokenExpressionBuilderImpl implements SingleTokenExpressionBuilder {
+    private final VariableBuilder variableBuilder;
+
+    public SingleTokenExpressionBuilderImpl(final VariableBuilder variableBuilder) {
+        this.variableBuilder = requireNonNull(variableBuilder);
+    }
 
     @Override
     public boolean canBuild(final List<String> tokens) {
@@ -59,6 +67,7 @@ public class SingleTokenExpressionBuilderImpl implements SingleTokenExpressionBu
      * var a = false
      * var a = 1
      * var a = 1.1
+     * var a = b
      */
     @Override
     public Expression build(final List<String> expressionTokens, final SourceLine sourceLine) {
@@ -74,22 +83,39 @@ public class SingleTokenExpressionBuilderImpl implements SingleTokenExpressionBu
         } else if (isConstantLiteral(token)) {
             return buildConstantExpression(token, sourceLine);
         } else {
-            throw syntaxError(sourceLine, "Invalid constant: %s", token);
+            return buildVariableExpression(token, sourceLine);
         }
     }
 
     private Expression buildConstantExpression(final String token, final SourceLine sourceLine) {
-        final String result = isString(token) ? buildStringLiteral(token, sourceLine) : token;
+        final Object result = buildConstantLiteral(token, sourceLine);
         return ConstantExpression.valueOf(result);
+    }
+
+    private Object buildConstantLiteral(final String token, final SourceLine sourceLine) {
+        if (isStringLiteral(token)) {
+            return buildStringLiteral(token, sourceLine);
+        } else if (isBooleanLiteral(token)) {
+            return Boolean.parseBoolean(token);
+        } else if (isIntegerLiteral(token)) {
+            return Integer.parseInt(token);
+        } else {
+            return Double.parseDouble(token);
+        }
+    }
+
+    private Expression buildVariableExpression(final String name, final SourceLine sourceLine) {
+        final Variable var = variableBuilder.build(name, sourceLine);
+        return new VariableExpression(var);
     }
 
     private String buildStringLiteral(final String token, final SourceLine sourceLine) {
         final String openDelimiter = getOpenDelimiter(token);
 
         if (closeDelimiterIsMissing(token)) {
-            throw syntaxError(sourceLine, "%s expected at the end of the string token", openDelimiter);
+            throw new JavammLineSyntaxError(sourceLine, "%s expected at the end of the string token", openDelimiter);
         } else if (delimitersDoNotMatch(token, openDelimiter)) {
-            throw syntaxError(sourceLine,
+            throw new JavammLineSyntaxError(sourceLine,
                     "%s expected at the end of the string literal instead of %s", openDelimiter, getLastChar(token));
         }
         return stringWithoutDelimiters(token);
@@ -111,10 +137,6 @@ public class SingleTokenExpressionBuilderImpl implements SingleTokenExpressionBu
         return token.charAt(token.length() - 1);
     }
 
-    private JavammLineSyntaxError syntaxError(final SourceLine sourceLine, final String template, final Object...args) {
-        return new JavammLineSyntaxError(format(template, args), sourceLine);
-    }
-
     private String stringWithoutDelimiters(final String token) {
         return token.substring(1, token.length() - 1);
     }
@@ -124,22 +146,22 @@ public class SingleTokenExpressionBuilderImpl implements SingleTokenExpressionBu
     }
 
     private boolean isConstantLiteral(final String token) {
-        return isBoolean(token) || isInteger(token) || isDouble(token) || isString(token);
+        return isBooleanLiteral(token) || isIntegerLiteral(token) || isDoubleLiteral(token) || isStringLiteral(token);
     }
 
     private boolean isNullLiteral(final String token) {
         return NULL.equals(token);
     }
 
-    private boolean isString(final String token) {
+    private boolean isStringLiteral(final String token) {
         return STRING_DELIMITERS.contains(token.charAt(0));
     }
 
-    private boolean isBoolean(final String token) {
+    private boolean isBooleanLiteral(final String token) {
         return TRUE.equals(token) || FALSE.equals(token);
     }
 
-    private boolean isInteger(final String token) {
+    private boolean isIntegerLiteral(final String token) {
         try {
             Integer.parseInt(token);
             return true;
@@ -148,7 +170,7 @@ public class SingleTokenExpressionBuilderImpl implements SingleTokenExpressionBu
         }
     }
 
-    private boolean isDouble(final String token) {
+    private boolean isDoubleLiteral(final String token) {
         try {
             Double.parseDouble(token);
             return true;

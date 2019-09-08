@@ -21,15 +21,32 @@ import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.UpdatableExpression;
 
-public class ExpressionContextDummy implements ExpressionContext {
+public class ExpressionContextSpy implements ExpressionContext {
+    private Expression lastGetValueExpression = null;
+    private UpdatableExpression  lastSetValueExpression = null;
+    private Object lastUpdateValue = null;
 
     @Override
     public Object getValue(final Expression expression) {
+        this.lastGetValueExpression = expression;
         return null;
     }
 
     @Override
     public void setValue(final UpdatableExpression updatableExpression, final Object updatedValue) {
+        this.lastSetValueExpression = updatableExpression;
+        this.lastUpdateValue = updatedValue;
     }
 
+    public Expression lastGetValueExpression() {
+        return lastGetValueExpression;
+    }
+
+    public UpdatableExpression lastSetValueExpression() {
+        return lastSetValueExpression;
+    }
+
+    public Object lastUpdateValue() {
+        return lastUpdateValue;
+    }
 }

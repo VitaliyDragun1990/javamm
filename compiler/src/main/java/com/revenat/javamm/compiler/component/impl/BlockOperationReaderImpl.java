@@ -62,10 +62,7 @@ public class BlockOperationReaderImpl implements BlockOperationReader {
         return operationReaders.stream()
                 .filter(reader -> reader.canRead(sourceLine))
                 .findFirst()
-                .orElseThrow(() -> syntaxError(sourceLine));
-    }
-
-    private JavammLineSyntaxError syntaxError(final SourceLine sourceLine) {
-        return new JavammLineSyntaxError("Unsupported operation: " + sourceLine.getCommand(), sourceLine);
+                .orElseThrow(
+                    () -> new JavammLineSyntaxError(sourceLine, "Unsupported operation: %s", sourceLine.getCommand()));
     }
 }

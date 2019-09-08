@@ -19,7 +19,7 @@ package com.revenat.javamm.code.fragment;
 
 /**
  * Marker interface responsible for marking classes, which represents
- * a part of the byte-code.
+ * a part of the byte code.
  *
  * @author Vitaliy Dragun
  *

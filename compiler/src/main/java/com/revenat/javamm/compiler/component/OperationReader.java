@@ -19,7 +19,7 @@ package com.revenat.javamm.compiler.component;
 
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceLine;
-import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
+import com.revenat.javamm.compiler.error.JavammSyntaxError;
 
 import java.util.ListIterator;
 
@@ -48,7 +48,7 @@ public interface OperationReader {
      *                             compiled code just after the source line where
      *                             particular byte code operation starts
      * @return byte code {@link Operation} obtained compiled code
-     * @throws JavammLineSyntaxError if source line contains suntax error
+     * @throws JavammSyntaxError if source line contains syntax error
      */
     Operation read(SourceLine startingLine, ListIterator<SourceLine> compiledCodeIterator);
 }

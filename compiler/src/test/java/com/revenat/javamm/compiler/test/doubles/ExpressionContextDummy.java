@@ -15,29 +15,24 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.code.fragment.operation;
+package com.revenat.javamm.compiler.test.doubles;
 
+import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
-import com.revenat.javamm.code.fragment.Operation;
-import com.revenat.javamm.code.fragment.SourceLine;
-
-import static java.util.Objects.requireNonNull;
+import com.revenat.javamm.code.fragment.UpdatableExpression;
 
 /**
- * Represents well known {@code println} operation
- *
  * @author Vitaliy Dragun
  *
  */
-public class PrintlnOperation extends AbstractOperation implements Operation {
-    private final Expression expression;
+public class ExpressionContextDummy implements ExpressionContext {
 
-    public PrintlnOperation(final SourceLine sourceLine, final Expression expression) {
-        super(sourceLine);
-        this.expression = requireNonNull(expression);
+    @Override
+    public Object getValue(final Expression expression) {
+        return null;
     }
 
-    public Expression getExpression() {
-        return expression;
+    @Override
+    public void setValue(final UpdatableExpression updatableExpression, final Object updatedValue) {
     }
 }

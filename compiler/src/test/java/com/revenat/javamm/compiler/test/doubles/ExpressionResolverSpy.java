@@ -15,29 +15,29 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.code.fragment.operation;
+package com.revenat.javamm.compiler.test.doubles;
 
 import com.revenat.javamm.code.fragment.Expression;
-import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.compiler.component.ExpressionResolver;
 
-import static java.util.Objects.requireNonNull;
+import java.util.List;
 
-/**
- * Represents well known {@code println} operation
- *
- * @author Vitaliy Dragun
- *
- */
-public class PrintlnOperation extends AbstractOperation implements Operation {
-    private final Expression expression;
+public class ExpressionResolverSpy implements ExpressionResolver {
+    private Expression expressionToResolve;
+    private List<String> lastExpressionTokens = List.of();
 
-    public PrintlnOperation(final SourceLine sourceLine, final Expression expression) {
-        super(sourceLine);
-        this.expression = requireNonNull(expression);
+    public List<String> getLastExpressionTokens() {
+        return lastExpressionTokens;
     }
 
-    public Expression getExpression() {
-        return expression;
+    public void setExpressionToResolve(final Expression expressionToResolve) {
+        this.expressionToResolve = expressionToResolve;
+    }
+
+    @Override
+    public Expression resolve(final List<String> expressionTokens, final SourceLine sourceLine) {
+        lastExpressionTokens = expressionTokens;
+        return expressionToResolve;
     }
 }

@@ -23,6 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.component.ExpressionContext;
+import com.revenat.javamm.code.test.doubles.ExpressionContextDummy;
 
 import java.util.stream.Stream;
 

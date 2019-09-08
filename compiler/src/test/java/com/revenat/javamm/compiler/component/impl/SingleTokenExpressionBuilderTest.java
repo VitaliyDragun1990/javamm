@@ -23,11 +23,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.Variable;
 import com.revenat.javamm.code.fragment.expression.ConstantExpression;
 import com.revenat.javamm.code.fragment.expression.NullValueExpression;
 import com.revenat.javamm.code.fragment.expression.TypeExpression;
+import com.revenat.javamm.code.fragment.expression.VariableExpression;
 import com.revenat.javamm.compiler.component.SingleTokenExpressionBuilder;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
+import com.revenat.javamm.compiler.test.doubles.ExpressionContextDummy;
+import com.revenat.javamm.compiler.test.doubles.VariableBuilderStub;
+import com.revenat.javamm.compiler.test.doubles.VariableDummy;
 
 import java.util.List;
 
@@ -54,14 +59,18 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a single token expression builder")
-class SingleTokenExpressionBuilderImplTest {
+class SingleTokenExpressionBuilderTest {
     private static final SourceLine DUMMY_SOURCE_LINE = SourceLine.EMPTY_SOURCE_LINE;
+    private static final Variable DUMMY_VARIABLE = new VariableDummy();
 
+    private VariableBuilderStub variableBuilderStub;
     private SingleTokenExpressionBuilder expresssionBuilder;
 
     @BeforeEach
     void setUp() {
-        expresssionBuilder = new SingleTokenExpressionBuilderImpl();
+        variableBuilderStub = new VariableBuilderStub();
+        variableBuilderStub.setVariableToBuild(DUMMY_VARIABLE);
+        expresssionBuilder = new SingleTokenExpressionBuilderImpl(variableBuilderStub);
     }
 
     private void assertSupport(final String... tokens) {
@@ -79,6 +88,12 @@ class SingleTokenExpressionBuilderImplTest {
     private void assertExpressionType(final String token, final Class<? extends Expression> expressionType) {
         final Expression expression = expresssionBuilder.build(List.of(token), DUMMY_SOURCE_LINE);
         assertThat(expression.getClass(), equalTo(expressionType));
+    }
+
+    private void assertConstantExpression(final String token, final Class<?> constantType) {
+        final Expression expression = expresssionBuilder.build(List.of(token), DUMMY_SOURCE_LINE);
+        assertThat(expression.getClass(), equalTo(ConstantExpression.class));
+        assertThat(expression.getValue(new ExpressionContextDummy()).getClass(), equalTo(constantType));
     }
 
     @Test
@@ -138,8 +153,8 @@ class SingleTokenExpressionBuilderImplTest {
     @ParameterizedTest
     @ValueSource(strings = { "a", "varA", "person1" })
     @Order(6)
-    void shouldSupportValidVariableNames(final String decimalLiteral) {
-        assertSupport(decimalLiteral);
+    void shouldSupportValidVariableNames(final String variableName) {
+        assertSupport(variableName);
     }
 
     @ParameterizedTest
@@ -153,28 +168,28 @@ class SingleTokenExpressionBuilderImplTest {
     @ValueSource(strings = { "10", "1", "99999999" })
     @Order(8)
     void shouldBuildConstantExpressionForIntegerLiteralToken(final String token) {
-        assertExpressionType(token, ConstantExpression.class);
+        assertConstantExpression(token, Integer.class);
     }
 
     @ParameterizedTest
     @ValueSource(strings = { "10.5", "0.255", ".255" })
     @Order(9)
-    void shouldBuildConstantExpressionForDecimalLiteralToken(final String token) {
-        assertExpressionType(token, ConstantExpression.class);
+    void shouldBuildConstantExpressionForDoubleLiteralToken(final String token) {
+        assertConstantExpression(token, Double.class);
     }
 
     @ParameterizedTest
     @ValueSource(strings = { "'test'", "\"hello\"" })
     @Order(10)
     void shouldBuildConstantExpressionForStringLiteralToken(final String token) {
-        assertExpressionType(token, ConstantExpression.class);
+        assertConstantExpression(token, String.class);
     }
 
     @ParameterizedTest
     @ValueSource(strings = { TRUE, FALSE })
     @Order(11)
     void shouldBuildConstantExpressionForBooleanLiteralToken(final String token) {
-        assertExpressionType(token, ConstantExpression.class);
+        assertConstantExpression(token, Boolean.class);
     }
 
     @Test
@@ -197,9 +212,9 @@ class SingleTokenExpressionBuilderImplTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "=", "++", "()", "[" })
+    @ValueSource(strings = { "a", "b", "varA"})
     @Order(15)
-    void shouldFailToBuildForUnsupportedToken(final String token) {
-        assertFailToBuild(token);
+    void shouldBuildVariableExpressionForVariableNameToken(final String token) {
+        assertExpressionType(token, VariableExpression.class);
     }
 }

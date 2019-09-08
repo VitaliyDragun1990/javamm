@@ -25,7 +25,7 @@ import com.revenat.javamm.code.component.ExpressionContext;
  * @author Vitaliy Dragun
  *
  */
-public interface UpdatableExpression {
+public interface UpdatableExpression extends Expression {
 
     /**
      * Sets new value for this expression

@@ -15,16 +15,12 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.operation;
+package com.revenat.javamm.interpreter.test.doubles;
 
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.UpdatableExpression;
 
-/**
- * @author Vitaliy Dragun
- *
- */
 public class ExpressionContextDummy implements ExpressionContext {
 
     @Override

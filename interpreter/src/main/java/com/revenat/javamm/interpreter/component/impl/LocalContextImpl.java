@@ -1,0 +1,86 @@
+
+/*
+ * Copyright (c) 2019. http://devonline.academy
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.revenat.javamm.interpreter.component.impl;
+
+import com.revenat.javamm.code.fragment.Variable;
+import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
+import com.revenat.javamm.interpreter.model.LocalContext;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.util.Objects.requireNonNull;
+
+/**
+ * @author Vitaliy Dragun
+ *
+ */
+public class LocalContextImpl implements LocalContext {
+    private final Map<Variable, Object> variables = new HashMap<>();
+
+    private final Map<Variable, Object> finals = new HashMap<>();
+
+    @Override
+    public void setFinalValue(final Variable variable, final Object value) {
+        assertNoSuchFinalDefined(requireNonNull(variable));
+        assertNoSuchVariableDefined(requireNonNull(variable));
+
+        finals.put(variable, value);
+    }
+
+    @Override
+    public void setVariableValue(final Variable variable, final Object value) {
+        assertNoSuchFinalDefined(requireNonNull(variable));
+
+        variables.put(variable, value);
+    }
+
+    @Override
+    public boolean isVariableDefined(final Variable variable) {
+        requireNonNull(variable);
+        return variables.containsKey(variable) || finals.containsKey(variable);
+    }
+
+    @Override
+    public Object getVariableValue(final Variable variable) {
+        if (!isVariableDefined(variable)) {
+            throw new JavammLineRuntimeError("Can not get value for variable '%s': variable is not defined",
+                    variable.getName());
+        }
+
+        if (variables.containsKey(variable)) {
+            return variables.get(variable);
+        } else {
+            return finals.get(variable);
+        }
+    }
+
+    private void assertNoSuchFinalDefined(final Variable variable) {
+        if (finals.containsKey(variable)) {
+            throw new JavammLineRuntimeError("Final variable '%s' can not be changed", variable.getName());
+        }
+    }
+
+    private void assertNoSuchVariableDefined(final Variable variable) {
+        if (variables.containsKey(variable)) {
+            throw new JavammLineRuntimeError(
+                    "Can not set value for final '%s': variable with same name is already defined",
+                    variable.getName());
+        }
+    }
+}

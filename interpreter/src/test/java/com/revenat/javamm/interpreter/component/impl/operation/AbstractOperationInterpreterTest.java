@@ -23,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.interpreter.error.TerminateInterpreterException;
-import com.revenat.javamm.test.doubles.OperationDummy;
+import com.revenat.javamm.interpreter.test.doubles.ExpressionContextDummy;
+import com.revenat.javamm.interpreter.test.doubles.OperationDummy;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;

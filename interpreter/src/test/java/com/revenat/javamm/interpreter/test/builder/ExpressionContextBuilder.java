@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.test.builder;
+package com.revenat.javamm.interpreter.test.builder;
 
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.interpreter.component.ExpressionEvaluator;

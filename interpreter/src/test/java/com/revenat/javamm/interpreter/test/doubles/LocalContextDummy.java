@@ -17,10 +17,30 @@
 
 package com.revenat.javamm.interpreter.test.doubles;
 
-public class OperationInterpreterSpy extends AbstractOperationInterpreterSpy<OperationDummy> {
+import com.revenat.javamm.code.fragment.Variable;
+import com.revenat.javamm.interpreter.model.LocalContext;
+
+/**
+ * @author Vitaliy Dragun
+ *
+ */
+public class LocalContextDummy implements LocalContext {
 
     @Override
-    public Class<OperationDummy> getOperationClass() {
-        return OperationDummy.class;
+    public void setFinalValue(final Variable variable, final Object value) {
+    }
+
+    @Override
+    public void setVariableValue(final Variable variable, final Object value) {
+    }
+
+    @Override
+    public boolean isVariableDefined(final Variable variable) {
+        return false;
+    }
+
+    @Override
+    public Object getVariableValue(final Variable variable) {
+        return null;
     }
 }

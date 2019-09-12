@@ -26,11 +26,11 @@ import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.exception.ConfigException;
 import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.ExpressionUpdater;
-import com.revenat.javamm.test.builder.ExpressionContextBuilder;
-import com.revenat.javamm.test.doubles.ExpressionDummy;
-import com.revenat.javamm.test.doubles.ExpressionEvaluatorStub;
-import com.revenat.javamm.test.doubles.ExpressionUpdaterSpy;
-import com.revenat.javamm.test.doubles.UpdatableExpressionDummy;
+import com.revenat.javamm.interpreter.test.builder.ExpressionContextBuilder;
+import com.revenat.javamm.interpreter.test.doubles.ExpressionDummy;
+import com.revenat.javamm.interpreter.test.doubles.ExpressionEvaluatorStub;
+import com.revenat.javamm.interpreter.test.doubles.ExpressionUpdaterSpy;
+import com.revenat.javamm.interpreter.test.doubles.UpdatableExpressionDummy;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

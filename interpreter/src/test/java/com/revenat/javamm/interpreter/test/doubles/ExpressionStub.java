@@ -17,10 +17,18 @@
 
 package com.revenat.javamm.interpreter.test.doubles;
 
-public class OperationInterpreterSpy extends AbstractOperationInterpreterSpy<OperationDummy> {
+import com.revenat.javamm.code.component.ExpressionContext;
+import com.revenat.javamm.code.fragment.Expression;
+
+public class ExpressionStub implements Expression {
+    private final Object value;
+
+    public ExpressionStub(final Object value) {
+        this.value = value;
+    }
 
     @Override
-    public Class<OperationDummy> getOperationClass() {
-        return OperationDummy.class;
+    public Object getValue(final ExpressionContext expressionContext) {
+        return value;
     }
 }

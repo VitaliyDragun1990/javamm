@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.test.doubles;
+package com.revenat.javamm.interpreter.test.doubles;
 
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceLine;

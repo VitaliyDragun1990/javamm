@@ -17,10 +17,32 @@
 
 package com.revenat.javamm.interpreter.test.doubles;
 
-public class OperationInterpreterSpy extends AbstractOperationInterpreterSpy<OperationDummy> {
+import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.interpreter.model.CurrentRuntime;
+import com.revenat.javamm.interpreter.model.LocalContext;
+
+public class CurrentRuntimeDummy implements CurrentRuntime {
 
     @Override
-    public Class<OperationDummy> getOperationClass() {
-        return OperationDummy.class;
+    public String getCurrentModuleName() {
+        return null;
+    }
+
+    @Override
+    public SourceLine getCurrentSourceLine() {
+        return null;
+    }
+
+    @Override
+    public void setCurrentSourceLine(final SourceLine currentSourceLine) {
+    }
+
+    @Override
+    public LocalContext getCurrentLocalContext() {
+        return null;
+    }
+
+    @Override
+    public void setCurrentLocalContext(final LocalContext localContext) {
     }
 }

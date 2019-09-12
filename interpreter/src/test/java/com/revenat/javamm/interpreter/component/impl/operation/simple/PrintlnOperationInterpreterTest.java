@@ -24,7 +24,7 @@ import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
-import com.revenat.javamm.interpreter.component.impl.operation.ExpressionContextDummy;
+import com.revenat.javamm.interpreter.test.doubles.ExpressionContextDummy;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

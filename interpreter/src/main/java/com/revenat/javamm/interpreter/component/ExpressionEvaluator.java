@@ -18,6 +18,7 @@
 package com.revenat.javamm.interpreter.component;
 
 import com.revenat.javamm.code.fragment.Expression;
+import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 
 /**
  * Responsible for evaluating expressions
@@ -39,6 +40,7 @@ public interface ExpressionEvaluator<T extends Expression> {
      *
      * @param expression expression to evaluate
      * @return result of the expression evaluation
+     * @throws JavammRuntimeError if provided expression can not be evaluated
      */
     Object evaluate(T expression);
 }

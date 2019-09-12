@@ -25,5 +25,4 @@ package com.revenat.javamm.code.fragment;
  *
  */
 public interface CompiledCodeFragment {
-
 }

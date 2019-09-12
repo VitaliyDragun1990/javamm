@@ -15,15 +15,25 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.interpreter.component.impl;
+
+import com.revenat.javamm.interpreter.component.RuntimeBuilder;
+import com.revenat.javamm.interpreter.model.CurrentRuntime;
+import com.revenat.javamm.interpreter.model.LocalContext;
+
 /**
  * @author Vitaliy Dragun
  *
  */
-module javamm.interpreter {
-    requires transitive javamm.code;
+public class RuntimeBuilderImpl implements RuntimeBuilder {
 
-    exports com.revenat.javamm.interpreter;
-    exports com.revenat.javamm.interpreter.error;
-    exports com.revenat.javamm.interpreter.model;
-//    exports com.revenat.javamm.interpreter.component;
+    @Override
+    public LocalContext buildLocalContext() {
+        return new LocalContextImpl();
+    }
+
+    @Override
+    public CurrentRuntime buildCurrentRuntime() {
+        return new CurrentRuntimeImpl();
+    }
 }

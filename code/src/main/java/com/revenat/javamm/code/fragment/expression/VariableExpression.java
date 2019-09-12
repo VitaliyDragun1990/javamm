@@ -20,7 +20,7 @@ package com.revenat.javamm.code.fragment.expression;
 import com.revenat.javamm.code.fragment.UpdatableExpression;
 import com.revenat.javamm.code.fragment.Variable;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Represents any variable
@@ -33,7 +33,7 @@ public class VariableExpression implements UpdatableExpression {
     private final Variable variable;
 
     public VariableExpression(final Variable variable) {
-        this.variable = Objects.requireNonNull(variable);
+        this.variable = requireNonNull(variable);
     }
 
     public Variable getVariable() {

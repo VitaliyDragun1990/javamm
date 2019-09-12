@@ -20,6 +20,14 @@ package com.revenat.javamm.interpreter.component.impl;
 import com.revenat.javamm.code.fragment.ByteCode;
 import com.revenat.javamm.interpreter.Interpreter;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
+import com.revenat.javamm.interpreter.component.RuntimeBuilder;
+import com.revenat.javamm.interpreter.model.CurrentRuntime;
+import com.revenat.javamm.interpreter.model.LocalContext;
+
+import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.releaseCurrentRuntime;
+import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.setCurrentRuntime;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Simple interpreter
@@ -30,12 +38,26 @@ import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
 public class InterpreterImpl implements Interpreter {
     private final BlockOperationInterpreter blockOperationInterpreter;
 
-    public InterpreterImpl(final BlockOperationInterpreter blockOperationInterpreter) {
-        this.blockOperationInterpreter = blockOperationInterpreter;
+    private final RuntimeBuilder runtimeBuilder;
+
+    public InterpreterImpl(final BlockOperationInterpreter blockOperationInterpreter,
+                           final RuntimeBuilder runtimeBuilder) {
+        this.blockOperationInterpreter = requireNonNull(blockOperationInterpreter);
+        this.runtimeBuilder = requireNonNull(runtimeBuilder);
     }
 
     @Override
     public void interpret(final ByteCode byteCode) {
-        blockOperationInterpreter.interpret(byteCode.getCode());
+        final CurrentRuntime currentRuntime = runtimeBuilder.buildCurrentRuntime();
+        setCurrentRuntime(currentRuntime);
+
+        final LocalContext localContext = runtimeBuilder.buildLocalContext();
+        currentRuntime.setCurrentLocalContext(localContext);
+
+        try {
+            blockOperationInterpreter.interpret(byteCode.getCode());
+        } finally {
+            releaseCurrentRuntime();
+        }
     }
 }

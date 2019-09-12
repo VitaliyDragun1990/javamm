@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.BinaryOperator;
 
+import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCurrentRuntime;
+
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toUnmodifiableMap;
 
@@ -68,6 +70,7 @@ public class BlockOperationInterpreterImpl implements BlockOperationInterpreter 
     public void interpret(final Block block) {
         for (final Operation operation : block.getOperations()) {
             final OperationInterpreter operationInterpreter = getInterpreterFor(operation);
+            updateCurrentRuntime(operation);
             operationInterpreter.interpret(operation);
         }
     }
@@ -81,4 +84,7 @@ public class BlockOperationInterpreterImpl implements BlockOperationInterpreter 
         }
     }
 
+    private void updateCurrentRuntime(final Operation operation) {
+        getCurrentRuntime().setCurrentOperation(operation);
+    }
 }

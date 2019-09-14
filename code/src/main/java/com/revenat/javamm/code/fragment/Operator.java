@@ -15,16 +15,27 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.code.fragment;
+
 /**
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
-    exports com.revenat.javamm.code.fragment.expression;
-    exports com.revenat.javamm.code.fragment.operator;
-    exports com.revenat.javamm.code.component;
-    exports com.revenat.javamm.code.exception;
-    exports com.revenat.javamm.code.syntax;
+public interface Operator {
+
+    /**
+     * Returns type of an operator: {@code unary} or {@code binary}
+     */
+    String getType();
+
+    /**
+     * Returns code of an operator
+     */
+    String getCode();
+
+    /**
+     * Returns {@code true} if an operator is an assignment operator, {@code false}
+     * otherwise
+     */
+    boolean isAssignment();
 }

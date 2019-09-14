@@ -27,10 +27,11 @@ import com.revenat.javamm.compiler.component.VariableBuilder;
 import com.revenat.javamm.compiler.component.impl.BlockOperationReaderImpl;
 import com.revenat.javamm.compiler.component.impl.CompilerImpl;
 import com.revenat.javamm.compiler.component.impl.ExpressionResolverImpl;
-import com.revenat.javamm.compiler.component.impl.SingleTokenExpressionBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.SourceLineReaderImpl;
 import com.revenat.javamm.compiler.component.impl.TokenParserImpl;
 import com.revenat.javamm.compiler.component.impl.VariableBuilderImpl;
+import com.revenat.javamm.compiler.component.impl.expression.builder.BinaryExpressionBuilder;
+import com.revenat.javamm.compiler.component.impl.expression.builder.SingleTokenExpressionBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.operation.simple.FinalDeclarationOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.PrintlnOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.VariableDeclarationOperationReader;
@@ -54,9 +55,13 @@ public class CompilerConfigurator {
     private final SingleTokenExpressionBuilder singleTokenExpressionBuilder =
             new SingleTokenExpressionBuilderImpl(variableBuilder);
 
+    private final BinaryExpressionBuilder binaryExpressionBuilder =
+            new BinaryExpressionBuilder(singleTokenExpressionBuilder);
+
     private final ExpressionResolver expressionResolver = new ExpressionResolverImpl(
             Set.of(
-                    singleTokenExpressionBuilder
+                    singleTokenExpressionBuilder,
+                    binaryExpressionBuilder
             )
     );
 

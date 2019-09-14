@@ -24,7 +24,7 @@ import com.revenat.javamm.compiler.error.JavammSyntaxError;
 import java.util.List;
 
 /**
- * Responsible for building particular kind of expresison
+ * Responsible for building particular kind of expression
  *
  * @author Vitaliy Dragun
  *

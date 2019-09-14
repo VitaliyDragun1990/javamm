@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.compiler.component.impl;
+package com.revenat.javamm.compiler.component.impl.expression.builder;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,6 +30,7 @@ import com.revenat.javamm.code.fragment.expression.TypeExpression;
 import com.revenat.javamm.code.fragment.expression.VariableExpression;
 import com.revenat.javamm.compiler.component.SingleTokenExpressionBuilder;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
+import com.revenat.javamm.compiler.component.impl.expression.builder.SingleTokenExpressionBuilderImpl;
 import com.revenat.javamm.compiler.test.doubles.ExpressionContextDummy;
 import com.revenat.javamm.compiler.test.doubles.VariableBuilderStub;
 import com.revenat.javamm.compiler.test.doubles.VariableDummy;

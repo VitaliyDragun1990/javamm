@@ -1,11 +1,9 @@
 var a = 1
-var b
-final c = a
-final d = integer
+var b = 2
+final c = a - b
 
 println ( a )
 println ( b )
 println ( c )
-println ( d )
+println ( c + 1 )
 println ( 'HelloWorld' )
-println ( 'HelloJavamm' )

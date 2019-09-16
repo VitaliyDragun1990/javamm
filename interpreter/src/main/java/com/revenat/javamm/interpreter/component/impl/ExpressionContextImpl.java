@@ -21,6 +21,7 @@ import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.exception.ConfigException;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.UpdatableExpression;
+import com.revenat.javamm.interpreter.component.ExpressionContextAware;
 import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.ExpressionUpdater;
 
@@ -79,6 +80,7 @@ public class ExpressionContextImpl implements ExpressionContext {
     private Map<Class<? extends Expression>, ExpressionEvaluator> getExpressionEvaluators(
             final Set<ExpressionEvaluator<?>> expressionEvaluators) {
         return expressionEvaluators.stream()
+                .peek(this::setExpressionContextIfAware)
                 .collect(
                         toUnmodifiableMap(
                                 ExpressionEvaluator::getExpressionClass, identity(), checkForEvaluatorDuplicates()));
@@ -87,9 +89,16 @@ public class ExpressionContextImpl implements ExpressionContext {
     private Map<Class<? extends UpdatableExpression>, ExpressionUpdater> getExpressionUpdaters(
             final Set<ExpressionUpdater<?>> expressionUpdaters) {
         return expressionUpdaters.stream()
+                .peek(this::setExpressionContextIfAware)
                 .collect(
                         toUnmodifiableMap(
                                 ExpressionUpdater::getExpressionClass, identity(), checkForUpdaterDuplicates()));
+    }
+
+    private void setExpressionContextIfAware(final Object instance) {
+        if (instance instanceof ExpressionContextAware) {
+            ((ExpressionContextAware) instance).setExpressionContext(this);
+        }
     }
 
     private BinaryOperator<ExpressionEvaluator> checkForEvaluatorDuplicates() {

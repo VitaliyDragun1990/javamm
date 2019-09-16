@@ -15,17 +15,22 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.code.util;
+
 /**
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
-    exports com.revenat.javamm.code.fragment.expression;
-    exports com.revenat.javamm.code.fragment.operator;
-    exports com.revenat.javamm.code.component;
-    exports com.revenat.javamm.code.exception;
-    exports com.revenat.javamm.code.syntax;
-    exports com.revenat.javamm.code.util;
+public final class TypeUtils {
+
+    private TypeUtils() {
+    }
+
+    public static String getType(final Object value) {
+        return value != null ? getType(value.getClass()) : "null";
+    }
+
+    public static String getType(final Class<?> value) {
+        return value != null ? value.getSimpleName().toLowerCase() : "null";
+    }
 }

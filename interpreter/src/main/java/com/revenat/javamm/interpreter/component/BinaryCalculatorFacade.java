@@ -15,17 +15,23 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.interpreter.component;
+
+import com.revenat.javamm.code.component.ExpressionContext;
+import com.revenat.javamm.code.fragment.Expression;
+import com.revenat.javamm.code.fragment.operator.BinaryOperator;
+
 /**
+ * Facade for {@linkplain BinaryExpressionCalculator binary calculator} functionality to calculate any supported binary
+ * expression.
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
-    exports com.revenat.javamm.code.fragment.expression;
-    exports com.revenat.javamm.code.fragment.operator;
-    exports com.revenat.javamm.code.component;
-    exports com.revenat.javamm.code.exception;
-    exports com.revenat.javamm.code.syntax;
-    exports com.revenat.javamm.code.util;
+public interface BinaryCalculatorFacade {
+
+    Object calculate(ExpressionContext expressionContext,
+                     Expression operand1,
+                     BinaryOperator operator,
+                     Expression operand2);
 }

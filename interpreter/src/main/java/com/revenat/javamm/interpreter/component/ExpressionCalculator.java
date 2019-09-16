@@ -15,17 +15,21 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.interpreter.component;
+
+import com.revenat.javamm.code.fragment.Operator;
+
 /**
+ * Calculates expressions that contain {@linkplain Operator operator}
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
-    exports com.revenat.javamm.code.fragment.expression;
-    exports com.revenat.javamm.code.fragment.operator;
-    exports com.revenat.javamm.code.component;
-    exports com.revenat.javamm.code.exception;
-    exports com.revenat.javamm.code.syntax;
-    exports com.revenat.javamm.code.util;
+public interface ExpressionCalculator {
+
+    /**
+     * Returns particular {@linkplain Operator operator} this expression calculator
+     * can handle
+     */
+    Operator getOperator();
 }

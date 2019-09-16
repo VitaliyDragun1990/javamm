@@ -18,15 +18,19 @@
 package com.revenat.javamm.interpreter;
 
 import com.revenat.javamm.code.component.ExpressionContext;
+import com.revenat.javamm.interpreter.component.BinaryCalculatorFacade;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
 import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.ExpressionUpdater;
 import com.revenat.javamm.interpreter.component.OperationInterpreter;
 import com.revenat.javamm.interpreter.component.RuntimeBuilder;
+import com.revenat.javamm.interpreter.component.impl.BinaryCalculatorFacadeImpl;
 import com.revenat.javamm.interpreter.component.impl.BlockOperationInterpreterImpl;
 import com.revenat.javamm.interpreter.component.impl.ExpressionContextImpl;
 import com.revenat.javamm.interpreter.component.impl.InterpreterImpl;
 import com.revenat.javamm.interpreter.component.impl.RuntimeBuilderImpl;
+import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.SubtractionBinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.expression.evaluator.BinaryExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.VariableExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.PrintlnOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.VariableDeclarationOperationInterpreter;
@@ -41,8 +45,13 @@ import java.util.Set;
  *
  */
 public class InterpreterConfigurator {
+    private final BinaryCalculatorFacade binaryCalculatorFacade = new BinaryCalculatorFacadeImpl(Set.of(
+            new SubtractionBinaryExpressionCalculator()
+    ));
+
     private final Set<ExpressionEvaluator<?>> expressionEvaluators = Set.of(
-            new VariableExpressionEvaluator()
+            new VariableExpressionEvaluator(),
+            new BinaryExpressionEvaluator(binaryCalculatorFacade)
     );
 
     private final Set<ExpressionUpdater<?>> expressionUpdaters = Set.of();

@@ -15,17 +15,18 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.interpreter.component;
+
+import com.revenat.javamm.code.component.ExpressionContext;
+
 /**
+ * Expresses that component that implements this interface needs
+ * {@linkplain ExpressionContext expression context} to be provided
+ *
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
-    exports com.revenat.javamm.code.fragment.expression;
-    exports com.revenat.javamm.code.fragment.operator;
-    exports com.revenat.javamm.code.component;
-    exports com.revenat.javamm.code.exception;
-    exports com.revenat.javamm.code.syntax;
-    exports com.revenat.javamm.code.util;
+public interface ExpressionContextAware {
+
+    void setExpressionContext(ExpressionContext expressionContext);
 }

@@ -29,6 +29,8 @@ import com.revenat.javamm.interpreter.component.impl.BlockOperationInterpreterIm
 import com.revenat.javamm.interpreter.component.impl.ExpressionContextImpl;
 import com.revenat.javamm.interpreter.component.impl.InterpreterImpl;
 import com.revenat.javamm.interpreter.component.impl.RuntimeBuilderImpl;
+import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.AdditionBinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.LogicalAndBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.SubtractionBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.BinaryExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.VariableExpressionEvaluator;
@@ -45,8 +47,11 @@ import java.util.Set;
  *
  */
 public class InterpreterConfigurator {
-    private final BinaryCalculatorFacade binaryCalculatorFacade = new BinaryCalculatorFacadeImpl(Set.of(
-            new SubtractionBinaryExpressionCalculator()
+    private final BinaryCalculatorFacade binaryCalculatorFacade = new BinaryCalculatorFacadeImpl(
+            Set.of(
+                    new SubtractionBinaryExpressionCalculator(),
+                    new AdditionBinaryExpressionCalculator(),
+                    new LogicalAndBinaryExpressionCalculator()
     ));
 
     private final Set<ExpressionEvaluator<?>> expressionEvaluators = Set.of(

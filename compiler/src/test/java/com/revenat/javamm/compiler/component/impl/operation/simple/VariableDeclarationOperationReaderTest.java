@@ -17,7 +17,6 @@
 
 package com.revenat.javamm.compiler.component.impl.operation.simple;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -34,6 +33,8 @@ import com.revenat.javamm.compiler.test.doubles.VariableDummy;
 
 import java.util.List;
 import java.util.ListIterator;
+
+import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -75,10 +76,6 @@ class VariableDeclarationOperationReaderTest {
         return new SourceLine("test", 1, List.of(tokens));
     }
 
-    private void assertErrorMessage(final JavammLineSyntaxError e, final String msg) {
-        assertThat(e.getMessage(), containsString(msg));
-    }
-
     private void assertNotConstant(final VariableDeclarationOperation operation) {
         assertFalse(operation.isConstant());
     }
@@ -117,7 +114,7 @@ class VariableDeclarationOperationReaderTest {
        final JavammLineSyntaxError e =
                assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(sourceLine("var"), DUMMY_CODE));
 
-       assertErrorMessage(e, "Variable name is missing");
+       assertErrorMessageContains(e, "Variable name is missing");
     }
 
     @ParameterizedTest
@@ -133,7 +130,7 @@ class VariableDeclarationOperationReaderTest {
         final JavammLineSyntaxError e =
                 assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(sourceLine(code), DUMMY_CODE));
 
-        assertErrorMessage(e, "'=' is missing or has invalid position");
+        assertErrorMessageContains(e, "'=' is missing or has invalid position");
     }
 
     @Test
@@ -142,7 +139,7 @@ class VariableDeclarationOperationReaderTest {
         final JavammLineSyntaxError e =
                 assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(sourceLine("var a ="), DUMMY_CODE));
 
-        assertErrorMessage(e, "Variable expression is missing");
+        assertErrorMessageContains(e, "Variable expression is missing");
     }
 
     @ParameterizedTest

@@ -46,7 +46,10 @@ public class BinaryExpressionEvaluator extends AbstractExpressionEvaluator
     @Override
     public Object evaluate(final BinaryExpression expression) {
         return calculatorFacade.calculate(
-                getExpressionContext(), expression.getOperand1(), expression.getOperator(),
-                expression.getOperand2());
+                getExpressionContext(),
+                expression.getOperand1(),
+                expression.getOperator(),
+                expression.getOperand2()
+        );
     }
 }

@@ -181,7 +181,5 @@ class SourceLineReaderTest {
         public TokenParserResult parseLineWithStartedMultilineComment(final String sourceCodeLine) {
             return answers.getOrDefault(sourceCodeLine + Boolean.toString(true), LINE_WITHOUT_TOKENS);
         }
-
     }
-
 }

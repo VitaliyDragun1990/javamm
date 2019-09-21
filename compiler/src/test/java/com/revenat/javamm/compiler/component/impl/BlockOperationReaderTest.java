@@ -27,6 +27,7 @@ import com.revenat.javamm.code.fragment.operation.Block;
 import com.revenat.javamm.compiler.component.BlockOperationReader;
 import com.revenat.javamm.compiler.component.OperationReader;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
+import com.revenat.javamm.compiler.test.doubles.OperationDummy;
 
 import java.util.Arrays;
 import java.util.List;
@@ -92,13 +93,4 @@ class BlockOperationReaderTest {
             return new OperationDummy();
         }
     }
-
-    private static class OperationDummy implements Operation {
-
-        @Override
-        public SourceLine getSourceLine() {
-            return null;
-        }
-    }
-
 }

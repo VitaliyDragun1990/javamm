@@ -19,7 +19,7 @@ package com.revenat.javamm.compiler.component.impl.util;
 
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
-import static com.revenat.javamm.code.syntax.Keywords.KEYWORDS;
+import static com.revenat.javamm.code.syntax.Keywords.ALL_KEYWORDS;
 
 import static java.lang.Character.isLetter;
 
@@ -53,7 +53,7 @@ public final class SyntaxValidationUtils {
      */
     public static void validateThatNameIsNotKeyword(final LanguageFeature feature, final String name,
             final SourceLine sourceLine) {
-        if (KEYWORDS.contains(name)) {
+        if (ALL_KEYWORDS.contains(name)) {
             throw new JavammLineSyntaxError(sourceLine, "The keyword '%s' can not be used as %s name", name,
                     feature.getName());
         }

@@ -17,7 +17,6 @@
 
 package com.revenat.javamm.interpreter.component.impl;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,6 +30,8 @@ import com.revenat.javamm.interpreter.test.doubles.ExpressionDummy;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionEvaluatorStub;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionUpdaterSpy;
 import com.revenat.javamm.interpreter.test.doubles.UpdatableExpressionDummy;
+
+import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -62,10 +63,6 @@ class ExpressionContextTest {
         expressionUpdaterSpy = new ExpressionUpdaterSpy();
     }
 
-    private void assertExceptionMessage(final ConfigException e, final String msg) {
-        assertThat(e.getMessage(), containsString(msg));
-    }
-
     @Test
     @Order(1)
     void canNotBeCreatedWithSeveralEvaluatorsForSingleExpression() {
@@ -77,7 +74,7 @@ class ExpressionContextTest {
                         ConfigException.class,
                         () -> new ExpressionContextBuilder().withEvaluators(evaluatorA, evaluatorB).build()
                 );
-        assertExceptionMessage(e, "Duplicate of ExpressionEvaluator found");
+        assertErrorMessageContains(e, "Duplicate of ExpressionEvaluator found");
     }
 
     @Test
@@ -91,7 +88,7 @@ class ExpressionContextTest {
                         ConfigException.class,
                         () -> new ExpressionContextBuilder().withUpdaters(updaterA, updaterB).build()
                 );
-        assertExceptionMessage(e, "Duplicate of ExpressionUpdater found");
+        assertErrorMessageContains(e, "Duplicate of ExpressionUpdater found");
     }
 
     @Test
@@ -100,7 +97,7 @@ class ExpressionContextTest {
         expressionContext = new ExpressionContextBuilder().build();
 
         final ConfigException e = assertThrows(ConfigException.class, () -> expressionContext.getValue(DUMMY_EXPRESSION));
-        assertExceptionMessage(e, "ExpressionEvaluator not defined for " + ExpressionDummy.class);
+        assertErrorMessageContains(e, "ExpressionEvaluator not defined for " + ExpressionDummy.class);
     }
 
     @Test
@@ -110,7 +107,7 @@ class ExpressionContextTest {
 
         final ConfigException e =
                 assertThrows(ConfigException.class, () -> expressionContext.setValue(DUMMY_UPDATABLE_EXPRESSION, TEST_VALUE));
-        assertExceptionMessage(e, "ExpressionUpdater not defined for " + UpdatableExpressionDummy.class);
+        assertErrorMessageContains(e, "ExpressionUpdater not defined for " + UpdatableExpressionDummy.class);
     }
 
     @Test

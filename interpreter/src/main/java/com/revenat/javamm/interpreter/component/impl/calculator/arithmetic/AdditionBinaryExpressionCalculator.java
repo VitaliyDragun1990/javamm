@@ -23,31 +23,41 @@ import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryEx
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for arithmetic subtraction operator
+ * implementation for arithmetic addition operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class SubtractionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public class AdditionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
-    public SubtractionBinaryExpressionCalculator() {
-        super(BinaryOperator.ARITHMETIC_SUBTRACTION);
+    public AdditionBinaryExpressionCalculator() {
+        super(BinaryOperator.ARITHMETIC_ADDITION);
     }
 
     @Override
     protected Object calculate(final Object value1, final Object value2) {
+        Object result = null;
+
         if (areIntegers(value1, value2)) {
-            return calculateSubtractionForIntegers(value1, value2);
+            result = calculateIntegerAddition(value1, value2);
         } else if (areDoubles(value1, value2)) {
-            return calculateSubtractionForDoubles(value1, value2);
+            result = calculateDoubleAddition(value1, value2);
         } else if (areNumbers(value1, value2)) {
-            return calculateSubtractionForDoubles(value1, value2);
+            result = ((Number) value1).doubleValue() + ((Number) value2).doubleValue();
+        } else if (eitherOneIsString(value1, value2)) {
+            result = calculateStringConcatenation(value1, value2);
+        } else {
+            throw createNotSupportedTypesError(value1, value2);
         }
-        throw createNotSupportedTypesError(value1, value2);
+        return result;
     }
 
-    private boolean areNumbers(final Object value1, final Object value2) {
-        return value1 instanceof Number && value2 instanceof Number;
+    private String calculateStringConcatenation(final Object value1, final Object value2) {
+        return String.valueOf(value1) + String.valueOf(value2);
+    }
+
+    private double calculateDoubleAddition(final Object value1, final Object value2) {
+        return (Double) value1 + (Double) value2;
     }
 
     private boolean areIntegers(final Object value1, final Object value2) {
@@ -58,11 +68,15 @@ public class SubtractionBinaryExpressionCalculator extends AbstractBinaryExpress
         return value1 instanceof Double && value2 instanceof Double;
     }
 
-    private int calculateSubtractionForIntegers(final Object value1, final Object value2) {
-        return (Integer) value1 - (Integer) value2;
+    private boolean areNumbers(final Object value1, final Object value2) {
+        return value1 instanceof Number && value2 instanceof Number;
     }
 
-    private double calculateSubtractionForDoubles(final Object value1, final Object value2) {
-        return ((Number) value1).doubleValue() - ((Number) value2).doubleValue();
+    private boolean eitherOneIsString(final Object value1, final Object value2) {
+        return value1 instanceof String || value2 instanceof String;
+    }
+
+    private int calculateIntegerAddition(final Object value1, final Object value2) {
+        return (Integer) value1 + (Integer) value2;
     }
 }

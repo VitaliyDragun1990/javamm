@@ -20,11 +20,10 @@ package com.revenat.javamm.interpreter.component.impl.operation.simple;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import com.revenat.javamm.code.component.ExpressionContext;
-import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionContextDummy;
+import com.revenat.javamm.interpreter.test.doubles.ExpressionStub;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -95,18 +94,5 @@ class PrintlnOperationInterpreterTest {
                 new SourceLine("test", 1, List.of("println", "(", text, ")")),
                 new ExpressionStub(text)
         );
-    }
-
-    private static class ExpressionStub implements Expression {
-        private final String text;
-
-        private ExpressionStub(final String text) {
-            this.text = text;
-        }
-
-        @Override
-        public Object getValue(final ExpressionContext expressionContext) {
-            return text;
-        }
     }
 }

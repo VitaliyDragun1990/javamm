@@ -51,8 +51,8 @@ public enum BinaryOperator implements Operator {
     BITWISE_SHIFT_LEFT("<<"),
     BITWISE_SHIFT_RIGHT_ZERO_FILL(">>>"),
 
-    LOGIC_AND("&&"),
-    LOGIC_OR("||"),
+    LOGICAL_AND("&&"),
+    LOGICAL_OR("||"),
 
     ASSIGNMENT_MULTIPLICATION("*="),
     ASSIGNMENT_DIVISION("/="),

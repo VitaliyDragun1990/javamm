@@ -17,18 +17,18 @@
 
 package com.revenat.javamm.interpreter.component.impl;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.fragment.Variable;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
-import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 import com.revenat.javamm.interpreter.model.CurrentRuntimeProvider;
 import com.revenat.javamm.interpreter.model.LocalContext;
 import com.revenat.javamm.interpreter.test.doubles.CurrentRuntimeStub;
 import com.revenat.javamm.interpreter.test.doubles.VariableStub;
+
+import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,10 +64,6 @@ class LocalContextTest {
 
     void assertDefined(final Variable variable) {
         assertTrue(localContext.isVariableDefined(variable));
-    }
-
-    void assertErrorMessageContains(final JavammRuntimeError e, final String string) {
-        assertThat(e.getMessage(), containsString(string));
     }
 
     void assertValue(final Variable variable, final Object expectedValue) {

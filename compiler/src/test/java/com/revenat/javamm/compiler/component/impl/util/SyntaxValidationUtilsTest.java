@@ -111,6 +111,6 @@ class SyntaxValidationUtilsTest {
     }
 
     static Stream<String> keywordProvider() {
-        return Keywords.KEYWORDS.stream();
+        return Keywords.ALL_KEYWORDS.stream();
     }
 }

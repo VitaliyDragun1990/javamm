@@ -47,8 +47,12 @@ public class BinaryCalculatorFacadeImpl implements BinaryCalculatorFacade {
     @Override
     public Object calculate(final ExpressionContext expressionContext, final Expression operand1,
             final BinaryOperator operator, final Expression operand2) {
-        final BinaryExpressionCalculator calculator = binaryExpressionCalculatorMap.get(operator);
+        final BinaryExpressionCalculator calculator = getBinaryCalculatorFor(operator);
         return calculator.calculate(expressionContext, operand1, operand2);
+    }
+
+    private BinaryExpressionCalculator getBinaryCalculatorFor(final BinaryOperator operator) {
+        return binaryExpressionCalculatorMap.get(operator);
     }
 
     private Map<BinaryOperator, BinaryExpressionCalculator> getBinaryExpressionCalculatorMap(

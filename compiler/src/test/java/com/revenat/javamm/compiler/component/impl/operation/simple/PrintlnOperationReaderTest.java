@@ -28,6 +28,7 @@ import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
+import com.revenat.javamm.compiler.test.doubles.ExpressionDummy;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -97,9 +98,6 @@ class PrintlnOperationReaderTest {
 
         assertThat(operation.getExpression(), equalTo(DUMMY_EXPRESSION));
         assertThat(operation.getSourceLine(), equalTo(CORRECT_PRINTLN_LINE));
-    }
-
-    private static class ExpressionDummy implements Expression {
     }
 
     private static class ExpressionResolverStub implements ExpressionResolver {

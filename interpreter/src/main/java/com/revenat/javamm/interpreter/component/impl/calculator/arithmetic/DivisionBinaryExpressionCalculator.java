@@ -19,37 +19,42 @@ package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for arithmetic subtraction operator
+ * implementation for arithmetic division operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class SubtractionBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
+public class DivisionBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
 
-    public SubtractionBinaryExpressionCalculator() {
-        super(BinaryOperator.ARITHMETIC_SUBTRACTION);
+    public DivisionBinaryExpressionCalculator() {
+        super(BinaryOperator.ARITHMETIC_DIVISION);
     }
 
     @Override
     protected Object calculate(final Object value1, final Object value2) {
         if (areIntegers(value1, value2)) {
-            return calculateSubtractionForIntegers(value1, value2);
-        } else if (areDoubles(value1, value2)) {
-            return calculateSubtractionForDoubles(value1, value2);
-        } else if (areNumbers(value1, value2)) {
-            return calculateSubtractionForDoubles(value1, value2);
+            return calculateIntegersDivision(value1, value2);
+        } else if (areDoubles(value1, value2) || areNumbers(value1, value2)) {
+            return calculateDoubleDivision(value1, value2);
         }
         throw createNotSupportedTypesError(value1, value2);
     }
 
-    private int calculateSubtractionForIntegers(final Object value1, final Object value2) {
-        return (Integer) value1 - (Integer) value2;
+    private double calculateDoubleDivision(final Object value1, final Object value2) {
+        return ((Number) value1).doubleValue() / ((Number) value2).doubleValue();
     }
 
-    private double calculateSubtractionForDoubles(final Object value1, final Object value2) {
-        return ((Number) value1).doubleValue() - ((Number) value2).doubleValue();
+    private int calculateIntegersDivision(final Object value1, final Object value2) {
+        final Integer v1 = (Integer) value1;
+        final Integer v2 = (Integer) value2;
+
+        if (v2 == 0) {
+            throw new JavammLineRuntimeError("/ by zero");
+        }
+        return v1 / v2;
     }
 }

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
+package com.revenat.javamm.interpreter.component.impl.calculator;
 
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
@@ -28,6 +28,11 @@ import com.revenat.javamm.interpreter.test.helper.TestCurrentRuntimeManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.TestMethodOrder;
+
+import com.revenat.juinit.addons.ReplaceCamelCase;
 
 /**
  * Abstract parent class for testing all {@linkplain BinaryExpressionCalculator
@@ -36,7 +41,9 @@ import org.junit.jupiter.api.BeforeEach;
  * @author Vitaliy Dragun
  *
  */
-abstract class AbstractBinaryExpressionmCalculatorTest {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@DisplayNameGeneration(ReplaceCamelCase.class)
+public abstract class AbstractBinaryExpressionmCalculatorTest {
     static final ExpressionContext EXPRESSION_CONTEXT_DUMMY = new ExpressionContextDummy();
 
     protected BinaryExpressionCalculator calculator;

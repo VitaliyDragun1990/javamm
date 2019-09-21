@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
+package com.revenat.javamm.interpreter.component.impl.calculator;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -23,6 +23,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
+import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.SubtractionBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 import java.util.stream.Stream;
 
@@ -30,19 +31,12 @@ import static com.revenat.javamm.code.util.TypeUtils.getType;
 import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
-
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a subtraction binary expression calculator")
 class SubtractionBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
 

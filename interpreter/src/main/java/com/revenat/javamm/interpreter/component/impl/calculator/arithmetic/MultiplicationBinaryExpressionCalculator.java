@@ -22,34 +22,33 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for arithmetic subtraction operator
+ * implementation for arithmetic multiplication operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class SubtractionBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
+public class MultiplicationBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
 
-    public SubtractionBinaryExpressionCalculator() {
-        super(BinaryOperator.ARITHMETIC_SUBTRACTION);
+    public MultiplicationBinaryExpressionCalculator() {
+        super(BinaryOperator.ARITHMETIC_MULTIPLICATION);
     }
 
     @Override
     protected Object calculate(final Object value1, final Object value2) {
         if (areIntegers(value1, value2)) {
-            return calculateSubtractionForIntegers(value1, value2);
-        } else if (areDoubles(value1, value2)) {
-            return calculateSubtractionForDoubles(value1, value2);
-        } else if (areNumbers(value1, value2)) {
-            return calculateSubtractionForDoubles(value1, value2);
+            return calculateIntegerMultiplication(value1, value2);
+        } else if (areDoubles(value1, value2) || areNumbers(value1, value2)) {
+            return calculateDoubleMultiplication(value1, value2);
         }
+
         throw createNotSupportedTypesError(value1, value2);
     }
 
-    private int calculateSubtractionForIntegers(final Object value1, final Object value2) {
-        return (Integer) value1 - (Integer) value2;
+    private double calculateDoubleMultiplication(final Object value1, final Object value2) {
+        return ((Number) value1).doubleValue() * ((Number) value2).doubleValue();
     }
 
-    private double calculateSubtractionForDoubles(final Object value1, final Object value2) {
-        return ((Number) value1).doubleValue() - ((Number) value2).doubleValue();
+    private int calculateIntegerMultiplication(final Object value1, final Object value2) {
+        return (Integer) value1 * (Integer) value2;
     }
 }

@@ -74,7 +74,11 @@
 						--add-opens
 						javamm.interpreter/com.revenat.javamm.interpreter.component.impl.expression.evaluator=ALL-UNNAMED
 						--add-opens
+						javamm.interpreter/com.revenat.javamm.interpreter.component.impl.calculator=ALL-UNNAMED
+						--add-opens
 						javamm.interpreter/com.revenat.javamm.interpreter.component.impl.calculator.arithmetic=ALL-UNNAMED
+						--add-opens
+						javamm.interpreter/com.revenat.javamm.interpreter.component.impl.calculator.logical=ALL-UNNAMED
 						--add-opens
 						javamm.interpreter/com.revenat.javamm.interpreter.model=ALL-UNNAMED
 					</argLine>

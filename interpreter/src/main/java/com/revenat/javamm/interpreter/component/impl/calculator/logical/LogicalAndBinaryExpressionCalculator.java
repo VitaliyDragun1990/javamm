@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
+package com.revenat.javamm.interpreter.component.impl.calculator.logical;
 
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;

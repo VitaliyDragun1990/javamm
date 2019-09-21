@@ -19,7 +19,6 @@ package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
@@ -28,7 +27,7 @@ import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryEx
  * @author Vitaliy Dragun
  *
  */
-public class AdditionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public class AdditionBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
 
     public AdditionBinaryExpressionCalculator() {
         super(BinaryOperator.ARITHMETIC_ADDITION);
@@ -58,18 +57,6 @@ public class AdditionBinaryExpressionCalculator extends AbstractBinaryExpression
 
     private double calculateDoubleAddition(final Object value1, final Object value2) {
         return (Double) value1 + (Double) value2;
-    }
-
-    private boolean areIntegers(final Object value1, final Object value2) {
-        return value1 instanceof Integer && value2 instanceof Integer;
-    }
-
-    private boolean areDoubles(final Object value1, final Object value2) {
-        return value1 instanceof Double && value2 instanceof Double;
-    }
-
-    private boolean areNumbers(final Object value1, final Object value2) {
-        return value1 instanceof Number && value2 instanceof Number;
     }
 
     private boolean eitherOneIsString(final Object value1, final Object value2) {

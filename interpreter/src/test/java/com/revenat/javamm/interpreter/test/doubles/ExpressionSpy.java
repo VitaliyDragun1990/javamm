@@ -26,7 +26,7 @@ public class ExpressionSpy extends ExpressionStub {
         super(value);
     }
 
-    public int getGetValueCount() {
+    public int numberOfValueEvaluation() {
         return getValueCount;
     }
 

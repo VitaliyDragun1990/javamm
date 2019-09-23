@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.logical.LogicalAndBinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.logical.LogicalOrBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionSpy;
 
@@ -39,64 +39,64 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-@DisplayName("logical and (&&) binary expression calculator")
-public class LogicalAndBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
+@DisplayName("a logical '||' binary expression calculator")
+class LogicalOrBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
 
     @Test
     @Order(1)
-    void shouldSupportLogicalAndOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.LOGICAL_AND));
+    void shouldSupportLogicalOrOperator() {
+        assertThat(calculator.getOperator(), is(BinaryOperator.LOGICAL_OR));
     }
 
     @Test
     @Order(2)
-    void shouldReturnTrueOnlyIfBothOperandsAreTrue() {
-        final Object result = calculate(true, true);
-
-        assertThat(result, is(true));
+    void shouldReturnTrueIfAtLeastOneOfTheOperandsIsTrue() {
+        assertThat(calculate(true, true), is(true));
+        assertThat(calculate(true, false), is(true));
+        assertThat(calculate(false, true), is(true));
     }
 
     @Test
     @Order(3)
-    void shouldReturnFalseIfEitherOfTwoOperandsIsFalse() {
-        final Object result1 = calculate(true, false);
-        final Object result2 = calculate(false, true);
-
-        assertThat(result1, is(false));
-        assertThat(result2, is(false));
+    void shouldReturnFalseOnlyIfBothOperandsAreFalse() {
+        assertThat(calculate(false, false), is(false));
     }
 
     @Test
     @Order(4)
-    void shouldNotEvaluateSecondOperandIfFirstIsFalse() {
-        final ExpressionSpy operandSpy = new ExpressionSpy(true);
+    void shouldNotEvaluateSecondExpressionIfFirstOneIsTrue() {
+        final ExpressionSpy shouldNotBeEvaluated = new ExpressionSpy(false);
 
-        calculate(expressionWithValue(false), operandSpy);
+        calculate(expressionWithValue(true), shouldNotBeEvaluated);
 
-        assertThat(operandSpy.numberOfValueEvaluation(), is(0));
+        assertThat(shouldNotBeEvaluated.numberOfValueEvaluation(), is(0));
     }
 
     @ParameterizedTest
     @MethodSource("unsupportedOperandProvider")
     @Order(5)
-    void shouldFailToEvaluateIfFirstOperandNotABoolean(final Object operand1) {
-        final Object operand2 = true;
+    void shouldFailIfFirstOperandIsNotABoolean(final Object operand1) {
+        final boolean operand2 = true;
 
-        final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(operand1, true));
+        final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> {
+            calculate(operand1, operand2);
+        });
 
-        assertErrorMessageContains(e, "Operator '&&' is not supported for types: %s and %s",
+        assertErrorMessageContains(e, "Operator '||' is not supported for types: %s and %s",
                 getType(operand1), getType(operand2));
     }
 
     @ParameterizedTest
     @MethodSource("unsupportedOperandProvider")
     @Order(6)
-    void shouldFailToEvaluateIfFirstOperandIsTrueAndSecondIsNotABoolean(final Object operand2) {
-        final Object operand1 = true;
+    void shouldFailIfFirstOperandIsFalseAndSecondOperandIsNotABoolean(final Object operand2) {
+        final boolean operand1 = false;
 
-        final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(operand1, operand2));
+        final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> {
+            calculate(operand1, operand2);
+        });
 
-        assertErrorMessageContains(e, "Operator '&&' is not supported for types: %s and %s",
+        assertErrorMessageContains(e, "Operator '||' is not supported for types: %s and %s",
                 getType(operand1), getType(operand2));
     }
 
@@ -111,6 +111,6 @@ public class LogicalAndBinaryExpressionCalculatorTest extends AbstractBinaryExpr
 
     @Override
     protected BinaryExpressionCalculator createCalculatorUnderTest() {
-        return new LogicalAndBinaryExpressionCalculator();
+        return new LogicalOrBinaryExpressionCalculator();
     }
 }

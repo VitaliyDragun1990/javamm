@@ -24,33 +24,33 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for 'logical and' ({@code &&}) operator
+ * implementation for 'logical or' ({@code ||}) operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class LogicalAndBinaryExpressionCalculator extends AbstractLogicalBinaryExpressionCalculator {
+public class LogicalOrBinaryExpressionCalculator extends AbstractLogicalBinaryExpressionCalculator {
 
-    public LogicalAndBinaryExpressionCalculator() {
-        super(BinaryOperator.LOGICAL_AND);
+    public LogicalOrBinaryExpressionCalculator() {
+        super(BinaryOperator.LOGICAL_OR);
     }
 
     @Override
     public Object calculate(final ExpressionContext expressionContext, final Expression expression1,
             final Expression expression2) {
-        final Object operand1 = expression1.getValue(expressionContext);
+        final Object value1 = expression1.getValue(expressionContext);
 
-        if (isFalsy(operand1)) {
-            return false;
+        if (isTruthy(value1)) {
+            return true;
         } else {
-            return calculate(operand1, expression2.getValue(expressionContext));
+            return calculate(value1, expression2.getValue(expressionContext));
         }
     }
 
     @Override
     protected Object calculate(final Object value1, final Object value2) {
         if (isBoolean(value1) && isBoolean(value2)) {
-            return (Boolean) value1 && (Boolean) value2;
+            return (Boolean) value1 || (Boolean) value2;
         } else {
             throw createNotSupportedTypesError(value1, value2);
         }

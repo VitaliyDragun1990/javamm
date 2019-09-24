@@ -20,33 +20,33 @@ package com.revenat.javamm.interpreter.component.impl.calculator.predicate;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for 'predicate not equals' ({@code !=}) operator
+ * implementation for 'predicate less than or equals' ({@code <=}) operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class IsNotEqualsBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
-    private final IsEqualsBinaryExpressionCalculator oppositeCalculator;
+public class IsLessThanOrEqualsBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
-    public IsNotEqualsBinaryExpressionCalculator() {
-        super(BinaryOperator.PREDICATE_NOT_EQUALS);
-        oppositeCalculator = new IsEqualsBinaryExpressionCalculator();
+    public IsLessThanOrEqualsBinaryExpressionCalculator() {
+        super(BinaryOperator.PREDICATE_LESS_THAN_OR_EQUALS);
     }
 
     @Override
     protected Boolean calculate(final Object value1, final Object value2) {
-        try {
-            return calculateWithOppositeCalculator(value1, value2);
-        } catch (final JavammLineRuntimeError e) {
-            throw createNotSupportedTypesError(value1, value2);
+        if (areNumbers(value1, value2)) {
+            return calculateLessThenOrEqualsOperation(value1, value2);
         }
+        throw createNotSupportedTypesError(value1, value2);
     }
 
-    private Boolean calculateWithOppositeCalculator(final Object value1, final Object value2) {
-        return !oppositeCalculator.calculate(value1, value2);
+    private boolean calculateLessThenOrEqualsOperation(final Object value1, final Object value2) {
+        return ((Number) value1).doubleValue() <= ((Number) value2).doubleValue();
+    }
+
+    private boolean areNumbers(final Object value1, final Object value2) {
+        return value1 instanceof Number && value2 instanceof Number;
     }
 }

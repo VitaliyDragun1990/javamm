@@ -19,6 +19,7 @@ package com.revenat.javamm.interpreter.component.impl.calculator.predicate;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
@@ -27,9 +28,49 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
  * @author Vitaliy Dragun
  *
  */
-public class IsEqualsBinaryExpressionCalculator extends AbstractPredicateEqualsBinaryExpressionCalculator {
+public class IsEqualsBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
     public IsEqualsBinaryExpressionCalculator() {
         super(BinaryOperator.PREDICATE_EQUALS);
+    }
+
+    @Override
+    protected Boolean calculate(final Object value1, final Object value2) {
+        if (booleanAgainstNotBoolean(value1, value2)) {
+            throw createNotSupportedTypesError(value1, value2);
+        } else {
+            return calculateEquals(value1, value2);
+        }
+    }
+
+    private boolean booleanAgainstNotBoolean(final Object value1, final Object value2) {
+        return (isBoolean(value1) && !isBoolean(value2)) ||
+                (!isBoolean(value1) && isBoolean(value2));
+    }
+
+    private boolean calculateEquals(final Object value1, final Object value2) {
+        if (areNumbers(value1, value2)) {
+            return calculateEqualsForNumbers(value1, value2);
+        } else if (areNotNull(value1, value2)) {
+            return value1.equals(value2);
+        } else {
+            return value1 == value2;
+        }
+    }
+
+    private boolean isBoolean(final Object value) {
+        return value instanceof Boolean;
+    }
+
+    private boolean areNotNull(final Object value1, final Object value2) {
+        return value1 != null && value2 != null;
+    }
+
+    private boolean calculateEqualsForNumbers(final Object value1, final Object value2) {
+        return ((Number) value1).doubleValue() == ((Number) value2).doubleValue();
+    }
+
+    private boolean areNumbers(final Object value1, final Object value2) {
+        return value1 instanceof Number && value2 instanceof Number;
     }
 }

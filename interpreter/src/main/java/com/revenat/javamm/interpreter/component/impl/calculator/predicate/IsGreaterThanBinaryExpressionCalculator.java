@@ -24,21 +24,21 @@ import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeErro
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for 'predicate not equals' ({@code !=}) operator
+ * implementation for 'predicate greater than' ({@code >}) operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class IsNotEqualsBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
-    private final IsEqualsBinaryExpressionCalculator oppositeCalculator;
+public class IsGreaterThanBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+    private final IsLessThanOrEqualsBinaryExpressionCalculator oppositeCalculator;
 
-    public IsNotEqualsBinaryExpressionCalculator() {
-        super(BinaryOperator.PREDICATE_NOT_EQUALS);
-        oppositeCalculator = new IsEqualsBinaryExpressionCalculator();
+    public IsGreaterThanBinaryExpressionCalculator() {
+        super(BinaryOperator.PREDICATE_GREATER_THAN);
+        oppositeCalculator = new IsLessThanOrEqualsBinaryExpressionCalculator();
     }
 
     @Override
-    protected Boolean calculate(final Object value1, final Object value2) {
+    protected Object calculate(final Object value1, final Object value2) {
         try {
             return calculateWithOppositeCalculator(value1, value2);
         } catch (final JavammLineRuntimeError e) {

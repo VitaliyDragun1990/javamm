@@ -22,16 +22,22 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.revenat.javamm.code.component.ExpressionContext;
+import com.revenat.javamm.code.exception.ConfigException;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryCalculatorFacade;
+import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.test.doubles.BinaryExpressionCalculatorStub;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionContextDummy;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionDummy;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.jupiter.api.BeforeEach;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
+import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -45,22 +51,37 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a binary calculator facade")
 class BinaryCalculatorFacadeTest {
-    private static final BinaryOperator BINARY_OPERATOR = BinaryOperator.ARITHMETIC_SUBTRACTION;
     private static final ExpressionContext DUMMY_EXPRESSION_CONTEXT = new ExpressionContextDummy();
     private static final Expression OPERAND_1 = new ExpressionDummy();
     private static final Expression OPERAND_2 = new ExpressionDummy();
 
-    private BinaryExpressionCalculatorStub binaryCalculatorStub;
-
     private BinaryCalculatorFacade calculatorFacade;
 
+    private Set<BinaryExpressionCalculator> calculatorsFor(final BinaryOperator...operators) {
+        final Set<BinaryExpressionCalculator> calculators = new HashSet<>();
 
-    @BeforeEach
-    void setUp() {
-        binaryCalculatorStub = new BinaryExpressionCalculatorStub();
-        binaryCalculatorStub.setSupportedOperator(BINARY_OPERATOR);
+        for(final BinaryOperator operator : operators) {
+            final BinaryExpressionCalculatorStub calculator = new BinaryExpressionCalculatorStub();
+            calculator.setSupportedOperator(operator);
+            calculators.add(calculator);
+        }
 
-        calculatorFacade = new BinaryCalculatorFacadeImpl(Set.of(binaryCalculatorStub));
+        return calculators;
+    }
+
+    private Set<BinaryExpressionCalculator> calculatorsForAllOperatorsExcept(final BinaryOperator... excludedOperators) {
+        final Set<BinaryOperator> excluded = Set.of(excludedOperators);
+        final Set<BinaryExpressionCalculator> calculators = calculatorsFor(BinaryOperator.values());
+
+        calculators.removeIf(c -> excluded.contains(c.getOperator()));
+
+        return calculators;
+    }
+
+    private BinaryExpressionCalculatorStub calculatorForOperatorWithExpectedResult(final BinaryOperator operator, final Object expectedResult) {
+        final BinaryExpressionCalculatorStub binaryCalculatorStub = new BinaryExpressionCalculatorStub(operator);
+        binaryCalculatorStub.setCalculationResult(expectedResult);
+        return binaryCalculatorStub;
     }
 
     @Test
@@ -71,12 +92,34 @@ class BinaryCalculatorFacadeTest {
 
     @Test
     @Order(2)
+    void canBeCreatedWithCalculatorsForAllBinaryOperators() {
+        calculatorFacade = new BinaryCalculatorFacadeImpl(calculatorsFor(BinaryOperator.values()));
+    }
+
+    @Disabled
+    @Test
+    @Order(3)
+    void canoNotBeCreatedWithoutCalculatosForSomeOperators() {
+        final Set<BinaryExpressionCalculator> allCalculators = calculatorsForAllOperatorsExcept(ARITHMETIC_ADDITION);
+
+        final ConfigException e = assertThrows(ConfigException.class, () -> new BinaryCalculatorFacadeImpl(allCalculators));
+
+        assertErrorMessageContains(e, "Missing calculator for binary operator: %s", ARITHMETIC_ADDITION);
+    }
+
+    @Test
+    @Order(4)
     void shouldCalculateBinaryExpression() {
-        final int expectedResult = 5;
-        binaryCalculatorStub.setCalculationResult(expectedResult);
+        final Set<BinaryExpressionCalculator> allCalculators = calculatorsForAllOperatorsExcept(ARITHMETIC_ADDITION);
+        allCalculators.add(calculatorForOperatorWithExpectedResult(ARITHMETIC_ADDITION, 5));
+        calculatorFacade = new BinaryCalculatorFacadeImpl(allCalculators);
 
-        final Object result = calculatorFacade.calculate(DUMMY_EXPRESSION_CONTEXT, OPERAND_1, BINARY_OPERATOR, OPERAND_2);
+        final Object result = calculatorFacade.calculate(
+                                                         DUMMY_EXPRESSION_CONTEXT,
+                                                         OPERAND_1,
+                                                         ARITHMETIC_ADDITION,
+                                                         OPERAND_2);
 
-        assertThat(result, equalTo(expectedResult));
+        assertThat(result, equalTo(5));
     }
 }

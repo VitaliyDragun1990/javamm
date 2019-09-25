@@ -53,5 +53,4 @@ class InterpreterConfiguratorTest {
 
         assertThat(interpreterA, sameInstance(interpreterB));
     }
-
 }

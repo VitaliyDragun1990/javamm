@@ -24,12 +24,16 @@ import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryCalculatorFacade;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static java.lang.System.lineSeparator;
 import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toUnmodifiableMap;
 
 /**
@@ -41,7 +45,7 @@ public class BinaryCalculatorFacadeImpl implements BinaryCalculatorFacade {
 
     public BinaryCalculatorFacadeImpl(final Set<BinaryExpressionCalculator> binaryExpressionCalculators) {
         binaryExpressionCalculatorMap = getBinaryExpressionCalculatorMap(requireNonNull(binaryExpressionCalculators));
-        // validateAllOperatorsSupported(binaryExpressionCalculatorMap.keySet(), BinaryOperator.values());
+        assertAllOperatorsSupported(binaryExpressionCalculatorMap.keySet());
     }
 
     @Override
@@ -62,14 +66,25 @@ public class BinaryCalculatorFacadeImpl implements BinaryCalculatorFacade {
                 .collect(toUnmodifiableMap(BinaryExpressionCalculator::getOperator, identity()));
     }
 
-    private void validateAllOperatorsSupported(final Set<BinaryOperator> currentlySupported,
-            final BinaryOperator[] allBianryOperators) {
-        Arrays.stream(allBianryOperators)
+    private void assertAllOperatorsSupported(final Set<BinaryOperator> currentlySupported) {
+        final List<String> errorMessages = new ArrayList<>();
+
+        // TODO: add support for assignment operators
+        Arrays.stream(BinaryOperator.values())
                 .forEach(operator -> {
-                    if (!currentlySupported.contains(operator)) {
-                        throw new ConfigException("Missing calculator for binary operator: " + operator);
-                    }
+//                    if (!currentlySupported.contains(operator)) {
+//                        errorMessages.add("Missing calculator for binary operator: " + operator);
+//                    }
                 });
+
+        processMessages(errorMessages);
     }
 
+    private void processMessages(final List<String> errorMessages) {
+        if (!errorMessages.isEmpty()) {
+            final String compositeErrorMessage =
+                    lineSeparator() + errorMessages.stream().collect(joining(lineSeparator()));
+            throw new ConfigException(compositeErrorMessage);
+        }
+    }
 }

@@ -18,7 +18,9 @@
 package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
+import com.revenat.javamm.code.util.TypeUtils;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
@@ -27,7 +29,7 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
  * @author Vitaliy Dragun
  *
  */
-public class SubtractionBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
+public class SubtractionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
     public SubtractionBinaryExpressionCalculator() {
         super(BinaryOperator.ARITHMETIC_SUBTRACTION);
@@ -35,11 +37,9 @@ public class SubtractionBinaryExpressionCalculator extends AbstractArithmeticBin
 
     @Override
     protected Object calculate(final Object value1, final Object value2) {
-        if (areIntegers(value1, value2)) {
+        if (TypeUtils.confirmType(Integer.class, value1, value2)) {
             return calculateSubtractionForIntegers(value1, value2);
-        } else if (areDoubles(value1, value2)) {
-            return calculateSubtractionForDoubles(value1, value2);
-        } else if (areNumbers(value1, value2)) {
+        } else if (TypeUtils.confirmType(Number.class, value1, value2)) {
             return calculateSubtractionForDoubles(value1, value2);
         }
         throw createNotSupportedTypesError(value1, value2);

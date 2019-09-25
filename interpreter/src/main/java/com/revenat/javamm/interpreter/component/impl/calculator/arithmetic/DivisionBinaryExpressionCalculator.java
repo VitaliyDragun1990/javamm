@@ -19,7 +19,10 @@ package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
+
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
@@ -28,7 +31,7 @@ import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeErro
  * @author Vitaliy Dragun
  *
  */
-public class DivisionBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
+public class DivisionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
     public DivisionBinaryExpressionCalculator() {
         super(BinaryOperator.ARITHMETIC_DIVISION);
@@ -36,9 +39,9 @@ public class DivisionBinaryExpressionCalculator extends AbstractArithmeticBinary
 
     @Override
     protected Object calculate(final Object value1, final Object value2) {
-        if (areIntegers(value1, value2)) {
+        if (confirmType(Integer.class, value1, value2)) {
             return calculateIntegersDivision(value1, value2);
-        } else if (areDoubles(value1, value2) || areNumbers(value1, value2)) {
+        } else if (confirmType(Number.class, value1, value2)) {
             return calculateDoubleDivision(value1, value2);
         }
         throw createNotSupportedTypesError(value1, value2);

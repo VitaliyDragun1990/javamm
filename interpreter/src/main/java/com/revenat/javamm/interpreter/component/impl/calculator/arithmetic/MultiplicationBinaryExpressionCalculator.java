@@ -19,6 +19,9 @@ package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
+
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
@@ -27,7 +30,7 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
  * @author Vitaliy Dragun
  *
  */
-public class MultiplicationBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
+public class MultiplicationBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
     public MultiplicationBinaryExpressionCalculator() {
         super(BinaryOperator.ARITHMETIC_MULTIPLICATION);
@@ -35,9 +38,9 @@ public class MultiplicationBinaryExpressionCalculator extends AbstractArithmetic
 
     @Override
     protected Object calculate(final Object value1, final Object value2) {
-        if (areIntegers(value1, value2)) {
+        if (confirmType(Integer.class, value1, value2)) {
             return calculateIntegerMultiplication(value1, value2);
-        } else if (areDoubles(value1, value2) || areNumbers(value1, value2)) {
+        } else if (confirmType(Number.class, value1, value2)) {
             return calculateDoubleMultiplication(value1, value2);
         }
 

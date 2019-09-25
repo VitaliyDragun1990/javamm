@@ -33,4 +33,23 @@ public final class TypeUtils {
     public static String getType(final Class<?> value) {
         return value != null ? value.getSimpleName().toLowerCase() : "null";
     }
+
+    /**
+     * Checks whether provided {@code values} all have specified {@code type}
+     *
+     * @param type   specific type to check values for
+     * @param values some values to check for type
+     * @return {@code true} if all specified {@code values} have specified
+     *         {@code type}, {@code false} otherwise.
+     * @apiNote if any value from the provided {@code values} is null, {@code false}
+     *          will be returned
+     */
+    public static boolean confirmType(final Class<?> type, final Object... values) {
+        for (final Object value : values) {
+            if (value == null || !type.isAssignableFrom(value.getClass())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -21,6 +21,8 @@ import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
+
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
  * implementation for 'predicate less than or equals' ({@code <=}) operator
@@ -36,7 +38,7 @@ public class IsLessThanOrEqualsBinaryExpressionCalculator extends AbstractBinary
 
     @Override
     protected Boolean calculate(final Object value1, final Object value2) {
-        if (areNumbers(value1, value2)) {
+        if (confirmType(Number.class, value1, value2)) {
             return calculateLessThenOrEqualsOperation(value1, value2);
         }
         throw createNotSupportedTypesError(value1, value2);
@@ -44,9 +46,5 @@ public class IsLessThanOrEqualsBinaryExpressionCalculator extends AbstractBinary
 
     private boolean calculateLessThenOrEqualsOperation(final Object value1, final Object value2) {
         return ((Number) value1).doubleValue() <= ((Number) value2).doubleValue();
-    }
-
-    private boolean areNumbers(final Object value1, final Object value2) {
-        return value1 instanceof Number && value2 instanceof Number;
     }
 }

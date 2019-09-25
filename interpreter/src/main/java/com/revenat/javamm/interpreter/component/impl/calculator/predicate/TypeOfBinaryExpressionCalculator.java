@@ -22,6 +22,8 @@ import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
+
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
  * implementation for 'predicate typeof' ({@code typeof}) operator
@@ -39,13 +41,9 @@ public class TypeOfBinaryExpressionCalculator extends AbstractBinaryExpressionCa
     protected Object calculate(final Object value1, final Object value2) {
         if (value1 == null) {
             return false;
-        } else if (isTypeExpression(value2)) {
+        } else if (confirmType(TypeExpression.class, value2)) {
             return value1.getClass().equals(((TypeExpression) value2).getType());
         }
         throw createNotSupportedTypesError(value1, value2);
-    }
-
-    private boolean isTypeExpression(final Object value) {
-        return value instanceof TypeExpression;
     }
 }

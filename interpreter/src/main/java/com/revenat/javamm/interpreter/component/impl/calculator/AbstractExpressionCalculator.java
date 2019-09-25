@@ -41,6 +41,7 @@ abstract class AbstractExpressionCalculator implements ExpressionCalculator {
         return operator;
     }
 
+    // TODO: relocate this method inside AbstractBianryExpressionCalculator
     protected final JavammLineRuntimeError createNotSupportedTypesError(final Object value1, final Object value2) {
         return new JavammLineRuntimeError("Operator '%s' is not supported for types: %s and %s",
                 operator.getCode(),

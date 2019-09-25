@@ -19,6 +19,9 @@ package com.revenat.javamm.interpreter.component.impl.calculator.bitwise;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
+
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
@@ -27,7 +30,7 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
  * @author Vitaliy Dragun
  *
  */
-public class BitwiseXorBinaryExpressionCalculator extends AbstractBitwiseBinaryExpressionCalculator {
+public class BitwiseXorBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
     public BitwiseXorBinaryExpressionCalculator() {
         super(BinaryOperator.BITWISE_XOR);
@@ -35,9 +38,9 @@ public class BitwiseXorBinaryExpressionCalculator extends AbstractBitwiseBinaryE
 
     @Override
     protected Object calculate(final Object value1, final Object value2) {
-        if (areIntegers(value1, value2)) {
+        if (confirmType(Integer.class, value1, value2)) {
             return calculateBitwiseXorFor(value1, value2);
-        } else if (areBooleans(value1, value2)) {
+        } else if (confirmType(Boolean.class, value1, value2)) {
             return calculateLogicalXorFor(value1, value2);
         }
 

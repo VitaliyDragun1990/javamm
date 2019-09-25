@@ -21,6 +21,9 @@ import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
+
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
@@ -29,7 +32,7 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
  * @author Vitaliy Dragun
  *
  */
-public class LogicalAndBinaryExpressionCalculator extends AbstractLogicalBinaryExpressionCalculator {
+public class LogicalAndBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
     public LogicalAndBinaryExpressionCalculator() {
         super(BinaryOperator.LOGICAL_AND);
@@ -49,10 +52,14 @@ public class LogicalAndBinaryExpressionCalculator extends AbstractLogicalBinaryE
 
     @Override
     protected Object calculate(final Object value1, final Object value2) {
-        if (isBoolean(value1) && isBoolean(value2)) {
+        if (confirmType(Boolean.class, value1, value2)) {
             return (Boolean) value1 && (Boolean) value2;
         } else {
             throw createNotSupportedTypesError(value1, value2);
         }
+    }
+
+    private boolean isFalsy(final Object operand) {
+        return operand instanceof Boolean && !(Boolean) operand;
     }
 }

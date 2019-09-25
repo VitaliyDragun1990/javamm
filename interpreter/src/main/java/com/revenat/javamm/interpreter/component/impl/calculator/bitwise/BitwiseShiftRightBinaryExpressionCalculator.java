@@ -19,6 +19,9 @@ package com.revenat.javamm.interpreter.component.impl.calculator.bitwise;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
+
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
@@ -27,7 +30,7 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
  * @author Vitaliy Dragun
  *
  */
-public class BitwiseShiftRightBinaryExpressionCalculator extends AbstractBitwiseBinaryExpressionCalculator {
+public class BitwiseShiftRightBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
     public BitwiseShiftRightBinaryExpressionCalculator() {
         super(BinaryOperator.BITWISE_SHIFT_RIGHT);
@@ -35,7 +38,7 @@ public class BitwiseShiftRightBinaryExpressionCalculator extends AbstractBitwise
 
     @Override
     protected Object calculate(final Object value1, final Object value2) {
-        if (areIntegers(value1, value2)) {
+        if (confirmType(Integer.class, value1, value2)) {
             return calculateBitwiseShiftRight(value1, value2);
         }
         throw createNotSupportedTypesError(value1, value2);

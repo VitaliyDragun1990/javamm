@@ -19,6 +19,9 @@ package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
+
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
@@ -27,7 +30,7 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
  * @author Vitaliy Dragun
  *
  */
-public class AdditionBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
+public class AdditionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
     public AdditionBinaryExpressionCalculator() {
         super(BinaryOperator.ARITHMETIC_ADDITION);
@@ -37,11 +40,11 @@ public class AdditionBinaryExpressionCalculator extends AbstractArithmeticBinary
     protected Object calculate(final Object value1, final Object value2) {
         Object result = null;
 
-        if (areIntegers(value1, value2)) {
+        if (confirmType(Integer.class, value1, value2)) {
             result = calculateIntegerAddition(value1, value2);
-        } else if (areDoubles(value1, value2)) {
+        } else if (confirmType(Double.class, value1, value2)) {
             result = calculateDoubleAddition(value1, value2);
-        } else if (areNumbers(value1, value2)) {
+        } else if (confirmType(Number.class, value1, value2)) {
             result = ((Number) value1).doubleValue() + ((Number) value2).doubleValue();
         } else if (eitherOneIsString(value1, value2)) {
             result = calculateStringConcatenation(value1, value2);

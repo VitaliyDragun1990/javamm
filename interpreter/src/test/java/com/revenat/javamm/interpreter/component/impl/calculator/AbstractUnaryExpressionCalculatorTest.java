@@ -17,9 +17,13 @@
 
 package com.revenat.javamm.interpreter.component.impl.calculator;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionContextDummy;
@@ -62,6 +66,10 @@ public abstract class AbstractUnaryExpressionCalculatorTest {
     @BeforeEach
     void setUp() {
         calculator = createCalculatorUnderTest();
+    }
+
+    protected void assertSupportOperator(final UnaryOperator operator) {
+        assertThat(calculator.getOperator(), is(operator));
     }
 
     protected abstract UnaryExpressionCalculator createCalculatorUnderTest();

@@ -19,11 +19,11 @@ package com.revenat.javamm.interpreter.component.impl.calculator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.PlusUnaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.MinusUnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
 import java.util.stream.Stream;
@@ -39,32 +39,30 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-@DisplayName("a plus '+' unary expression calculator")
-class PlusUnaryExpressionCalculatorTest extends AbstractUnaryExpressionCalculatorTest {
+@DisplayName("a minus '-' unary expression calculator")
+class MinusUnaryExpressionCalculatorTest extends AbstractUnaryExpressionCalculatorTest {
 
     @Test
     @Order(1)
-    void shouldSupportUnaryPlusOperator() {
-        assertSupportOperator(UnaryOperator.ARITHMETICAL_UNARY_PLUS);
+    void shouldSupportUnaryMinusOperator() {
+        assertSupportOperator(UnaryOperator.ARITHMETICAL_UNARY_MINUS);
     }
 
     @Test
     @Order(2)
-    void shouldReturnNumberValueAsIs() {
-        assertThat(calculate(10), is(10));
-        assertThat(calculate(-10), is(-10));
-        assertThat(calculate(-5.2), is(-5.2));
-        assertThat(calculate(2.2), is(2.2));
+    void shouldChangeSignForNumbers() {
+        assertThat(calculate(1), is(-1));
+        assertThat(calculate(-10.5), is(10.5));
         assertThat(calculate(0), is(0));
     }
 
     @ParameterizedTest
     @MethodSource("unsupportedTypesProvider")
     @Order(3)
-    void shouldFailIfValueIsNotANumber(final Object value) {
+    void shouldFailIfValueNotANumber(final Object value) {
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(value));
 
-        assertErrorMessageContains(e, "Operator '+' is not supported for type: %s", getType(value));
+        assertErrorMessageContains(e, "Operator '-' is not supported for type: %s", getType(value));
     }
 
     static Stream<Object> unsupportedTypesProvider() {
@@ -73,6 +71,6 @@ class PlusUnaryExpressionCalculatorTest extends AbstractUnaryExpressionCalculato
 
     @Override
     protected UnaryExpressionCalculator createCalculatorUnderTest() {
-        return new PlusUnaryExpressionCalculator();
+        return new MinusUnaryExpressionCalculator();
     }
 }

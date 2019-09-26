@@ -45,7 +45,7 @@ class LogicalNotUnaryExpressionCalculatorTest extends AbstractUnaryExpressionCal
     @Test
     @Order(1)
     void shouldSupportUnaryLogicalNotOperator() {
-        assertThat(calculator.getOperator(), is(UnaryOperator.LOGICAL_NOT));
+        assertSupportOperator(UnaryOperator.LOGICAL_NOT);
     }
 
     @Test

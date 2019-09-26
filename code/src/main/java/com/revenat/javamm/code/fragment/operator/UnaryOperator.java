@@ -33,9 +33,9 @@ public enum UnaryOperator implements Operator {
 
     DECREMENT("--"),
 
-    ARITHMETIC_UNARY_PLUS("+"),
+    ARITHMETICAL_UNARY_PLUS("+"),
 
-    ARITHMETIC_UNARY_MINUS("-"),
+    ARITHMETICAL_UNARY_MINUS("-"),
 
     BITWISE_INVERSE("~"),
 

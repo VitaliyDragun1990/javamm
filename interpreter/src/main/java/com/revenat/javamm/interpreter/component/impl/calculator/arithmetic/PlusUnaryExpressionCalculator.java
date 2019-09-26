@@ -15,31 +15,30 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.logical;
+package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
 
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
+import com.revenat.javamm.code.util.TypeUtils;
 import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractUnaryExpressionCalculator;
 
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
-
 /**
  * {@linkplain UnaryExpressionCalculator Unary expression calculator}
- * implementation for 'logical not' ({@code !}) operator
+ * implementation for 'arithmetical unary plus' ({@code +}) operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class LogicalNotUnaryExpressionCalculator extends AbstractUnaryExpressionCalculator {
+public class PlusUnaryExpressionCalculator extends AbstractUnaryExpressionCalculator {
 
-    public LogicalNotUnaryExpressionCalculator() {
-        super(UnaryOperator.LOGICAL_NOT);
+    public PlusUnaryExpressionCalculator() {
+        super(UnaryOperator.ARITHMETICAL_UNARY_PLUS);
     }
 
     @Override
     protected Object calculate(final Object value) {
-        if (confirmType(Boolean.class, value)) {
-            return !(Boolean) value;
+        if (TypeUtils.confirmType(Number.class, value)) {
+            return value;
         }
         throw createNotSupportedTypesError(value);
     }

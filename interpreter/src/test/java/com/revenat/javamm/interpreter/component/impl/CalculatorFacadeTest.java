@@ -25,7 +25,7 @@ import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.exception.ConfigException;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
-import com.revenat.javamm.interpreter.component.BinaryCalculatorFacade;
+import com.revenat.javamm.interpreter.component.CalculatorFacade;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.test.doubles.BinaryExpressionCalculatorStub;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionContextDummy;
@@ -50,12 +50,12 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a binary calculator facade")
-class BinaryCalculatorFacadeTest {
+class CalculatorFacadeTest {
     private static final ExpressionContext DUMMY_EXPRESSION_CONTEXT = new ExpressionContextDummy();
     private static final Expression OPERAND_1 = new ExpressionDummy();
     private static final Expression OPERAND_2 = new ExpressionDummy();
 
-    private BinaryCalculatorFacade calculatorFacade;
+    private CalculatorFacade calculatorFacade;
 
     private Set<BinaryExpressionCalculator> calculatorsFor(final BinaryOperator...operators) {
         final Set<BinaryExpressionCalculator> calculators = new HashSet<>();

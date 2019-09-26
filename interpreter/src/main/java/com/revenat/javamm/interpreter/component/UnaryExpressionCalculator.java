@@ -19,19 +19,18 @@ package com.revenat.javamm.interpreter.component;
 
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
-import com.revenat.javamm.code.fragment.operator.BinaryOperator;
+import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 
 /**
- * Facade for {@linkplain BinaryExpressionCalculator binary calculator} functionality to calculate any supported binary
- * expression.
+ * Calculates expressions with {@linkplain UnaryOperator unary operator}
  *
  * @author Vitaliy Dragun
  *
  */
-public interface BinaryCalculatorFacade {
+public interface UnaryExpressionCalculator extends ExpressionCalculator {
 
-    Object calculate(ExpressionContext expressionContext,
-                     Expression operand1,
-                     BinaryOperator operator,
-                     Expression operand2);
+    @Override
+    UnaryOperator getOperator();
+
+    Object calculate(ExpressionContext expressionContext, Expression expression);
 }

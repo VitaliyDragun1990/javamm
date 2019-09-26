@@ -18,7 +18,7 @@
 package com.revenat.javamm.interpreter.component.impl.expression.evaluator;
 
 import com.revenat.javamm.code.fragment.expression.BinaryExpression;
-import com.revenat.javamm.interpreter.component.BinaryCalculatorFacade;
+import com.revenat.javamm.interpreter.component.CalculatorFacade;
 import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
 
 import static java.util.Objects.requireNonNull;
@@ -32,9 +32,9 @@ import static java.util.Objects.requireNonNull;
 public class BinaryExpressionEvaluator extends AbstractExpressionEvaluator
         implements ExpressionEvaluator<BinaryExpression> {
 
-    private final BinaryCalculatorFacade calculatorFacade;
+    private final CalculatorFacade calculatorFacade;
 
-    public BinaryExpressionEvaluator(final BinaryCalculatorFacade calculatorFacade) {
+    public BinaryExpressionEvaluator(final CalculatorFacade calculatorFacade) {
         this.calculatorFacade = requireNonNull(calculatorFacade);
     }
 

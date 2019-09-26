@@ -18,7 +18,7 @@
 package com.revenat.javamm.interpreter;
 
 import com.revenat.javamm.code.component.ExpressionContext;
-import com.revenat.javamm.interpreter.component.BinaryCalculatorFacade;
+import com.revenat.javamm.interpreter.component.CalculatorFacade;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
 import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.ExpressionUpdater;
@@ -41,6 +41,7 @@ import com.revenat.javamm.interpreter.component.impl.calculator.bitwise.BitwiseS
 import com.revenat.javamm.interpreter.component.impl.calculator.bitwise.BitwiseShiftRightZeroFillBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.bitwise.BitwiseXorBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.logical.LogicalAndBinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.logical.LogicalNotUnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.logical.LogicalOrBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsEqualsBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsGreaterThanBinaryExpressionCalculator;
@@ -64,7 +65,7 @@ import java.util.Set;
  *
  */
 public class InterpreterConfigurator {
-    private final BinaryCalculatorFacade binaryCalculatorFacade = new BinaryCalculatorFacadeImpl(
+    private final CalculatorFacade binaryCalculatorFacade = new BinaryCalculatorFacadeImpl(
             Set.of(
                     new AdditionBinaryExpressionCalculator(),
                     new SubtractionBinaryExpressionCalculator(),
@@ -89,7 +90,10 @@ public class InterpreterConfigurator {
                     new IsLessThanBinaryExpressionCaluclator(),
                     new IsLessThanOrEqualsBinaryExpressionCalculator(),
                     new TypeOfBinaryExpressionCalculator()
-    ));
+    ),
+            Set.of(
+                    new LogicalNotUnaryExpressionCalculator()
+                    ));
 
     private final Set<ExpressionEvaluator<?>> expressionEvaluators = Set.of(
             new VariableExpressionEvaluator(),

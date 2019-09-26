@@ -19,12 +19,11 @@ package com.revenat.javamm.interpreter.component;
 
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
-import com.revenat.javamm.code.fragment.expression.BinaryExpression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 
 /**
- * Calculates {@linkplain BinaryExpression binary expressions}
+ * Calculates expressions with {@linkplain BinaryOperator binary operator}
  *
  * @author Vitaliy Dragun
  *

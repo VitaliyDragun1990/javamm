@@ -1,9 +1,11 @@
 var a = 1
 var b = 2
+var d = true
 final c = a - b
 
 println ( a )
 println ( b )
 println ( c )
+println ( ! d )
 println ( c - 1 )
 println ( 'HelloWorld' )

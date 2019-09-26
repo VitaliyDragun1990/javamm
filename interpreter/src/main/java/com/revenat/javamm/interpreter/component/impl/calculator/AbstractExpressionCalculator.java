@@ -50,7 +50,7 @@ abstract class AbstractExpressionCalculator implements ExpressionCalculator {
     }
 
     protected final JavammLineRuntimeError createNotSupportedTypesError(final Object value) {
-        return new JavammLineRuntimeError("Operator '%s' is not supported for type: '%s'",
+        return new JavammLineRuntimeError("Operator '%s' is not supported for type: %s",
                 operator.getCode(),
                 getType(value));
     }

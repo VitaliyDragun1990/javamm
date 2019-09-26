@@ -15,29 +15,34 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.test.doubles;
+package com.revenat.javamm.interpreter.component.impl.calculator;
 
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
-import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
-import com.revenat.javamm.interpreter.component.CalculatorFacade;
+import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
 
-public class BinaryCalculatorFacadeStub implements CalculatorFacade {
-    private Object calculatedValue;
+/**
+ * @author Vitaliy Dragun
+ *
+ */
+public abstract class AbstractUnaryExpressionCalculator extends AbstractExpressionCalculator
+        implements UnaryExpressionCalculator {
 
-    public void setCalculatedValue(final Object calculatedValue) {
-        this.calculatedValue = calculatedValue;
+    protected AbstractUnaryExpressionCalculator(final UnaryOperator operator) {
+        super(operator);
     }
 
     @Override
-    public Object calculate(final ExpressionContext expressionContext, final Expression operand1, final BinaryOperator operator,
-            final Expression operand2) {
-        return calculatedValue;
+    public UnaryOperator getOperator() {
+        return (UnaryOperator) super.getOperator();
     }
 
     @Override
-    public Object calculate(final ExpressionContext expressionContext, final UnaryOperator operator, final Expression operand) {
-        return calculatedValue;
+    public Object calculate(final ExpressionContext expressionContext, final Expression expression) {
+        final Object value = expression.getValue(expressionContext);
+        return calculate(value);
     }
+
+    protected abstract Object calculate(Object value);
 }

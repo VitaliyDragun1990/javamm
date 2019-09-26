@@ -15,29 +15,28 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.test.doubles;
+package com.revenat.javamm.interpreter.component;
 
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
-import com.revenat.javamm.interpreter.component.CalculatorFacade;
 
-public class BinaryCalculatorFacadeStub implements CalculatorFacade {
-    private Object calculatedValue;
+/**
+ * Facade for calculators to calculate expressions with {@linkplain BinaryOperator binary operators} and
+ * {@linkplain UnaryOperator unary operators}
+ *
+ * @author Vitaliy Dragun
+ *
+ */
+public interface CalculatorFacade {
 
-    public void setCalculatedValue(final Object calculatedValue) {
-        this.calculatedValue = calculatedValue;
-    }
+    Object calculate(ExpressionContext expressionContext,
+                     Expression operand1,
+                     BinaryOperator operator,
+                     Expression operand2);
 
-    @Override
-    public Object calculate(final ExpressionContext expressionContext, final Expression operand1, final BinaryOperator operator,
-            final Expression operand2) {
-        return calculatedValue;
-    }
-
-    @Override
-    public Object calculate(final ExpressionContext expressionContext, final UnaryOperator operator, final Expression operand) {
-        return calculatedValue;
-    }
+    Object calculate(ExpressionContext expressionContext,
+                     UnaryOperator operator,
+                     Expression operand);
 }

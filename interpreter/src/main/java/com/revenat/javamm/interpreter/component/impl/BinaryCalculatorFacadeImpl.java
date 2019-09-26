@@ -21,8 +21,10 @@ import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.exception.ConfigException;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
-import com.revenat.javamm.interpreter.component.BinaryCalculatorFacade;
+import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.CalculatorFacade;
+import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,12 +42,17 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
  * @author Vitaliy Dragun
  *
  */
-public class BinaryCalculatorFacadeImpl implements BinaryCalculatorFacade {
-    private final Map<BinaryOperator, BinaryExpressionCalculator> binaryExpressionCalculatorMap;
+public class BinaryCalculatorFacadeImpl implements CalculatorFacade {
 
-    public BinaryCalculatorFacadeImpl(final Set<BinaryExpressionCalculator> binaryExpressionCalculators) {
-        binaryExpressionCalculatorMap = getBinaryExpressionCalculatorMap(requireNonNull(binaryExpressionCalculators));
-        assertAllOperatorsSupported(binaryExpressionCalculatorMap.keySet());
+    private final Map<BinaryOperator, BinaryExpressionCalculator> binaryCalculatorRegistry;
+
+    private final Map<UnaryOperator, UnaryExpressionCalculator> unaryCalculatorRegistry;
+
+    public BinaryCalculatorFacadeImpl(final Set<BinaryExpressionCalculator> binaryExpressionCalculators,
+            final Set<UnaryExpressionCalculator> unaryExpressionCalculators) {
+        binaryCalculatorRegistry = buildBinaryExpressionCalculatorRegistry(requireNonNull(binaryExpressionCalculators));
+        unaryCalculatorRegistry = buildUnaryExpressionCalculatorRegistry(unaryExpressionCalculators);
+        assertAllOperatorsSupported();
     }
 
     @Override
@@ -55,18 +62,36 @@ public class BinaryCalculatorFacadeImpl implements BinaryCalculatorFacade {
         return calculator.calculate(expressionContext, operand1, operand2);
     }
 
-    private BinaryExpressionCalculator getBinaryCalculatorFor(final BinaryOperator operator) {
-        return binaryExpressionCalculatorMap.get(operator);
+    @Override
+    public Object calculate(final ExpressionContext expressionContext, final UnaryOperator operator,
+            final Expression operand) {
+        final UnaryExpressionCalculator calculator = getUnaryCalculatorFor(operator);
+        return calculator.calculate(expressionContext, operand);
     }
 
-    private Map<BinaryOperator, BinaryExpressionCalculator> getBinaryExpressionCalculatorMap(
+    private BinaryExpressionCalculator getBinaryCalculatorFor(final BinaryOperator operator) {
+        return binaryCalculatorRegistry.get(operator);
+    }
+
+    private UnaryExpressionCalculator getUnaryCalculatorFor(final UnaryOperator operator) {
+        return unaryCalculatorRegistry.get(operator);
+    }
+
+    private Map<BinaryOperator, BinaryExpressionCalculator> buildBinaryExpressionCalculatorRegistry(
             final Set<BinaryExpressionCalculator> binaryExpressionCalculators) {
         return binaryExpressionCalculators
                 .stream()
                 .collect(toUnmodifiableMap(BinaryExpressionCalculator::getOperator, identity()));
     }
 
-    private void assertAllOperatorsSupported(final Set<BinaryOperator> currentlySupported) {
+    private Map<UnaryOperator, UnaryExpressionCalculator> buildUnaryExpressionCalculatorRegistry(
+            final Set<UnaryExpressionCalculator> unaryExpressionCalculators) {
+        return unaryExpressionCalculators
+                .stream()
+                .collect(toUnmodifiableMap(UnaryExpressionCalculator::getOperator, identity()));
+    }
+
+    private void assertAllOperatorsSupported() {
         final List<String> errorMessages = new ArrayList<>();
 
         // TODO: add support for assignment operators

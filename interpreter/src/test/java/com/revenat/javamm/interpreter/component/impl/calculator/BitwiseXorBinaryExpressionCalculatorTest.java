@@ -21,13 +21,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.bitwise.BitwiseXorBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
 import java.util.stream.Stream;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_XOR;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_XOR;
 import static com.revenat.javamm.code.util.TypeUtils.getType;
 import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
 
@@ -44,7 +45,8 @@ class BitwiseXorBinaryExpressionCalculatorTest extends AbstractBinaryExpressionm
     @Test
     @Order(1)
     void shouldSupportBitwiseXorOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.BITWISE_XOR));
+        assertCalculatorSupportsOperator(BitwiseXorBinaryExpressionCalculator.createNormalCalculator(), BITWISE_XOR);
+        assertCalculatorSupportsOperator(BitwiseXorBinaryExpressionCalculator.createAssignmentCalculator(), ASSIGNMENT_BITWISE_XOR);
     }
 
     @Test
@@ -88,6 +90,6 @@ class BitwiseXorBinaryExpressionCalculatorTest extends AbstractBinaryExpressionm
 
     @Override
     protected BinaryExpressionCalculator createCalculatorUnderTest() {
-        return new BitwiseXorBinaryExpressionCalculator();
+        return BitwiseXorBinaryExpressionCalculator.createNormalCalculator();
     }
 }

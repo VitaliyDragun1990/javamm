@@ -48,7 +48,7 @@ class IsEqualsBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCa
     @Test
     @Order(1)
     void shouldSupportPredicateEqualsOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.PREDICATE_EQUALS));
+        assertCalculatorSupportsOperator(calculator, BinaryOperator.PREDICATE_EQUALS);
     }
 
     @Test

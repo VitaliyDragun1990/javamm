@@ -22,19 +22,29 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_MODULUS;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_MODULUS;
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for arithmetic modulus operator
+ * implementation for binary modulus operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class ModulusBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class ModulusBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
-    public ModulusBinaryExpressionCalculator() {
-        super(BinaryOperator.ARITHMETIC_MODULUS);
+    private ModulusBinaryExpressionCalculator(final BinaryOperator operator) {
+        super(operator);
+    }
+
+    public static ModulusBinaryExpressionCalculator createNormalCalculator() {
+        return new ModulusBinaryExpressionCalculator(ARITHMETIC_MODULUS);
+    }
+
+    public static ModulusBinaryExpressionCalculator createAssignmentCalculator() {
+        return new ModulusBinaryExpressionCalculator(ASSIGNMENT_MODULUS);
     }
 
     @Override

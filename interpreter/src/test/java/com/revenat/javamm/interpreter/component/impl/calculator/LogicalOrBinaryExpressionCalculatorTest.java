@@ -45,7 +45,7 @@ class LogicalOrBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmC
     @Test
     @Order(1)
     void shouldSupportLogicalOrOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.LOGICAL_OR));
+        assertCalculatorSupportsOperator(calculator, BinaryOperator.LOGICAL_OR);
     }
 
     @Test

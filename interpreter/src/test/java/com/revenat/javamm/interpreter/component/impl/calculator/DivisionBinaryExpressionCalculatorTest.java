@@ -21,13 +21,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.DivisionBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
 import java.util.stream.Stream;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_DIVISION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_DIVISION;
 import static com.revenat.javamm.code.util.TypeUtils.getType;
 import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
 
@@ -40,13 +41,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-@DisplayName("a division binary expression calculator")
+@DisplayName("a division '/' binary expression calculator")
 class DivisionBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
 
     @Test
     @Order(1)
     void shouldSupportArithmeticDivisionOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.ARITHMETIC_DIVISION));
+        assertCalculatorSupportsOperator(DivisionBinaryExpressionCalculator.createNormalCalculator(), ARITHMETIC_DIVISION);
+        assertCalculatorSupportsOperator(DivisionBinaryExpressionCalculator.createAssignmentCalculator(), ASSIGNMENT_DIVISION);
     }
 
     @Test
@@ -111,6 +113,6 @@ class DivisionBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCa
 
     @Override
     protected BinaryExpressionCalculator createCalculatorUnderTest() {
-        return new DivisionBinaryExpressionCalculator();
+        return DivisionBinaryExpressionCalculator.createNormalCalculator();
     }
 }

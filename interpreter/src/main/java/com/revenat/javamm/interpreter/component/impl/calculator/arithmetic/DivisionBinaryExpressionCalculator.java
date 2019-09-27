@@ -22,19 +22,29 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_DIVISION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_DIVISION;
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for arithmetic division operator
+ * implementation for binary division operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class DivisionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class DivisionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
-    public DivisionBinaryExpressionCalculator() {
-        super(BinaryOperator.ARITHMETIC_DIVISION);
+    private DivisionBinaryExpressionCalculator(final BinaryOperator operator) {
+        super(operator);
+    }
+
+    public static DivisionBinaryExpressionCalculator createNormalCalculator() {
+        return new DivisionBinaryExpressionCalculator(ARITHMETIC_DIVISION);
+    }
+
+    public static DivisionBinaryExpressionCalculator createAssignmentCalculator() {
+        return new DivisionBinaryExpressionCalculator(ASSIGNMENT_DIVISION);
     }
 
     @Override

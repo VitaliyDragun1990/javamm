@@ -25,15 +25,23 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for bitwise or ('^') operator
+ * implementation for binary bitwise xor ('^') operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class BitwiseXorBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class BitwiseXorBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
-    public BitwiseXorBinaryExpressionCalculator() {
-        super(BinaryOperator.BITWISE_XOR);
+    private BitwiseXorBinaryExpressionCalculator(final BinaryOperator operator) {
+        super(operator);
+    }
+
+    public static BitwiseXorBinaryExpressionCalculator createNormalCalculator() {
+        return new BitwiseXorBinaryExpressionCalculator(BinaryOperator.BITWISE_XOR);
+    }
+
+    public static BitwiseXorBinaryExpressionCalculator createAssignmentCalculator() {
+        return new BitwiseXorBinaryExpressionCalculator(BinaryOperator.ASSIGNMENT_BITWISE_XOR);
     }
 
     @Override

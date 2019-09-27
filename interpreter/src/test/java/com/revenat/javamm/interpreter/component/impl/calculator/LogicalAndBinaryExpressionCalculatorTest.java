@@ -45,7 +45,7 @@ public class LogicalAndBinaryExpressionCalculatorTest extends AbstractBinaryExpr
     @Test
     @Order(1)
     void shouldSupportLogicalAndOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.LOGICAL_AND));
+        assertCalculatorSupportsOperator(calculator, BinaryOperator.LOGICAL_AND);
     }
 
     @Test

@@ -49,7 +49,7 @@ class TypeOfBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalc
     @Test
     @Order(1)
     void shouldSupportTypeOfPredicateOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.PREDICATE_TYPEOF));
+        assertCalculatorSupportsOperator(calculator, BinaryOperator.PREDICATE_TYPEOF);
     }
 
     @Test

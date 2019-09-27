@@ -21,19 +21,29 @@ import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_OR;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_OR;
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for bitwise or ('|') operator
+ * implementation for binary bitwise or ('|') operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class BitwiseOrBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class BitwiseOrBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
-    public BitwiseOrBinaryExpressionCalculator() {
-        super(BinaryOperator.BITWISE_OR);
+    private BitwiseOrBinaryExpressionCalculator(final BinaryOperator operator) {
+        super(operator);
+    }
+
+    public static BitwiseOrBinaryExpressionCalculator createNormalCalculator() {
+        return new BitwiseOrBinaryExpressionCalculator(BITWISE_OR);
+    }
+
+    public static BitwiseOrBinaryExpressionCalculator createAssignmentCalculator() {
+        return new BitwiseOrBinaryExpressionCalculator(ASSIGNMENT_BITWISE_OR);
     }
 
     @Override

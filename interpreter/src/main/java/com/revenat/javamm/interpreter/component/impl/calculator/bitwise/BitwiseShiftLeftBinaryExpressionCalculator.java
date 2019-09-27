@@ -21,19 +21,29 @@ import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_SHIFT_LEFT;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_SHIFT_LEFT;
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for bitwise shift left ('<<') operator
+ * implementation for binary bitwise shift left ('<<') operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class BitwiseShiftLeftBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class BitwiseShiftLeftBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
-    public BitwiseShiftLeftBinaryExpressionCalculator() {
-        super(BinaryOperator.BITWISE_SHIFT_LEFT);
+    private BitwiseShiftLeftBinaryExpressionCalculator(final BinaryOperator operator) {
+        super(operator);
+    }
+
+    public static BitwiseShiftLeftBinaryExpressionCalculator createNormalCalculator() {
+        return new BitwiseShiftLeftBinaryExpressionCalculator(BITWISE_SHIFT_LEFT);
+    }
+
+    public static BitwiseShiftLeftBinaryExpressionCalculator createAssignmentCalculator() {
+        return new BitwiseShiftLeftBinaryExpressionCalculator(ASSIGNMENT_BITWISE_SHIFT_LEFT);
     }
 
     @Override

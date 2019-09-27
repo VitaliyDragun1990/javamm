@@ -21,19 +21,29 @@ import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_SHIFT_RIGHT_ZERO_FILL;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_SHIFT_RIGHT_ZERO_FILL;
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for bitwise shift right zero fill ('>>>') operator
+ * implementation for binary bitwise shift right zero fill ('>>>') operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class BitwiseShiftRightZeroFillBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class BitwiseShiftRightZeroFillBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
-    public BitwiseShiftRightZeroFillBinaryExpressionCalculator() {
-        super(BinaryOperator.BITWISE_SHIFT_RIGHT_ZERO_FILL);
+    private BitwiseShiftRightZeroFillBinaryExpressionCalculator(final BinaryOperator operator) {
+        super(operator);
+    }
+
+    public static BitwiseShiftRightZeroFillBinaryExpressionCalculator createNormalCalculator() {
+        return new BitwiseShiftRightZeroFillBinaryExpressionCalculator(BITWISE_SHIFT_RIGHT_ZERO_FILL);
+    }
+
+    public static BitwiseShiftRightZeroFillBinaryExpressionCalculator createAssignmentCalculator() {
+        return new BitwiseShiftRightZeroFillBinaryExpressionCalculator(ASSIGNMENT_BITWISE_SHIFT_RIGHT_ZERO_FILL);
     }
 
     @Override

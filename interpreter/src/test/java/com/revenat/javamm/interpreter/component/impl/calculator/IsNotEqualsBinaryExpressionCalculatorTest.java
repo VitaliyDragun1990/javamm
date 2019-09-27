@@ -46,7 +46,7 @@ class IsNotEqualsBinaryExpressionCalculatorTest extends AbstractBinaryExpression
     @Test
     @Order(1)
     void shouldSupportPredicateNotEqualsOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.PREDICATE_NOT_EQUALS));
+        assertCalculatorSupportsOperator(calculator, BinaryOperator.PREDICATE_NOT_EQUALS);
     }
 
     @Test

@@ -21,13 +21,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.bitwise.BitwiseShiftRightZeroFillBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
 import java.util.stream.Stream;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_SHIFT_RIGHT_ZERO_FILL;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_SHIFT_RIGHT_ZERO_FILL;
 import static com.revenat.javamm.code.util.TypeUtils.getType;
 import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
 
@@ -38,13 +39,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-@DisplayName("a bitwise '>>>' binary expression calculator")
+@DisplayName("a bitwise shift right zero fill '>>>' binary expression calculator")
 class BitwiseShiftRightZeroFillBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
 
     @Test
     @Order(1)
     void shouldSupportBitwiseShiftRightZeroFillOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.BITWISE_SHIFT_RIGHT_ZERO_FILL));
+        assertCalculatorSupportsOperator(BitwiseShiftRightZeroFillBinaryExpressionCalculator.createNormalCalculator(), BITWISE_SHIFT_RIGHT_ZERO_FILL);
+        assertCalculatorSupportsOperator(BitwiseShiftRightZeroFillBinaryExpressionCalculator.createAssignmentCalculator(), ASSIGNMENT_BITWISE_SHIFT_RIGHT_ZERO_FILL);
     }
 
     @Test
@@ -83,6 +85,6 @@ class BitwiseShiftRightZeroFillBinaryExpressionCalculatorTest extends AbstractBi
 
     @Override
     protected BinaryExpressionCalculator createCalculatorUnderTest() {
-        return new BitwiseShiftRightZeroFillBinaryExpressionCalculator();
+        return BitwiseShiftRightZeroFillBinaryExpressionCalculator.createNormalCalculator();
     }
 }

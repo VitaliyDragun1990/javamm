@@ -41,7 +41,6 @@ import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETI
 import static com.revenat.javamm.code.fragment.operator.UnaryOperator.ARITHMETICAL_UNARY_PLUS;
 import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -119,7 +118,6 @@ class CalculatorFacadeTest {
         calculatorFacade = new CalculatorFacadeImpl(calculatorsFor(BinaryOperator.values()), calculatorsFor(UnaryOperator.values()));
     }
 
-    @Disabled
     @Test
     @Order(3)
     void canoNotBeCreatedWithoutCalculatosForBinaryOperators() {

@@ -72,18 +72,29 @@ import java.util.Set;
 public class InterpreterConfigurator {
     private final CalculatorFacade binaryCalculatorFacade = new CalculatorFacadeImpl(
             Set.of(
-                    new AdditionBinaryExpressionCalculator(),
-                    new SubtractionBinaryExpressionCalculator(),
-                    new MultiplicationBinaryExpressionCalculator(),
-                    new DivisionBinaryExpressionCalculator(),
-                    new ModulusBinaryExpressionCalculator(),
+                    AdditionBinaryExpressionCalculator.createNormalCalculator(),
+                    AdditionBinaryExpressionCalculator.createAssignmentCalculator(),
+                    SubtractionBinaryExpressionCalculator.createNormalCalculator(),
+                    SubtractionBinaryExpressionCalculator.createAssignmentCalculator(),
+                    MultiplicationBinaryExpressionCalculator.createNormalCalculator(),
+                    MultiplicationBinaryExpressionCalculator.createAssignmentCalculator(),
+                    DivisionBinaryExpressionCalculator.createNormalCalculator(),
+                    DivisionBinaryExpressionCalculator.createAssignmentCalculator(),
+                    ModulusBinaryExpressionCalculator.createNormalCalculator(),
+                    ModulusBinaryExpressionCalculator.createAssignmentCalculator(),
 
-                    new BitwiseAndBinaryExpressionCalculator(),
-                    new BitwiseOrBinaryExpressionCalculator(),
-                    new BitwiseXorBinaryExpressionCalculator(),
-                    new BitwiseShiftLeftBinaryExpressionCalculator(),
-                    new BitwiseShiftRightBinaryExpressionCalculator(),
-                    new BitwiseShiftRightZeroFillBinaryExpressionCalculator(),
+                    BitwiseAndBinaryExpressionCalculator.createNormalCalculator(),
+                    BitwiseAndBinaryExpressionCalculator.createAssignmentCalculator(),
+                    BitwiseOrBinaryExpressionCalculator.createNormalCalculator(),
+                    BitwiseOrBinaryExpressionCalculator.createAssignmentCalculator(),
+                    BitwiseXorBinaryExpressionCalculator.createNormalCalculator(),
+                    BitwiseXorBinaryExpressionCalculator.createAssignmentCalculator(),
+                    BitwiseShiftLeftBinaryExpressionCalculator.createNormalCalculator(),
+                    BitwiseShiftLeftBinaryExpressionCalculator.createAssignmentCalculator(),
+                    BitwiseShiftRightBinaryExpressionCalculator.createNormalCalculator(),
+                    BitwiseShiftRightBinaryExpressionCalculator.createAssignmentCalculator(),
+                    BitwiseShiftRightZeroFillBinaryExpressionCalculator.createNormalCalculator(),
+                    BitwiseShiftRightZeroFillBinaryExpressionCalculator.createAssignmentCalculator(),
 
                     new LogicalAndBinaryExpressionCalculator(),
                     new LogicalOrBinaryExpressionCalculator(),
@@ -95,6 +106,7 @@ public class InterpreterConfigurator {
                     new IsLessThanBinaryExpressionCaluclator(),
                     new IsLessThanOrEqualsBinaryExpressionCalculator(),
                     new TypeOfBinaryExpressionCalculator()
+
     ),
             Set.of(
                     new IncrementUnaryExpressionCalculator(),

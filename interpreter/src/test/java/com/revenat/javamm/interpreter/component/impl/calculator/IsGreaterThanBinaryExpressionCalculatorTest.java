@@ -46,7 +46,7 @@ class IsGreaterThanBinaryExpressionCalculatorTest extends AbstractBinaryExpressi
     @Test
     @Order(1)
     void shouldSupportGreaterThanOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.PREDICATE_GREATER_THAN));
+        assertCalculatorSupportsOperator(calculator, BinaryOperator.PREDICATE_GREATER_THAN);
     }
 
     @Test

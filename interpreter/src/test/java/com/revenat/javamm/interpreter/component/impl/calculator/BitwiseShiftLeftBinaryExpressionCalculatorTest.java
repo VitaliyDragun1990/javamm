@@ -21,13 +21,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.bitwise.BitwiseShiftLeftBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
 import java.util.stream.Stream;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_SHIFT_LEFT;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_SHIFT_LEFT;
 import static com.revenat.javamm.code.util.TypeUtils.getType;
 import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
 
@@ -38,13 +39,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-@DisplayName("a bitwise '<<' binary expression calculator")
+@DisplayName("a bitwise shift left '<<' binary expression calculator")
 class BitwiseShiftLeftBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
 
     @Test
     @Order(1)
     void shouldSupportBitwiseShiftLeftOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.BITWISE_SHIFT_LEFT));
+        assertCalculatorSupportsOperator(BitwiseShiftLeftBinaryExpressionCalculator.createNormalCalculator(), BITWISE_SHIFT_LEFT);
+        assertCalculatorSupportsOperator(BitwiseShiftLeftBinaryExpressionCalculator.createAssignmentCalculator(), ASSIGNMENT_BITWISE_SHIFT_LEFT);
     }
 
     @Test
@@ -83,6 +85,6 @@ class BitwiseShiftLeftBinaryExpressionCalculatorTest extends AbstractBinaryExpre
 
     @Override
     protected BinaryExpressionCalculator createCalculatorUnderTest() {
-        return new BitwiseShiftLeftBinaryExpressionCalculator();
+        return BitwiseShiftLeftBinaryExpressionCalculator.createNormalCalculator();
     }
 }

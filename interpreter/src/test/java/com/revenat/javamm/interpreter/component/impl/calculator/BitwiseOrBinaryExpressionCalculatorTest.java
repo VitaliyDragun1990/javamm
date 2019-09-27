@@ -21,13 +21,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.bitwise.BitwiseOrBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
 import java.util.stream.Stream;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_OR;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_OR;
 import static com.revenat.javamm.code.util.TypeUtils.getType;
 import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
 
@@ -44,7 +45,8 @@ class BitwiseOrBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmC
     @Test
     @Order(1)
     void shouldSupportBitwiseOrOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.BITWISE_OR));
+        assertCalculatorSupportsOperator(BitwiseOrBinaryExpressionCalculator.createNormalCalculator(), BITWISE_OR);
+        assertCalculatorSupportsOperator(BitwiseOrBinaryExpressionCalculator.createAssignmentCalculator(), ASSIGNMENT_BITWISE_OR);
     }
 
     @Test
@@ -87,6 +89,6 @@ class BitwiseOrBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmC
 
     @Override
     protected BinaryExpressionCalculator createCalculatorUnderTest() {
-        return new BitwiseOrBinaryExpressionCalculator();
+        return BitwiseOrBinaryExpressionCalculator.createNormalCalculator();
     }
 }

@@ -21,21 +21,24 @@ import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
+
+import static com.revenat.javamm.code.util.TypeUtils.getType;
 
 /**
  * @author Vitaliy Dragun
  *
  */
-public abstract class AbstractUnaryExpressionCalculator extends AbstractExpressionCalculator
-        implements UnaryExpressionCalculator {
+public abstract class AbstractUnaryExpressionCalculator implements UnaryExpressionCalculator {
+    private final UnaryOperator operator;
 
     protected AbstractUnaryExpressionCalculator(final UnaryOperator operator) {
-        super(operator);
+        this.operator = operator;
     }
 
     @Override
     public UnaryOperator getOperator() {
-        return (UnaryOperator) super.getOperator();
+        return operator;
     }
 
     @Override
@@ -45,4 +48,10 @@ public abstract class AbstractUnaryExpressionCalculator extends AbstractExpressi
     }
 
     protected abstract Object calculate(Object value);
+
+    protected final JavammLineRuntimeError createNotSupportedTypesError(final Object value) {
+        return new JavammLineRuntimeError("Operator '%s' is not supported for type: %s",
+                operator.getCode(),
+                getType(value));
+    }
 }

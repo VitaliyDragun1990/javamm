@@ -46,7 +46,7 @@ class IsLessThanBinaryExpressionCaluclatorTest extends AbstractBinaryExpressionm
     @Test
     @Order(1)
     void shouldSupportLessThanBianryOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.PREDICATE_LESS_THAN));
+        assertCalculatorSupportsOperator(calculator, BinaryOperator.PREDICATE_LESS_THAN);
     }
 
     @Test

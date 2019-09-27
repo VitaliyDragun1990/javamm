@@ -17,9 +17,13 @@
 
 package com.revenat.javamm.interpreter.component.impl.calculator;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionContextDummy;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionStub;
@@ -75,5 +79,9 @@ public abstract class AbstractBinaryExpressionmCalculatorTest {
 
     protected Object calculate(final Expression operand1, final Expression operand2) {
         return calculator.calculate(EXPRESSION_CONTEXT_DUMMY, operand1, operand2);
+    }
+
+    protected void assertCalculatorSupportsOperator(final BinaryExpressionCalculator calc, final BinaryOperator operator) {
+        assertThat(calc.getOperator(), is(operator));
     }
 }

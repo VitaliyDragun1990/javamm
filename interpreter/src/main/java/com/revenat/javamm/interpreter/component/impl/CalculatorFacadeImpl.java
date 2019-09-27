@@ -51,6 +51,7 @@ public class CalculatorFacadeImpl implements CalculatorFacade {
 
     public CalculatorFacadeImpl(final Set<BinaryExpressionCalculator> binaryExpressionCalculators,
             final Set<UnaryExpressionCalculator> unaryExpressionCalculators) {
+
         binaryCalculatorRegistry = buildBinaryExpressionCalculatorRegistry(requireNonNull(binaryExpressionCalculators));
         unaryCalculatorRegistry = buildUnaryExpressionCalculatorRegistry(unaryExpressionCalculators);
         assertAllOperatorsSupported();
@@ -107,14 +108,13 @@ public class CalculatorFacadeImpl implements CalculatorFacade {
     private List<String> assertBinaryOperatorsSupported(final Collection<BinaryOperator> supportedBinary) {
         final List<String> errorMessages = new ArrayList<>();
 
-        // TODO: add support for assignment operators
         Arrays.stream(BinaryOperator.values()).forEach(operator -> {
             if (!supportedBinary.contains(operator)) {
                 errorMessages.add("Missing calculator for binary operator: " + operator);
             }
         });
 
-        return /* errorMessages */List.of();
+        return errorMessages;
     }
 
     private List<String> assertAllUnaryOperatorsSupported(final Collection<UnaryOperator> supportedUnary) {

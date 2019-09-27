@@ -21,21 +21,24 @@ import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
+
+import static com.revenat.javamm.code.util.TypeUtils.getType;
 
 /**
  * @author Vitaliy Dragun
  *
  */
-public abstract class AbstractBinaryExpressionCalculator extends AbstractExpressionCalculator
-        implements BinaryExpressionCalculator {
+public abstract class AbstractBinaryExpressionCalculator implements BinaryExpressionCalculator {
+    private final BinaryOperator operator;
 
     protected AbstractBinaryExpressionCalculator(final BinaryOperator operator) {
-        super(operator);
+        this.operator = operator;
     }
 
     @Override
     public BinaryOperator getOperator() {
-        return (BinaryOperator) super.getOperator();
+        return operator;
     }
 
     @Override
@@ -48,4 +51,11 @@ public abstract class AbstractBinaryExpressionCalculator extends AbstractExpress
     }
 
     protected abstract Object calculate(Object value1, Object value2);
+
+    protected final JavammLineRuntimeError createNotSupportedTypesError(final Object value1, final Object value2) {
+        return new JavammLineRuntimeError("Operator '%s' is not supported for types: %s and %s",
+                operator.getCode(),
+                getType(value1),
+                getType(value2));
+    }
 }

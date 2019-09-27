@@ -21,13 +21,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.MultiplicationBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
 import java.util.stream.Stream;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_MULTIPLICATION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_MULTIPLICATION;
 import static com.revenat.javamm.code.util.TypeUtils.getType;
 import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
 
@@ -39,13 +40,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 
-@DisplayName("a multiplication binary expression calculator")
+@DisplayName("a multiplication '*' binary expression calculator")
 class MultiplicationBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
 
     @Test
     @Order(1)
     void shouldSupportArithmeticMultiplicationOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.ARITHMETIC_MULTIPLICATION));
+        assertCalculatorSupportsOperator(MultiplicationBinaryExpressionCalculator.createNormalCalculator(), ARITHMETIC_MULTIPLICATION);
+        assertCalculatorSupportsOperator(MultiplicationBinaryExpressionCalculator.createAssignmentCalculator(), ASSIGNMENT_MULTIPLICATION);
     }
 
     @Test
@@ -93,6 +95,6 @@ class MultiplicationBinaryExpressionCalculatorTest extends AbstractBinaryExpress
 
     @Override
     protected BinaryExpressionCalculator createCalculatorUnderTest() {
-        return new MultiplicationBinaryExpressionCalculator();
+        return MultiplicationBinaryExpressionCalculator.createNormalCalculator();
     }
 }

@@ -21,19 +21,29 @@ import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_ADDITION;
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for arithmetic addition operator
+ * implementation for binary addition operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class AdditionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class AdditionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
-    public AdditionBinaryExpressionCalculator() {
-        super(BinaryOperator.ARITHMETIC_ADDITION);
+    private AdditionBinaryExpressionCalculator(final BinaryOperator operator) {
+        super(operator);
+    }
+
+    public static AdditionBinaryExpressionCalculator createNormalCalculator() {
+        return new AdditionBinaryExpressionCalculator(ARITHMETIC_ADDITION);
+    }
+
+    public static AdditionBinaryExpressionCalculator createAssignmentCalculator() {
+        return new AdditionBinaryExpressionCalculator(ASSIGNMENT_ADDITION);
     }
 
     @Override

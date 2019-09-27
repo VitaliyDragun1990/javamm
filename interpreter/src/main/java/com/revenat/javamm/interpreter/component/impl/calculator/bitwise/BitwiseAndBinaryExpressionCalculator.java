@@ -21,19 +21,29 @@ import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_AND;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_AND;
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for bitwise and ('&') operator
+ * implementation for binary bitwise and ('&') operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class BitwiseAndBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class BitwiseAndBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
-    public BitwiseAndBinaryExpressionCalculator() {
-        super(BinaryOperator.BITWISE_AND);
+    private BitwiseAndBinaryExpressionCalculator(final BinaryOperator operator) {
+        super(operator);
+    }
+
+    public static BitwiseAndBinaryExpressionCalculator createNormalCalculator() {
+        return new BitwiseAndBinaryExpressionCalculator(BITWISE_AND);
+    }
+
+    public static BitwiseAndBinaryExpressionCalculator createAssignmentCalculator() {
+        return new BitwiseAndBinaryExpressionCalculator(ASSIGNMENT_BITWISE_AND);
     }
 
     @Override

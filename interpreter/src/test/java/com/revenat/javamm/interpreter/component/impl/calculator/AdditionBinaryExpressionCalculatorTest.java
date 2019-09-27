@@ -21,13 +21,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.AdditionBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
 import java.util.stream.Stream;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_ADDITION;
 import static com.revenat.javamm.code.util.TypeUtils.getType;
 import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
 
@@ -38,13 +39,14 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-@DisplayName("an addition binary expression calculator")
+@DisplayName("an addition '+' binary expression calculator")
 class AdditionBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
 
     @Test
     @Order(1)
     void shouldSupportArithmeticAdditionOperator() {
-        assertThat(calculator.getOperator(), is(BinaryOperator.ARITHMETIC_ADDITION));
+        assertCalculatorSupportsOperator(AdditionBinaryExpressionCalculator.createNormalCalculator(), ARITHMETIC_ADDITION);
+        assertCalculatorSupportsOperator(AdditionBinaryExpressionCalculator.createAssignmentCalculator(), ASSIGNMENT_ADDITION);
     }
 
     @Test
@@ -128,6 +130,6 @@ class AdditionBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCa
 
     @Override
     protected BinaryExpressionCalculator createCalculatorUnderTest() {
-        return new AdditionBinaryExpressionCalculator();
+        return AdditionBinaryExpressionCalculator.createNormalCalculator();
     }
 }

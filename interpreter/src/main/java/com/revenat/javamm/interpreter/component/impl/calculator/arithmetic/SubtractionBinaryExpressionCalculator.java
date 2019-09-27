@@ -22,17 +22,28 @@ import com.revenat.javamm.code.util.TypeUtils;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_SUBTRACTION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_SUBTRACTION;
+
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for arithmetic subtraction operator
+ * implementation for binary subtraction operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class SubtractionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class SubtractionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
-    public SubtractionBinaryExpressionCalculator() {
-        super(BinaryOperator.ARITHMETIC_SUBTRACTION);
+    private SubtractionBinaryExpressionCalculator(final BinaryOperator operator) {
+        super(operator);
+    }
+
+    public static SubtractionBinaryExpressionCalculator createNormalCalculator() {
+        return new SubtractionBinaryExpressionCalculator(ARITHMETIC_SUBTRACTION);
+    }
+
+    public static SubtractionBinaryExpressionCalculator createAssignmentCalculator() {
+        return new SubtractionBinaryExpressionCalculator(ASSIGNMENT_SUBTRACTION);
     }
 
     @Override

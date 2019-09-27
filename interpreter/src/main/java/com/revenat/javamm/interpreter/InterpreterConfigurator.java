@@ -18,23 +18,28 @@
 package com.revenat.javamm.interpreter;
 
 import com.revenat.javamm.code.component.ExpressionContext;
-import com.revenat.javamm.interpreter.component.CalculatorFacade;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
+import com.revenat.javamm.interpreter.component.CalculatorFacade;
 import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.ExpressionUpdater;
 import com.revenat.javamm.interpreter.component.OperationInterpreter;
 import com.revenat.javamm.interpreter.component.RuntimeBuilder;
-import com.revenat.javamm.interpreter.component.impl.BinaryCalculatorFacadeImpl;
 import com.revenat.javamm.interpreter.component.impl.BlockOperationInterpreterImpl;
+import com.revenat.javamm.interpreter.component.impl.CalculatorFacadeImpl;
 import com.revenat.javamm.interpreter.component.impl.ExpressionContextImpl;
 import com.revenat.javamm.interpreter.component.impl.InterpreterImpl;
 import com.revenat.javamm.interpreter.component.impl.RuntimeBuilderImpl;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.AdditionBinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.DecrementUnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.DivisionBinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.IncrementUnaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.MinusUnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.ModulusBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.MultiplicationBinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.PlusUnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.SubtractionBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.bitwise.BitwiseAndBinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.bitwise.BitwiseInverseUnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.bitwise.BitwiseOrBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.bitwise.BitwiseShiftLeftBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.bitwise.BitwiseShiftRightBinaryExpressionCalculator;
@@ -65,7 +70,7 @@ import java.util.Set;
  *
  */
 public class InterpreterConfigurator {
-    private final CalculatorFacade binaryCalculatorFacade = new BinaryCalculatorFacadeImpl(
+    private final CalculatorFacade binaryCalculatorFacade = new CalculatorFacadeImpl(
             Set.of(
                     new AdditionBinaryExpressionCalculator(),
                     new SubtractionBinaryExpressionCalculator(),
@@ -92,6 +97,13 @@ public class InterpreterConfigurator {
                     new TypeOfBinaryExpressionCalculator()
     ),
             Set.of(
+                    new IncrementUnaryExpressionCalculator(),
+                    new DecrementUnaryExpressionCalculator(),
+                    new PlusUnaryExpressionCalculator(),
+                    new MinusUnaryExpressionCalculator(),
+
+                    new BitwiseInverseUnaryExpressionCalculator(),
+
                     new LogicalNotUnaryExpressionCalculator()
                     ));
 

@@ -28,6 +28,7 @@ import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,13 +43,13 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
  * @author Vitaliy Dragun
  *
  */
-public class BinaryCalculatorFacadeImpl implements CalculatorFacade {
+public class CalculatorFacadeImpl implements CalculatorFacade {
 
     private final Map<BinaryOperator, BinaryExpressionCalculator> binaryCalculatorRegistry;
 
     private final Map<UnaryOperator, UnaryExpressionCalculator> unaryCalculatorRegistry;
 
-    public BinaryCalculatorFacadeImpl(final Set<BinaryExpressionCalculator> binaryExpressionCalculators,
+    public CalculatorFacadeImpl(final Set<BinaryExpressionCalculator> binaryExpressionCalculators,
             final Set<UnaryExpressionCalculator> unaryExpressionCalculators) {
         binaryCalculatorRegistry = buildBinaryExpressionCalculatorRegistry(requireNonNull(binaryExpressionCalculators));
         unaryCalculatorRegistry = buildUnaryExpressionCalculatorRegistry(unaryExpressionCalculators);
@@ -94,22 +95,48 @@ public class BinaryCalculatorFacadeImpl implements CalculatorFacade {
     private void assertAllOperatorsSupported() {
         final List<String> errorMessages = new ArrayList<>();
 
-        // TODO: add support for assignment operators
-        Arrays.stream(BinaryOperator.values())
-                .forEach(operator -> {
-//                    if (!currentlySupported.contains(operator)) {
-//                        errorMessages.add("Missing calculator for binary operator: " + operator);
-//                    }
-                });
+        final Collection<BinaryOperator> supportedBinary = binaryCalculatorRegistry.keySet();
+        final Collection<UnaryOperator> supportedUnary = unaryCalculatorRegistry.keySet();
+
+        errorMessages.addAll(assertBinaryOperatorsSupported(supportedBinary));
+        errorMessages.addAll(assertAllUnaryOperatorsSupported(supportedUnary));
 
         processMessages(errorMessages);
     }
 
+    private List<String> assertBinaryOperatorsSupported(final Collection<BinaryOperator> supportedBinary) {
+        final List<String> errorMessages = new ArrayList<>();
+
+        // TODO: add support for assignment operators
+        Arrays.stream(BinaryOperator.values()).forEach(operator -> {
+            if (!supportedBinary.contains(operator)) {
+                errorMessages.add("Missing calculator for binary operator: " + operator);
+            }
+        });
+
+        return /* errorMessages */List.of();
+    }
+
+    private List<String> assertAllUnaryOperatorsSupported(final Collection<UnaryOperator> supportedUnary) {
+        final List<String> errorMessages = new ArrayList<>();
+
+        Arrays.stream(UnaryOperator.values()).forEach(operator -> {
+            if (!supportedUnary.contains(operator)) {
+                errorMessages.add("Missing calculator for unary operator: " + operator);
+            }
+        });
+
+        return errorMessages;
+    }
+
     private void processMessages(final List<String> errorMessages) {
         if (!errorMessages.isEmpty()) {
-            final String compositeErrorMessage =
-                    lineSeparator() + errorMessages.stream().collect(joining(lineSeparator()));
+            final String compositeErrorMessage = createCompositeErrorMessage(errorMessages);
             throw new ConfigException(compositeErrorMessage);
         }
+    }
+
+    private String createCompositeErrorMessage(final List<String> errorMessages) {
+        return lineSeparator() + errorMessages.stream().collect(joining(lineSeparator()));
     }
 }

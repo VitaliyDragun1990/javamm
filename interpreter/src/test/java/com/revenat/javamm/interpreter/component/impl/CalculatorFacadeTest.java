@@ -25,16 +25,20 @@ import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.exception.ConfigException;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
-import com.revenat.javamm.interpreter.component.CalculatorFacade;
+import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.CalculatorFacade;
+import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.test.doubles.BinaryExpressionCalculatorStub;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionContextDummy;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionDummy;
+import com.revenat.javamm.interpreter.test.doubles.UnaryExpressionCalculatorStub;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
+import static com.revenat.javamm.code.fragment.operator.UnaryOperator.ARITHMETICAL_UNARY_PLUS;
 import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
 
 import org.junit.jupiter.api.Disabled;
@@ -61,8 +65,18 @@ class CalculatorFacadeTest {
         final Set<BinaryExpressionCalculator> calculators = new HashSet<>();
 
         for(final BinaryOperator operator : operators) {
-            final BinaryExpressionCalculatorStub calculator = new BinaryExpressionCalculatorStub();
-            calculator.setSupportedOperator(operator);
+            final BinaryExpressionCalculatorStub calculator = new BinaryExpressionCalculatorStub(operator);
+            calculators.add(calculator);
+        }
+
+        return calculators;
+    }
+
+    private Set<UnaryExpressionCalculator> calculatorsFor(final UnaryOperator...operators) {
+        final Set<UnaryExpressionCalculator> calculators = new HashSet<>();
+
+        for(final UnaryOperator operator : operators) {
+            final UnaryExpressionCalculatorStub calculator = new UnaryExpressionCalculatorStub(operator);
             calculators.add(calculator);
         }
 
@@ -78,6 +92,15 @@ class CalculatorFacadeTest {
         return calculators;
     }
 
+    private Set<UnaryExpressionCalculator> calculatorsForAllOperatorsExcept(final UnaryOperator... excludedOperators) {
+        final Set<UnaryOperator> excluded = Set.of(excludedOperators);
+        final Set<UnaryExpressionCalculator> calculators = calculatorsFor(UnaryOperator.values());
+
+        calculators.removeIf(c -> excluded.contains(c.getOperator()));
+
+        return calculators;
+    }
+
     private BinaryExpressionCalculatorStub calculatorForOperatorWithExpectedResult(final BinaryOperator operator, final Object expectedResult) {
         final BinaryExpressionCalculatorStub binaryCalculatorStub = new BinaryExpressionCalculatorStub(operator);
         binaryCalculatorStub.setCalculationResult(expectedResult);
@@ -87,32 +110,47 @@ class CalculatorFacadeTest {
     @Test
     @Order(1)
     void canNotBeCreatedWithoutCalculators() {
-        assertThrows(NullPointerException.class, () -> new BinaryCalculatorFacadeImpl(null));
+        assertThrows(NullPointerException.class, () -> new CalculatorFacadeImpl(null, null));
     }
 
     @Test
     @Order(2)
-    void canBeCreatedWithCalculatorsForAllBinaryOperators() {
-        calculatorFacade = new BinaryCalculatorFacadeImpl(calculatorsFor(BinaryOperator.values()));
+    void canBeCreatedWithCalculatorsForAllOperators() {
+        calculatorFacade = new CalculatorFacadeImpl(calculatorsFor(BinaryOperator.values()), calculatorsFor(UnaryOperator.values()));
     }
 
     @Disabled
     @Test
     @Order(3)
-    void canoNotBeCreatedWithoutCalculatosForSomeOperators() {
-        final Set<BinaryExpressionCalculator> allCalculators = calculatorsForAllOperatorsExcept(ARITHMETIC_ADDITION);
+    void canoNotBeCreatedWithoutCalculatosForBinaryOperators() {
+        final Set<BinaryExpressionCalculator> notAllBinaryCalculators = calculatorsForAllOperatorsExcept(ARITHMETIC_ADDITION);
+        final Set<UnaryExpressionCalculator> allUnaryCalculators = calculatorsFor(UnaryOperator.values());
 
-        final ConfigException e = assertThrows(ConfigException.class, () -> new BinaryCalculatorFacadeImpl(allCalculators));
+        final ConfigException e =
+                assertThrows(ConfigException.class, () -> new CalculatorFacadeImpl(notAllBinaryCalculators, allUnaryCalculators));
 
         assertErrorMessageContains(e, "Missing calculator for binary operator: %s", ARITHMETIC_ADDITION);
     }
 
     @Test
     @Order(4)
+    void canoNotBeCreatedWithoutCalculatosForUnaryOperators() {
+        final Set<BinaryExpressionCalculator> allBinaryCalculators = calculatorsFor(BinaryOperator.values());
+        final Set<UnaryExpressionCalculator> notAllUnaryCalculators = calculatorsForAllOperatorsExcept(ARITHMETICAL_UNARY_PLUS);
+
+        final ConfigException e =
+                assertThrows(ConfigException.class, () -> new CalculatorFacadeImpl(allBinaryCalculators, notAllUnaryCalculators));
+
+        assertErrorMessageContains(e, "Missing calculator for unary operator: %s", ARITHMETICAL_UNARY_PLUS);
+    }
+
+    @Test
+    @Order(5)
     void shouldCalculateBinaryExpression() {
-        final Set<BinaryExpressionCalculator> allCalculators = calculatorsForAllOperatorsExcept(ARITHMETIC_ADDITION);
-        allCalculators.add(calculatorForOperatorWithExpectedResult(ARITHMETIC_ADDITION, 5));
-        calculatorFacade = new BinaryCalculatorFacadeImpl(allCalculators);
+        final Set<UnaryExpressionCalculator> allUnaryCalculators = calculatorsFor(UnaryOperator.values());
+        final Set<BinaryExpressionCalculator> allBinaryCalculators = calculatorsForAllOperatorsExcept(ARITHMETIC_ADDITION);
+        allBinaryCalculators.add(calculatorForOperatorWithExpectedResult(ARITHMETIC_ADDITION, 5));
+        calculatorFacade = new CalculatorFacadeImpl(allBinaryCalculators, allUnaryCalculators);
 
         final Object result = calculatorFacade.calculate(
                                                          DUMMY_EXPRESSION_CONTEXT,

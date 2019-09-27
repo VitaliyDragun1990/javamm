@@ -70,4 +70,9 @@ public enum UnaryOperator implements Operator {
     public boolean isAssignment() {
         return this == INCREMENT || this == DECREMENT;
     }
+
+    @Override
+    public String toString() {
+        return code;
+    }
 }

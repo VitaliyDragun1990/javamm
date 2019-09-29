@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2019. http://devonline.academy
  *
@@ -14,22 +15,22 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.code.fragment;
+package com.revenat.javamm.compiler.component;
 
-import com.revenat.javamm.code.component.ExpressionContext;
+import com.revenat.javamm.code.fragment.Operator;
 
 /**
- * Special type of {@linkplain Lexeme lexeme}. Represents any kind of expression
+ * Resolves operator precedence
  *
  * @author Vitaliy Dragun
  *
  */
-public interface Expression extends Lexeme {
+public interface OperatorPrecedenceResolver {
 
     /**
-     * Returns evaluated value of this expression
+     * Returns precedence of the specified {@linkplain Operator operator}
+     * represented as {@code integer} value. Greater value represents greater
+     * precedence operator has and vice versa.
      */
-    default Object getValue(final ExpressionContext expressionContext) {
-        return expressionContext.getValue(this);
-    }
+    int getPrecedence(Operator operator);
 }

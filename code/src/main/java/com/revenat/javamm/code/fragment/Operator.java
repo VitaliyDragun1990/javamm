@@ -18,10 +18,12 @@
 package com.revenat.javamm.code.fragment;
 
 /**
+ * Special type of {@linkplain Lexeme lexeme}. Represents any supported operator
+ *
  * @author Vitaliy Dragun
  *
  */
-public interface Operator {
+public interface Operator extends Lexeme {
 
     /**
      * Returns type of an operator: {@code unary} or {@code binary}

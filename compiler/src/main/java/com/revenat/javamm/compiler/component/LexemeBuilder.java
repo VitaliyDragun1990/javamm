@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2019. http://devonline.academy
  *
@@ -14,22 +15,20 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.code.fragment;
+package com.revenat.javamm.compiler.component;
 
-import com.revenat.javamm.code.component.ExpressionContext;
+import com.revenat.javamm.code.fragment.Lexeme;
+import com.revenat.javamm.code.fragment.SourceLine;
+
+import java.util.List;
 
 /**
- * Special type of {@linkplain Lexeme lexeme}. Represents any kind of expression
+ * Responsible for building {@linkplain Lexeme lexemes}
  *
  * @author Vitaliy Dragun
  *
  */
-public interface Expression extends Lexeme {
+public interface LexemeBuilder {
 
-    /**
-     * Returns evaluated value of this expression
-     */
-    default Object getValue(final ExpressionContext expressionContext) {
-        return expressionContext.getValue(this);
-    }
+    List<Lexeme> build(List<String> tokens, SourceLine sourceLine);
 }

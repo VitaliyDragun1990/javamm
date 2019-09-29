@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2019. http://devonline.academy
  *
@@ -14,22 +15,29 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.code.fragment;
+package com.revenat.javamm.code.fragment.expression;
 
-import com.revenat.javamm.code.component.ExpressionContext;
+import com.revenat.javamm.code.fragment.Lexeme;
+
+import java.util.List;
 
 /**
- * Special type of {@linkplain Lexeme lexeme}. Represents any kind of expression
+ * Represents complex expression which is done using {@code Postfix} notation
  *
  * @author Vitaliy Dragun
+ * @link https://en.wikipedia.org/wiki/Reverse_Polish_notation
  *
  */
-public interface Expression extends Lexeme {
+public class PostfixNotationExpression extends ComplexExpression {
+    private final String originalExpression;
 
-    /**
-     * Returns evaluated value of this expression
-     */
-    default Object getValue(final ExpressionContext expressionContext) {
-        return expressionContext.getValue(this);
+    public PostfixNotationExpression(final List<Lexeme> lexemes, final String originalExpression) {
+        super(lexemes);
+        this.originalExpression = originalExpression;
+    }
+
+    @Override
+    public String toString() {
+        return originalExpression;
     }
 }

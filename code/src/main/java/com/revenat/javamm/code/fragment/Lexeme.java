@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2019. http://devonline.academy
  *
@@ -16,20 +17,14 @@
 
 package com.revenat.javamm.code.fragment;
 
-import com.revenat.javamm.code.component.ExpressionContext;
-
 /**
- * Special type of {@linkplain Lexeme lexeme}. Represents any kind of expression
+ * Lexeme - type of token which is a part of more complex expression. Lexeme can
+ * be represented by an {@linkplain Operator operator}, an
+ * {@linkplain Expression expression} or {@linkplain Parenthesis parenthesis}
  *
  * @author Vitaliy Dragun
  *
  */
-public interface Expression extends Lexeme {
+public interface Lexeme extends CompiledCodeFragment {
 
-    /**
-     * Returns evaluated value of this expression
-     */
-    default Object getValue(final ExpressionContext expressionContext) {
-        return expressionContext.getValue(this);
-    }
 }

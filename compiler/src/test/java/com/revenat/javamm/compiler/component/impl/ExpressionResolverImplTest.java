@@ -17,23 +17,32 @@
 
 package com.revenat.javamm.compiler.component.impl;
 
-import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.fragment.Expression;
+import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
-import com.revenat.javamm.compiler.component.ExpressionBuilder;
+import com.revenat.javamm.code.fragment.expression.ComplexExpression;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
+import com.revenat.javamm.compiler.test.doubles.ComplexExpressionBuilderStub;
+import com.revenat.javamm.compiler.test.doubles.ExpressionBuilderStub;
+import com.revenat.javamm.compiler.test.doubles.ExpressionDummy;
+import com.revenat.javamm.compiler.test.doubles.LexemeBuilderStub;
+import com.revenat.javamm.compiler.test.helper.CustomAsserts;
 
 import java.util.List;
 import java.util.Set;
+
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
@@ -43,51 +52,73 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a expression resolver")
 class ExpressionResolverImplTest {
-    private static final Expression DUMMY_EXPRESSION = new Expression() {};
-    private static final SourceLine SOURCE_LINE = new SourceLine("test", 1, List.of("println", "(", "'test'", ")"));
-    private static final List<String> EXCEPTION_TOKENS = List.of("'test'");
+    private static final Expression EXPRESSION = new ExpressionDummy();
+    private static final SourceLine SOURCE_LINE = SourceLine.EMPTY_SOURCE_LINE;
 
-    private ExpressionBuilderStub expressionBuilderStub;
+    private ExpressionBuilderStub expressionBuilder;
+    private ComplexExpressionBuilderStub complexExpressionBuilder;
+    private LexemeBuilderStub lexemeBuilder;
 
     private ExpressionResolver expressionResolver;
 
     @BeforeEach
     void setUp() {
-        expressionBuilderStub = new ExpressionBuilderStub();
+        expressionBuilder = new ExpressionBuilderStub();
+        complexExpressionBuilder = new ComplexExpressionBuilderStub();
+        lexemeBuilder = new LexemeBuilderStub();
+
+        expressionResolver = new ExpressionResolverImpl(Set.of(expressionBuilder), complexExpressionBuilder, lexemeBuilder);
     }
 
     @Test
-    void shouldFailIfCanNotResolveTokensForAnySupportedExpression() {
-        expressionResolver = new ExpressionResolverImpl(Set.of(expressionBuilderStub));
-
-        assertThrows(JavammLineSyntaxError.class, () -> expressionResolver.resolve(EXCEPTION_TOKENS, SOURCE_LINE));
+    @Order(1)
+    void canNotBeBuildWithoutDependencies() {
+        assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(null, complexExpressionBuilder, lexemeBuilder));
+        assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder), null, lexemeBuilder));
+        assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder), complexExpressionBuilder, null));
     }
 
     @Test
-    void shouldResolveSupportedExpressionFromTokens() {
-        expressionBuilderStub.setCanBuild(true);
-        expressionResolver = new ExpressionResolverImpl(Set.of(expressionBuilderStub));
+    @Order(2)
+    void shouldResolveExpressionFromSingleToken() {
+        final List<String> tokens = List.of("hello");
+        expressionBuilder.setCanBuild(true);
+        expressionBuilder.setExpressionToBuild(tokens, EXPRESSION);
 
-        final Expression expression = expressionResolver.resolve(EXCEPTION_TOKENS, SOURCE_LINE);
+        final Expression resolvedExpression = expressionResolver.resolve(tokens, SOURCE_LINE);
 
-        assertThat(expression, sameInstance(DUMMY_EXPRESSION));
+        assertThat(resolvedExpression, is(EXPRESSION));
     }
 
-    private class ExpressionBuilderStub implements ExpressionBuilder {
-        private boolean canBuild = false;
+    @Test
+    @Order(3)
+    void shouldResolveComplexExpressionFromSeveralTokens() {
+        final List<String> tokens = List.of("a", "+", "10");
+        final List<Lexeme> lexemes = List.of(EXPRESSION, ARITHMETIC_ADDITION, EXPRESSION);
+        final ComplexExpression complexExpression = complexExpression(lexemes);
+        expressionBuilder.setCanBuild(false);
+        lexemeBuilder.setLexemesToBuild(tokens, lexemes);
+        complexExpressionBuilder.setExpressionToBuild(lexemes, complexExpression);
 
-        void setCanBuild(final boolean canBuild) {
-            this.canBuild = canBuild;
-        }
+        final Expression resolvedExpression = expressionResolver.resolve(tokens, SOURCE_LINE);
 
-        @Override
-        public boolean canBuild(final List<String> tokens) {
-            return canBuild;
-        }
+        assertThat(resolvedExpression, is(complexExpression));
+    }
 
-        @Override
-        public Expression build(final List<String> expressionTokens, final SourceLine sourceLine) {
-            return DUMMY_EXPRESSION;
-        }
+    @Test
+    @Order(4)
+    void shouldFailIfProvidedTokenDoesNotRepresentExpression() {
+        final List<String> singleTokenList = List.of("+");
+        final List<Lexeme> lexemes = List.of(ARITHMETIC_ADDITION);
+        expressionBuilder.setCanBuild(false);
+        lexemeBuilder.setLexemesToBuild(singleTokenList, lexemes);
+
+        final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> expressionResolver.resolve(singleTokenList, SOURCE_LINE));
+
+        CustomAsserts.assertErrorMessageContains(e, "Unsupported expression: %s",lexemes.get(0));
+    }
+
+    private ComplexExpression complexExpression(final List<Lexeme> lexemes) {
+        return new ComplexExpression(lexemes);
     }
 }

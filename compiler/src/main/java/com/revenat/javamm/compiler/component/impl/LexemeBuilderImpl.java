@@ -18,6 +18,7 @@
 package com.revenat.javamm.compiler.component.impl;
 
 import com.revenat.javamm.code.fragment.Lexeme;
+import com.revenat.javamm.code.fragment.Operator;
 import com.revenat.javamm.code.fragment.Parenthesis;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
@@ -29,15 +30,18 @@ import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import java.util.List;
 import java.util.Optional;
 
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
+
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toUnmodifiableList;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Vitaliy Dragun
  *
  */
 public class LexemeBuilderImpl implements LexemeBuilder {
+    private static final String[] AMBIGUOUS_CODES = {"+", "-"};
 
     private final SingleTokenExpressionBuilder singleTokenExpressionBuilder;
 
@@ -47,17 +51,61 @@ public class LexemeBuilderImpl implements LexemeBuilder {
 
     @Override
     public List<Lexeme> build(final List<String> tokens, final SourceLine sourceLine) {
-        return tokens.stream()
+        final List<Lexeme> lexemes = tokens.stream()
                 .map(token -> buildLexeme(token, sourceLine))
-                .collect(toUnmodifiableList());
+                .collect(toList());
+
+        fixOperatorsAmbiguity(lexemes);
+
+        return List.copyOf(lexemes);
     }
 
     private Lexeme buildLexeme(final String token, final SourceLine sourceLine) {
         return
                 tryToBuildOperatorFrom(token)
-                 .or(() -> tryToBuildParenthesisFrom(token))
-                 .or(() -> tryToBuildSingleTokenExpressionFrom(token, sourceLine))
-                 .orElseThrow(() -> syntaxError(token, sourceLine));
+                .or(() -> tryToBuildParenthesisFrom(token))
+                .or(() -> tryToBuildSingleTokenExpressionFrom(token, sourceLine))
+                .orElseThrow(() -> syntaxError(token, sourceLine));
+    }
+
+    private void fixOperatorsAmbiguity(final List<Lexeme> lexemes) {
+        for (int i = 0; i < lexemes.size(); i++) {
+            checkForAmbiguity(lexemes.get(i), i, lexemes);
+        }
+    }
+
+    private void checkForAmbiguity(final Lexeme lexeme, final int i, final List<Lexeme> lexemes) {
+        for (final String code : AMBIGUOUS_CODES) {
+            if (ifAmbiguousOperatorWithCode(lexeme, code)) {
+                resolveAmbiguity(code, i, lexemes);
+            }
+        }
+    }
+
+    private void resolveAmbiguity(final String ambiguousCode, final int ambiguousLexemPosition,
+            final List<Lexeme> lexemes) {
+        if (shouldBeBinaryOperator(lexemes, ambiguousLexemPosition)) {
+            lexemes.set(ambiguousLexemPosition, binaryOperatorFor(ambiguousCode));
+        } else {
+            lexemes.set(ambiguousLexemPosition, unaryOperatorFor(ambiguousCode));
+        }
+    }
+
+    private boolean shouldBeBinaryOperator(final List<Lexeme> lexemes, final int lexemePosition) {
+        return lexemePosition > 0 && (lexemes.get(lexemePosition - 1) != Parenthesis.OPENING_PARENTHESIS) &&
+                (!confirmType(Operator.class, lexemes.get(lexemePosition - 1)));
+    }
+
+    private boolean ifAmbiguousOperatorWithCode(final Lexeme lexeme, final String code) {
+        return confirmType(Operator.class, lexeme) && ((Operator) lexeme).getCode().equals(code);
+    }
+
+    private UnaryOperator unaryOperatorFor(final String code) {
+        return UnaryOperator.of(code).get();
+    }
+
+    private BinaryOperator binaryOperatorFor(final String code) {
+        return BinaryOperator.of(code).get();
     }
 
     @SuppressWarnings("unchecked")

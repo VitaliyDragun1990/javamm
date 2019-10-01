@@ -18,13 +18,15 @@
 package com.revenat.javamm.compiler.component.impl;
 
 import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInRelativeOrder;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.Lexeme;
+import com.revenat.javamm.code.fragment.Operator;
 import com.revenat.javamm.code.fragment.Parenthesis;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
@@ -45,7 +47,6 @@ import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETI
 import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -73,6 +74,12 @@ class LexemeBuilderImplTest {
         lexemeBuilder = new LexemeBuilderImpl(expressionBuilderStub);
     }
 
+    private void assertOperatorWithCode(final Lexeme lexeme, final String code) {
+        assertThat(lexeme, instanceOf(Operator.class));
+        final Operator operator = (Operator) lexeme;
+        assertThat(operator.getCode(), is(code));
+    }
+
     private void assertLexemesInOrder(final List<Lexeme> lexemes, final Lexeme... expectedLexemes) {
         for (final Lexeme expectedLexeme : expectedLexemes) {
             assertThat(lexemes, hasItem(is(expectedLexeme)));
@@ -85,24 +92,13 @@ class LexemeBuilderImplTest {
     }
 
     @ParameterizedTest
-    @MethodSource("binaryOperatorTokenProvider")
+    @MethodSource("operatorTokenProvider")
     @Order(1)
-    void canBuildLexemeFromTokenRepresentingBinaryOperator(final String token, final BinaryOperator expectedOperator) {
+    void canBuildLexemeFromTokenRepresentingOperator(final String token, final Operator expectedOperator) {
         final List<Lexeme> lexemes = lexemeBuilder.build(List.of(token), SOURCE_LINE);
 
         assertLexemesCount(lexemes, 1);
-        assertLexemesInOrder(lexemes, expectedOperator);
-    }
-
-    @Disabled("builds binary operators for '+' and '-' tokens instead of unary ones")
-    @ParameterizedTest
-    @MethodSource("unaryOperatorTokenProvider")
-    @Order(2)
-    void canBuildLexemeFromTokenRepresentingUnaryOperator(final String token, final UnaryOperator expectedOperator) {
-        final List<Lexeme> lexemes = lexemeBuilder.build(List.of(token), SOURCE_LINE);
-
-        assertLexemesCount(lexemes, 1);
-        assertLexemesInOrder(lexemes, expectedOperator);
+        assertOperatorWithCode(lexemes.get(0), token);
     }
 
     @ParameterizedTest
@@ -163,8 +159,9 @@ class LexemeBuilderImplTest {
         assertErrorMessageContains(e, "Unsupported token: %s", unsupportedToken);
     }
 
-    static Stream<Arguments> binaryOperatorTokenProvider() {
-        return Arrays.stream(BinaryOperator.values())
+    static Stream<Arguments> operatorTokenProvider() {
+        return Stream.of(BinaryOperator.values(), UnaryOperator.values())
+                .flatMap(op -> Arrays.stream(op))
                 .map(operator -> Arguments.of(operator.getCode(), operator));
     }
 

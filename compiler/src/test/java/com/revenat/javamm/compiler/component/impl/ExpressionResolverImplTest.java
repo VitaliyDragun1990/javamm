@@ -31,12 +31,12 @@ import com.revenat.javamm.compiler.test.doubles.ComplexExpressionBuilderStub;
 import com.revenat.javamm.compiler.test.doubles.ExpressionBuilderStub;
 import com.revenat.javamm.compiler.test.doubles.ExpressionDummy;
 import com.revenat.javamm.compiler.test.doubles.LexemeBuilderStub;
-import com.revenat.javamm.compiler.test.helper.CustomAsserts;
 
 import java.util.List;
 import java.util.Set;
 
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
+import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -115,7 +115,7 @@ class ExpressionResolverImplTest {
 
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> expressionResolver.resolve(singleTokenList, SOURCE_LINE));
 
-        CustomAsserts.assertErrorMessageContains(e, "Unsupported expression: %s",lexemes.get(0));
+        assertErrorMessageContains(e, "Unsupported expression: %s",lexemes.get(0));
     }
 
     private ComplexExpression complexExpression(final List<Lexeme> lexemes) {

@@ -80,8 +80,8 @@ public class OperatorPrecedenceResolverImpl implements OperatorPrecedenceResolve
             entry(DECREMENT, MAX_PRECEDENCE - 1),
             entry(ARITHMETICAL_UNARY_PLUS, MAX_PRECEDENCE - 1),
             entry(ARITHMETICAL_UNARY_MINUS, MAX_PRECEDENCE - 1),
-            entry(LOGICAL_NOT, MAX_PRECEDENCE - 1),
             entry(BITWISE_INVERSE, MAX_PRECEDENCE - 1),
+            entry(LOGICAL_NOT, MAX_PRECEDENCE - 1),
             //
             entry(ARITHMETIC_MULTIPLICATION, MAX_PRECEDENCE - 2),
             entry(ARITHMETIC_DIVISION, MAX_PRECEDENCE - 2),
@@ -138,6 +138,11 @@ public class OperatorPrecedenceResolverImpl implements OperatorPrecedenceResolve
         }
 
         return precedence;
+    }
+
+    @Override
+    public boolean hasLowerPrecedence(final Operator first, final Operator second) {
+        return getPrecedence(first) < getPrecedence(second);
     }
 
     @SuppressWarnings("unlikely-arg-type")

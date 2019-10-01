@@ -33,4 +33,13 @@ public interface OperatorPrecedenceResolver {
      * precedence operator has and vice versa.
      */
     int getPrecedence(Operator operator);
+
+    /**
+     * Checks whether {@code first} {@linkplain Operator operator} has lower
+     * precedence than {@code second} {@linkplain Operator operator}
+     *
+     * @return {@code true} if the first operator has lower precedence than the second
+     *         operator, {@code false} otherwise
+     */
+    boolean hasLowerPrecedence(Operator first, Operator second);
 }

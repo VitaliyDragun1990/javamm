@@ -20,7 +20,7 @@ package com.revenat.javamm.interpreter.component.impl.expression.evaluator;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.expression.ConstantExpression;
-import com.revenat.javamm.code.fragment.expression.PostfixNotationExpression;
+import com.revenat.javamm.code.fragment.expression.PostfixNotationComplexExpression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.interpreter.component.CalculatorFacade;
@@ -33,28 +33,28 @@ import java.util.Deque;
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
- * Responsible for evaluation {@linkplain PostfixNotationExpression postfix
+ * Responsible for evaluation {@linkplain PostfixNotationComplexExpression postfix
  * notation expressions}
  *
  * @author Vitaliy Dragun
  *
  */
-public class PostfixNotationExpressionEvaluator extends AbstractExpressionEvaluator
-        implements ExpressionEvaluator<PostfixNotationExpression> {
+public class PostfixNotationComplexExpressionEvaluator extends AbstractExpressionEvaluator
+        implements ExpressionEvaluator<PostfixNotationComplexExpression> {
 
     private final CalculatorFacade calculator;
 
-    public PostfixNotationExpressionEvaluator(final CalculatorFacade calculator) {
+    public PostfixNotationComplexExpressionEvaluator(final CalculatorFacade calculator) {
         this.calculator = calculator;
     }
 
     @Override
-    public Class<PostfixNotationExpression> getExpressionClass() {
-        return PostfixNotationExpression.class;
+    public Class<PostfixNotationComplexExpression> getExpressionClass() {
+        return PostfixNotationComplexExpression.class;
     }
 
     @Override
-    public Object evaluate(final PostfixNotationExpression expression) {
+    public Object evaluate(final PostfixNotationComplexExpression expression) {
         final Deque<Expression> resultStack = new ArrayDeque<>();
 
         for (final Lexeme lexeme : expression.getLexemes()) {
@@ -93,7 +93,8 @@ public class PostfixNotationExpressionEvaluator extends AbstractExpressionEvalua
         stack.push(expression);
     }
 
-    private void assertResultPresent(final Deque<Expression> resultStack, final PostfixNotationExpression expression) {
+    private void assertResultPresent(final Deque<Expression> resultStack,
+                                     final PostfixNotationComplexExpression expression) {
         if (resultStack.size() != 1) {
             throw new JavammLineRuntimeError("Invalid expression: %s", expression);
         }

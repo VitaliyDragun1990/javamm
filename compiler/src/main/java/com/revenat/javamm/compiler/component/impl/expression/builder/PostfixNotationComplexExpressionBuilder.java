@@ -22,7 +22,7 @@ import com.revenat.javamm.code.fragment.Operator;
 import com.revenat.javamm.code.fragment.Parenthesis;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.ComplexExpression;
-import com.revenat.javamm.code.fragment.expression.PostfixNotationExpression;
+import com.revenat.javamm.code.fragment.expression.PostfixNotationComplexExpression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.ComplexExpressionBuilder;
@@ -56,10 +56,10 @@ public class PostfixNotationComplexExpressionBuilder implements ComplexExpressio
 
     @Override
     public ComplexExpression build(final List<Lexeme> lexemes, final SourceLine sourceLine) {
-        return new PostfixNotationExpression(representInPostifxNotation(lexemes, sourceLine), lexemesAsString(lexemes));
+        return new PostfixNotationComplexExpression(getInPostifxNotation(lexemes, sourceLine), toString(lexemes));
     }
 
-    private List<Lexeme> representInPostifxNotation(final List<Lexeme> lexemes, final SourceLine sourceLine) {
+    private List<Lexeme> getInPostifxNotation(final List<Lexeme> lexemes, final SourceLine sourceLine) {
         final List<Lexeme> result = new ArrayList<>();
         final Deque<Lexeme> stack = new ArrayDeque<>();
 
@@ -184,7 +184,7 @@ public class PostfixNotationComplexExpressionBuilder implements ComplexExpressio
         return confirmType(UnaryOperator.class, first, second);
     }
 
-    private String lexemesAsString(final List<Lexeme> lexemes) {
+    private String toString(final List<Lexeme> lexemes) {
         return lexemes.stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(" "));

@@ -28,10 +28,10 @@ import java.util.List;
  * @link https://en.wikipedia.org/wiki/Reverse_Polish_notation
  *
  */
-public class PostfixNotationExpression extends ComplexExpression {
+public class PostfixNotationComplexExpression extends ComplexExpression {
     private final String originalExpression;
 
-    public PostfixNotationExpression(final List<Lexeme> lexemes, final String originalExpression) {
+    public PostfixNotationComplexExpression(final List<Lexeme> lexemes, final String originalExpression) {
         super(lexemes);
         this.originalExpression = originalExpression;
     }

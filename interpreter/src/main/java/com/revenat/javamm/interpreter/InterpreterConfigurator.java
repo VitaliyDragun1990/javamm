@@ -55,7 +55,6 @@ import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsLess
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsLessThanOrEqualsBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsNotEqualsBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.TypeOfBinaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.expression.evaluator.BinaryExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.PostfixNotationExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.VariableExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.PrintlnOperationInterpreter;
@@ -122,7 +121,6 @@ public class InterpreterConfigurator {
 
     private final Set<ExpressionEvaluator<?>> expressionEvaluators = Set.of(
             new VariableExpressionEvaluator(),
-            new BinaryExpressionEvaluator(binaryCalculatorFacade),
             new PostfixNotationExpressionEvaluator(binaryCalculatorFacade)
     );
 

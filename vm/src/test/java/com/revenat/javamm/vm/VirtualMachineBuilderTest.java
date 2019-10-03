@@ -38,5 +38,4 @@ class VirtualMachineBuilderTest {
     void shouldBuildNewVirtualMachine() {
         assertNotNull(new VirtualMachineBuilder().build());
     }
-
 }

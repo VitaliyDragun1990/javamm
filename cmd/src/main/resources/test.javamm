@@ -1,11 +1,11 @@
-var a = 1
-var b = 2
-var d = true
-final c = a - b
+var a1 = 5
+var b1 = 3
 
-println ( a )
-println ( b )
-println ( c )
-println ( ! d )
-println ( c - 1 )
-println ( 'HelloWorld' )
+var c1 = a1 + b1
+var c2 = ~ a1
+
+var c3 = ~ a1 + b1
+var c4 = a1 * b1 + a1
+var c5 = a1 * ( b1 + a1 )
+
+println ( a1 + "," + b1 + "," + c1 + "," + c2 + "," + c3 + "," + c4 + "," + c5 )

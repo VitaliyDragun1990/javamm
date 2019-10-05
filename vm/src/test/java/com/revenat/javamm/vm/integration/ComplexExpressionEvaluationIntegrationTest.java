@@ -17,14 +17,11 @@
 
 package com.revenat.javamm.vm.integration;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import com.revenat.javamm.code.fragment.SourceCode;
-import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 import com.revenat.javamm.vm.VirtualMachine;
 import com.revenat.javamm.vm.VirtualMachineBuilder;
 
@@ -48,8 +45,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import org.junit.jupiter.params.provider.ValueSource;
-
 import com.revenat.juinit.addons.ReplaceCamelCase;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -80,18 +75,6 @@ public class ComplexExpressionEvaluationIntegrationTest {
         vm.run(sourceCodeFrom(expression));
 
         assertEvaluationResult(expectedResult);
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "10 + 20 ( 30 )",
-            "+ 20 ( 30 )",
-    })
-    @Order(2)
-    void shouldFailToEvaluateIfExpressionIsInvalid(final String invalidExpression) {
-        final JavammRuntimeError e = assertThrows(JavammRuntimeError.class, () -> vm.run(sourceCodeFrom(invalidExpression)));
-
-        assertThat(e.getMessage(), containsString("Invalid expression: " + invalidExpression));
     }
 
     private void assertEvaluationResult(final Object expectedResult) {

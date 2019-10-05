@@ -19,6 +19,8 @@ package com.revenat.javamm.compiler;
 
 import com.revenat.javamm.compiler.component.BlockOperationReader;
 import com.revenat.javamm.compiler.component.ComplexExpressionBuilder;
+import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
+import com.revenat.javamm.compiler.component.ExpressionBuilder;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
 import com.revenat.javamm.compiler.component.OperationReader;
@@ -29,6 +31,7 @@ import com.revenat.javamm.compiler.component.TokenParser;
 import com.revenat.javamm.compiler.component.VariableBuilder;
 import com.revenat.javamm.compiler.component.impl.BlockOperationReaderImpl;
 import com.revenat.javamm.compiler.component.impl.CompilerImpl;
+import com.revenat.javamm.compiler.component.impl.ComplexLexemeValidatorImpl;
 import com.revenat.javamm.compiler.component.impl.ExpressionResolverImpl;
 import com.revenat.javamm.compiler.component.impl.LexemeBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.OperatorPrecedenceResolverImpl;
@@ -65,14 +68,19 @@ public class CompilerConfigurator {
     private final SingleTokenExpressionBuilder singleTokenExpressionBuilder =
             new SingleTokenExpressionBuilderImpl(variableBuilder);
 
+    private final Set<ExpressionBuilder> expressionBuilders = Set.of(
+            singleTokenExpressionBuilder
+    );
+
     private final LexemeBuilder lexemeBuilder = new LexemeBuilderImpl(singleTokenExpressionBuilder);
 
+    private final ComplexLexemeValidator lexemeValidator = new ComplexLexemeValidatorImpl();
+
     private final ExpressionResolver expressionResolver = new ExpressionResolverImpl(
-            Set.of(
-                    singleTokenExpressionBuilder
-            ),
+            expressionBuilders,
             complexExpressionBuilder,
-            lexemeBuilder
+            lexemeBuilder,
+            lexemeValidator
     );
 
     private final Set<OperationReader> operationReaders = Set.of(

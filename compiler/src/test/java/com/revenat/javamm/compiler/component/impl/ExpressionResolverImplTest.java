@@ -25,9 +25,11 @@ import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.ComplexExpression;
+import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.test.doubles.ComplexExpressionBuilderStub;
+import com.revenat.javamm.compiler.test.doubles.ComplexLexemeValidatorDummy;
 import com.revenat.javamm.compiler.test.doubles.ExpressionBuilderStub;
 import com.revenat.javamm.compiler.test.doubles.ExpressionDummy;
 import com.revenat.javamm.compiler.test.doubles.LexemeBuilderStub;
@@ -58,6 +60,7 @@ class ExpressionResolverImplTest {
     private ExpressionBuilderStub expressionBuilder;
     private ComplexExpressionBuilderStub complexExpressionBuilder;
     private LexemeBuilderStub lexemeBuilder;
+    private ComplexLexemeValidator lexemeValidator;
 
     private ExpressionResolver expressionResolver;
 
@@ -66,16 +69,34 @@ class ExpressionResolverImplTest {
         expressionBuilder = new ExpressionBuilderStub();
         complexExpressionBuilder = new ComplexExpressionBuilderStub();
         lexemeBuilder = new LexemeBuilderStub();
+        lexemeValidator = new ComplexLexemeValidatorDummy();
 
-        expressionResolver = new ExpressionResolverImpl(Set.of(expressionBuilder), complexExpressionBuilder, lexemeBuilder);
+        expressionResolver = new ExpressionResolverImpl(Set.of(expressionBuilder), complexExpressionBuilder, lexemeBuilder, lexemeValidator);
+    }
+
+    private Expression resolve(final List<String> tokens) {
+        return expressionResolver.resolve(tokens, SOURCE_LINE);
     }
 
     @Test
     @Order(1)
     void canNotBeBuildWithoutDependencies() {
-        assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(null, complexExpressionBuilder, lexemeBuilder));
-        assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder), null, lexemeBuilder));
-        assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder), complexExpressionBuilder, null));
+        assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(null,
+                                                                                  complexExpressionBuilder,
+                                                                                  lexemeBuilder,
+                                                                                  lexemeValidator));
+        assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder),
+                                                                                  null,
+                                                                                  lexemeBuilder,
+                                                                                  lexemeValidator));
+        assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder),
+                                                                                  complexExpressionBuilder,
+                                                                                  null,
+                                                                                  lexemeValidator));
+        assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder),
+                                                                                  complexExpressionBuilder,
+                                                                                  lexemeBuilder,
+                                                                                  null));
     }
 
     @Test
@@ -85,7 +106,7 @@ class ExpressionResolverImplTest {
         expressionBuilder.setCanBuild(true);
         expressionBuilder.setExpressionToBuild(tokens, EXPRESSION);
 
-        final Expression resolvedExpression = expressionResolver.resolve(tokens, SOURCE_LINE);
+        final Expression resolvedExpression = resolve(tokens);
 
         assertThat(resolvedExpression, is(EXPRESSION));
     }
@@ -100,7 +121,7 @@ class ExpressionResolverImplTest {
         lexemeBuilder.setLexemesToBuild(tokens, lexemes);
         complexExpressionBuilder.setExpressionToBuild(lexemes, complexExpression);
 
-        final Expression resolvedExpression = expressionResolver.resolve(tokens, SOURCE_LINE);
+        final Expression resolvedExpression = resolve(tokens);
 
         assertThat(resolvedExpression, is(complexExpression));
     }
@@ -113,7 +134,7 @@ class ExpressionResolverImplTest {
         expressionBuilder.setCanBuild(false);
         lexemeBuilder.setLexemesToBuild(singleTokenList, lexemes);
 
-        final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> expressionResolver.resolve(singleTokenList, SOURCE_LINE));
+        final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> resolve(singleTokenList));
 
         assertErrorMessageContains(e, "Unsupported expression: %s",lexemes.get(0));
     }

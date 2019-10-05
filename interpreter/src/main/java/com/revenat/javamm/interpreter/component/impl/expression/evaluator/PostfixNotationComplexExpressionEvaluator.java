@@ -25,8 +25,6 @@ import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.interpreter.component.CalculatorFacade;
 import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
-import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -61,8 +59,6 @@ public class PostfixNotationComplexExpressionEvaluator extends AbstractExpressio
             processLexeme(resultStack, lexeme);
         }
 
-        assertResultPresent(resultStack, expression);
-
         return evaluateResult(resultStack);
     }
 
@@ -91,13 +87,6 @@ public class PostfixNotationComplexExpressionEvaluator extends AbstractExpressio
 
     private void processExpression(final Expression expression, final Deque<Expression> stack) {
         stack.push(expression);
-    }
-
-    private void assertResultPresent(final Deque<Expression> resultStack,
-                                     final PostfixNotationComplexExpression expression) {
-        if (resultStack.size() != 1) {
-            throw new JavammLineRuntimeError("Invalid expression: %s", expression);
-        }
     }
 
     private Object evaluateResult(final Deque<Expression> resultStack) {

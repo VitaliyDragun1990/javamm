@@ -22,6 +22,7 @@ import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.ComplexExpression;
 import com.revenat.javamm.compiler.component.ComplexExpressionBuilder;
+import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
 import com.revenat.javamm.compiler.component.ExpressionBuilder;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
@@ -48,12 +49,16 @@ public class ExpressionResolverImpl implements ExpressionResolver {
 
     private final LexemeBuilder lexemeBuilder;
 
+    private final ComplexLexemeValidator lexemeValidator;
+
     public ExpressionResolverImpl(final Set<ExpressionBuilder> expressionBuilders,
                                   final ComplexExpressionBuilder complexExpressionBuilder,
-                                  final LexemeBuilder lexemeBuilder) {
+                                  final LexemeBuilder lexemeBuilder,
+                                  final ComplexLexemeValidator lexemeValidator) {
         this.expressionBuilders = List.copyOf(expressionBuilders);
         this.complexExpressionBuilder = requireNonNull(complexExpressionBuilder);
         this.lexemeBuilder = requireNonNull(lexemeBuilder);
+        this.lexemeValidator = requireNonNull(lexemeValidator);
     }
 
     @Override
@@ -84,9 +89,10 @@ public class ExpressionResolverImpl implements ExpressionResolver {
     private Expression resolveComplexExpression(final List<String> expressionTokens, final SourceLine sourceLine) {
         final List<Lexeme> lexemes = lexemeBuilder.build(expressionTokens, sourceLine);
 
-        if (lexemes.size() == 1) { // TODO: How it has been missed by ExpressionBuilder ??????
+        if (lexemes.size() == 1) {
             return resolveFromSingleLexeme(sourceLine, lexemes.get(0));
         } else {
+            lexemeValidator.validate(lexemes, sourceLine);
             return buildComplexExpression(sourceLine, lexemes);
         }
     }

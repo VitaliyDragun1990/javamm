@@ -27,6 +27,7 @@ import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.ComplexExpression;
 import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
+import com.revenat.javamm.compiler.component.UnaryAssignmentExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.test.doubles.ComplexExpressionBuilderStub;
 import com.revenat.javamm.compiler.test.doubles.ComplexLexemeValidatorDummy;
@@ -61,6 +62,7 @@ class ExpressionResolverImplTest {
     private ComplexExpressionBuilderStub complexExpressionBuilder;
     private LexemeBuilderStub lexemeBuilder;
     private ComplexLexemeValidator lexemeValidator;
+    private UnaryAssignmentExpressionResolver unaryAssignmentExpressionResolver;
 
     private ExpressionResolver expressionResolver;
 
@@ -70,8 +72,13 @@ class ExpressionResolverImplTest {
         complexExpressionBuilder = new ComplexExpressionBuilderStub();
         lexemeBuilder = new LexemeBuilderStub();
         lexemeValidator = new ComplexLexemeValidatorDummy();
+        unaryAssignmentExpressionResolver = new UnaryAssignmentExpressionResolverStub();
 
-        expressionResolver = new ExpressionResolverImpl(Set.of(expressionBuilder), complexExpressionBuilder, lexemeBuilder, lexemeValidator);
+        expressionResolver = new ExpressionResolverImpl(Set.of(expressionBuilder),
+                                                        complexExpressionBuilder,
+                                                        lexemeBuilder,
+                                                        lexemeValidator,
+                                                        unaryAssignmentExpressionResolver);
     }
 
     private Expression resolve(final List<String> tokens) {
@@ -84,18 +91,27 @@ class ExpressionResolverImplTest {
         assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(null,
                                                                                   complexExpressionBuilder,
                                                                                   lexemeBuilder,
-                                                                                  lexemeValidator));
+                                                                                  lexemeValidator,
+                                                                                  unaryAssignmentExpressionResolver));
         assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder),
                                                                                   null,
                                                                                   lexemeBuilder,
-                                                                                  lexemeValidator));
+                                                                                  lexemeValidator,
+                                                                                  unaryAssignmentExpressionResolver));
         assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder),
                                                                                   complexExpressionBuilder,
                                                                                   null,
-                                                                                  lexemeValidator));
+                                                                                  lexemeValidator,
+                                                                                  unaryAssignmentExpressionResolver));
         assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder),
                                                                                   complexExpressionBuilder,
                                                                                   lexemeBuilder,
+                                                                                  null,
+                                                                                  unaryAssignmentExpressionResolver));
+        assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder),
+                                                                                  complexExpressionBuilder,
+                                                                                  lexemeBuilder,
+                                                                                  lexemeValidator,
                                                                                   null));
     }
 
@@ -141,5 +157,13 @@ class ExpressionResolverImplTest {
 
     private ComplexExpression complexExpression(final List<Lexeme> lexemes) {
         return new ComplexExpression(lexemes);
+    }
+
+    public static class UnaryAssignmentExpressionResolverStub implements UnaryAssignmentExpressionResolver {
+
+        @Override
+        public List<Lexeme> resolve(final List<Lexeme> lexemes, final SourceLine sourceLine) {
+            return lexemes;
+        }
     }
 }

@@ -18,11 +18,11 @@
 package com.revenat.javamm.compiler.component.impl;
 
 import com.revenat.javamm.code.fragment.Lexeme;
-import com.revenat.javamm.code.fragment.Operator;
 import com.revenat.javamm.code.fragment.Parenthesis;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
+import com.revenat.javamm.compiler.component.LexemeAmbiguityResolver;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
 import com.revenat.javamm.compiler.component.SingleTokenExpressionBuilder;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
@@ -30,13 +30,6 @@ import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-
-import static com.revenat.javamm.code.fragment.Parenthesis.OPENING_PARENTHESIS;
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_SUBTRACTION;
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
-
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 
@@ -45,15 +38,15 @@ import static java.util.stream.Collectors.joining;
  *
  */
 public class LexemeBuilderImpl implements LexemeBuilder {
-    private static final Set<Operator> AMBIGUOUS_OPERATORS = Set.of(
-            ARITHMETIC_ADDITION,
-            ARITHMETIC_SUBTRACTION
-        );
 
     private final SingleTokenExpressionBuilder singleTokenExpressionBuilder;
 
-    public LexemeBuilderImpl(final SingleTokenExpressionBuilder singleTokenExpressionBuilder) {
+    private final LexemeAmbiguityResolver lexemeAmbiguityResolver;
+
+    public LexemeBuilderImpl(final SingleTokenExpressionBuilder singleTokenExpressionBuilder,
+                             final LexemeAmbiguityResolver lexemeAmbiguityResolver) {
         this.singleTokenExpressionBuilder = singleTokenExpressionBuilder;
+        this.lexemeAmbiguityResolver = lexemeAmbiguityResolver;
     }
 
     @Override
@@ -62,7 +55,7 @@ public class LexemeBuilderImpl implements LexemeBuilder {
 
         for (int i = 0; i < tokens.size(); i++) {
             final Lexeme lexeme = buildLexeme(tokens.get(i), sourceLine);
-            processLexem(lexeme, i, lexemes);
+            lexemes.add(lexemeAmbiguityResolver.resolve(lexeme, i, lexemes));
         }
 
         return List.copyOf(lexemes);
@@ -74,54 +67,6 @@ public class LexemeBuilderImpl implements LexemeBuilder {
                 .or(() -> tryToBuildParenthesisFrom(token))
                 .or(() -> tryToBuildSingleTokenExpressionFrom(token, sourceLine))
                 .orElseThrow(() -> syntaxError(token, sourceLine));
-    }
-
-    private void processLexem(final Lexeme lexeme, final int position, final List<Lexeme> lexemes) {
-        if (isAmbigousOperator(lexeme)) {
-            resolveAmbiguity((Operator) lexeme, position, lexemes);
-        } else {
-            lexemes.add(lexeme);
-        }
-    }
-
-    private boolean isAmbigousOperator(final Lexeme lexeme) {
-        return AMBIGUOUS_OPERATORS.contains(lexeme);
-    }
-
-    private void resolveAmbiguity(final Operator ambiguousOperator,
-                                  final int position,
-                                  final List<Lexeme> lexemes) {
-        if (shouldBeUnaryOperator(lexemes, position)) {
-            lexemes.add(unaryOperatorFor(ambiguousOperator.getCode()));
-        } else {
-            lexemes.add(binaryOperatorFor(ambiguousOperator.getCode()));
-        }
-    }
-
-    private boolean shouldBeUnaryOperator(final List<Lexeme> lexemes, final int position) {
-        final boolean isFirstLexeme = position == 0;
-        final int previousLexemPosition = position - 1;
-
-        return isFirstLexeme ||
-               previousLexemIsAnOpeningParenthesis(previousLexemPosition, lexemes) ||
-               previousLexemeIsAnOperator(previousLexemPosition, lexemes);
-    }
-
-    private boolean previousLexemIsAnOpeningParenthesis(final int previousLexemPosition,
-            final List<Lexeme> lexemes) {
-        return lexemes.get(previousLexemPosition) == OPENING_PARENTHESIS;
-    }
-
-    private boolean previousLexemeIsAnOperator(final int previousLexemPosition, final List<Lexeme> lexemes) {
-        return confirmType(Operator.class, lexemes.get(previousLexemPosition));
-    }
-
-    private UnaryOperator unaryOperatorFor(final String code) {
-        return UnaryOperator.of(code).get();
-    }
-
-    private BinaryOperator binaryOperatorFor(final String code) {
-        return BinaryOperator.of(code).get();
     }
 
     @SuppressWarnings("unchecked")

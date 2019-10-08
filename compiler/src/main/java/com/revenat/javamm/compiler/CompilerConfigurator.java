@@ -22,21 +22,25 @@ import com.revenat.javamm.compiler.component.ComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
 import com.revenat.javamm.compiler.component.ExpressionBuilder;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
+import com.revenat.javamm.compiler.component.LexemeAmbiguityResolver;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
 import com.revenat.javamm.compiler.component.OperationReader;
 import com.revenat.javamm.compiler.component.OperatorPrecedenceResolver;
 import com.revenat.javamm.compiler.component.SingleTokenExpressionBuilder;
 import com.revenat.javamm.compiler.component.SourceLineReader;
 import com.revenat.javamm.compiler.component.TokenParser;
+import com.revenat.javamm.compiler.component.UnaryAssignmentExpressionResolver;
 import com.revenat.javamm.compiler.component.VariableBuilder;
 import com.revenat.javamm.compiler.component.impl.BlockOperationReaderImpl;
 import com.revenat.javamm.compiler.component.impl.CompilerImpl;
 import com.revenat.javamm.compiler.component.impl.ComplexLexemeValidatorImpl;
 import com.revenat.javamm.compiler.component.impl.ExpressionResolverImpl;
+import com.revenat.javamm.compiler.component.impl.LexemeAmbiguityResolverImpl;
 import com.revenat.javamm.compiler.component.impl.LexemeBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.OperatorPrecedenceResolverImpl;
 import com.revenat.javamm.compiler.component.impl.SourceLineReaderImpl;
 import com.revenat.javamm.compiler.component.impl.TokenParserImpl;
+import com.revenat.javamm.compiler.component.impl.UnaryAssignmentExpressionResolverImpl;
 import com.revenat.javamm.compiler.component.impl.VariableBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.expression.builder.PostfixNotationComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.impl.expression.builder.SingleTokenExpressionBuilderImpl;
@@ -72,15 +76,22 @@ public class CompilerConfigurator {
             singleTokenExpressionBuilder
     );
 
-    private final LexemeBuilder lexemeBuilder = new LexemeBuilderImpl(singleTokenExpressionBuilder);
+    private final LexemeAmbiguityResolver lexemeAmbiguityResolver = new LexemeAmbiguityResolverImpl();
+
+    private final LexemeBuilder lexemeBuilder = new LexemeBuilderImpl(singleTokenExpressionBuilder,
+                                                                      lexemeAmbiguityResolver);
 
     private final ComplexLexemeValidator lexemeValidator = new ComplexLexemeValidatorImpl();
+
+    private final UnaryAssignmentExpressionResolver unaryAssignmentExpressionResolver =
+            new UnaryAssignmentExpressionResolverImpl();
 
     private final ExpressionResolver expressionResolver = new ExpressionResolverImpl(
             expressionBuilders,
             complexExpressionBuilder,
             lexemeBuilder,
-            lexemeValidator
+            lexemeValidator,
+            unaryAssignmentExpressionResolver
     );
 
     private final Set<OperationReader> operationReaders = Set.of(

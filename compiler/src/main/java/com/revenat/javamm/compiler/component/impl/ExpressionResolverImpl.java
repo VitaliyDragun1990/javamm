@@ -26,6 +26,7 @@ import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
 import com.revenat.javamm.compiler.component.ExpressionBuilder;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
+import com.revenat.javamm.compiler.component.UnaryAssignmentExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 
 import java.util.Collection;
@@ -51,14 +52,18 @@ public class ExpressionResolverImpl implements ExpressionResolver {
 
     private final ComplexLexemeValidator lexemeValidator;
 
+    private final UnaryAssignmentExpressionResolver unaryAssignmentExpressionResolver;
+
     public ExpressionResolverImpl(final Set<ExpressionBuilder> expressionBuilders,
                                   final ComplexExpressionBuilder complexExpressionBuilder,
                                   final LexemeBuilder lexemeBuilder,
-                                  final ComplexLexemeValidator lexemeValidator) {
+                                  final ComplexLexemeValidator lexemeValidator,
+                                  final UnaryAssignmentExpressionResolver unaryAssignmentExpressionResolver) {
         this.expressionBuilders = List.copyOf(expressionBuilders);
         this.complexExpressionBuilder = requireNonNull(complexExpressionBuilder);
         this.lexemeBuilder = requireNonNull(lexemeBuilder);
         this.lexemeValidator = requireNonNull(lexemeValidator);
+        this.unaryAssignmentExpressionResolver = requireNonNull(unaryAssignmentExpressionResolver);
     }
 
     @Override
@@ -89,15 +94,25 @@ public class ExpressionResolverImpl implements ExpressionResolver {
     private Expression resolveComplexExpression(final List<String> expressionTokens, final SourceLine sourceLine) {
         final List<Lexeme> lexemes = lexemeBuilder.build(expressionTokens, sourceLine);
 
-        if (lexemes.size() == 1) {
-            return resolveFromSingleLexeme(sourceLine, lexemes.get(0));
+        if (containsSingleLexeme(lexemes)) {
+            return resolveFromLexeme(lexemes.get(0), sourceLine);
         } else {
-            lexemeValidator.validate(lexemes, sourceLine);
-            return buildComplexExpression(sourceLine, lexemes);
+            return resolveFromLexemes(lexemes, sourceLine);
         }
     }
 
-    private Expression resolveFromSingleLexeme(final SourceLine sourceLine, final Lexeme lexeme) {
+    private Expression resolveFromLexemes(final List<Lexeme> lexemes, final SourceLine sourceLine) {
+        final List<Lexeme> processedLexemes = unaryAssignmentExpressionResolver.resolve(lexemes, sourceLine);
+
+        if (containsSingleLexeme(processedLexemes)) {
+            return resolveFromLexeme(processedLexemes.get(0), sourceLine);
+        } else {
+            lexemeValidator.validate(processedLexemes, sourceLine);
+            return buildComplexExpression(processedLexemes, sourceLine);
+        }
+    }
+
+    private Expression resolveFromLexeme(final Lexeme lexeme, final SourceLine sourceLine) {
         if (confirmType(Expression.class, lexeme)) {
             return (Expression) lexeme;
         } else {
@@ -105,7 +120,11 @@ public class ExpressionResolverImpl implements ExpressionResolver {
         }
     }
 
-    private ComplexExpression buildComplexExpression(final SourceLine sourceLine, final List<Lexeme> lexemes) {
+    private boolean containsSingleLexeme(final List<Lexeme> lexemes) {
+        return lexemes.size() == 1;
+    }
+
+    private ComplexExpression buildComplexExpression(final List<Lexeme> lexemes, final SourceLine sourceLine) {
         return complexExpressionBuilder.build(lexemes, sourceLine);
     }
 

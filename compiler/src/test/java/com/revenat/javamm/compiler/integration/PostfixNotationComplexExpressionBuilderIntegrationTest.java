@@ -27,6 +27,7 @@ import com.revenat.javamm.code.fragment.expression.ComplexExpression;
 import com.revenat.javamm.compiler.component.ComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
+import com.revenat.javamm.compiler.component.impl.LexemeAmbiguityResolverImpl;
 import com.revenat.javamm.compiler.component.impl.LexemeBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.OperatorPrecedenceResolverImpl;
 import com.revenat.javamm.compiler.component.impl.VariableBuilderImpl;
@@ -61,7 +62,8 @@ class PostfixNotationComplexExpressionBuilderIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        lexemeBuilder = new LexemeBuilderImpl(new SingleTokenExpressionBuilderImpl(new VariableBuilderImpl()));
+        lexemeBuilder = new LexemeBuilderImpl(new SingleTokenExpressionBuilderImpl(new VariableBuilderImpl()),
+                                              new LexemeAmbiguityResolverImpl());
         complexExpressionBuilder = new PostfixNotationComplexExpressionBuilder(new OperatorPrecedenceResolverImpl());
     }
 

@@ -71,7 +71,7 @@ class LexemeBuilderImplTest {
     @BeforeEach
     void setUp() {
         expressionBuilderStub = new SingleTokenExpressionBuilderStub();
-        lexemeBuilder = new LexemeBuilderImpl(expressionBuilderStub);
+        lexemeBuilder = new LexemeBuilderImpl(expressionBuilderStub, new LexemeAmbiguityResolverImpl());
     }
 
     private void assertOperatorWithCode(final Lexeme lexeme, final String code) {

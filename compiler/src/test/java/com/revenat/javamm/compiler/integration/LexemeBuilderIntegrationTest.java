@@ -23,6 +23,7 @@ import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.Operator;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
+import com.revenat.javamm.compiler.component.impl.LexemeAmbiguityResolverImpl;
 import com.revenat.javamm.compiler.component.impl.LexemeBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.VariableBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.expression.builder.SingleTokenExpressionBuilderImpl;
@@ -55,7 +56,8 @@ class LexemeBuilderIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        lexemeBuilder = new LexemeBuilderImpl(new SingleTokenExpressionBuilderImpl(new VariableBuilderImpl()));
+        lexemeBuilder = new LexemeBuilderImpl(new SingleTokenExpressionBuilderImpl(new VariableBuilderImpl()),
+                                              new LexemeAmbiguityResolverImpl());
     }
 
     @ParameterizedTest

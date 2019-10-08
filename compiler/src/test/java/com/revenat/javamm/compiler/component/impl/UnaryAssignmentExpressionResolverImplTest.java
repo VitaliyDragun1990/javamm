@@ -34,9 +34,9 @@ import com.revenat.javamm.compiler.component.LexemeBuilder;
 import com.revenat.javamm.compiler.component.UnaryAssignmentExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.component.impl.expression.builder.SingleTokenExpressionBuilderImpl;
-import com.revenat.javamm.compiler.test.helper.CustomAsserts;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
 
@@ -219,7 +219,7 @@ class UnaryAssignmentExpressionResolverImplTest {
     void shouldFailIfArgumentForUnaryAssignmentOperatorIsNotASignleExpression(final String expression, final String operatorCode) {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> resolve(expression));
 
-        CustomAsserts.assertErrorMessageContains(e, "Invalid argument for '%s' operator", operatorCode);
+        assertErrorMessageContains(e, "Invalid argument for '%s' operator", operatorCode);
     }
 
     @ParameterizedTest
@@ -233,7 +233,7 @@ class UnaryAssignmentExpressionResolverImplTest {
     void shouldFailIfArgumentForUnaryAssignmentOperatorIsNotVariableExpression(final String expression, final String operatorCode) {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> resolve(expression));
 
-        CustomAsserts.assertErrorMessageContains(e, "A variable expression is expected for unary operator: '%s'", operatorCode);
+        assertErrorMessageContains(e, "A variable expression is expected for unary operator: '%s'", operatorCode);
     }
 
     @ParameterizedTest
@@ -246,5 +246,25 @@ class UnaryAssignmentExpressionResolverImplTest {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> resolve(expression));
 
         assertErrorMessageContains(e, "An argument is expected for unary operator: '%s'", operatorCode);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "( a + b )",
+        "( ( ( a + b ) ) )",
+        "a * ( 1 + b ) / ( 2 + 4 ) % 6",
+    })
+    void shouldNotChangeAnyLexemeIfNoUnaryAssignmentOperatorFound(final String expression) {
+        assertNoLexemeChanged(expression);
+    }
+
+    private void assertNoLexemeChanged(final String expression) {
+        assertThat(getExpressionFrom(resolve(expression)), is(expression));
+    }
+
+    private Object getExpressionFrom(final List<Lexeme> lexemes) {
+        return lexemes.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(" "));
     }
 }

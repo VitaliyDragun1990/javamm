@@ -17,36 +17,28 @@
 
 package com.revenat.javamm.compiler.component.impl;
 
-import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.Lexeme;
-import com.revenat.javamm.code.fragment.Parenthesis;
 import com.revenat.javamm.code.fragment.SourceLine;
-import com.revenat.javamm.code.fragment.expression.UnaryPostfixAssignmentExpression;
-import com.revenat.javamm.code.fragment.expression.UnaryPrefixAssignmentExpression;
-import com.revenat.javamm.code.fragment.expression.VariableExpression;
-import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.UnaryAssignmentExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Set;
-
-import static com.revenat.javamm.code.fragment.operator.UnaryOperator.DECREMENT;
-import static com.revenat.javamm.code.fragment.operator.UnaryOperator.INCREMENT;
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
-import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.requireVariableExpression;
+import static com.revenat.javamm.code.util.LexemeUtils.isClosingParenthesis;
+import static com.revenat.javamm.code.util.LexemeUtils.isExpression;
+import static com.revenat.javamm.code.util.LexemeUtils.isOpeningParenthesis;
+import static com.revenat.javamm.code.util.LexemeUtils.isUnaryAssignmentOperator;
+import static com.revenat.javamm.compiler.component.impl.expression.processor.UnaryAssignmentOperatorProcessor.processExpressionBeforeOperator;
+import static com.revenat.javamm.compiler.component.impl.expression.processor.UnaryAssignmentOperatorProcessor.processOperatorBeforeExpression;
+import static com.revenat.javamm.compiler.component.impl.expression.processor.UnaryAssignmentOperatorProcessor.processOperatorBeforeOpeningParenthesis;
+import static com.revenat.javamm.compiler.component.impl.expression.processor.UnaryAssignmentOperatorProcessor.processPossibleOperatorAfterClosingParenthesis;
 
 /**
  * @author Vitaliy Dragun
  *
  */
 public class UnaryAssignmentExpressionResolverImpl implements UnaryAssignmentExpressionResolver {
-    private static final Set<UnaryOperator> UNARY_ASSIGNMENT_OPERATORS = Set.of(
-            INCREMENT,
-            DECREMENT
-    );
 
     @Override
     public List<Lexeme> resolve(final List<Lexeme> lexemes, final SourceLine sourceLine) {
@@ -81,91 +73,28 @@ public class UnaryAssignmentExpressionResolverImpl implements UnaryAssignmentExp
         final Lexeme next = lexemes.next();
 
         if (isUnaryAssignmentOperatorBeforeExpression(current, next)) {
-            processUnaryAssignmentOperatorBeforeExpression((UnaryOperator) current, next, result, sourceLine);
+            processOperatorBeforeExpression(current, next, result, sourceLine);
 
         } else if (isExpressionBeforeUnaryAssignmentOperator(current, next)) {
-            processExpressionBeforeUnaryAssignmentOperator(current, (UnaryOperator) next, result, sourceLine);
+            processExpressionBeforeOperator(current, next, result, sourceLine);
 
         } else if (isUnaryAssignmentOperatorBeforeOpeningParenthesis(current, next)) {
-            processUnaryAssignmentOperatorBeforeOpeningParenthesis((UnaryOperator) current,
-                                                                   next,
-                                                                   lexemes,
-                                                                   result,
-                                                                   sourceLine);
+            processOperatorBeforeOpeningParenthesis(current,
+                                                    next,
+                                                    lexemes,
+                                                    result,
+                                                    sourceLine);
 
         } else if (isExpressionBeforeClosingParenthesis(current, next)) {
-            processExpressionBeforeClosingParenthesis(current, next, lexemes, result, sourceLine);
+            processPossibleOperatorAfterClosingParenthesis(current,
+                                                           next,
+                                                           lexemes,
+                                                           result,
+                                                           sourceLine);
 
         } else {
             lexemes.previous();
             result.add(current);
-        }
-    }
-
-    private void processUnaryAssignmentOperatorBeforeExpression(final UnaryOperator operator,
-                                                                final Lexeme expression,
-                                                                final List<Lexeme> result,
-                                                                final SourceLine sourceLine) {
-        final VariableExpression operand = requireVariableExpression(expression, operator, sourceLine);
-        result.add(new UnaryPrefixAssignmentExpression(operand, operator));
-    }
-
-    private void processExpressionBeforeUnaryAssignmentOperator(final Lexeme expression,
-                                                                final UnaryOperator operator,
-                                                                final List<Lexeme> result,
-                                                                final SourceLine sourceLine) {
-        final VariableExpression operand = requireVariableExpression(expression, operator, sourceLine);
-        result.add(new UnaryPostfixAssignmentExpression(operand, operator));
-    }
-
-    private void processUnaryAssignmentOperatorBeforeOpeningParenthesis(final UnaryOperator operator,
-                                                                        final Lexeme parenthesis,
-                                                                        final ListIterator<Lexeme> lexemes,
-                                                                        final List<Lexeme> result,
-                                                                        final SourceLine sourceLine) {
-        Lexeme next = parenthesis;
-        while (isOpeningParenthesis(next)) {
-            result.add(next);
-            next = lexemes.next();
-        }
-
-        final Lexeme agr = next;
-        next = lexemes.next();
-
-        if (isExpressionBeforeClosingParenthesis(agr, next)) {
-            final VariableExpression operand = requireVariableExpression(agr, operator, sourceLine);
-            result.add(new UnaryPrefixAssignmentExpression(operand, operator));
-            lexemes.previous();
-
-        } else {
-            throw syntaxError(sourceLine, "Invalid argument for '%s' operator", operator);
-        }
-    }
-
-    private void processExpressionBeforeClosingParenthesis(final Lexeme expression,
-                                                           final Lexeme parenthesis,
-                                                           final ListIterator<Lexeme> lexemes,
-                                                           final List<Lexeme> result,
-                                                           final SourceLine sourceLine) {
-        final int expressionPosition = result.size();
-        result.add(parenthesis);
-        Lexeme next = lexemes.next();
-
-        while (lexemes.hasNext() && isClosingParenthesis(next)) {
-            result.add(next);
-            next = lexemes.next();
-        }
-
-        if (isUnaryAssignmentOperator(next) && isOpeningParenthesis(result.get(expressionPosition - 1))) {
-            final UnaryOperator operator = (UnaryOperator) next;
-            final VariableExpression operand = requireVariableExpression(expression, operator, sourceLine);
-            result.add(expressionPosition, new UnaryPostfixAssignmentExpression(operand, operator));
-
-        } else if (isUnaryAssignmentOperator(next)) {
-            throw syntaxError(sourceLine, "Invalid argument for '%s' operator", next);
-
-        } else {
-            result.add(expressionPosition, expression);
         }
     }
 
@@ -183,22 +112,6 @@ public class UnaryAssignmentExpressionResolverImpl implements UnaryAssignmentExp
 
     private boolean isUnaryAssignmentOperatorBeforeExpression(final Lexeme current, final Lexeme next) {
         return isUnaryAssignmentOperator(current) && isExpression(next);
-    }
-
-    private boolean isClosingParenthesis(final Lexeme next) {
-        return next == Parenthesis.CLOSING_PARENTHESIS;
-    }
-
-    private boolean isOpeningParenthesis(final Lexeme next) {
-        return next == Parenthesis.OPENING_PARENTHESIS;
-    }
-
-    private boolean isExpression(final Lexeme lexeme) {
-        return confirmType(Expression.class, lexeme);
-    }
-
-    private boolean isUnaryAssignmentOperator(final Lexeme lexeme) {
-        return UNARY_ASSIGNMENT_OPERATORS.contains(lexeme);
     }
 
     private JavammLineSyntaxError syntaxError(final SourceLine sourceLine, final String message, final Object... args) {

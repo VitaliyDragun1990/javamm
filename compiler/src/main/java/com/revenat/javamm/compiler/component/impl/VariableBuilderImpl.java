@@ -94,5 +94,10 @@ public class VariableBuilderImpl implements VariableBuilder {
             final VariableImpl other = (VariableImpl) obj;
             return name.equals(other.getName());
         }
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
 }

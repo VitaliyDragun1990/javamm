@@ -17,9 +17,14 @@
 
 package com.revenat.javamm.compiler.component.impl.util;
 
+import com.revenat.javamm.code.fragment.Lexeme;
+import com.revenat.javamm.code.fragment.Operator;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.expression.VariableExpression;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
+
 import static com.revenat.javamm.code.syntax.Keywords.ALL_KEYWORDS;
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 import static java.lang.Character.isLetter;
 
@@ -56,6 +61,17 @@ public final class SyntaxValidationUtils {
         if (ALL_KEYWORDS.contains(name)) {
             throw new JavammLineSyntaxError(sourceLine, "The keyword '%s' can not be used as %s name", name,
                     feature.getName());
+        }
+    }
+
+    public static VariableExpression requireVariableExpression(final Lexeme lexeme,
+                                                               final Operator operator,
+                                                               final SourceLine sourceLine) {
+        if (confirmType(VariableExpression.class, lexeme)) {
+            return (VariableExpression) lexeme;
+        } else {
+            throw new JavammLineSyntaxError(sourceLine, "A variable expression is expected for %s operator: '%s'",
+                    operator.getType(), operator);
         }
     }
 

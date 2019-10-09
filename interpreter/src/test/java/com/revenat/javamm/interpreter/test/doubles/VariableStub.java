@@ -65,4 +65,9 @@ public class VariableStub implements Variable {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

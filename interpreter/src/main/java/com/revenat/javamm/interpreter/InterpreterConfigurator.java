@@ -57,6 +57,7 @@ import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsNotE
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.TypeOfBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.PostfixNotationComplexExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.VariableExpressionEvaluator;
+import com.revenat.javamm.interpreter.component.impl.expression.updater.VariableExpressionUpdater;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.PrintlnOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.VariableDeclarationOperationInterpreter;
 
@@ -124,7 +125,9 @@ public class InterpreterConfigurator {
             new PostfixNotationComplexExpressionEvaluator(binaryCalculatorFacade)
     );
 
-    private final Set<ExpressionUpdater<?>> expressionUpdaters = Set.of();
+    private final Set<ExpressionUpdater<?>> expressionUpdaters = Set.of(
+            new VariableExpressionUpdater()
+    );
 
     private final ExpressionContext expressionContext =
             new ExpressionContextImpl(expressionEvaluators, expressionUpdaters);

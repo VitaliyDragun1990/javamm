@@ -15,18 +15,19 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.expression.evaluator;
+package com.revenat.javamm.interpreter.component.impl.expression.updater;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.VariableExpression;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
-import com.revenat.javamm.interpreter.component.impl.expression.evaluator.VariableExpressionEvaluator;
 import com.revenat.javamm.interpreter.test.doubles.VariableStub;
 import com.revenat.javamm.interpreter.test.helper.TestCurrentRuntimeManager;
+
+import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -42,13 +43,13 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
-@DisplayName("a variable expression evaluator")
-class VariableExpressionEvaluatorTest {
-    private static final String VARIABLE_VALUE = "test";
-    private static final VariableStub VARIABLE = new VariableStub("name");
+@DisplayName("a variable expression updater")
+class VariableExpressionUpdaterTest {
+    private static final String UPDATED_VARIABLE_VALUE = "updated value";
+    private static final VariableStub VARIABLE = new VariableStub("a");
     private static final VariableExpression VARIABLE_EXPRESSION = new VariableExpression(VARIABLE);
 
-    private VariableExpressionEvaluator evaluator;
+    private VariableExpressionUpdater variableExpressionUpdater;
 
     @BeforeAll
     static void setupFakeRuntime() {
@@ -60,36 +61,37 @@ class VariableExpressionEvaluatorTest {
         TestCurrentRuntimeManager.releaseFakeCurrentRuntime();
     }
 
+
     @BeforeEach
     void setUp() {
         TestCurrentRuntimeManager.refreshLocalContext();
-        evaluator = new VariableExpressionEvaluator();
+        variableExpressionUpdater = new VariableExpressionUpdater();
     }
 
     @Test
     @Order(1)
-    void shouldDefineClassForExpressionItCanEvaluate() {
-        assertThat(evaluator.getExpressionClass(), equalTo(VariableExpression.class));
+    void shouldConfirmItCanUpdateVariableExpression() {
+        assertThat(variableExpressionUpdater.getExpressionClass(), is(VariableExpression.class));
     }
 
     @Test
     @Order(2)
-    void shouldFailToEvaluateIfVariableNotDefined() {
+    void shouldFailIfVariableToUpdateHasNotBeenDefinedYet() {
         TestCurrentRuntimeManager.getLocalContextSpy().setVariableDefined(false);
 
-        assertThrows(
-                JavammLineRuntimeError.class,
-                () -> evaluator.evaluate(VARIABLE_EXPRESSION));
+        final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class,
+                () -> variableExpressionUpdater.update(VARIABLE_EXPRESSION, UPDATED_VARIABLE_VALUE));
+
+        assertErrorMessageContains(e, "Variable '%s' is not defined", VARIABLE);
     }
 
     @Test
     @Order(3)
-    void shouldEvaluateVariableExpression() {
+    void shouldUpdateVariableExpression() {
         TestCurrentRuntimeManager.getLocalContextSpy().setVariableDefined(true);
-        TestCurrentRuntimeManager.getLocalContextSpy().setVariableValue(VARIABLE_VALUE);
 
-        final Object value = evaluator.evaluate(VARIABLE_EXPRESSION);
+        variableExpressionUpdater.update(VARIABLE_EXPRESSION, UPDATED_VARIABLE_VALUE);
 
-        assertThat(value, equalTo(VARIABLE_VALUE));
+        assertThat(TestCurrentRuntimeManager.getLocalContextSpy().getLastVarValue(), is(UPDATED_VARIABLE_VALUE));
     }
 }

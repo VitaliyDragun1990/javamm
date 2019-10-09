@@ -19,7 +19,10 @@ package com.revenat.javamm.code.util;
 
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.Lexeme;
+import com.revenat.javamm.code.fragment.Operator;
 import com.revenat.javamm.code.fragment.Parenthesis;
+import com.revenat.javamm.code.fragment.expression.VariableExpression;
+import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 
 import java.util.Set;
@@ -53,7 +56,27 @@ public final class LexemeUtils {
         return confirmType(Expression.class, lexeme);
     }
 
+    public static boolean isOperator(final Lexeme lexeme) {
+        return confirmType(Operator.class, lexeme);
+    }
+
+    public static boolean isUnaryOperator(final Lexeme lexeme) {
+        return confirmType(UnaryOperator.class, lexeme);
+    }
+
+    public static boolean isBinaryOperator(final Lexeme lexeme) {
+        return confirmType(BinaryOperator.class, lexeme);
+    }
+
     public static boolean isUnaryAssignmentOperator(final Lexeme lexeme) {
         return UNARY_ASSIGNMENT_OPERATORS.contains(lexeme);
+    }
+
+    public static boolean isBinaryAssignmentOperator(final Lexeme lexeme) {
+        return confirmType(BinaryOperator.class, lexeme) && ((BinaryOperator) lexeme).isAssignment();
+    }
+
+    public static boolean isVariableExpression(final Lexeme lexeme) {
+        return confirmType(VariableExpression.class, lexeme);
     }
 }

@@ -17,19 +17,21 @@
 
 package com.revenat.javamm.compiler.component.impl;
 
-import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.Operator;
 import com.revenat.javamm.code.fragment.SourceLine;
-import com.revenat.javamm.code.fragment.operator.BinaryOperator;
-import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 
 import java.util.List;
 
-import static com.revenat.javamm.code.fragment.Parenthesis.CLOSING_PARENTHESIS;
-import static com.revenat.javamm.code.fragment.Parenthesis.OPENING_PARENTHESIS;
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
+import static com.revenat.javamm.code.util.LexemeUtils.isBinaryAssignmentOperator;
+import static com.revenat.javamm.code.util.LexemeUtils.isBinaryOperator;
+import static com.revenat.javamm.code.util.LexemeUtils.isClosingParenthesis;
+import static com.revenat.javamm.code.util.LexemeUtils.isExpression;
+import static com.revenat.javamm.code.util.LexemeUtils.isOpeningParenthesis;
+import static com.revenat.javamm.code.util.LexemeUtils.isOperator;
+import static com.revenat.javamm.code.util.LexemeUtils.isUnaryOperator;
+import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.requireVariableExpression;
 
 /**
  * Validates that specified lexemes are in valid order
@@ -43,13 +45,15 @@ final class LexemesOrderValidator {
 
     private final SourceLine sourceLine;
 
-    private Lexeme firstExprassionWithoutBinaryOperator;
+    private Lexeme expressionWithoutBinary;
 
-    private LexemesOrderValidator(final List<Lexeme> lexemes,
-                          final SourceLine sourceLine) {
+    private Lexeme lastCheckedExpression;
+
+    private LexemesOrderValidator(final List<Lexeme> lexemes, final SourceLine sourceLine) {
         this.lexemes = lexemes;
         this.sourceLine = sourceLine;
-        this.firstExprassionWithoutBinaryOperator = null;
+        this.expressionWithoutBinary = null;
+        this.lastCheckedExpression = null;
     }
 
     static LexemesOrderValidator validator(final List<Lexeme> lexemes, final SourceLine sourceLine) {
@@ -81,7 +85,7 @@ final class LexemesOrderValidator {
 
     private void validateLexemesOrder() {
         final Lexeme firstLexeme = lexemes.get(0);
-        firstExprassionWithoutBinaryOperator = isExpression(firstLexeme) ? firstLexeme : null;
+        expressionWithoutBinary = isExpression(firstLexeme) ? firstLexeme : null;
 
         for (int i = 0; i < lexemes.size() - 1; i++) {
             final Lexeme current = lexemes.get(i);
@@ -92,17 +96,26 @@ final class LexemesOrderValidator {
             assertNoSequentialBinaryOperators(current, next);
             assertNoOperatorWithoutExpression(current, next);
             assertCorreclyPlacedParentheses(current, next);
+            requireVariableExpressionForBinaryAssignmentOperator(current, next);
+        }
+    }
+
+    private void requireVariableExpressionForBinaryAssignmentOperator(final Lexeme current, final Lexeme next) {
+        lastCheckedExpression = isExpression(current) ? current : lastCheckedExpression;
+
+        if (isBinaryAssignmentOperator(next)) {
+            requireVariableExpression(lastCheckedExpression, (Operator) next, sourceLine);
         }
     }
 
     private void assertNoExpressionsWithoutBinary(final Lexeme lexemeToCheck) {
-        if (isExpression(lexemeToCheck) && firstExprassionWithoutBinaryOperator != null) {
+        if (isExpression(lexemeToCheck) && expressionWithoutBinary != null) {
             throw syntaxError("A binary operator is expected between expressions: '%s' and '%s'",
-                    firstExprassionWithoutBinaryOperator, lexemeToCheck);
+                    expressionWithoutBinary, lexemeToCheck);
         } else if (isExpression(lexemeToCheck)) {
-            firstExprassionWithoutBinaryOperator = lexemeToCheck;
+            expressionWithoutBinary = lexemeToCheck;
         } else if (isBinaryOperator(lexemeToCheck)) {
-            firstExprassionWithoutBinaryOperator = null;
+            expressionWithoutBinary = null;
         }
     }
 
@@ -136,30 +149,6 @@ final class LexemesOrderValidator {
             throw syntaxError("An expression is expected between binary operators: '%s' and '%s'",
                     current, next);
         }
-    }
-
-    private boolean isExpression(final Lexeme lexeme) {
-        return confirmType(Expression.class, lexeme);
-    }
-
-    private boolean isOperator(final Lexeme lexeme) {
-        return confirmType(Operator.class, lexeme);
-    }
-
-    private boolean isBinaryOperator(final Lexeme lexeme) {
-        return confirmType(BinaryOperator.class, lexeme);
-    }
-
-    private boolean isUnaryOperator(final Lexeme lexeme) {
-        return confirmType(UnaryOperator.class, lexeme);
-    }
-
-    private boolean isOpeningParenthesis(final Lexeme lexeme) {
-        return lexeme == OPENING_PARENTHESIS;
-    }
-
-    private boolean isClosingParenthesis(final Lexeme lexeme) {
-        return lexeme == CLOSING_PARENTHESIS;
     }
 
     private JavammLineSyntaxError syntaxError(final String msgTemplate,

@@ -19,6 +19,7 @@ package com.revenat.javamm.interpreter.component.impl.expression.evaluator;
 
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.Lexeme;
+import com.revenat.javamm.code.fragment.UpdatableExpression;
 import com.revenat.javamm.code.fragment.expression.ConstantExpression;
 import com.revenat.javamm.code.fragment.expression.PostfixNotationComplexExpression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
@@ -28,7 +29,8 @@ import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
+import static com.revenat.javamm.code.util.LexemeUtils.isBinaryOperator;
+import static com.revenat.javamm.code.util.LexemeUtils.isUnaryOperator;
 
 /**
  * Responsible for evaluation {@linkplain PostfixNotationComplexExpression postfix
@@ -75,14 +77,19 @@ public class PostfixNotationComplexExpressionEvaluator extends AbstractExpressio
     private void calculateBinaryOperation(final BinaryOperator operator, final Deque<Expression> stack) {
         final Expression secondOperand = stack.pop();
         final Expression firstOperand = stack.pop();
-        final Expression result = calculate(firstOperand, operator, secondOperand);
-        stack.push(result);
+        final Object result = calculate(firstOperand, operator, secondOperand);
+
+        if (operator.isAssignment()) {
+            ((UpdatableExpression) firstOperand).setValue(getExpressionContext(), result);
+        }
+
+        stack.push(toExpression(result));
     }
 
     private void calculateUnaryOperation(final UnaryOperator operator, final Deque<Expression> stack) {
         final Expression operand = stack.pop();
-        final Expression result = calculate(operand, operator);
-        stack.push(result);
+        final Object result = calculate(operand, operator);
+        stack.push(toExpression(result));
     }
 
     private void processExpression(final Expression expression, final Deque<Expression> stack) {
@@ -93,26 +100,17 @@ public class PostfixNotationComplexExpressionEvaluator extends AbstractExpressio
         return resultStack.pop().getValue(getExpressionContext());
     }
 
-    private Expression calculate(final Expression operand,
-                                 final UnaryOperator operator) {
-        return toExpression(calculator.calculate(getExpressionContext(), operator, operand));
+    private Object calculate(final Expression operand, final UnaryOperator operator) {
+        return calculator.calculate(getExpressionContext(), operator, operand);
     }
 
-    private Expression calculate(final Expression firstOperand,
-                                 final BinaryOperator operator,
-                                 final Expression secondOperand) {
-        return toExpression(calculator.calculate(getExpressionContext(), firstOperand, operator, secondOperand));
+    private Object calculate(final Expression firstOperand,
+                             final BinaryOperator operator,
+                             final Expression secondOperand) {
+        return calculator.calculate(getExpressionContext(), firstOperand, operator, secondOperand);
     }
 
     private ConstantExpression toExpression(final Object result) {
         return ConstantExpression.valueOf(result);
-    }
-
-    private boolean isUnaryOperator(final Lexeme lexeme) {
-        return confirmType(UnaryOperator.class, lexeme);
-    }
-
-    private boolean isBinaryOperator(final Lexeme lexeme) {
-        return confirmType(BinaryOperator.class, lexeme);
     }
 }

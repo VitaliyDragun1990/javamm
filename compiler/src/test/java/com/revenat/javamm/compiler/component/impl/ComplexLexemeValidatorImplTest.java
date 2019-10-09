@@ -23,12 +23,14 @@ import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.Parenthesis;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.expression.VariableExpression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.test.doubles.ExpressionDummy;
 import com.revenat.javamm.compiler.test.doubles.ExpressionStub;
+import com.revenat.javamm.compiler.test.doubles.VariableDummy;
 
 import java.util.Arrays;
 import java.util.List;
@@ -63,11 +65,15 @@ class ComplexLexemeValidatorImplTest {
 
     private static final BinaryOperator ANY_BINARY_OPERATOR = BinaryOperator.ARITHMETIC_MULTIPLICATION;
 
+    private static final BinaryOperator ANY_BINARY_ASSIGNMENT_OPERATOR = BinaryOperator.ASSIGNMENT_ADDITION;
+
     private static final UnaryOperator ANY_UNARY_OPERATOR = UnaryOperator.LOGICAL_NOT;
 
     private static final SourceLine SOURCE_LINE = new SourceLine("test", 5, List.of());
 
     private static final Expression ANY_EXPRESSION = new ExpressionDummy();
+
+    private static final VariableExpression VARIABLE_EXPRESSION = new VariableExpression(new VariableDummy());
 
     private ComplexLexemeValidator lexemeValidator;
 
@@ -193,11 +199,26 @@ class ComplexLexemeValidatorImplTest {
     @ArgumentsSource(InvalidLexemeCombinationWithParenthesesProvider.class)
     @Order(13)
     void shouldFailIfNoBinaryOperatorBetweenTwoExpressionsIgnoringParentheses(final List<Lexeme> lexemes,
-            final String expectedError) {
+                                                                              final String expectedError) {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
                 () -> validate(lexemes.toArray(new Lexeme[0])));
 
         assertErrorMessageContains(e, expectedError);
+    }
+
+    @Test
+    @Order(14)
+    void shouldFailIfFirstOperandOfBinaryAssignmentOperatorIsNotVariableExpression() {
+        final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
+                () -> validate(ANY_EXPRESSION, ANY_BINARY_ASSIGNMENT_OPERATOR, ANY_EXPRESSION));
+
+        assertErrorMessageContains(e, "A variable expression is expected for binary operator: '%s'", ANY_BINARY_ASSIGNMENT_OPERATOR);
+    }
+
+    @Test
+    @Order(15)
+    void shouldPassIfFirstOperandOfBinaryAssignmentOperatorIsVariableExpression() {
+        assertDoesNotThrow(() -> validate(VARIABLE_EXPRESSION, ANY_BINARY_ASSIGNMENT_OPERATOR, ANY_EXPRESSION));
     }
 
     static final class InvalidLexemeCombinationWithParenthesesProvider implements ArgumentsProvider {

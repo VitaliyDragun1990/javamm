@@ -23,6 +23,7 @@ import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.UnaryPrefixAssignmentExpression;
 import com.revenat.javamm.code.fragment.expression.VariableExpression;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
+import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -56,26 +57,45 @@ class UnaryAssignmentOperatorBeforeOpeningParenthesisProcessor extends UnaryAssi
     @Override
     protected void processEntry() {
         Lexeme next = getParenthesis();
-        while (isOpeningParenthesis(next)) {
+
+        while (isOpeningParenthesis(next) && source.hasNext()) {
             result.add(next);
             next = source.next();
         }
 
-        final Lexeme agr = next;
-        next = source.next();
-
-        if (isExpressionBeforeClosingParenthesis(agr, next)) {
-            final VariableExpression operand = requireVariableExpression(agr, getOperator(), sourceLine);
-            result.add(new UnaryPrefixAssignmentExpression(operand, getOperator()));
-            source.previous();
-
+        if (isNotExpression(next)) {
+            throw syntaxError(sourceLine, "A variable expression is expected for unary operator: '%s'", current);
         } else {
-            throw syntaxError("Invalid argument for '%s' operator", getOperator());
+            buildUnaryAssignmentExpression(next);
         }
+    }
 
+    private void buildUnaryAssignmentExpression(final Lexeme next) {
+        final Lexeme operatorArgument = next;
+
+        if (source.hasNext()) {
+            final Lexeme assumedParenthesis = source.next();
+            if (isExpressionBeforeClosingParenthesis(operatorArgument, assumedParenthesis)) {
+                final VariableExpression operand = requireVariableExpression(operatorArgument,
+                                                                             getOperator(),
+                                                                             sourceLine);
+                result.add(new UnaryPrefixAssignmentExpression(operand, getOperator()));
+                source.previous();
+                return;
+            }
+        }
+        throw syntaxError("Invalid argument for '%s' operator", getOperator());
+    }
+
+    private boolean isNotExpression(final Lexeme lexeme) {
+        return !isExpression(lexeme);
     }
 
     private boolean isExpressionBeforeClosingParenthesis(final Lexeme current, final Lexeme next) {
         return isExpression(current) && isClosingParenthesis(next);
+    }
+
+    private JavammLineSyntaxError syntaxError(final SourceLine sourceLine, final String message, final Object... args) {
+        return new JavammLineSyntaxError(sourceLine, message, args);
     }
 }

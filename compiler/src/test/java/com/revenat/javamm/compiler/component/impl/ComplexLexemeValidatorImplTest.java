@@ -79,7 +79,7 @@ class ComplexLexemeValidatorImplTest {
 
     @BeforeEach
     void setUp() {
-        lexemeValidator = new ComplexLexemeValidatorImpl();
+        lexemeValidator = new ComplexLexemeValidatorImpl(new OperatorPrecedenceResolverImpl());
     }
 
     private void validate(final Lexeme... lexemes) {
@@ -183,7 +183,7 @@ class ComplexLexemeValidatorImplTest {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
                 () -> validate(ANY_EXPRESSION, OPENING_PARENTHESIS, CLOSING_PARENTHESIS));
 
-        assertErrorMessageContains(e, "Parenthesis are incorrectly placed");
+        assertErrorMessageContains(e, "Parentheses are incorrectly placed");
     }
 
     @Test
@@ -192,7 +192,7 @@ class ComplexLexemeValidatorImplTest {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
                 () -> validate(ANY_EXPRESSION, CLOSING_PARENTHESIS, OPENING_PARENTHESIS));
 
-        assertErrorMessageContains(e, "Parenthesis are incorrectly placed");
+        assertErrorMessageContains(e, "Parentheses are incorrectly placed");
     }
 
     @ParameterizedTest
@@ -219,6 +219,23 @@ class ComplexLexemeValidatorImplTest {
     @Order(15)
     void shouldPassIfFirstOperandOfBinaryAssignmentOperatorIsVariableExpression() {
         assertDoesNotThrow(() -> validate(VARIABLE_EXPRESSION, ANY_BINARY_ASSIGNMENT_OPERATOR, ANY_EXPRESSION));
+    }
+
+    @Test
+    @Order(16)
+    void shouldFailIfVariableExpressionFollowedByBinaryAssignmentOperatorPrecededByAnyOperatorWithHigherPrecedence() {
+        final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
+                () -> validate(ANY_EXPRESSION, ANY_BINARY_OPERATOR, VARIABLE_EXPRESSION, ANY_BINARY_ASSIGNMENT_OPERATOR, ANY_EXPRESSION));
+
+        assertErrorMessageContains(e, "A variable expression is expected for binary operator: '%s'", ANY_BINARY_ASSIGNMENT_OPERATOR);
+    }
+
+//    @Disabled
+    @Test
+    @Order(17)
+    void shouldPassIfVariableExpressionFollowedByBinaryAssignmentOperatorNotPrecededByAnyOperatorWithHigherPrecedence() {
+        assertDoesNotThrow(() -> validate(ANY_EXPRESSION, ANY_BINARY_OPERATOR, OPENING_PARENTHESIS,
+                        VARIABLE_EXPRESSION, ANY_BINARY_ASSIGNMENT_OPERATOR, ANY_EXPRESSION, CLOSING_PARENTHESIS));
     }
 
     static final class InvalidLexemeCombinationWithParenthesesProvider implements ArgumentsProvider {

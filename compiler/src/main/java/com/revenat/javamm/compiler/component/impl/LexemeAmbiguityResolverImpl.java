@@ -31,7 +31,9 @@ import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETI
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_SUBTRACTION;
 import static com.revenat.javamm.code.fragment.operator.UnaryOperator.ARITHMETICAL_UNARY_MINUS;
 import static com.revenat.javamm.code.fragment.operator.UnaryOperator.ARITHMETICAL_UNARY_PLUS;
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
+import static com.revenat.javamm.code.util.LexemeUtils.isBinaryOperator;
+import static com.revenat.javamm.code.util.LexemeUtils.isUnaryAssignmentOperator;
+import static com.revenat.javamm.code.util.LexemeUtils.isUnaryOperator;
 
 /**
  * @author Vitaliy Dragun
@@ -82,16 +84,34 @@ public class LexemeAmbiguityResolverImpl implements LexemeAmbiguityResolver {
         final boolean isFirstLexeme = position == 0;
         final int previousLexemPosition = position - 1;
 
-        return isFirstLexeme || previousLexemIsAnOpeningParenthesis(previousLexemPosition, lexemes) ||
-                previousLexemeIsAnOperator(previousLexemPosition, lexemes);
+        return isFirstLexeme ||
+               previousLexemIsAnOpeningParenthesis(previousLexemPosition, lexemes) ||
+               previousLexemeIsBinaryOperator(previousLexemPosition, lexemes) ||
+               previousLexemeIsAmbigousOrNotAssignmentUnary(previousLexemPosition, lexemes);
+    }
+
+    private boolean previousLexemeIsAmbigousOrNotAssignmentUnary(final int previousLexemPosition,
+                                                                 final List<Lexeme> lexemes) {
+        return previousLexemeIsAmbigousUnary(previousLexemPosition, lexemes) ||
+               previousLexemeIsUnaryButNotAssignment(previousLexemPosition, lexemes);
+    }
+
+    private boolean previousLexemeIsAmbigousUnary(final int previousLexemPosition, final List<Lexeme> lexemes) {
+        final Lexeme previousLexeme = lexemes.get(previousLexemPosition);
+        return isUnaryOperator(previousLexeme) && isAmbigousOperator(previousLexeme);
+    }
+
+    private boolean previousLexemeIsUnaryButNotAssignment(final int previousLexemPosition, final List<Lexeme> lexemes) {
+        final Lexeme previousLexeme = lexemes.get(previousLexemPosition);
+        return isUnaryOperator(previousLexeme) && !isUnaryAssignmentOperator(previousLexeme);
+    }
+
+    private boolean previousLexemeIsBinaryOperator(final int previousLexemPosition, final List<Lexeme> lexemes) {
+        return isBinaryOperator(lexemes.get(previousLexemPosition));
     }
 
     private boolean previousLexemIsAnOpeningParenthesis(final int previousLexemPosition, final List<Lexeme> lexemes) {
         return lexemes.get(previousLexemPosition) == OPENING_PARENTHESIS;
-    }
-
-    private boolean previousLexemeIsAnOperator(final int previousLexemPosition, final List<Lexeme> lexemes) {
-        return confirmType(Operator.class, lexemes.get(previousLexemPosition));
     }
 
     private UnaryOperator unaryOperatorFor(final String code) {

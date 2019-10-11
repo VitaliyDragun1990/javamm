@@ -15,53 +15,37 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.compiler;
+package com.revenat.javamm.compiler.test.builder;
 
-import com.revenat.javamm.compiler.component.BlockOperationReader;
 import com.revenat.javamm.compiler.component.ComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
 import com.revenat.javamm.compiler.component.ExpressionBuilder;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.LexemeAmbiguityResolver;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
-import com.revenat.javamm.compiler.component.OperationReader;
 import com.revenat.javamm.compiler.component.OperatorPrecedenceResolver;
 import com.revenat.javamm.compiler.component.SingleTokenExpressionBuilder;
-import com.revenat.javamm.compiler.component.SourceLineReader;
-import com.revenat.javamm.compiler.component.TokenParser;
 import com.revenat.javamm.compiler.component.UnaryAssignmentExpressionResolver;
 import com.revenat.javamm.compiler.component.VariableBuilder;
-import com.revenat.javamm.compiler.component.impl.BlockOperationReaderImpl;
-import com.revenat.javamm.compiler.component.impl.CompilerImpl;
 import com.revenat.javamm.compiler.component.impl.ComplexLexemeValidatorImpl;
 import com.revenat.javamm.compiler.component.impl.ExpressionResolverImpl;
 import com.revenat.javamm.compiler.component.impl.LexemeAmbiguityResolverImpl;
 import com.revenat.javamm.compiler.component.impl.LexemeBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.OperatorPrecedenceResolverImpl;
-import com.revenat.javamm.compiler.component.impl.SourceLineReaderImpl;
-import com.revenat.javamm.compiler.component.impl.TokenParserImpl;
 import com.revenat.javamm.compiler.component.impl.UnaryAssignmentExpressionResolverImpl;
 import com.revenat.javamm.compiler.component.impl.VariableBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.expression.builder.PostfixNotationComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.impl.expression.builder.SingleTokenExpressionBuilderImpl;
-import com.revenat.javamm.compiler.component.impl.operation.simple.FinalDeclarationOperationReader;
-import com.revenat.javamm.compiler.component.impl.operation.simple.PrintlnOperationReader;
-import com.revenat.javamm.compiler.component.impl.operation.simple.VariableDeclarationOperationReader;
 
 import java.util.Set;
 
 /**
- * Responsible for creating fully configured and ready to work with
- * {@link Compiler} component
+ * Creates fully configured components for integration testing
  *
  * @author Vitaliy Dragun
  *
  */
-public class CompilerConfigurator {
-    private final TokenParser tokenParser = new TokenParserImpl();
-
-    private final SourceLineReader sourceLineReader = new SourceLineReaderImpl(tokenParser);
-
+public final class ComponentBuilder {
     private final VariableBuilder variableBuilder = new VariableBuilderImpl();
 
     private final OperatorPrecedenceResolver operatorPrecedenceResolver = new OperatorPrecedenceResolverImpl();
@@ -94,17 +78,11 @@ public class CompilerConfigurator {
             unaryAssignmentExpressionResolver
     );
 
-    private final Set<OperationReader> operationReaders = Set.of(
-            new PrintlnOperationReader(expressionResolver),
-            new VariableDeclarationOperationReader(variableBuilder, expressionResolver),
-            new FinalDeclarationOperationReader(variableBuilder, expressionResolver)
-    );
+    public ExpressionResolver buildExpressionResolver() {
+        return expressionResolver;
+    }
 
-    private final BlockOperationReader blockOperationReader = new BlockOperationReaderImpl(operationReaders);
-
-    private final Compiler compiler = new CompilerImpl(sourceLineReader, blockOperationReader);
-
-    public Compiler getCompiler() {
-        return compiler;
+    public LexemeBuilder buildLexemeBuilder() {
+        return lexemeBuilder;
     }
 }

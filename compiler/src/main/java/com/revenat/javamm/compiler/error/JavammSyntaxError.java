@@ -31,5 +31,4 @@ public class JavammSyntaxError extends JavammError {
     protected JavammSyntaxError(final String message) {
         super(message);
     }
-
 }

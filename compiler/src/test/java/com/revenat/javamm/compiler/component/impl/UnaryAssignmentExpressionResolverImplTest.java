@@ -33,7 +33,7 @@ import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
 import com.revenat.javamm.compiler.component.UnaryAssignmentExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
-import com.revenat.javamm.compiler.component.impl.expression.builder.SingleTokenExpressionBuilderImpl;
+import com.revenat.javamm.compiler.test.builder.ComponentBuilder;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,8 +64,7 @@ class UnaryAssignmentExpressionResolverImplTest {
 
     @BeforeEach
     void setUp() {
-        lexemeBuilder = new LexemeBuilderImpl(new SingleTokenExpressionBuilderImpl(new VariableBuilderImpl()),
-                                              new LexemeAmbiguityResolverImpl());
+        lexemeBuilder = new ComponentBuilder().buildLexemeBuilder();
         unaryAssignmentExpressionResolver = new UnaryAssignmentExpressionResolverImpl();
     }
 
@@ -150,7 +149,7 @@ class UnaryAssignmentExpressionResolverImplTest {
 
     @ParameterizedTest
     @CsvSource({
-        "++ a - -- b * ( ++ c ),    7, 0, 2, 5",
+        "++ a - -- b * ( ++ c ),         7, 0, 2, 5",
         "10 * -- a + ++ b / ( -- c ),    9, 2, 4, 7",
     })
     @Order(5)
@@ -172,7 +171,7 @@ class UnaryAssignmentExpressionResolverImplTest {
 
     @ParameterizedTest
     @CsvSource({
-        "a ++ - b -- * ( c ++ ),    7, 0, 2, 5",
+        "a ++ - b -- * ( c ++ ),         7, 0, 2, 5",
         "10 * a -- + b ++ / ( c -- ),    9, 2, 4, 7",
     })
     @Order(6)
@@ -239,13 +238,13 @@ class UnaryAssignmentExpressionResolverImplTest {
     @ParameterizedTest
     @CsvSource({
         "++ a --,       --",
-        "++ ( a ) --,   --",
+        "++ ( a ) ++,   ++",
     })
     @Order(10)
     void shouldFailIfUnaryAssignmentOperatorWithoutCorrespondingArgument(final String expression, final String operatorCode) {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> resolve(expression));
 
-        assertErrorMessageContains(e, "An argument is expected for unary operator: '%s'", operatorCode);
+        assertErrorMessageContains(e, "A variable expression is expected for unary operator: '%s'", operatorCode);
     }
 
     @ParameterizedTest

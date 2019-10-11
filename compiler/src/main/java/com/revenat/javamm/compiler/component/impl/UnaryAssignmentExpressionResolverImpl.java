@@ -29,6 +29,7 @@ import static com.revenat.javamm.code.util.LexemeUtils.isClosingParenthesis;
 import static com.revenat.javamm.code.util.LexemeUtils.isExpression;
 import static com.revenat.javamm.code.util.LexemeUtils.isOpeningParenthesis;
 import static com.revenat.javamm.code.util.LexemeUtils.isUnaryAssignmentOperator;
+import static com.revenat.javamm.code.util.LexemeUtils.isVariableExpression;
 import static com.revenat.javamm.compiler.component.impl.expression.processor.UnaryAssignmentOperatorProcessor.processExpressionBeforeOperator;
 import static com.revenat.javamm.compiler.component.impl.expression.processor.UnaryAssignmentOperatorProcessor.processOperatorBeforeExpression;
 import static com.revenat.javamm.compiler.component.impl.expression.processor.UnaryAssignmentOperatorProcessor.processOperatorBeforeOpeningParenthesis;
@@ -59,7 +60,7 @@ public class UnaryAssignmentExpressionResolverImpl implements UnaryAssignmentExp
         if (lexemes.hasNext()) {
             processLexemePair(current, lexemes, result, sourceLine);
         } else if (isUnaryAssignmentOperator(current)) {
-            throw syntaxError(sourceLine, "An argument is expected for unary operator: '%s'", current);
+            throw syntaxError(sourceLine, "A variable expression is expected for unary operator: '%s'", current);
 
         } else {
             result.add(current);
@@ -75,15 +76,15 @@ public class UnaryAssignmentExpressionResolverImpl implements UnaryAssignmentExp
         if (isUnaryAssignmentOperatorBeforeExpression(current, next)) {
             processOperatorBeforeExpression(current, next, result, sourceLine);
 
-        } else if (isExpressionBeforeUnaryAssignmentOperator(current, next)) {
-            processExpressionBeforeOperator(current, next, result, sourceLine);
-
         } else if (isUnaryAssignmentOperatorBeforeOpeningParenthesis(current, next)) {
             processOperatorBeforeOpeningParenthesis(current,
                                                     next,
                                                     lexemes,
                                                     result,
                                                     sourceLine);
+
+        } else if (isVariableExpressionBeforeUnaryAssignmentOperator(current, next)) {
+            processExpressionBeforeOperator(current, next, result, sourceLine);
 
         } else if (isExpressionBeforeClosingParenthesis(current, next)) {
             processPossibleOperatorAfterClosingParenthesis(current,
@@ -92,6 +93,8 @@ public class UnaryAssignmentExpressionResolverImpl implements UnaryAssignmentExp
                                                            result,
                                                            sourceLine);
 
+        } else if (isUnaryAssignmentOperator(current)) {
+            throw syntaxError(sourceLine, "A variable expression is expected for unary operator: '%s'", current);
         } else {
             lexemes.previous();
             result.add(current);
@@ -106,8 +109,8 @@ public class UnaryAssignmentExpressionResolverImpl implements UnaryAssignmentExp
         return isUnaryAssignmentOperator(current) && isOpeningParenthesis(next);
     }
 
-    private boolean isExpressionBeforeUnaryAssignmentOperator(final Lexeme current, final Lexeme next) {
-        return isExpression(current) && isUnaryAssignmentOperator(next);
+    private boolean isVariableExpressionBeforeUnaryAssignmentOperator(final Lexeme current, final Lexeme next) {
+        return isVariableExpression(current) && isUnaryAssignmentOperator(next);
     }
 
     private boolean isUnaryAssignmentOperatorBeforeExpression(final Lexeme current, final Lexeme next) {

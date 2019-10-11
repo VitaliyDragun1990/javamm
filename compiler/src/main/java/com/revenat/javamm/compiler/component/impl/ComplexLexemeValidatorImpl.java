@@ -20,6 +20,8 @@ package com.revenat.javamm.compiler.component.impl;
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
+import com.revenat.javamm.compiler.component.OperatorPrecedenceResolver;
+
 import java.util.List;
 
 /**
@@ -28,10 +30,16 @@ import java.util.List;
  */
 public class ComplexLexemeValidatorImpl implements ComplexLexemeValidator {
 
+    private final OperatorPrecedenceResolver operatorPrecedenceResolver;
+
+    public ComplexLexemeValidatorImpl(final OperatorPrecedenceResolver operatorPrecedenceResolver) {
+        this.operatorPrecedenceResolver = operatorPrecedenceResolver;
+    }
+
     @Override
     public void validate(final List<Lexeme> lexemes, final SourceLine sourceLine) {
         requireNotEmpty(lexemes);
-        LexemesOrderValidator.validator(lexemes, sourceLine).validate();
+        LexemesOrderValidator.validator(operatorPrecedenceResolver, lexemes, sourceLine).validate();
     }
 
     private void requireNotEmpty(final List<Lexeme> lexemes) {

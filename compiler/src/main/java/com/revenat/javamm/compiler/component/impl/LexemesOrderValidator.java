@@ -20,6 +20,7 @@ package com.revenat.javamm.compiler.component.impl;
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.Operator;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.compiler.component.OperatorPrecedenceResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 
 import java.util.List;
@@ -41,6 +42,8 @@ import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUt
  */
 final class LexemesOrderValidator {
 
+    private final OperatorPrecedenceResolver operatorPrecedenceResolver;
+
     private final List<Lexeme> lexemes;
 
     private final SourceLine sourceLine;
@@ -49,15 +52,23 @@ final class LexemesOrderValidator {
 
     private Lexeme lastCheckedExpression;
 
-    private LexemesOrderValidator(final List<Lexeme> lexemes, final SourceLine sourceLine) {
+    private Lexeme lastValidatedLexeme;
+
+    private LexemesOrderValidator(final OperatorPrecedenceResolver operatorPrecedenceResolver,
+                                  final List<Lexeme> lexemes,
+                                  final SourceLine sourceLine) {
+        this.operatorPrecedenceResolver = operatorPrecedenceResolver;
         this.lexemes = lexemes;
         this.sourceLine = sourceLine;
         this.expressionWithoutBinary = null;
         this.lastCheckedExpression = null;
+        this.lastValidatedLexeme = null;
     }
 
-    static LexemesOrderValidator validator(final List<Lexeme> lexemes, final SourceLine sourceLine) {
-        return new LexemesOrderValidator(lexemes, sourceLine);
+    static LexemesOrderValidator validator(final OperatorPrecedenceResolver operatorPrecedenceResolver,
+                                           final List<Lexeme> lexemes,
+                                           final SourceLine sourceLine) {
+        return new LexemesOrderValidator(operatorPrecedenceResolver, lexemes, sourceLine);
     }
 
     public void validate() {
@@ -85,30 +96,44 @@ final class LexemesOrderValidator {
 
     private void validateLexemesOrder() {
         final Lexeme firstLexeme = lexemes.get(0);
-        expressionWithoutBinary = isExpression(firstLexeme) ? firstLexeme : null;
+        expressionWithoutBinary = isExpression(firstLexeme) ? firstLexeme : expressionWithoutBinary;
 
         for (int i = 0; i < lexemes.size() - 1; i++) {
             final Lexeme current = lexemes.get(i);
             final Lexeme next = lexemes.get(i + 1);
 
-            assertNoExpressionsWithoutBinary(next);
+            assertNoExpressionsWithoutBinaryInBetween(next);
 
             assertNoSequentialBinaryOperators(current, next);
             assertNoOperatorWithoutExpression(current, next);
             assertCorreclyPlacedParentheses(current, next);
             requireVariableExpressionForBinaryAssignmentOperator(current, next);
+
+            lastValidatedLexeme = current;
         }
     }
 
     private void requireVariableExpressionForBinaryAssignmentOperator(final Lexeme current, final Lexeme next) {
         lastCheckedExpression = isExpression(current) ? current : lastCheckedExpression;
 
-        if (isBinaryAssignmentOperator(next)) {
+        if (isBinaryAssignmentOperator(next) && isPreviousLexemeNotOperatorWithHigherPrecedence(next)) {
             requireVariableExpression(lastCheckedExpression, (Operator) next, sourceLine);
+        } else if (isBinaryAssignmentOperator(next)) {
+            throw syntaxError("A variable expression is expected for binary operator: '%s'", next);
         }
     }
 
-    private void assertNoExpressionsWithoutBinary(final Lexeme lexemeToCheck) {
+    private boolean isPreviousLexemeNotOperatorWithHigherPrecedence(final Lexeme operator) {
+        return !isPreviousLexemeIsOperatorWithHigherPrecedence(operator);
+    }
+
+    private boolean isPreviousLexemeIsOperatorWithHigherPrecedence(final Lexeme operator) {
+        return lastValidatedLexeme != null &&
+                isOperator(lastValidatedLexeme) &&
+                operatorPrecedenceResolver.hasLowerPrecedence((Operator) operator, (Operator) lastValidatedLexeme);
+    }
+
+    private void assertNoExpressionsWithoutBinaryInBetween(final Lexeme lexemeToCheck) {
         if (isExpression(lexemeToCheck) && expressionWithoutBinary != null) {
             throw syntaxError("A binary operator is expected between expressions: '%s' and '%s'",
                     expressionWithoutBinary, lexemeToCheck);
@@ -122,10 +147,10 @@ final class LexemesOrderValidator {
     private void assertCorreclyPlacedParentheses(final Lexeme current,
                                                  final Lexeme next) {
         if (isOpeningParenthesis(current) && isClosingParenthesis(next)) {
-            throw syntaxError("Parenthesis are incorrectly placed");
+            throw syntaxError("Parentheses are incorrectly placed");
         }
         if (isClosingParenthesis(current) && isOpeningParenthesis(next)) {
-            throw syntaxError("Parenthesis are incorrectly placed");
+            throw syntaxError("Parentheses are incorrectly placed");
         }
     }
 

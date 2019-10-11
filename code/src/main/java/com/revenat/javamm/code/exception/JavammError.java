@@ -31,5 +31,4 @@ public class JavammError extends RuntimeException {
     public JavammError(final String message) {
         super(requireNonNull(message), null, false, false);
     }
-
 }

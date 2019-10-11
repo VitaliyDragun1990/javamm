@@ -17,23 +17,30 @@
 
 package com.revenat.javamm.compiler.integration;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.revenat.javamm.code.fragment.Lexeme;
-import com.revenat.javamm.code.fragment.Operator;
+import com.revenat.javamm.code.fragment.Parenthesis;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.expression.ConstantExpression;
+import com.revenat.javamm.code.fragment.expression.VariableExpression;
+import com.revenat.javamm.code.fragment.operator.BinaryOperator;
+import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
-import com.revenat.javamm.compiler.component.impl.LexemeAmbiguityResolverImpl;
-import com.revenat.javamm.compiler.component.impl.LexemeBuilderImpl;
-import com.revenat.javamm.compiler.component.impl.VariableBuilderImpl;
-import com.revenat.javamm.compiler.component.impl.expression.builder.SingleTokenExpressionBuilderImpl;
+import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
+import com.revenat.javamm.compiler.test.builder.ComponentBuilder;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_SUBTRACTION;
-import static com.revenat.javamm.code.fragment.operator.UnaryOperator.ARITHMETICAL_UNARY_MINUS;
-import static com.revenat.javamm.code.fragment.operator.UnaryOperator.ARITHMETICAL_UNARY_PLUS;
+import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
+
+import static java.util.Map.entry;
+import static java.util.stream.Collectors.toList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -50,83 +57,97 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a lexeme builder")
 class LexemeBuilderIntegrationTest {
+
     private static final SourceLine SOURCE_LINE = SourceLine.EMPTY_SOURCE_LINE;
+
+    private static final String CE = "CE"; // constant expression
+    private static final String VE = "VE"; // variable expression
+    private static final String OP = "OP"; // opening parenthesis
+    private static final String CP = "CP"; // closing parenthesis
+    private static final String BA = "BA"; // binary addition
+    private static final String BS = "BS"; // binary subtraction
+    private static final String BD = "BD"; // binary division
+    private static final String BM = "BM"; // binary multiplication
+    private static final String UP = "UP"; // unary plus
+    private static final String UM = "UM"; // unary minus
+    private static final String UI = "UI"; // unary increment
+    private static final String UD = "UD"; // unary decrement
+
+    private static final Map<String, Class<? extends Lexeme>> LEXEMES = Map.ofEntries(
+            entry(CE, ConstantExpression.class),
+            entry(VE, VariableExpression.class),
+            entry(OP, Parenthesis.OPENING_PARENTHESIS.getClass()),
+            entry(CP, Parenthesis.CLOSING_PARENTHESIS.getClass()),
+            entry(BA, BinaryOperator.ARITHMETIC_ADDITION.getClass()),
+            entry(BS, BinaryOperator.ARITHMETIC_SUBTRACTION.getClass()),
+            entry(BD, BinaryOperator.ARITHMETIC_DIVISION.getClass()),
+            entry(BM, BinaryOperator.ARITHMETIC_MULTIPLICATION.getClass()),
+            entry(UP, UnaryOperator.ARITHMETICAL_UNARY_PLUS.getClass()),
+            entry(UM, UnaryOperator.ARITHMETICAL_UNARY_MINUS.getClass()),
+            entry(UI, UnaryOperator.INCREMENT.getClass()),
+            entry(UD, UnaryOperator.DECREMENT.getClass())
+            );
 
     private LexemeBuilder lexemeBuilder;
 
     @BeforeEach
     void setUp() {
-        lexemeBuilder = new LexemeBuilderImpl(new SingleTokenExpressionBuilderImpl(new VariableBuilderImpl()),
-                                              new LexemeAmbiguityResolverImpl());
+        lexemeBuilder = new ComponentBuilder().buildLexemeBuilder();
     }
 
     @ParameterizedTest
     @CsvSource({
-        "1 + 2, 1",
-        "a + b, 1",
-        "( 1 * 2 ) + 3, 5",
-        "( 1 * 2 ) + ( 3 / a ), 5",
-        "( 1 * 2 ) + - a, 5",
+        "a,                                   VE",
+        "2,                                   CE",
+        "1 + 2,                               CE:BA:CE",
+        "a * b,                               VE:BM:VE",
+        "( 1 * b ) / 3,                       OP:CE:BM:VE:CP:BD:CE",
+        "( 1 * b ) + - + 3,                   OP:CE:BM:VE:CP:BA:UM:UP:CE",
+        "( 1 * -- b ) + - + a ++,             OP:CE:BM:UI:VE:CP:BA:UM:UP:VE:UI",
+        "( ( 1 * + -- b ) ) + - + + + ++ a,   OP:OP:CE:BM:UP:UD:VE:CP:CP:BA:UM:UP:UP:UP:UI:VE",
     })
     @Order(1)
-    void shouldDistinguishBinaryArithmeticAdditionOperator(final String expression, final String operatorPosition) {
-        final List<Lexeme> lexemes = lexemeBuilder.build(parseTokens(expression), SOURCE_LINE);
-
-        assertOperatorAtPosition(lexemes, ARITHMETIC_ADDITION, parsePosition(operatorPosition));
+    void shouldBuildCorrectLexemesFromExpressionTokens(final String expression, final String expectedLexemes) {
+        assertLexemesFromExpression(expression, expectedLexemes);
     }
 
     @ParameterizedTest
     @CsvSource({
-        "1 - 2, 1",
-        "a - b, 1",
-        "( 1 * 2 ) - 3, 5",
-        "( 1 * 2 ) - ( 3 / a ), 5",
-        "( 1 * 2 ) - - a, 5",
+        "[ a,       [",
+        "10 + #,    #",
+        "a ? b,     ?"
     })
     @Order(2)
-    void shouldDistinguishBinaryArithmeticSubtractionOperator(final String expression, final String operatorPosition) {
-        final List<Lexeme> lexemes = lexemeBuilder.build(parseTokens(expression), SOURCE_LINE);
+    void shouldFailToBuildIfUnsupportedTokenPresent(final String expression, final String unsupportedToken) {
+        final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> build(expression));
 
-        assertOperatorAtPosition(lexemes, ARITHMETIC_SUBTRACTION, parsePosition(operatorPosition));
+        assertErrorMessageContains(e, "Unsupported token: %s", unsupportedToken);
     }
 
-    @ParameterizedTest
-    @CsvSource({
-        "+ 5 - 2, 0",
-        "+ 5, 0",
-        "( 1 * 2 ) - + 3, 6",
-        "( 1 * 2 ) - ( + a ), 7",
-        "( 1 * 2 ) - + ( a ), 6",
-    })
-    @Order(3)
-    void shouldDistinguishUnaryArithmeticalPlusOperator(final String expression, final String operatorPosition) {
-        final List<Lexeme> lexemes = lexemeBuilder.build(parseTokens(expression), SOURCE_LINE);
+    private void assertLexemesFromExpression(final String expression, final String expectedLexemes) {
+        final List<String> tokens = parseTokens(expression);
+        final List<Class<? extends Lexeme>> expectedLexemeTypes = parseLexemes(expectedLexemes);
 
-        assertOperatorAtPosition(lexemes, ARITHMETICAL_UNARY_PLUS, parsePosition(operatorPosition));
+        final List<Lexeme> actualLexemes = lexemeBuilder.build(tokens, SOURCE_LINE);
+
+        assertThat(actualLexemes, hasSize(expectedLexemeTypes.size()));
+
+        for (int i = 0; i < actualLexemes.size(); i++) {
+            final Lexeme actual =  actualLexemes.get(i);
+            final Class<? extends Lexeme> expectedType = expectedLexemeTypes.get(i);
+
+            assertThat(actual, instanceOf(expectedType));
+        }
     }
 
-    @ParameterizedTest
-    @CsvSource({
-        "- 5 - 2, 0",
-        "- 5, 0",
-        "( 1 * 2 ) - - 3, 6",
-        "( 1 * 2 ) - ( - a ), 7",
-        "( 1 * 2 ) - - ( a ), 6",
-    })
-    @Order(4)
-    void shouldDistinguishUnaryArithmeticalMinusOperator(final String expression, final String operatorPosition) {
-        final List<Lexeme> lexemes = lexemeBuilder.build(parseTokens(expression), SOURCE_LINE);
-
-        assertOperatorAtPosition(lexemes, ARITHMETICAL_UNARY_MINUS, parsePosition(operatorPosition));
+    private List<Lexeme> build(final String expression) {
+        return lexemeBuilder.build(parseTokens(expression), SOURCE_LINE);
     }
 
-    private void assertOperatorAtPosition(final List<Lexeme> lexemes, final Operator operator, final Integer position) {
-        assertThat(lexemes.get(position), is(operator));
+    private List<Class<? extends Lexeme>> parseLexemes(final String expectedLexemes) {
+        final String[] tokens = expectedLexemes.split(":");
 
-    }
-
-    private Integer parsePosition(final String operatorPosition) {
-        return Integer.parseInt(operatorPosition);
+        return Stream.of(tokens).map(token -> LEXEMES.get(token)).collect(toList());
     }
 
     private List<String> parseTokens(final String tokens) {

@@ -15,15 +15,12 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
+package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.binary;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
-
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_ADDITION;
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
@@ -32,7 +29,7 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
  * @author Vitaliy Dragun
  *
  */
-public final class AdditionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class AdditionBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
 
     private AdditionBinaryExpressionCalculator(final BinaryOperator operator) {
         super(operator);
@@ -48,35 +45,32 @@ public final class AdditionBinaryExpressionCalculator extends AbstractBinaryExpr
 
     @Override
     protected Object calculate(final Object value1, final Object value2) {
-        Object result = null;
-
-        if (confirmType(Integer.class, value1, value2)) {
-            result = calculateIntegerAddition(value1, value2);
-        } else if (confirmType(Double.class, value1, value2)) {
-            result = calculateDoubleAddition(value1, value2);
-        } else if (confirmType(Number.class, value1, value2)) {
-            result = ((Number) value1).doubleValue() + ((Number) value2).doubleValue();
+        if (areIntegers(value1, value2)) {
+            return calculateForIntegers(value1, value2);
+        } else if (areNumbers(value1, value2)) {
+            return calculateForDoubles(value1, value2);
         } else if (eitherOneIsString(value1, value2)) {
-            result = calculateStringConcatenation(value1, value2);
+            return calculateStringConcatenation(value1, value2);
         } else {
             throw createNotSupportedTypesError(value1, value2);
         }
-        return result;
+    }
+
+    @Override
+    protected Integer calculateForIntegers(final Object value1, final Object value2) {
+        return (Integer) value1 + (Integer) value2;
+    }
+
+    @Override
+    protected Double calculateForDoubles(final Object value1, final Object value2) {
+        return ((Number) value1).doubleValue() + ((Number) value2).doubleValue();
     }
 
     private String calculateStringConcatenation(final Object value1, final Object value2) {
         return String.valueOf(value1) + String.valueOf(value2);
     }
 
-    private double calculateDoubleAddition(final Object value1, final Object value2) {
-        return (Double) value1 + (Double) value2;
-    }
-
     private boolean eitherOneIsString(final Object value1, final Object value2) {
         return value1 instanceof String || value2 instanceof String;
-    }
-
-    private int calculateIntegerAddition(final Object value1, final Object value2) {
-        return (Integer) value1 + (Integer) value2;
     }
 }

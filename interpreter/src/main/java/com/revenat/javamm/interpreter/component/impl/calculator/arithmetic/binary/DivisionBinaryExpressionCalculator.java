@@ -15,16 +15,14 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
+package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.binary;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_DIVISION;
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_DIVISION;
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
@@ -33,7 +31,7 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
  * @author Vitaliy Dragun
  *
  */
-public final class DivisionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class DivisionBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
 
     private DivisionBinaryExpressionCalculator(final BinaryOperator operator) {
         super(operator);
@@ -48,20 +46,7 @@ public final class DivisionBinaryExpressionCalculator extends AbstractBinaryExpr
     }
 
     @Override
-    protected Object calculate(final Object value1, final Object value2) {
-        if (confirmType(Integer.class, value1, value2)) {
-            return calculateIntegersDivision(value1, value2);
-        } else if (confirmType(Number.class, value1, value2)) {
-            return calculateDoubleDivision(value1, value2);
-        }
-        throw createNotSupportedTypesError(value1, value2);
-    }
-
-    private double calculateDoubleDivision(final Object value1, final Object value2) {
-        return ((Number) value1).doubleValue() / ((Number) value2).doubleValue();
-    }
-
-    private int calculateIntegersDivision(final Object value1, final Object value2) {
+    protected Integer calculateForIntegers(final Object value1, final Object value2) {
         final Integer v1 = (Integer) value1;
         final Integer v2 = (Integer) value2;
 
@@ -69,5 +54,10 @@ public final class DivisionBinaryExpressionCalculator extends AbstractBinaryExpr
             throw new JavammLineRuntimeError("/ by zero");
         }
         return v1 / v2;
+    }
+
+    @Override
+    protected Double calculateForDoubles(final Object value1, final Object value2) {
+        return ((Number) value1).doubleValue() / ((Number) value2).doubleValue();
     }
 }

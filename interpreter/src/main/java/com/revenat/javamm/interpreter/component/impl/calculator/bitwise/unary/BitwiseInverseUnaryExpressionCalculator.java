@@ -15,31 +15,41 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
+package com.revenat.javamm.interpreter.component.impl.calculator.bitwise.unary;
 
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
-import com.revenat.javamm.code.util.TypeUtils;
 import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractUnaryExpressionCalculator;
 
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
+
 /**
  * {@linkplain UnaryExpressionCalculator Unary expression calculator}
- * implementation for 'arithmetical unary plus' ({@code +}) operator
+ * implementation for 'bitwise unary inverse' ({@code ~}) operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class PlusUnaryExpressionCalculator extends AbstractUnaryExpressionCalculator {
+public class BitwiseInverseUnaryExpressionCalculator extends AbstractUnaryExpressionCalculator {
 
-    public PlusUnaryExpressionCalculator() {
-        super(UnaryOperator.ARITHMETICAL_UNARY_PLUS);
+    public BitwiseInverseUnaryExpressionCalculator() {
+        super(UnaryOperator.BITWISE_INVERSE);
     }
 
     @Override
     protected Object calculate(final Object value) {
-        if (TypeUtils.confirmType(Number.class, value)) {
-            return value;
+        if (isInteger(value)) {
+            return inverseBytesFor(value);
         }
         throw createNotSupportedTypesError(value);
+    }
+
+    private boolean isInteger(final Object value) {
+        return confirmType(Integer.class, value);
+    }
+
+    private Integer inverseBytesFor(final Object value) {
+        final int i = (Integer) value;
+        return ~i;
     }
 }

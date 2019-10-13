@@ -38,13 +38,17 @@ public class IsLessThanOrEqualsBinaryExpressionCalculator extends AbstractBinary
 
     @Override
     protected Boolean calculate(final Object value1, final Object value2) {
-        if (confirmType(Number.class, value1, value2)) {
-            return calculateLessThenOrEqualsOperation(value1, value2);
+        if (areNumbers(value1, value2)) {
+            return calculateForNumbers(value1, value2);
         }
         throw createNotSupportedTypesError(value1, value2);
     }
 
-    private boolean calculateLessThenOrEqualsOperation(final Object value1, final Object value2) {
+    private boolean areNumbers(final Object value1, final Object value2) {
+        return confirmType(Number.class, value1, value2);
+    }
+
+    private boolean calculateForNumbers(final Object value1, final Object value2) {
         return ((Number) value1).doubleValue() <= ((Number) value2).doubleValue();
     }
 }

@@ -44,6 +44,10 @@ public final class LexemeUtils {
     private LexemeUtils() {
     }
 
+    public static boolean isParenthesis(final Lexeme lexeme) {
+        return confirmType(Parenthesis.class, lexeme);
+    }
+
     public static boolean isClosingParenthesis(final Lexeme next) {
         return next == Parenthesis.CLOSING_PARENTHESIS;
     }

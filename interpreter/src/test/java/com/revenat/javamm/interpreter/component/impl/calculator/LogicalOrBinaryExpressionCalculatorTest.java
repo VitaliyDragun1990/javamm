@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.logical.LogicalOrBinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.logical.bianry.LogicalOrBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionSpy;
 

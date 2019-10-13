@@ -15,36 +15,42 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.bitwise;
+package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.unary;
 
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
-import com.revenat.javamm.code.util.TypeUtils;
-import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractUnaryExpressionCalculator;
 
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
+
 /**
- * {@linkplain UnaryExpressionCalculator Unary expression calculator}
- * implementation for 'bitwise unary inverse' ({@code ~}) operator
- *
  * @author Vitaliy Dragun
  *
  */
-public class BitwiseInverseUnaryExpressionCalculator extends AbstractUnaryExpressionCalculator {
+abstract class AbstractArithmeticUnaryExpressionCalculator extends AbstractUnaryExpressionCalculator {
 
-    public BitwiseInverseUnaryExpressionCalculator() {
-        super(UnaryOperator.BITWISE_INVERSE);
+    protected AbstractArithmeticUnaryExpressionCalculator(final UnaryOperator operator) {
+        super(operator);
     }
 
     @Override
     protected Object calculate(final Object value) {
-        if (TypeUtils.confirmType(Integer.class, value)) {
-            return inverseBytesFor(value);
+        if (isInteger(value)) {
+            return calculateForInteger(value);
+        } else if (isDouble(value)) {
+            return calculateForDouble(value);
         }
         throw createNotSupportedTypesError(value);
     }
 
-    private Integer inverseBytesFor(final Object value) {
-        final int i = (Integer) value;
-        return ~i;
+    protected abstract Integer calculateForInteger(Object value);
+
+    protected abstract Double calculateForDouble(Object value);
+
+    private boolean isDouble(final Object value) {
+        return confirmType(Double.class, value);
+    }
+
+    private boolean isInteger(final Object value) {
+        return confirmType(Integer.class, value);
     }
 }

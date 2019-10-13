@@ -15,15 +15,12 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.bitwise;
+package com.revenat.javamm.interpreter.component.impl.calculator.bitwise.binary;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
-
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_SHIFT_RIGHT_ZERO_FILL;
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_SHIFT_RIGHT_ZERO_FILL;
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
@@ -32,7 +29,8 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
  * @author Vitaliy Dragun
  *
  */
-public final class BitwiseShiftRightZeroFillBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class BitwiseShiftRightZeroFillBinaryExpressionCalculator
+        extends AbstractBitwiseShiftBinaryExpressionCalculator {
 
     private BitwiseShiftRightZeroFillBinaryExpressionCalculator(final BinaryOperator operator) {
         super(operator);
@@ -47,14 +45,7 @@ public final class BitwiseShiftRightZeroFillBinaryExpressionCalculator extends A
     }
 
     @Override
-    protected Object calculate(final Object value1, final Object value2) {
-        if (confirmType(Integer.class, value1, value2)) {
-            return calculateRightShiftZeroFill(value1, value2);
-        }
-        throw createNotSupportedTypesError(value1, value2);
-    }
-
-    private int calculateRightShiftZeroFill(final Object value1, final Object value2) {
+    protected Integer calculateForIntegers(final Object value1, final Object value2) {
         return (Integer) value1 >>> (Integer) value2;
     }
 }

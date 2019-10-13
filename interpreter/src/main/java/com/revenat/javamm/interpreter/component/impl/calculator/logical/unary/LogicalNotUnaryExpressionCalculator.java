@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
+package com.revenat.javamm.interpreter.component.impl.calculator.logical.unary;
 
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
@@ -25,34 +25,30 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain UnaryExpressionCalculator Unary expression calculator}
- * implementation for 'arithmetical unary increment' ({@code ++}) operator
+ * implementation for 'logical not' ({@code !}) operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class IncrementUnaryExpressionCalculator extends AbstractUnaryExpressionCalculator {
+public class LogicalNotUnaryExpressionCalculator extends AbstractUnaryExpressionCalculator {
 
-    public IncrementUnaryExpressionCalculator() {
-        super(UnaryOperator.INCREMENT);
+    public LogicalNotUnaryExpressionCalculator() {
+        super(UnaryOperator.LOGICAL_NOT);
     }
 
     @Override
     protected Object calculate(final Object value) {
-        if (confirmType(Integer.class, value)) {
-            return incrementIntegerValue(value);
-        } else if (confirmType(Double.class, value)) {
-            return incrementDoubleValue(value);
+        if (isBoolean(value)) {
+            return calculateOpposite(value);
         }
         throw createNotSupportedTypesError(value);
     }
 
-    private Double incrementDoubleValue(final Object value) {
-        double d = (Double) value;
-        return ++d;
+    private boolean calculateOpposite(final Object value) {
+        return !(Boolean) value;
     }
 
-    private Integer incrementIntegerValue(final Object value) {
-        int i = (Integer) value;
-        return ++i;
+    private boolean isBoolean(final Object value) {
+        return confirmType(Boolean.class, value);
     }
 }

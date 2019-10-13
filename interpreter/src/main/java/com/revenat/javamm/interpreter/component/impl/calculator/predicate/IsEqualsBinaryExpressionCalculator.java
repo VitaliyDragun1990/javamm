@@ -38,14 +38,14 @@ public class IsEqualsBinaryExpressionCalculator extends AbstractBinaryExpression
 
     @Override
     protected Boolean calculate(final Object value1, final Object value2) {
-        if (booleanAgainstNotBoolean(value1, value2)) {
+        if (areBooleanAndNonBoolean(value1, value2)) {
             throw createNotSupportedTypesError(value1, value2);
         } else {
             return calculateEquals(value1, value2);
         }
     }
 
-    private boolean booleanAgainstNotBoolean(final Object value1, final Object value2) {
+    private boolean areBooleanAndNonBoolean(final Object value1, final Object value2) {
         return (confirmType(Boolean.class, value1) && !confirmType(Boolean.class, value2)) ||
                 (!confirmType(Boolean.class, value1) && confirmType(Boolean.class, value2));
     }

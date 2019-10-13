@@ -15,15 +15,12 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.bitwise;
+package com.revenat.javamm.interpreter.component.impl.calculator.bitwise.binary;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
-
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_AND;
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_AND;
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
@@ -32,7 +29,7 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
  * @author Vitaliy Dragun
  *
  */
-public final class BitwiseAndBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class BitwiseAndBinaryExpressionCalculator extends AbstractBitwiseBinaryExpressionCalculator {
 
     private BitwiseAndBinaryExpressionCalculator(final BinaryOperator operator) {
         super(operator);
@@ -47,21 +44,12 @@ public final class BitwiseAndBinaryExpressionCalculator extends AbstractBinaryEx
     }
 
     @Override
-    protected Object calculate(final Object value1, final Object value2) {
-        if (confirmType(Integer.class, value1, value2)) {
-            return calculateBitwiseAndFor(value1, value2);
-        } else if (confirmType(Boolean.class, value1, value2)) {
-            return calculateLogicalAndFor(value1, value2);
-        }
-
-        throw createNotSupportedTypesError(value1, value2);
-    }
-
-    private boolean calculateLogicalAndFor(final Object value1, final Object value2) {
+    protected Boolean calculateForBooleans(final Object value1, final Object value2) {
         return (Boolean) value1 & (Boolean) value2;
     }
 
-    private int calculateBitwiseAndFor(final Object value1, final Object value2) {
+    @Override
+    protected Integer calculateForIntegers(final Object value1, final Object value2) {
         return (Integer) value1 & (Integer) value2;
     }
 }

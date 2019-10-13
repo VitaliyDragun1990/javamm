@@ -38,9 +38,17 @@ public class IsGreaterThanOrEqualsBinaryExpressionCalculator extends AbstractBin
 
     @Override
     protected Boolean calculate(final Object value1, final Object value2) {
-        if (confirmType(Number.class, value1, value2)) {
-            return ((Number) value1).doubleValue() >= ((Number) value2).doubleValue();
+        if (areNumbers(value1, value2)) {
+            return calculateForNumbers(value1, value2);
         }
         throw createNotSupportedTypesError(value1, value2);
+    }
+
+    private boolean calculateForNumbers(final Object value1, final Object value2) {
+        return ((Number) value1).doubleValue() >= ((Number) value2).doubleValue();
+    }
+
+    private boolean areNumbers(final Object value1, final Object value2) {
+        return confirmType(Number.class, value1, value2);
     }
 }

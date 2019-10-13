@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.PlusUnaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.unary.PlusUnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
 import java.util.stream.Stream;

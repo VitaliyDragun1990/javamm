@@ -15,15 +15,12 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
+package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.binary;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
-
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_MULTIPLICATION;
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_MULTIPLICATION;
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
@@ -32,7 +29,7 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
  * @author Vitaliy Dragun
  *
  */
-public final class MultiplicationBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class MultiplicationBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
 
     private MultiplicationBinaryExpressionCalculator(final BinaryOperator operator) {
         super(operator);
@@ -47,21 +44,12 @@ public final class MultiplicationBinaryExpressionCalculator extends AbstractBina
     }
 
     @Override
-    protected Object calculate(final Object value1, final Object value2) {
-        if (confirmType(Integer.class, value1, value2)) {
-            return calculateIntegerMultiplication(value1, value2);
-        } else if (confirmType(Number.class, value1, value2)) {
-            return calculateDoubleMultiplication(value1, value2);
-        }
-
-        throw createNotSupportedTypesError(value1, value2);
-    }
-
-    private double calculateDoubleMultiplication(final Object value1, final Object value2) {
-        return ((Number) value1).doubleValue() * ((Number) value2).doubleValue();
-    }
-
-    private int calculateIntegerMultiplication(final Object value1, final Object value2) {
+    protected Integer calculateForIntegers(final Object value1, final Object value2) {
         return (Integer) value1 * (Integer) value2;
+    }
+
+    @Override
+    protected Double calculateForDoubles(final Object value1, final Object value2) {
+        return ((Number) value1).doubleValue() * ((Number) value2).doubleValue();
     }
 }

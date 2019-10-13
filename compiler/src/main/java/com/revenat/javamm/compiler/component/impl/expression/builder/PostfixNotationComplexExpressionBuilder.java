@@ -23,7 +23,6 @@ import com.revenat.javamm.code.fragment.Parenthesis;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.ComplexExpression;
 import com.revenat.javamm.code.fragment.expression.PostfixNotationComplexExpression;
-import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.ComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.OperatorPrecedenceResolver;
@@ -35,6 +34,10 @@ import java.util.Deque;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.revenat.javamm.code.util.LexemeUtils.isBinaryOperator;
+import static com.revenat.javamm.code.util.LexemeUtils.isOpeningParenthesis;
+import static com.revenat.javamm.code.util.LexemeUtils.isOperator;
+import static com.revenat.javamm.code.util.LexemeUtils.isParenthesis;
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
@@ -67,13 +70,13 @@ public class PostfixNotationComplexExpressionBuilder implements ComplexExpressio
             processLexeme(lexeme, result, stack, sourceLine);
         }
 
-        popStackOperatorsIntoResult(result, stack, sourceLine);
+        popStackOperatorsIntoResult(stack, result, sourceLine);
 
         return List.copyOf(result);
     }
 
-    private void popStackOperatorsIntoResult(final List<Lexeme> result,
-                                             final Deque<Lexeme> stack,
+    private void popStackOperatorsIntoResult(final Deque<Lexeme> stack,
+                                             final List<Lexeme> result,
                                              final SourceLine sourceLine) {
         while (!stack.isEmpty()) {
             final Lexeme top = stack.pop();
@@ -148,18 +151,6 @@ public class PostfixNotationComplexExpressionBuilder implements ComplexExpressio
                 isNotOperator(lexeme));
     }
 
-    private boolean isParenthesis(final Lexeme lexeme) {
-        return confirmType(Parenthesis.class, lexeme);
-    }
-
-    private boolean isOperator(final Lexeme lexeme) {
-        return confirmType(Operator.class, lexeme);
-    }
-
-    private boolean isOpeningParenthesis(final Lexeme lexeme) {
-        return Parenthesis.OPENING_PARENTHESIS == lexeme;
-    }
-
     private void processExpression(final Lexeme lexeme, final List<Lexeme> result) {
         result.add(lexeme);
     }
@@ -169,15 +160,11 @@ public class PostfixNotationComplexExpressionBuilder implements ComplexExpressio
     }
 
     private boolean isBinaryWithLowerPrecedence(final Lexeme first, final Operator second) {
-        return isBinary(first) && hasLowerPrecedence((Operator) first, second);
+        return isBinaryOperator(first) && hasLowerPrecedence((Operator) first, second);
     }
 
     private boolean hasLowerPrecedence(final Operator first, final Operator second) {
         return precedenceResolver.hasLowerPrecedence(first, second);
-    }
-
-    private boolean isBinary(final Lexeme top) {
-        return confirmType(BinaryOperator.class, top);
     }
 
     private boolean areBothUnary(final Lexeme first, final Lexeme second) {

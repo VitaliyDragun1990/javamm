@@ -15,13 +15,10 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
+package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.binary;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
-import com.revenat.javamm.code.util.TypeUtils;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
-
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_SUBTRACTION;
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_SUBTRACTION;
 
@@ -32,7 +29,7 @@ import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMEN
  * @author Vitaliy Dragun
  *
  */
-public final class SubtractionBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public final class SubtractionBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
 
     private SubtractionBinaryExpressionCalculator(final BinaryOperator operator) {
         super(operator);
@@ -47,20 +44,12 @@ public final class SubtractionBinaryExpressionCalculator extends AbstractBinaryE
     }
 
     @Override
-    protected Object calculate(final Object value1, final Object value2) {
-        if (TypeUtils.confirmType(Integer.class, value1, value2)) {
-            return calculateSubtractionForIntegers(value1, value2);
-        } else if (TypeUtils.confirmType(Number.class, value1, value2)) {
-            return calculateSubtractionForDoubles(value1, value2);
-        }
-        throw createNotSupportedTypesError(value1, value2);
-    }
-
-    private int calculateSubtractionForIntegers(final Object value1, final Object value2) {
+    protected Integer calculateForIntegers(final Object value1, final Object value2) {
         return (Integer) value1 - (Integer) value2;
     }
 
-    private double calculateSubtractionForDoubles(final Object value1, final Object value2) {
+    @Override
+    protected Double calculateForDoubles(final Object value1, final Object value2) {
         return ((Number) value1).doubleValue() - ((Number) value2).doubleValue();
     }
 }

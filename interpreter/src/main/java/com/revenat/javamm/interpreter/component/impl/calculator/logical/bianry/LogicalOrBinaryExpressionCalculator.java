@@ -15,51 +15,45 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.logical;
+package com.revenat.javamm.interpreter.component.impl.calculator.logical.bianry;
 
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
-
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for 'logical and' ({@code &&}) operator
+ * implementation for 'logical or' ({@code ||}) operator
  *
  * @author Vitaliy Dragun
  *
  */
-public class LogicalAndBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+public class LogicalOrBinaryExpressionCalculator extends AbstractLogicalBinaryExpressionCalculator {
 
-    public LogicalAndBinaryExpressionCalculator() {
-        super(BinaryOperator.LOGICAL_AND);
+    public LogicalOrBinaryExpressionCalculator() {
+        super(BinaryOperator.LOGICAL_OR);
     }
 
     @Override
-    public Object calculate(final ExpressionContext expressionContext, final Expression expression1,
-            final Expression expression2) {
+    public Object calculate(final ExpressionContext expressionContext,
+                            final Expression expression1,
+                            final Expression expression2) {
         final Object operand1 = expression1.getValue(expressionContext);
 
-        if (isFalsy(operand1)) {
-            return false;
+        if (isTruthy(operand1)) {
+            return true;
         } else {
             return calculate(operand1, expression2.getValue(expressionContext));
         }
     }
 
     @Override
-    protected Object calculate(final Object value1, final Object value2) {
-        if (confirmType(Boolean.class, value1, value2)) {
-            return (Boolean) value1 && (Boolean) value2;
-        } else {
-            throw createNotSupportedTypesError(value1, value2);
-        }
+    protected Boolean calculateForBooleans(final Object value1, final Object value2) {
+        return (Boolean) value1 || (Boolean) value2;
     }
 
-    private boolean isFalsy(final Object operand) {
-        return operand instanceof Boolean && !(Boolean) operand;
+    private boolean isTruthy(final Object operand) {
+        return operand instanceof Boolean && (Boolean) operand;
     }
 }

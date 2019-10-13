@@ -15,43 +15,43 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.predicate;
+package com.revenat.javamm.interpreter.component.impl.calculator.bitwise.binary;
 
-import com.revenat.javamm.code.fragment.expression.TypeExpression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
-import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.AbstractBinaryExpressionCalculator;
 
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
- * {@linkplain BinaryExpressionCalculator Binary expression calculator}
- * implementation for 'predicate typeof' ({@code typeof}) operator
- *
  * @author Vitaliy Dragun
  *
  */
-public class TypeOfBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
+abstract class AbstractBitwiseBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
-    public TypeOfBinaryExpressionCalculator() {
-        super(BinaryOperator.PREDICATE_TYPEOF);
+    protected AbstractBitwiseBinaryExpressionCalculator(final BinaryOperator operator) {
+        super(operator);
     }
 
     @Override
     protected Object calculate(final Object value1, final Object value2) {
-        if (value1 == null) {
-            return false;
-        } else if (isTypeExpression(value2)) {
-            return verifySpecifiedType(value1, value2);
+        if (areIntegers(value1, value2)) {
+            return calculateForIntegers(value1, value2);
+        } else if (areBooleans(value1, value2)) {
+            return calculateForBooleans(value1, value2);
         }
+
         throw createNotSupportedTypesError(value1, value2);
     }
 
-    private boolean verifySpecifiedType(final Object value, final Object type) {
-        return value.getClass().equals(((TypeExpression) type).getType());
+    protected abstract Object calculateForIntegers(Object value1, Object value2);
+
+    protected abstract Object calculateForBooleans(Object value1, Object value2);
+
+    private boolean areBooleans(final Object value1, final Object value2) {
+        return confirmType(Boolean.class, value1, value2);
     }
 
-    private boolean isTypeExpression(final Object value2) {
-        return confirmType(TypeExpression.class, value2);
+    private boolean areIntegers(final Object value1, final Object value2) {
+        return confirmType(Integer.class, value1, value2);
     }
 }

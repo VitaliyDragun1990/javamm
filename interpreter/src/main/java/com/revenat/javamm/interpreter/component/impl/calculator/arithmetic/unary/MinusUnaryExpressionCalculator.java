@@ -15,13 +15,10 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic;
+package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.unary;
 
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.AbstractUnaryExpressionCalculator;
-
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * {@linkplain UnaryExpressionCalculator Unary expression calculator}
@@ -30,27 +27,19 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
  * @author Vitaliy Dragun
  *
  */
-public class MinusUnaryExpressionCalculator extends AbstractUnaryExpressionCalculator {
+public class MinusUnaryExpressionCalculator extends AbstractArithmeticUnaryExpressionCalculator {
 
     public MinusUnaryExpressionCalculator() {
         super(UnaryOperator.ARITHMETICAL_UNARY_MINUS);
     }
 
     @Override
-    protected Object calculate(final Object value) {
-        if (confirmType(Integer.class, value)) {
-            return negateIntegerValue(value);
-        } else if (confirmType(Double.class, value)) {
-            return negateDoubleValue(value);
-        }
-        throw createNotSupportedTypesError(value);
-    }
-
-    private double negateDoubleValue(final Object value) {
-        return -(Double) value;
-    }
-
-    private int negateIntegerValue(final Object value) {
+    protected Integer calculateForInteger(final Object value) {
         return -(Integer) value;
+    }
+
+    @Override
+    protected Double calculateForDouble(final Object value) {
+        return -(Double) value;
     }
 }

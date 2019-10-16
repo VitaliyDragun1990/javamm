@@ -17,10 +17,18 @@
 
 package com.revenat.javamm.compiler.integration;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.fragment.Expression;
+import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.expression.ComplexExpression;
+import com.revenat.javamm.code.fragment.expression.PostfixNotationComplexExpression;
+import com.revenat.javamm.code.fragment.expression.TernaryConditionalExpression;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.test.builder.ComponentBuilder;
@@ -100,6 +108,164 @@ public class ExpressionResolverIntegrationTest {
         assertDoesNotThrow(() -> resolve(expression));
     }
 
+     @ParameterizedTest
+     @CsvSource({
+         "true ? 1 : 2,                 true, 1, 2",
+         "false ? 1 + 2 : 2 - 1,        false, 1 + 2, 2 - 1",
+         "a ? 1 : 2,                    a, 1, 2",
+     })
+     @Order(2)
+    void shouldResolveSimpleTernaryConditionalExpressions(final String expression,
+                                                          final String expectedPredicateOperand,
+                                                          final String expectedTrueCaseOperand,
+                                                          final String expectedFalseCaseOperand) {
+         final Expression result = resolve(expression);
+
+         assertTernaryConditionalExpression(result, expectedPredicateOperand, expectedTrueCaseOperand, expectedFalseCaseOperand);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "? 1 : 2,               Ternary operator '?:' should have predicate clause expression",
+        "+= ? 1 : 2,            Ternary operator '?:' should have predicate clause expression",  // '+=' operator has lower precedence than '?:'
+        "true ? : 2,            Ternary operator '?:' should have true clause expression",
+        "true ? 1 :,            Ternary operator '?:' should have false clause expression",
+    })
+    @Order(3)
+    void shouldFailIfAnyClauseOfTernaryConditionalOperatorIsAbsent(final String expression, final String expectedMessage) {
+        final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> resolve(expression));
+
+        assertErrorMessageContains(e, expectedMessage);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "true ? 1 : +,              Unsupported expression: +",
+        "false ? - : 2,             Unsupported expression: -",
+        "+ ? true : false,          Unsupported expression: +",
+    })
+    @Order(4)
+    void shouldFailIfAnyClauseOfTernaryConditionalOperatorIsNotExpression(final String expression, final String expectedMsg) {
+        final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> resolve(expression));
+
+        assertErrorMessageContains(e, expectedMsg);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "10 > a ? 1 : 2,                                            10 > a, 1, 2",
+        "a / 2 + b ? 1 : 2,                                         a / 2 + b, 1, 2",
+        "a + ( 2 > b ) ? 1 : 2,                                     a + ( 2 > b ), 1, 2",
+        "a + b / c - ( 2 * ( b + 2 ) ) ? 1 : 2,                     a + b / c - ( 2 * ( b + 2 ) ), 1, 2",
+        "a + b / c - ( 2 * ( b + 2 ) / ( 1 + 6 ) ) ? 1 : 2,         a + b / c - ( 2 * ( b + 2 ) / ( 1 + 6 ) ), 1, 2",
+    })
+    @Order(5)
+    void shouldResolveTernaryConditionalExpressionWithComplexPredicateClause(final String expression,
+                                                                             final String expectedPredicate,
+                                                                             final String expectedTrueClause,
+                                                                             final String expectedFalseClause) {
+
+        final Expression result = resolve(expression);
+
+        assertTernaryConditionalExpression(result, expectedPredicate, expectedTrueClause, expectedFalseClause);
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "a += 4 > b ? 10 : 20,                      4 > b",
+        "a + ( ( b > 4 ) ? 10 : 20 ),               ( b > 4 )",
+    })
+    @Order(6)
+    void shouldCorrectlySeparateTernaryConditionalPredicateClauseFromPreviousLexemes(final String expression,
+                                                                                     final String expectedPredicate) {
+        final Expression result = resolve(expression);
+
+        final List<Lexeme> resolved = assertPostfixComplexExpression(result).getLexemes();
+        assertThat(resolved, hasSize(3));
+        assertTernaryConditionalExpressionWithPredicate(resolved.get(1), expectedPredicate);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "a > 9 ? ( 1 + 2 - a ) : 2,                                     a > 9, ( 1 + 2 - a ) , 2",
+        "a > 9 ? ( ( 1 + 2 - ( a * 2 ) ) ) : 2,                         a > 9, ( ( 1 + 2 - ( a * 2 ) ) ) , 2",
+        "a > 9 ? ( true ? 10 : 20 ) : 2,                                a > 9, ( true ? 10 : 20 ) , 2",
+        "a > 9 ? ( ( ( true ? 10 : 20 ) ) ) : 2,                        a > 9, ( ( ( true ? 10 : 20 ) ) ) , 2",
+    })
+    @Order(7)
+    void shouldResolveTernaryConditionalExpressionWithComplexTrueClause(final String expression,
+                                                                        final String expectedPredicate,
+                                                                        final String expectedTrueClause,
+                                                                        final String expectedFalseClause) {
+
+        final Expression result = resolve(expression);
+
+        assertTernaryConditionalExpression(result, expectedPredicate, expectedTrueClause, expectedFalseClause);
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "a > 9 ? 1 : ( ( 2 + b ) / c ),                               a > 9, 1, ( ( 2 + b ) / c )",
+        "a > 9 ? 1 : ( ( ( 2 + b ) / ( c - 2 ) ) ),                   a > 9, 1, ( ( ( 2 + b ) / ( c - 2 ) ) )",
+        "a > 9 ? 1 : ( true ? ( true ? 10 : 20 ) : ( 1 + 2 - a ) ),   a > 9, 1, ( true ? ( true ? 10 : 20 ) : ( 1 + 2 - a ) )",
+    })
+    @Order(8)
+    void shouldResolveTernaryConditionalExpressionWithComplexFalseClause(final String expression,
+                                                                         final String expectedPredicate,
+                                                                         final String expectedTrueClause,
+                                                                         final String expectedFalseClause) {
+
+        final Expression result = resolve(expression);
+
+        assertTernaryConditionalExpression(result, expectedPredicate, expectedTrueClause, expectedFalseClause);
+
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "( true ? 10 : 25 + 10 ) + a,                   3, 0, true, 10, 25 + 10",
+        "( ( ( true ? 10 : 25 + 10 ) ) ) + a / 2,       5, 0, true, 10, 25 + 10",
+        "( a + ( true ? 10 : 25 + 10 ) ) * a / 2,       7, 1, true, 10, 25 + 10",
+        "( a + ( true ? 10 : 25 + 10 ) * b ) * a / 2,   9, 1, true, 10, 25 + 10",
+    })
+    @Order(9)
+    void shouldResolveTernaryConditionalExpressionFollowedBySomeDifferentExpression(final String expression,
+                                                                                    final int expectedLexemCount,
+                                                                                    final int expectedPosition,
+                                                                                    final String expectedPredicate,
+                                                                                    final String expectedTrueClause,
+                                                                                    final String expectedFalseClause) {
+        final Expression result = resolve(expression);
+
+        final List<Lexeme> resolved = assertPostfixComplexExpression(result).getLexemes();
+        assertThat(resolved, hasSize(expectedLexemCount));
+        assertTernaryConditionalExpression(resolved.get(expectedPosition), expectedPredicate, expectedTrueClause, expectedFalseClause);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "( true ? 10 : 20 ) + ( false ? 20 : 10 ),                      3, 1, false, 20, 10",
+        "( ( ( true ? 10 : 20 ) + ( false ? 20 : 10 ) ) ),              3, 1, false, 20, 10",
+    })
+    @Order(10)
+    void shouldResolveTernaryConditionalExpressionFollowedByAnotherTernaryExpression(final String expression,
+                                                                                     final int expectedLexemCount,
+                                                                                     final int expectedSecondTernaryPosition,
+                                                                                     final String secondTernaryExpectedPredicate,
+                                                                                     final String secondTernaryExpectedTrueClause,
+                                                                                     final String secondTernaryExpectedFalseClause) {
+        final Expression result = resolve(expression);
+
+        final List<Lexeme> resolved = assertPostfixComplexExpression(result).getLexemes();
+        assertThat(resolved, hasSize(expectedLexemCount));
+        assertTernaryConditionalExpression(resolved.get(expectedSecondTernaryPosition),
+                                           secondTernaryExpectedPredicate,
+                                           secondTernaryExpectedTrueClause,
+                                           secondTernaryExpectedFalseClause);
+    }
+
     @ParameterizedTest
     @CsvSource({
         // Constants only
@@ -156,10 +322,39 @@ public class ExpressionResolverIntegrationTest {
         "a ++ 5,                    A binary operator is expected between expressions: 'a++' and '5'",
         "5 ++ 5,                    A variable expression is expected for unary operator: '++'",
     })
-    @Order(2)
+    @Order(11)
     void shouldFailIfExpressionIsSyntacticallyIncorrect(final String expression, final String expectedMessage) {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> resolve(expression));
 
         assertErrorMessageContains(e, "Syntax error in 'module1' [Line: 5]: %s", expectedMessage);
+    }
+
+    private void assertTernaryConditionalExpressionWithPredicate(final Lexeme expression, final String expectedPredicate) {
+        final TernaryConditionalExpression ternary = assertTernaryConditionalExpression(expression);
+
+        assertThat(ternary.getPredicateOperand(), instanceOf(ComplexExpression.class));
+        assertThat(ternary.getPredicateOperand().toString(), equalTo(expectedPredicate));
+    }
+
+    private void assertTernaryConditionalExpression(final Lexeme expectedExpression,
+                                                    final String expectedPredicateOperand,
+                                                    final String expectedTrueCaseOperand,
+                                                    final String expectedFalseCaseOperand) {
+        final TernaryConditionalExpression expression = assertTernaryConditionalExpression(expectedExpression);
+
+        assertThat(expression.getPredicateOperand().toString(), equalTo(expectedPredicateOperand));
+        assertThat(expression.getTrueClauseOperand().toString(), equalTo(expectedTrueCaseOperand));
+        assertThat(expression.getFalseClauseOperand().toString(), equalTo(expectedFalseCaseOperand));
+
+    }
+
+    private TernaryConditionalExpression assertTernaryConditionalExpression(final Lexeme expression) {
+        assertThat(expression, instanceOf(TernaryConditionalExpression.class));
+        return (TernaryConditionalExpression) expression;
+    }
+
+    private ComplexExpression assertPostfixComplexExpression(final Expression expression) {
+        assertThat(expression, instanceOf(PostfixNotationComplexExpression.class));
+        return (ComplexExpression) expression;
     }
 }

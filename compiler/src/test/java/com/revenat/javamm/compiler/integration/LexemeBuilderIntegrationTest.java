@@ -28,6 +28,7 @@ import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.ConstantExpression;
 import com.revenat.javamm.code.fragment.expression.VariableExpression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
+import com.revenat.javamm.code.fragment.operator.TernaryConditionalOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
@@ -68,10 +69,13 @@ class LexemeBuilderIntegrationTest {
     private static final String BS = "BS"; // binary subtraction
     private static final String BD = "BD"; // binary division
     private static final String BM = "BM"; // binary multiplication
+    private static final String BG = "BG"; // binary greater than
     private static final String UP = "UP"; // unary plus
     private static final String UM = "UM"; // unary minus
     private static final String UI = "UI"; // unary increment
     private static final String UD = "UD"; // unary decrement
+    private static final String TC = "TC"; // ternary conditional
+    private static final String TS = "TS"; // ternary separator
 
     private static final Map<String, Class<? extends Lexeme>> LEXEMES = Map.ofEntries(
             entry(CE, ConstantExpression.class),
@@ -82,10 +86,13 @@ class LexemeBuilderIntegrationTest {
             entry(BS, BinaryOperator.ARITHMETIC_SUBTRACTION.getClass()),
             entry(BD, BinaryOperator.ARITHMETIC_DIVISION.getClass()),
             entry(BM, BinaryOperator.ARITHMETIC_MULTIPLICATION.getClass()),
+            entry(BG, BinaryOperator.PREDICATE_GREATER_THAN.getClass()),
             entry(UP, UnaryOperator.ARITHMETICAL_UNARY_PLUS.getClass()),
             entry(UM, UnaryOperator.ARITHMETICAL_UNARY_MINUS.getClass()),
             entry(UI, UnaryOperator.INCREMENT.getClass()),
-            entry(UD, UnaryOperator.DECREMENT.getClass())
+            entry(UD, UnaryOperator.DECREMENT.getClass()),
+            entry(TC, TernaryConditionalOperator.OPERATOR.getClass()),
+            entry(TS, TernaryConditionalOperator.SEPARATOR.getClass())
             );
 
     private LexemeBuilder lexemeBuilder;
@@ -113,15 +120,28 @@ class LexemeBuilderIntegrationTest {
 
     @ParameterizedTest
     @CsvSource({
-        "[ a,       [",
-        "10 + #,    #",
-        "a ? b,     ?"
+        "[ a,                [",
+        "10 + #,             #",
+        "10 + :,             :",
+        "a > 2 ? b,          ?",
+        "a > 2 ? b : c :,    :",
+        "a > 2 ? b : c ?,    ?",
     })
     @Order(2)
     void shouldFailToBuildIfUnsupportedTokenPresent(final String expression, final String unsupportedToken) {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> build(expression));
 
         assertErrorMessageContains(e, "Unsupported token: %s", unsupportedToken);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "true ? 10 : 20,                   CE:TC:CE:TS:CE",
+        "true ? false ? a : b : 20,        CE:TC:CE:TC:VE:TS:VE:TS:CE",
+    })
+    @Order(3)
+    void shouldSupportTernaryOperator(final String expression, final String expectedLexemes) {
+        assertLexemesFromExpression(expression, expectedLexemes);
     }
 
     private void assertLexemesFromExpression(final String expression, final String expectedLexemes) {

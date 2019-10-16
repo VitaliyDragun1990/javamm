@@ -17,10 +17,12 @@
 
 package com.revenat.javamm.compiler.component.impl;
 
+import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.Parenthesis;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
+import com.revenat.javamm.code.fragment.operator.TernaryConditionalOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.LexemeAmbiguityResolver;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
@@ -29,7 +31,7 @@ import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.ListIterator;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 
@@ -53,49 +55,87 @@ public class LexemeBuilderImpl implements LexemeBuilder {
     public List<Lexeme> build(final List<String> tokens, final SourceLine sourceLine) {
         final List<Lexeme> lexemes = new ArrayList<>();
 
-        for (int i = 0; i < tokens.size(); i++) {
-            final Lexeme lexeme = buildLexeme(tokens.get(i), sourceLine);
-            lexemes.add(lexemeAmbiguityResolver.resolve(lexeme, i, lexemes));
+        for (final ListIterator<String> source = tokens.listIterator(); source.hasNext();) {
+            buildLexeme(source.next(), lexemes, source, sourceLine);
         }
 
         return List.copyOf(lexemes);
     }
 
-    private Lexeme buildLexeme(final String token, final SourceLine sourceLine) {
-        return
-                tryToBuildOperatorFrom(token)
-                .or(() -> tryToBuildParenthesisFrom(token))
-                .or(() -> tryToBuildSingleTokenExpressionFrom(token, sourceLine))
-                .orElseThrow(() -> syntaxError(token, sourceLine));
-    }
+    private void buildLexeme(final String currentToken,
+                             final List<Lexeme> lexemes,
+                             final ListIterator<String> tokens,
+                             final SourceLine sourceLine) {
+        if (isOperator(currentToken)) {
+            buildOperatorLexeme(currentToken, lexemes, tokens, sourceLine);
 
-    @SuppressWarnings("unchecked")
-    private Optional<Lexeme> tryToBuildOperatorFrom(final String token) {
-        final Optional<Lexeme> binaryOperator = (Optional<Lexeme>) tryToBuildBinaryOperator(token);
-        if (binaryOperator.isPresent()) {
-            return binaryOperator;
+        } else if (isParenthesis(currentToken)) {
+            lexemes.add(resolveAmbiguity(parenthesisFrom(currentToken), lexemes));
+
+        } else if (isSingleTokenExpression(currentToken)) {
+            lexemes.add(resolveAmbiguity(buildExpressionFrom(currentToken, sourceLine), lexemes));
+
         } else {
-            return (Optional<Lexeme>) tryToBuildUnaryOperator(token);
+            throw syntaxError(currentToken, sourceLine);
         }
     }
 
-    private Optional<? extends Lexeme> tryToBuildBinaryOperator(final String token) {
-        return BinaryOperator.of(token);
-    }
-
-    private Optional<? extends Lexeme> tryToBuildUnaryOperator(final String token) {
-        return UnaryOperator.of(token);
-    }
-
-    private Optional<? extends Lexeme> tryToBuildParenthesisFrom(final String token) {
-        return Parenthesis.of(token);
-    }
-
-    private Optional<Lexeme> tryToBuildSingleTokenExpressionFrom(final String token, final SourceLine sourceLine) {
-        if (singleTokenExpressionBuilder.canBuild(List.of(token))) {
-            return Optional.of(singleTokenExpressionBuilder.build(List.of(token), sourceLine));
+    private void buildOperatorLexeme(final String currentToken,
+                                     final List<Lexeme> lexemes,
+                                     final ListIterator<String> tokens,
+                                     final SourceLine sourceLine) {
+        if (isBinaryOperator(currentToken)) {
+            lexemes.add(resolveAmbiguity(binaryOpertorFrom(currentToken), lexemes));
+        } else if (isUnaryOperator(currentToken)) {
+            lexemes.add(resolveAmbiguity(unaryOperatorFrom(currentToken), lexemes));
+        } else {
+            lexemes.add(TernaryConditionalOperator.OPERATOR);
+            new TernaryConditionalOperatorBuilder(tokens, lexemes, sourceLine).build();
         }
-        return Optional.empty();
+    }
+
+    private Expression buildExpressionFrom(final String token, final SourceLine sourceLine) {
+        return singleTokenExpressionBuilder.build(List.of(token), sourceLine);
+    }
+
+    private UnaryOperator unaryOperatorFrom(final String token) {
+        return UnaryOperator.of(token).get();
+    }
+
+    private BinaryOperator binaryOpertorFrom(final String token) {
+        return BinaryOperator.of(token).get();
+    }
+
+    private Parenthesis parenthesisFrom(final String token) {
+        return Parenthesis.of(token).get();
+    }
+
+    private boolean isSingleTokenExpression(final String token) {
+        return singleTokenExpressionBuilder.canBuild(List.of(token));
+    }
+
+    private boolean isParenthesis(final String token) {
+        return Parenthesis.of(token).isPresent();
+    }
+
+    private Lexeme resolveAmbiguity(final Lexeme lexeme, final List<Lexeme> resolved) {
+        return lexemeAmbiguityResolver.resolve(lexeme, resolved.size(), resolved);
+    }
+
+    private boolean isOperator(final String token) {
+        return isBinaryOperator(token) || isUnaryOperator(token) || isTernaryOperator(token);
+    }
+
+    private boolean isTernaryOperator(final String token) {
+        return TernaryConditionalOperator.isContitional(token);
+    }
+
+    private boolean isUnaryOperator(final String token) {
+        return UnaryOperator.of(token).isPresent();
+    }
+
+    private boolean isBinaryOperator(final String token) {
+        return BinaryOperator.of(token).isPresent();
     }
 
     private JavammLineSyntaxError syntaxError(final String token, final SourceLine sourceLine) {
@@ -107,5 +147,48 @@ public class LexemeBuilderImpl implements LexemeBuilder {
                 "Unsupported token: %s (%s)",
                 token,
                 token.codePoints().mapToObj(v -> "0x" + format("%04x", v)).collect(joining(" ")));
+    }
+
+    private final class TernaryConditionalOperatorBuilder {
+
+        private static final String CONDITIONAL_SYMBOL = "?";
+
+        private final ListIterator<String> tokens;
+
+        private final List<Lexeme> resolvedLexemes;
+
+        private final SourceLine sourceLine;
+
+        private boolean isSeparatorFound;
+
+        private TernaryConditionalOperatorBuilder(final ListIterator<String> tokens,
+                                                  final List<Lexeme> resolvedLexemes,
+                                                  final SourceLine sourceLine) {
+            this.tokens = tokens;
+            this.resolvedLexemes = resolvedLexemes;
+            this.sourceLine = sourceLine;
+            isSeparatorFound = false;
+        }
+
+        public void build() {
+            while (tokens.hasNext() && !isSeparatorFound) {
+                final String token = tokens.next();
+
+                if (isTernarySeparator(token)) {
+                    resolvedLexemes.add(TernaryConditionalOperator.SEPARATOR);
+                    isSeparatorFound = true;
+                } else {
+                    buildLexeme(token, resolvedLexemes, tokens, sourceLine);
+                }
+            }
+
+            if (!isSeparatorFound) {
+                throw syntaxError(CONDITIONAL_SYMBOL, sourceLine);
+            }
+        }
+
+        private boolean isTernarySeparator(final String token) {
+            return TernaryConditionalOperator.isSeparator(token);
+        }
     }
 }

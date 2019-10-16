@@ -28,5 +28,12 @@ public final class HelloWorld {
 
     public static void main(final String[] args) {
         System.out.println("Hello world");
+
+        final int a = 1;
+
+       final int b =  false ? 10 : true ^ true ? 20 : 30;
+       System.out.println(10 + ((10 > b) ? 10 : true ? 20 : 30));
+
+       System.out.println(b);
     }
 }

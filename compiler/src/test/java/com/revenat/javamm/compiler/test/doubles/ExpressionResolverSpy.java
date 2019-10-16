@@ -18,6 +18,7 @@
 package com.revenat.javamm.compiler.test.doubles;
 
 import com.revenat.javamm.code.fragment.Expression;
+import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 
@@ -39,5 +40,11 @@ public class ExpressionResolverSpy implements ExpressionResolver {
     public Expression resolve(final List<String> expressionTokens, final SourceLine sourceLine) {
         lastExpressionTokens = expressionTokens;
         return expressionToResolve;
+    }
+
+    @Override
+    public Expression resolveFromLexemes(final List<Lexeme> lexems, final SourceLine sourceLine) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

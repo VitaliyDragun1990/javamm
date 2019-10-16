@@ -24,6 +24,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.fragment.Expression;
+import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
@@ -109,6 +110,11 @@ class PrintlnOperationReaderTest {
 
         @Override
         public Expression resolve(final List<String> expressionTokens, final SourceLine sourceLine) {
+            return expression;
+        }
+
+        @Override
+        public Expression resolveFromLexemes(final List<Lexeme> lexems, final SourceLine sourceLine) {
             return expression;
         }
     }

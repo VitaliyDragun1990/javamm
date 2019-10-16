@@ -18,6 +18,7 @@
 package com.revenat.javamm.compiler.component;
 
 import com.revenat.javamm.code.fragment.Expression;
+import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.compiler.error.JavammSyntaxError;
 
@@ -42,4 +43,16 @@ public interface ExpressionResolver {
      *                           resolved to any supported expression
      */
     Expression resolve(List<String> expressionTokens, SourceLine sourceLine);
+
+    /**
+     * Resolves any kind of supported expression using {@linkplain Lexeme lexemes} and source
+     * line where assumed expression is defined
+     *
+     * @param expressionTokens tokens that form assumed expression
+     * @param sourceLine       source line where assumed expression is defined
+     * @return resolved expression
+     * @throws JavammSyntaxError if specified {@code expressionTokens} can not be
+     *                           resolved to any supported expression
+     */
+    Expression resolveFromLexemes(List<Lexeme> lexems, SourceLine sourceLine);
 }

@@ -23,6 +23,7 @@ import com.revenat.javamm.code.fragment.Operator;
 import com.revenat.javamm.code.fragment.Parenthesis;
 import com.revenat.javamm.code.fragment.expression.VariableExpression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
+import com.revenat.javamm.code.fragment.operator.TernaryConditionalOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 
 import java.util.Set;
@@ -70,6 +71,10 @@ public final class LexemeUtils {
 
     public static boolean isBinaryOperator(final Lexeme lexeme) {
         return confirmType(BinaryOperator.class, lexeme);
+    }
+
+    public static boolean isTernaryOperator(final Lexeme lexeme) {
+        return confirmType(TernaryConditionalOperator.class, lexeme);
     }
 
     public static boolean isUnaryAssignmentOperator(final Lexeme lexeme) {

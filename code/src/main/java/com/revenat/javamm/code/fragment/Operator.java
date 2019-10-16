@@ -26,7 +26,7 @@ package com.revenat.javamm.code.fragment;
 public interface Operator extends Lexeme {
 
     /**
-     * Returns type of an operator: {@code unary} or {@code binary}
+     * Returns type of an operator: {@code unary}, {@code binary} or {@code ternary}
      */
     String getType();
 

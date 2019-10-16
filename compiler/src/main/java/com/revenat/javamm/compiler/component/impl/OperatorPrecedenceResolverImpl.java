@@ -20,6 +20,7 @@ package com.revenat.javamm.compiler.component.impl;
 import com.revenat.javamm.code.exception.ConfigException;
 import com.revenat.javamm.code.fragment.Operator;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
+import com.revenat.javamm.code.fragment.operator.TernaryConditionalOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.OperatorPrecedenceResolver;
 
@@ -113,17 +114,19 @@ public class OperatorPrecedenceResolverImpl implements OperatorPrecedenceResolve
             //
             entry(LOGICAL_OR, MAX_PRECEDENCE - 11),
             //
-            entry(ASSIGNMENT_MULTIPLICATION, MAX_PRECEDENCE - 12),
-            entry(ASSIGNMENT_DIVISION, MAX_PRECEDENCE - 12),
-            entry(ASSIGNMENT_MODULUS, MAX_PRECEDENCE - 12),
-            entry(ASSIGNMENT_ADDITION, MAX_PRECEDENCE - 12),
-            entry(ASSIGNMENT_SUBTRACTION, MAX_PRECEDENCE - 12),
-            entry(ASSIGNMENT_BITWISE_SHIFT_LEFT, MAX_PRECEDENCE - 12),
-            entry(ASSIGNMENT_BITWISE_SHIFT_RIGHT, MAX_PRECEDENCE - 12),
-            entry(ASSIGNMENT_BITWISE_SHIFT_RIGHT_ZERO_FILL, MAX_PRECEDENCE - 12),
-            entry(ASSIGNMENT_BITWISE_AND, MAX_PRECEDENCE - 12),
-            entry(ASSIGNMENT_BITWISE_XOR, MAX_PRECEDENCE - 12),
-            entry(ASSIGNMENT_BITWISE_OR, MAX_PRECEDENCE - 12)
+            entry(TernaryConditionalOperator.OPERATOR, MAX_PRECEDENCE - 12),
+            //
+            entry(ASSIGNMENT_MULTIPLICATION, MAX_PRECEDENCE - 13),
+            entry(ASSIGNMENT_DIVISION, MAX_PRECEDENCE - 13),
+            entry(ASSIGNMENT_MODULUS, MAX_PRECEDENCE - 13),
+            entry(ASSIGNMENT_ADDITION, MAX_PRECEDENCE - 13),
+            entry(ASSIGNMENT_SUBTRACTION, MAX_PRECEDENCE - 13),
+            entry(ASSIGNMENT_BITWISE_SHIFT_LEFT, MAX_PRECEDENCE - 13),
+            entry(ASSIGNMENT_BITWISE_SHIFT_RIGHT, MAX_PRECEDENCE - 13),
+            entry(ASSIGNMENT_BITWISE_SHIFT_RIGHT_ZERO_FILL, MAX_PRECEDENCE - 13),
+            entry(ASSIGNMENT_BITWISE_AND, MAX_PRECEDENCE - 13),
+            entry(ASSIGNMENT_BITWISE_XOR, MAX_PRECEDENCE - 13),
+            entry(ASSIGNMENT_BITWISE_OR, MAX_PRECEDENCE - 13)
             );
 
     static {

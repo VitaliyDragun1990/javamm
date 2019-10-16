@@ -61,7 +61,6 @@ class UnaryAssignmentExpressionResolverImplTest {
 
     private UnaryAssignmentExpressionResolver unaryAssignmentExpressionResolver;
 
-
     @BeforeEach
     void setUp() {
         lexemeBuilder = new ComponentBuilder().buildLexemeBuilder();

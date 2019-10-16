@@ -19,6 +19,7 @@ package com.revenat.javamm.compiler.component.impl;
 
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.util.LexemeUtils;
 import com.revenat.javamm.compiler.component.UnaryAssignmentExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 
@@ -43,6 +44,19 @@ public class UnaryAssignmentExpressionResolverImpl implements UnaryAssignmentExp
 
     @Override
     public List<Lexeme> resolve(final List<Lexeme> lexemes, final SourceLine sourceLine) {
+        if (containsUnaryAssignmentOperator(lexemes)) {
+            return resolveFrom(lexemes, sourceLine);
+        } else {
+            return lexemes;
+        }
+    }
+
+    private boolean containsUnaryAssignmentOperator(final List<Lexeme> lexemes) {
+        return lexemes.stream()
+                .anyMatch(LexemeUtils::isUnaryAssignmentOperator);
+    }
+
+    private List<Lexeme> resolveFrom(final List<Lexeme> lexemes, final SourceLine sourceLine) {
         final List<Lexeme> result = new ArrayList<>();
 
         for (final ListIterator<Lexeme> original = lexemes.listIterator(); original.hasNext();) {

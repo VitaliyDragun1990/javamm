@@ -44,7 +44,7 @@ public class ExpressionContextImpl implements ExpressionContext {
     private final Map<Class<? extends UpdatableExpression>, ExpressionUpdater> expressionUpdaterMap;
 
     public ExpressionContextImpl(final Set<ExpressionEvaluator<?>> expressionEvaluators,
-            final Set<ExpressionUpdater<?>> expressionUpdaters) {
+                                 final Set<ExpressionUpdater<?>> expressionUpdaters) {
         this.expressionEvaluatorMap = getExpressionEvaluators(expressionEvaluators);
         this.expressionUpdaterMap = getExpressionUpdaters(expressionUpdaters);
     }
@@ -78,7 +78,7 @@ public class ExpressionContextImpl implements ExpressionContext {
     }
 
     private Map<Class<? extends Expression>, ExpressionEvaluator> getExpressionEvaluators(
-            final Set<ExpressionEvaluator<?>> expressionEvaluators) {
+                                    final Set<ExpressionEvaluator<?>> expressionEvaluators) {
         return expressionEvaluators.stream()
                 .peek(this::setExpressionContextIfAware)
                 .collect(

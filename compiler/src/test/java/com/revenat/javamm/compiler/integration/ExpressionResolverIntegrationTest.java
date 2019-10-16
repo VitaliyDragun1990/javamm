@@ -192,6 +192,7 @@ public class ExpressionResolverIntegrationTest {
         "a > 9 ? ( ( 1 + 2 - ( a * 2 ) ) ) : 2,                         a > 9, ( ( 1 + 2 - ( a * 2 ) ) ) , 2",
         "a > 9 ? ( true ? 10 : 20 ) : 2,                                a > 9, ( true ? 10 : 20 ) , 2",
         "a > 9 ? ( ( ( true ? 10 : 20 ) ) ) : 2,                        a > 9, ( ( ( true ? 10 : 20 ) ) ) , 2",
+        "b > a ? 10 > 20 ? 10 : 20 : c,                                 b > a, 10 > 20 ? 10 : 20, c"
     })
     @Order(7)
     void shouldResolveTernaryConditionalExpressionWithComplexTrueClause(final String expression,

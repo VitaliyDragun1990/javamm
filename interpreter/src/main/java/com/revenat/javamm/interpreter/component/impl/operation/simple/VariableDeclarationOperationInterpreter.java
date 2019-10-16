@@ -71,8 +71,9 @@ public class VariableDeclarationOperationInterpreter
         }
     }
 
-    private void defineVariableInLocalContext(final Variable variable, final LocalContext localContext,
-            final VariableDeclarationOperation operation) {
+    private void defineVariableInLocalContext(final Variable variable,
+                                              final LocalContext localContext,
+                                              final VariableDeclarationOperation operation) {
         final Object variableValue = operation.getExpression().getValue(expressionContext);
 
         if (operation.isConstant()) {

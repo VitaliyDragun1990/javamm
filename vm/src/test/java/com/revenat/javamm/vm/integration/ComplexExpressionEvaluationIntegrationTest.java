@@ -94,6 +94,7 @@ public class ComplexExpressionEvaluationIntegrationTest {
                     arithmeticExpressionsProvider(),
                     logicalAndPredicateExpressionProvider(),
                     bitwiseExpressionProvider(),
+                    ternaryExpressionProvider(),
                     complexExpressionProvider()
                     ).flatMap(identity());
         }
@@ -186,6 +187,29 @@ public class ComplexExpressionEvaluationIntegrationTest {
                 );
         }
 
+        @SuppressWarnings("unused")
+        private Stream<Arguments> ternaryExpressionProvider() {
+            return Stream.of(
+                    arguments(
+                            "true ? 10 : 20",
+                            true ? 10 : 20
+                            ),
+                    arguments(
+                            "false ? 20 : 10",
+                            false ? 20 : 10
+                            ),
+                    arguments(
+                            "false ? true ? false : true : false ? false : true",
+                            false ? true ? false : true : false ? false : true
+                            ),
+                    arguments(
+                            "( ( ( false ? ( true ? ( false ) : ( true ) ) : ( false ? false : true ) ) ) )",
+                            ( ( ( false ? ( true ? ( false ) : ( true ) ) : ( false ? false : true ) ) ) )
+                            )
+                    );
+        }
+
+        @SuppressWarnings("unused")
         private Stream<Arguments> complexExpressionProvider() {
             return Stream.of(
                     arguments(
@@ -199,7 +223,11 @@ public class ComplexExpressionEvaluationIntegrationTest {
                     arguments(
                         "( ( 5 & 4 | 8 & ~ + 1 ) >> 4 ) * ( ( ( 1 + 2 ) - ( 3 * 4 ) ) << 3 ) - ( ( ( 5 % 6 ) ^ 1 ) )",
                         ((5 & 4 | 8 & ~+1) >> 4) * (((1 + 2) - (3 * 4)) << 3) - (((5 % 6) ^ 1))
-                    )
+                    ),
+                    arguments(
+                            "( ( 5 & 4 | 8 & ~ + 1 ) >> 4 ) * ( 10 > 20 ? 10 + ( 255 * 20 ) : ( 100 % 2 >= 0 ? 100 : 255 ) )",
+                            ( ( 5 & 4 | 8 & ~ + 1 ) >> 4 ) * ( 10 > 20 ? 10 + ( 255 * 20 ) : ( 100 % 2 >= 0 ? 100 : 255 ) )
+                            )
                 );
         }
     }

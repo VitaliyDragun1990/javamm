@@ -245,6 +245,7 @@ public class ExpressionResolverImpl implements ExpressionResolver {
         private List<Lexeme> buildTrueClauseWithLexemesUpToColonTernarySeparator(final ListIterator<Lexeme> lexemes) {
             final List<Lexeme> trueClause = new ArrayList<>();
             int danglingParenthesis = 0;
+            boolean anotherTernaryStart = false;
 
             while (lexemes.hasNext()) {
                 final Lexeme current = lexemes.next();
@@ -253,7 +254,11 @@ public class ExpressionResolverImpl implements ExpressionResolver {
                     danglingParenthesis++;
                 } else if (isClosingParenthesis(current)) {
                     danglingParenthesis--;
-                } else if (isSeparator(current) && (danglingParenthesis == 0)) {
+                } else if (isTernaryOperator(current) && (danglingParenthesis == 0)) {
+                    anotherTernaryStart = true;
+                } else if (isSeparator(current) && anotherTernaryStart) {
+                    anotherTernaryStart = false;
+                } else if (isSeparator(current) && (danglingParenthesis == 0) && !anotherTernaryStart) {
                     break;
                 }
 

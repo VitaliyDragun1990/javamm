@@ -66,33 +66,39 @@ public class PostfixNotationComplexExpressionEvaluator extends AbstractExpressio
 
     private void processLexeme(final Deque<Expression> stack, final Lexeme lexeme) {
         if (isBinaryOperator(lexeme)) {
-            calculateBinaryOperation((BinaryOperator) lexeme, stack);
+            calculateBinaryOperationAndPutResultInStack((BinaryOperator) lexeme, stack);
         } else if (isUnaryOperator(lexeme)) {
-            calculateUnaryOperation((UnaryOperator) lexeme, stack);
+            calculateUnaryOperationAndPutResultInStack((UnaryOperator) lexeme, stack);
         } else {
-            processExpression((Expression) lexeme, stack);
+            putInStack((Expression) lexeme, stack);
         }
     }
 
-    private void calculateBinaryOperation(final BinaryOperator operator, final Deque<Expression> stack) {
+    private void calculateBinaryOperationAndPutResultInStack(final BinaryOperator operator,
+                                                             final Deque<Expression> stack) {
         final Expression secondOperand = stack.pop();
         final Expression firstOperand = stack.pop();
         final Object result = calculate(firstOperand, operator, secondOperand);
 
         if (operator.isAssignment()) {
-            ((UpdatableExpression) firstOperand).setValue(getExpressionContext(), result);
+            updateOperandValue(firstOperand, result);
         }
 
         stack.push(toExpression(result));
     }
 
-    private void calculateUnaryOperation(final UnaryOperator operator, final Deque<Expression> stack) {
+    private void updateOperandValue(final Expression operandToUpdate, final Object newValue) {
+        ((UpdatableExpression) operandToUpdate).setValue(getExpressionContext(), newValue);
+    }
+
+    private void calculateUnaryOperationAndPutResultInStack(final UnaryOperator operator,
+                                                            final Deque<Expression> stack) {
         final Expression operand = stack.pop();
         final Object result = calculate(operand, operator);
         stack.push(toExpression(result));
     }
 
-    private void processExpression(final Expression expression, final Deque<Expression> stack) {
+    private void putInStack(final Expression expression, final Deque<Expression> stack) {
         stack.push(expression);
     }
 

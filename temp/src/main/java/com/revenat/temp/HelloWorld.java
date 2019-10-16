@@ -31,7 +31,7 @@ public final class HelloWorld {
 
         final int a = 1;
 
-       final int b =  false ? 10 : true ^ true ? 20 : 30;
+       final int b =  100 + ( a > 0 ? 10 > 20 ? 10 : 20  : 1_000 );
        System.out.println(10 + ((10 > b) ? 10 : true ? 20 : 30));
 
        System.out.println(b);

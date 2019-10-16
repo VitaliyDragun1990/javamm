@@ -17,13 +17,10 @@
 
 package com.revenat.javamm.code.fragment.expression;
 
-import com.revenat.javamm.code.component.ExpressionContext;
-import com.revenat.javamm.code.exception.JavammError;
 import com.revenat.javamm.code.fragment.Expression;
 
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
-
 import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Represents ternary operator expression: predicate, true case and
@@ -43,9 +40,9 @@ public class TernaryConditionalExpression implements Expression {
     public TernaryConditionalExpression(final Expression predicateOperand,
                                         final Expression trueClauseOperand,
                                         final Expression falseClauseOperand) {
-        this.predicateOperand = predicateOperand;
-        this.trueClauseOperand = trueClauseOperand;
-        this.falseClauseOperand = falseClauseOperand;
+        this.predicateOperand = requireNonNull(predicateOperand);
+        this.trueClauseOperand = requireNonNull(trueClauseOperand);
+        this.falseClauseOperand = requireNonNull(falseClauseOperand);
     }
 
     public Expression getPredicateOperand() {
@@ -58,28 +55,6 @@ public class TernaryConditionalExpression implements Expression {
 
     public Expression getFalseClauseOperand() {
         return falseClauseOperand;
-    }
-
-    @Override
-    public Object getValue(final ExpressionContext expressionContext) {
-        final Object predicateResult = predicateOperand.getValue(expressionContext);
-
-        if (isBoolean(predicateResult)) {
-            return evaluate(expressionContext, (Boolean) predicateResult);
-        }
-        throw new JavammError("First operand of ?: operator should resolve to boolean value");
-    }
-
-    private Object evaluate(final ExpressionContext expressionContext, final Boolean result) {
-        if (result) {
-            return trueClauseOperand.getValue(expressionContext);
-        } else {
-            return falseClauseOperand.getValue(expressionContext);
-        }
-    }
-
-    private boolean isBoolean(final Object object) {
-        return confirmType(Boolean.class, object);
     }
 
     @Override

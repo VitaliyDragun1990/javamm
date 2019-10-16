@@ -19,11 +19,10 @@ package com.revenat.javamm.interpreter.component.impl.error;
 
 import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 
-import java.util.Objects;
-
 import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCurrentRuntime;
 
 import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 
 
 /**
@@ -36,7 +35,7 @@ public class JavammLineRuntimeError extends JavammRuntimeError {
     private static final long serialVersionUID = -2098638364439526984L;
 
     public JavammLineRuntimeError(final String message) {
-        super(buildErrorMessage(Objects.requireNonNull(message)));
+        super(buildErrorMessage(requireNonNull(message)));
     }
 
     public JavammLineRuntimeError(final String template, final Object...args) {

@@ -36,7 +36,7 @@ public class SourceLineReaderImpl implements SourceLineReader {
 
     @Override
     public List<SourceLine> read(final SourceCode sourceCode) {
-        return List.copyOf(readLines(sourceCode.getLines(), sourceCode.getModuleName()));
+        return readLines(sourceCode.getLines(), sourceCode.getModuleName());
     }
 
     private List<SourceLine> readLines(final List<String> sourceCodeLines, final String moduleName) {
@@ -54,15 +54,10 @@ public class SourceLineReaderImpl implements SourceLineReader {
             isMultilineCommentStarted = parserResult.isMultilineCommentStarted();
         }
 
-        return result;
+        return List.copyOf(result);
     }
 
     private TokenParserResult parseLine(final String codeLine, final boolean isMultilineCommentStarted) {
-        if (!isMultilineCommentStarted) {
-            return tokenParser.parseLine(codeLine);
-        } else {
-            return tokenParser.parseLineWithStartedMultilineComment(codeLine);
-        }
+        return tokenParser.parseLine(codeLine, isMultilineCommentStarted);
     }
-
 }

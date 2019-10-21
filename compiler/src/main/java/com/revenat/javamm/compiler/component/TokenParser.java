@@ -28,7 +28,5 @@ import com.revenat.javamm.compiler.model.TokenParserResult;
  */
 public interface TokenParser {
 
-    TokenParserResult parseLine(String sourceCodeLine);
-
-    TokenParserResult parseLineWithStartedMultilineComment(String sourceCodeLine);
+    TokenParserResult parseLine(String sourceCodeLine, boolean isMultilineCommentStartedBefore);
 }

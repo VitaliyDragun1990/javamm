@@ -173,13 +173,8 @@ class SourceLineReaderTest {
         }
 
         @Override
-        public TokenParserResult parseLine(final String sourceCodeLine) {
-            return answers.getOrDefault(sourceCodeLine + Boolean.toString(false), LINE_WITHOUT_TOKENS);
-        }
-
-        @Override
-        public TokenParserResult parseLineWithStartedMultilineComment(final String sourceCodeLine) {
-            return answers.getOrDefault(sourceCodeLine + Boolean.toString(true), LINE_WITHOUT_TOKENS);
+        public TokenParserResult parseLine(final String sourceCodeLine, final boolean isMultilineCommentStartedBefore) {
+            return answers.getOrDefault(sourceCodeLine + Boolean.toString(isMultilineCommentStartedBefore), LINE_WITHOUT_TOKENS);
         }
     }
 }

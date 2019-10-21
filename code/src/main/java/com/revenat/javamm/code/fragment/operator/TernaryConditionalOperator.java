@@ -30,7 +30,7 @@ public final class TernaryConditionalOperator implements Operator {
 
     public static final Lexeme SEPARATOR = new TernarySeparator();
 
-    private static final String CODE = "?:";
+    private static final String CODE = "?"; // TODO: remove ???
 
     private static final String CONTITIONAL = "?";
 

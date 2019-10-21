@@ -1,13 +1,14 @@
+//------------------------------------------
 var a = 1
-var b = a ++
-var c = ++ a
-var d = ( ( ( ( c ) ) ) ) += 4 + a * b
-var e = 2 * b + ( c += 4 + a * b )
+var b = 		a++
+var c = ++a
+var d = ((((c)))) += 4 + a * b
+var e = 2* b+    (c+=4+a	*b)
 var f = b > a ? "false" : "true"
 
-println ( "a=" + a )
-println ( "b=" + b )
-println ( "c=" + c )
-println ( "d=" + d )
-println ( "e=" + e )
-println ( "f=" + f )
+println(		"a="+a)
+println("b="+b  )
+println("c="+c)
+println("d="+d)
+println("e="+e)
+println("f="+f)

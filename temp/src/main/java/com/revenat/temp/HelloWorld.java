@@ -17,11 +17,28 @@
 
 package com.revenat.temp;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author devonline
  * @link http://devonline.academy/javamm
  */
 public final class HelloWorld {
+    public static final Set<String> OPERATOR_TOKEN_DELIMITERS =
+            Set.of(
+                "+", "++", "+=", "-", "--", "*", "*=", "/", "/=", "%", "%=",
+                ">", ">>", ">=", ">>>", ">>=", ">>>=", "<", "<<", "<=", "<<=",
+                "!", "!=", "=", "==", "&", "&&", "&=", "|", "||", "|=", "^", "^=", "~",
+                "?"
+            );
+    public static final List<String> sorted = new ArrayList<>(OPERATOR_TOKEN_DELIMITERS);
+
+    static {
+        Collections.sort(sorted, (a, b) -> b.length() - a.length());
+    }
 
     private HelloWorld() {
     }
@@ -29,11 +46,15 @@ public final class HelloWorld {
     public static void main(final String[] args) {
         System.out.println("Hello world");
 
-        final int a = 1;
+        int a = 1;
 
-       final int b =  100 + ( a > 0 ? 10 > 20 ? 10 : 20  : 1_000 );
-       System.out.println(10 + ((10 > b) ? 10 : true ? 20 : 30));
+       final int b=100+(a>0?10>20?10:20:1_000);
+       final int c = a                  ++;
+       System.out.println  (10 + ((10 > b) ? 10 : true ? 20 : 30));
 
-       System.out.println(b);
+       System.out.println           (b              )       ;
+
+       System.out.println(List.of("a     b c        d".split("\\s+")));
+       System.out.println(sorted);
     }
 }

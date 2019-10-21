@@ -50,7 +50,7 @@ public final class SyntaxUtils {
     public static boolean isValidSyntaxToken(final String token) {
         if (isAssumedStringLiteral(token)) {
             return true;
-        } else if (significantDelimiter(token)) {
+        } else if (isSignificantDelimiter(token)) {
             return true;
         } else {
             return verifyOnlyContainsAllowedSymbols(token);
@@ -61,7 +61,7 @@ public final class SyntaxUtils {
         return STRING_DELIMITERS.contains(token.charAt(0));
     }
 
-    private static boolean significantDelimiter(final String token) {
+    public static boolean isSignificantDelimiter(final String token) {
         return SIGNIFICANT_TOKEN_DELIMITERS.contains(token);
     }
 

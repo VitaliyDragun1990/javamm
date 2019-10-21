@@ -39,7 +39,6 @@ import com.revenat.javamm.compiler.component.impl.LexemeAmbiguityResolverImpl;
 import com.revenat.javamm.compiler.component.impl.LexemeBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.OperatorPrecedenceResolverImpl;
 import com.revenat.javamm.compiler.component.impl.SourceLineReaderImpl;
-import com.revenat.javamm.compiler.component.impl.TokenParserImpl;
 import com.revenat.javamm.compiler.component.impl.UnaryAssignmentExpressionResolverImpl;
 import com.revenat.javamm.compiler.component.impl.VariableBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.expression.builder.PostfixNotationComplexExpressionBuilder;
@@ -47,6 +46,7 @@ import com.revenat.javamm.compiler.component.impl.expression.builder.SingleToken
 import com.revenat.javamm.compiler.component.impl.operation.simple.FinalDeclarationOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.PrintlnOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.VariableDeclarationOperationReader;
+import com.revenat.javamm.compiler.component.impl.parser.TokenParserImpl;
 
 import java.util.Set;
 

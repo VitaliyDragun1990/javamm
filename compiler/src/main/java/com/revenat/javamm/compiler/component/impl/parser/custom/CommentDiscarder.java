@@ -15,11 +15,15 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.compiler.component.impl.parser;
+package com.revenat.javamm.compiler.component.impl.parser.custom;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+
+import static com.revenat.javamm.code.syntax.Delimiters.END_MULTILINE_COMMENT;
+import static com.revenat.javamm.code.syntax.Delimiters.START_MULTILINE_COMMENT;
+import static com.revenat.javamm.code.syntax.Delimiters.START_SINGLE_LINE_COMMENT;
 
 /**
  * Discards all comments from source line
@@ -28,12 +32,6 @@ import java.util.ListIterator;
  *
  */
 class CommentDiscarder {
-
-    private static final String MULTILINE_COMMENT_STARTED_DELIMITER = "/*";
-
-    private static final String MULTILINE_COMMENT_ENDED_DELIMITER = "*/";
-
-    private static final String SINGLE_LINE_COMMEND_DELIMITER = "//";
 
     private final ListIterator<Character> sourceLine;
 
@@ -88,7 +86,7 @@ class CommentDiscarder {
     }
 
     private boolean isSingleLineCommentDetected() {
-        return commentFreeContent.indexOf(SINGLE_LINE_COMMEND_DELIMITER) != -1;
+        return commentFreeContent.indexOf(START_SINGLE_LINE_COMMENT) != -1;
     }
 
     private void startMultilineComment() {
@@ -97,7 +95,7 @@ class CommentDiscarder {
     }
 
     private boolean isMultilineCommentStartDetected() {
-        return commentFreeContent.indexOf(MULTILINE_COMMENT_STARTED_DELIMITER) != -1;
+        return commentFreeContent.indexOf(START_MULTILINE_COMMENT) != -1;
     }
 
     private void startStringLiteral(final Character c) {
@@ -122,7 +120,7 @@ class CommentDiscarder {
     }
 
     private boolean isMultilineCommentEndDetected() {
-        return commentedOutContent.indexOf(MULTILINE_COMMENT_ENDED_DELIMITER) != -1;
+        return commentedOutContent.indexOf(END_MULTILINE_COMMENT) != -1;
     }
 
     private boolean isStringLiteralQuote(final Character c) {

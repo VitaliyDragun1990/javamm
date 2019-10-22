@@ -46,7 +46,7 @@ import com.revenat.javamm.compiler.component.impl.expression.builder.SingleToken
 import com.revenat.javamm.compiler.component.impl.operation.simple.FinalDeclarationOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.PrintlnOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.VariableDeclarationOperationReader;
-import com.revenat.javamm.compiler.component.impl.parser.TokenParserImpl;
+import com.revenat.javamm.compiler.component.impl.parser.custom.TokenParserImpl;
 
 import java.util.Set;
 

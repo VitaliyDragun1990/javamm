@@ -188,7 +188,6 @@
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~ Miscellaneous other checks ~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         <!--                http://checkstyle.sourceforge.net/config_misc.html              -->
         <module name="ArrayTypeStyle"/>
-        <module name="AvoidEscapedUnicodeCharacters"/>
         <module name="CommentsIndentation"/>
         <module name="FinalParameters">
             <property name="tokens" value="METHOD_DEF, CTOR_DEF, LITERAL_CATCH, FOR_EACH_CLAUSE"/>

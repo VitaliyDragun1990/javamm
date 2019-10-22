@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.*;
 
 import com.revenat.javamm.compiler.component.TokenParser;
-import com.revenat.javamm.compiler.component.impl.parser.TokenParserImpl;
+import com.revenat.javamm.compiler.component.impl.parser.custom.TokenParserImpl;
 import com.revenat.javamm.compiler.model.TokenParserResult;
 
 import java.util.List;

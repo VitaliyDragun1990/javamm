@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.compiler.component.impl.parser;
+package com.revenat.javamm.compiler.component.impl.parser.custom;
 
 import com.revenat.javamm.compiler.component.TokenParser;
-import com.revenat.javamm.compiler.component.impl.parser.CommentDiscarder.CommentFreeSourceLine;
-import com.revenat.javamm.compiler.component.impl.parser.StringLiteralExtractor.StringLiteralHolder;
+import com.revenat.javamm.compiler.component.impl.parser.custom.CommentDiscarder.CommentFreeSourceLine;
+import com.revenat.javamm.compiler.component.impl.parser.custom.StringLiteralExtractor.StringLiteralHolder;
 import com.revenat.javamm.compiler.model.TokenParserResult;
 
 import java.util.ArrayList;

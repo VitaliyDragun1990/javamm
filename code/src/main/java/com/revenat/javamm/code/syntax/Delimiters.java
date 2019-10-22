@@ -31,11 +31,19 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
  */
 public final class Delimiters {
 
+    public static final String START_MULTILINE_COMMENT = "/*";
+
+    public static final String END_MULTILINE_COMMENT = "*/";
+
+    public static final String START_SINGLE_LINE_COMMENT = "//";
+
+    public static final Set<Character> IGNORED_DELIMITERS = Set.of(' ', '\u00A0', '\n', '\t', '\r');
+
     public static final Set<Character> STRING_DELIMITERS = Set.of('\'', '"');
 
     public static final Set<String> OPERATOR_TOKEN_DELIMITERS =
             Set.of(
-                "+", "++", "+=", "-", "--", "*", "*=", "/", "/=", "%", "%=",
+                "+", "++", "+=", "-", "--", "-=", "*", "*=", "/", "/=", "%", "%=",
                 ">", ">>", ">=", ">>>", ">>=", ">>>=", "<", "<<", "<=", "<<=",
                 "!", "!=", "=", "==", "&", "&&", "&=", "|", "||", "|=", "^", "^=", "~",
                 "?"
@@ -63,6 +71,14 @@ public final class Delimiters {
                     OPERATOR_TOKEN_DELIMITERS.stream(),
                     NOT_OPERATOR_TOKEN_DELIMITERS.stream()
             ).flatMap(identity())
+            .collect(toUnmodifiableSet());
+
+    public static final Set<String> SIGNIFICANT_TOKEN_DELIMITERS_WITH_COMMENTS =
+            Stream.of(
+                    OPERATOR_TOKEN_DELIMITERS.stream(),
+                    NOT_OPERATOR_TOKEN_DELIMITERS.stream(),
+                    Stream.of(START_MULTILINE_COMMENT, END_MULTILINE_COMMENT, START_SINGLE_LINE_COMMENT)
+                    ).flatMap(identity())
             .collect(toUnmodifiableSet());
 
     private Delimiters() {

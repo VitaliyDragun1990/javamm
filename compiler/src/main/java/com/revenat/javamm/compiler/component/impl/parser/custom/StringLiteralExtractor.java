@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.compiler.component.impl.parser;
+package com.revenat.javamm.compiler.component.impl.parser.custom;
 
 /**
  * Checks whether string literal (text fragments surrounded by either single

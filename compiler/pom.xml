@@ -79,6 +79,12 @@
 						javamm.compiler/com.revenat.javamm.compiler.component.impl.parser.reference=ALL-UNNAMED
 						--add-opens
 						javamm.compiler/com.revenat.javamm.compiler.integration=ALL-UNNAMED
+						--add-opens
+						javamm.compiler/com.revenat.javamm.compiler.integration.expression=ALL-UNNAMED
+						--add-opens
+						javamm.compiler/com.revenat.javamm.compiler.integration.operation=ALL-UNNAMED
+						--add-opens
+						javamm.compiler/com.revenat.javamm.compiler.integration.builder=ALL-UNNAMED
 					</argLine>
 				</configuration>
 			</plugin>

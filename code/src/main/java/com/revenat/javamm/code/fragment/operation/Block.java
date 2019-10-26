@@ -21,7 +21,9 @@ import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceLine;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.lang.System.lineSeparator;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Represents block of compiled code which can compose several operations.
@@ -64,6 +66,6 @@ public final class Block extends AbstractOperation implements Operation {
     public String toString() {
         return operations.stream()
                 .map(Object::toString)
-                .collect(Collectors.joining(System.lineSeparator()));
+                .collect(joining(lineSeparator()));
     }
 }

@@ -28,7 +28,7 @@ import java.util.List;
  */
 class TokensBetweenBracketsExtractor {
 
-    private static final String MISSING_BRACKET_TEMPLATE = "Missing %s";
+    private static final String MISSING_BRACKET_TEMPLATE = "Missing '%s'";
 
     private final String openingBracket;
 
@@ -80,7 +80,7 @@ class TokensBetweenBracketsExtractor {
 
     private void validateBracketsRelativePosition(final int openingBracketPosition, final int closingBracketsPosition) {
         if (openingBracketPosition > closingBracketsPosition) {
-            throw syntaxError("Expected %s before %s", openingBracket, closingBracket);
+            throw syntaxError("Expected '%s' before '%s'", openingBracket, closingBracket);
         }
     }
 
@@ -96,7 +96,7 @@ class TokensBetweenBracketsExtractor {
 
     private void validateSize(final List<String> tokensBetweenBrackets) {
         if (!allowEmptyResult && tokensBetweenBrackets.isEmpty()) {
-            throw syntaxError("An expression is expected between %s and %s",
+            throw syntaxError("An expression is expected between '%s' and '%s'",
                     openingBracket, closingBracket);
         }
     }

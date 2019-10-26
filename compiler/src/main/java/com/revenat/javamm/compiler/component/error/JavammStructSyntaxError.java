@@ -17,27 +17,20 @@
 
 package com.revenat.javamm.compiler.component.error;
 
-import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.compiler.error.JavammSyntaxError;
 
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Signals that particular source line contains syntax error
- *
  * @author Vitaliy Dragun
  *
  */
-public class JavammLineSyntaxError extends JavammSyntaxError {
-    private static final long serialVersionUID = -529150170431648757L;
+public class JavammStructSyntaxError extends JavammSyntaxError {
 
-    public JavammLineSyntaxError(final String message, final SourceLine sourceLine) {
-        super(format("Syntax error in '%s' [Line: %s]: %s",
-                sourceLine.getModuleName(), sourceLine.getLineNumber(), requireNonNull(message)));
-    }
+    private static final long serialVersionUID = 1L;
 
-    public JavammLineSyntaxError(final SourceLine sourceLine, final String messageTemplate, final Object... args) {
-        this(format(requireNonNull(messageTemplate), args), sourceLine);
+    public JavammStructSyntaxError(final String message, final String moduleName) {
+        super(format("Syntax error in '%s': %s", requireNonNull(moduleName), requireNonNull(message)));
     }
 }

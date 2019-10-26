@@ -20,6 +20,7 @@ package com.revenat.javamm.compiler.integration.operation;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import com.revenat.javamm.code.fragment.Operation;
+import com.revenat.javamm.code.fragment.operation.IfElseOperation;
 
 import java.util.stream.Stream;
 
@@ -31,8 +32,7 @@ class IfElseOperationReader_Expected_Success_IntegrationTest extends AbstractOpe
 
     @Override
     protected Class<? extends Operation> getExpectedOperationClass() {
-        // FIXME
-        return Operation.class;
+        return IfElseOperation.class;
     }
 
     @Override
@@ -50,10 +50,10 @@ class IfElseOperationReader_Expected_Success_IntegrationTest extends AbstractOpe
                 )),
                 arguments(of(
                         "if ( i < 10 ) {",
-
+                        "   var a = 10",
                         "}",
                         "else {",
-
+                        "   var b = 10",
                         "}"
                 )),
                 arguments(of(

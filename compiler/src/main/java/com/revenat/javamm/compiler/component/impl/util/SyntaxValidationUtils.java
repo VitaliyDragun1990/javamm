@@ -34,7 +34,27 @@ import static java.lang.Character.isLetter;
  */
 public final class SyntaxValidationUtils {
 
+    private static final String OPENING_CURLY_BRACE = "{";
+
+    private static final String CLOSING_CURLY_BRACE = "}";
+
     private SyntaxValidationUtils() {
+    }
+
+    public static void validateThatLineEndsWithOpeningCurlyBrace(final SourceLine sourceLine) {
+        if (!OPENING_CURLY_BRACE.equals(sourceLine.getLast())) {
+            throw new JavammLineSyntaxError(sourceLine, "'%s' expected at the end of the line", OPENING_CURLY_BRACE);
+        }
+    }
+
+    public static void validateThatLineContainsOnlyClosingCurlyBrace(final SourceLine sourceLine) {
+        if (!assertContainsOnly(sourceLine, CLOSING_CURLY_BRACE)) {
+            throw new JavammLineSyntaxError(sourceLine, "'%s' expected only", CLOSING_CURLY_BRACE);
+        }
+    }
+
+    private static boolean assertContainsOnly(final SourceLine sourceLine, final String expectedToken) {
+        return sourceLine.getTokenCount() == 1 && expectedToken.equals(sourceLine.getFirst());
     }
 
     /**

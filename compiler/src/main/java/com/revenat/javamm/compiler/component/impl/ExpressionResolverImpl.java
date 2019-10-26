@@ -117,8 +117,7 @@ public class ExpressionResolverImpl implements ExpressionResolver {
         }
     }
 
-    @Override
-    public Expression resolveFromLexemes(final List<Lexeme> lexemes, final SourceLine sourceLine) {
+    private Expression resolveFromLexemes(final List<Lexeme> lexemes, final SourceLine sourceLine) {
         List<Lexeme> processedLexemes = new TernaryConditionalExpressionResolver(lexemes, sourceLine).resolve();
         processedLexemes = unaryAssignmentExpressionResolver.resolve(processedLexemes, sourceLine);
 

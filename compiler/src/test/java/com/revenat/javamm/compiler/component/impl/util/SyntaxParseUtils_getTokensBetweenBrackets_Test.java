@@ -109,7 +109,7 @@ class SyntaxParseUtils_getTokensBetweenBrackets_Test {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
                 () -> getTokensBetweenBrackets(openingBracket, closingBracket, sourceLine, ALLOW_EMPTY_RESULT));
 
-        assertErrorMessageContains(e, "Syntax error in '%s' [Line: %s]: Missing %s", ANY_MODULE_NAME, ANY_LINE_NUMBER, openingBracket);
+        assertErrorMessageContains(e, "Syntax error in '%s' [Line: %s]: Missing '%s'", ANY_MODULE_NAME, ANY_LINE_NUMBER, openingBracket);
     }
 
     @ParameterizedTest
@@ -128,7 +128,7 @@ class SyntaxParseUtils_getTokensBetweenBrackets_Test {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
                 () -> getTokensBetweenBrackets(openingBracket, closingBracket, sourceLine, ALLOW_EMPTY_RESULT));
 
-        assertErrorMessageContains(e, "Syntax error in '%s' [Line: %s]: Missing %s", ANY_MODULE_NAME, ANY_LINE_NUMBER, closingBracket);
+        assertErrorMessageContains(e, "Syntax error in '%s' [Line: %s]: Missing '%s'", ANY_MODULE_NAME, ANY_LINE_NUMBER, closingBracket);
     }
 
     @ParameterizedTest
@@ -147,7 +147,7 @@ class SyntaxParseUtils_getTokensBetweenBrackets_Test {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
                 () -> getTokensBetweenBrackets(openingBrackets, closingBrackets, sourceLine, PROHIBIT_EMPTY_RESULT));
 
-        assertErrorMessageContains(e, "Syntax error in '%s' [Line: %s]: An expression is expected between %s and %s",
+        assertErrorMessageContains(e, "Syntax error in '%s' [Line: %s]: An expression is expected between '%s' and '%s'",
                 ANY_MODULE_NAME, ANY_LINE_NUMBER, openingBrackets, closingBrackets);
     }
 
@@ -166,7 +166,7 @@ class SyntaxParseUtils_getTokensBetweenBrackets_Test {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
                 () -> getTokensBetweenBrackets(openingBrackets, closingBrackets, sourceLine, PROHIBIT_EMPTY_RESULT));
 
-        assertErrorMessageContains(e, "Syntax error in '%s' [Line: %s]: Expected %s before %s",
+        assertErrorMessageContains(e, "Syntax error in '%s' [Line: %s]: Expected '%s' before '%s'",
                 ANY_MODULE_NAME, ANY_LINE_NUMBER, openingBrackets, closingBrackets);
     }
 

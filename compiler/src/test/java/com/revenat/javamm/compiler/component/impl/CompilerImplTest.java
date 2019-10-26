@@ -121,6 +121,13 @@ class CompilerImplTest {
             return new Block(DUMMY_OPERATION, SourceLine.EMPTY_SOURCE_LINE);
         }
 
+        @Override
+        public Block readWithExpectedClosingCurlyBrace(final SourceLine blockStartingLine,
+                final ListIterator<SourceLine> compiledCodeIterator) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
         int getCallTimesFor(final ListIterator<SourceLine> compiledCodeIterator) {
             return callMap.getOrDefault(compiledCodeIterator.next(), 0);
         }

@@ -46,4 +46,8 @@ public final class SyntaxParseUtils {
         return new TokensBetweenBracketsExtractor(openingBracket, closingBracket, allowEmptyResult, sourceLine)
                 .extract(tokens);
     }
+
+    public static boolean isClosingBlockOperation(final SourceLine sourceLine) {
+        return "}".equals(sourceLine.getFirst());
+    }
 }

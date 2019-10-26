@@ -55,17 +55,18 @@ public abstract class AbstractOperationReaderHappyPathIntegrationTest extends Ab
 
     private DynamicTest createDynamicTest(final List<String> lines) {
         final String testName = String.join(" ", lines);
-        final Executable testBody = () -> testBody(lines);
 
-        return dynamicTest(testName, testBody);
+        return dynamicTest(testName, testBody(lines));
     }
 
-    private void testBody(final List<String> lines) {
-        final ByteCode byteCode = assertDoesNotThrow(() -> compile(lines));
+    private Executable testBody(final List<String> lines) {
+        return () -> {
+            final ByteCode byteCode = assertDoesNotThrow(() -> compile(lines));
 
-        final List<Class<? extends Operation>> actualOperations = getCompiledOperations(byteCode);
+            final List<Class<? extends Operation>> actualOperations = getCompiledOperations(byteCode);
 
-        assertSingleOperationOfExpectedClass(actualOperations);
+            assertSingleOperationOfExpectedClass(actualOperations);
+        };
     }
 
     private void assertSingleOperationOfExpectedClass(final List<Class<? extends Operation>> actualOperations) {

@@ -74,6 +74,10 @@
 						javamm.vm/com.revenat.javamm.vm=ALL-UNNAMED
 						--add-opens
 						javamm.vm/com.revenat.javamm.vm.integration=ALL-UNNAMED
+						--add-opens
+						javamm.vm/com.revenat.javamm.vm.integration.expression=ALL-UNNAMED
+						--add-opens
+						javamm.vm/com.revenat.javamm.vm.integration.operation=ALL-UNNAMED
 					</argLine>
 				</configuration>
 			</plugin>

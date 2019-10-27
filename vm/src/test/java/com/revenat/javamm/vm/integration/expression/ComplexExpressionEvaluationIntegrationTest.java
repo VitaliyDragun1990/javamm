@@ -15,26 +15,21 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.vm.integration;
+package com.revenat.javamm.vm.integration.expression;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import com.revenat.javamm.code.fragment.SourceCode;
-import com.revenat.javamm.vm.VirtualMachine;
-import com.revenat.javamm.vm.VirtualMachineBuilder;
+import com.revenat.javamm.vm.integration.AbstractIntegrationTest;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.util.function.Function.identity;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -45,45 +40,29 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+
 import com.revenat.juinit.addons.ReplaceCamelCase;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a Javamm virtual machine interpreter")
-public class ComplexExpressionEvaluationIntegrationTest {
-
-    private final PrintStream originalOutputStream = System.out;
-
-    private final SpyPrintStream testOutputStream = new SpyPrintStream();
-
-    private final VirtualMachine vm = new VirtualMachineBuilder().build();
-
-    @BeforeEach
-    public void setupSpyOutput() {
-        System.setOut(testOutputStream);
-    }
-
-    @AfterEach
-    void setUpOriginalOutput() {
-        System.setOut(originalOutputStream);
-    }
+public class ComplexExpressionEvaluationIntegrationTest extends AbstractIntegrationTest {
 
     @ParameterizedTest
     @ArgumentsSource(ValidComplexExpressionProvider.class)
     @Order(1)
     void shouldEvaluateComplexExpressions(final String expression, final Object expectedResult) {
-        vm.run(sourceCodeFrom(expression));
-
-        assertEvaluationResult(expectedResult);
+        evaluate(expression, expectedResult);
     }
 
-    private void assertEvaluationResult(final Object expectedResult) {
-        assertThat(testOutputStream.getResult(), equalTo(expectedResult));
+    private void evaluate(final String expression, final Object expectedResult) {
+        assertDoesNotThrow(() -> runBlock(putInsidePrintlnOperation(expression)));
+        assertThat(getOutput(), equalTo(List.of(expectedResult)));
 
     }
 
-    private SourceCode sourceCodeFrom(final String expression) {
-        return new TestSourceCode(expression);
+    private String putInsidePrintlnOperation(final String expression) {
+        return format("println(%s)", expression);
     }
 
     static final class ValidComplexExpressionProvider implements ArgumentsProvider {
@@ -232,38 +211,4 @@ public class ComplexExpressionEvaluationIntegrationTest {
         }
     }
 
-    public static final class TestSourceCode implements SourceCode {
-        private final String expression;
-
-        public TestSourceCode(final String expression) {
-            this.expression = expression;
-        }
-
-        @Override
-        public String getModuleName() {
-            return "test";
-        }
-
-        @Override
-        public List<String> getLines() {
-            return List.of(format("println ( %s )", expression));
-        }
-    }
-
-    public static class SpyPrintStream extends PrintStream {
-        private Object result;
-
-        public SpyPrintStream() {
-            super(new ByteArrayOutputStream());
-        }
-
-        public Object getResult() {
-            return result;
-        }
-
-        @Override
-        public void println(final Object x) {
-            result = x;
-        }
-    }
 }

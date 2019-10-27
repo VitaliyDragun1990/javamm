@@ -25,6 +25,7 @@ import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.CalculatorFacade;
 import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +33,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
+import static com.revenat.javamm.code.util.TypeUtils.getType;
 
 import static java.lang.System.lineSeparator;
 import static java.util.Objects.requireNonNull;
@@ -50,25 +54,46 @@ public class CalculatorFacadeImpl implements CalculatorFacade {
     private final Map<UnaryOperator, UnaryExpressionCalculator> unaryCalculatorRegistry;
 
     public CalculatorFacadeImpl(final Set<BinaryExpressionCalculator> binaryExpressionCalculators,
-            final Set<UnaryExpressionCalculator> unaryExpressionCalculators) {
-
+                                final Set<UnaryExpressionCalculator> unaryExpressionCalculators) {
         binaryCalculatorRegistry = buildBinaryExpressionCalculatorRegistry(requireNonNull(binaryExpressionCalculators));
         unaryCalculatorRegistry = buildUnaryExpressionCalculatorRegistry(unaryExpressionCalculators);
         assertAllOperatorsSupported();
     }
 
     @Override
-    public Object calculate(final ExpressionContext expressionContext, final Expression operand1,
-            final BinaryOperator operator, final Expression operand2) {
+    public Object calculate(final ExpressionContext expressionContext,
+                            final Expression operand1,
+                            final BinaryOperator operator,
+                            final Expression operand2) {
         final BinaryExpressionCalculator calculator = getBinaryCalculatorFor(operator);
         return calculator.calculate(expressionContext, operand1, operand2);
     }
 
     @Override
-    public Object calculate(final ExpressionContext expressionContext, final UnaryOperator operator,
-            final Expression operand) {
+    public Object calculate(final ExpressionContext expressionContext,
+                            final UnaryOperator operator,
+                            final Expression operand) {
         final UnaryExpressionCalculator calculator = getUnaryCalculatorFor(operator);
         return calculator.calculate(expressionContext, operand);
+    }
+
+    @Override
+    public boolean isTrue(final ExpressionContext expressionContext, final Expression condition) {
+        final Object value = condition.getValue(expressionContext);
+        return requireBoolean(value);
+    }
+
+    private boolean requireBoolean(final Object value) {
+        if (isBoolean(value)) {
+            return (boolean) value;
+        } else {
+            throw new JavammLineRuntimeError("Condition expression should be boolean. Current type is %s",
+                    getType(value));
+        }
+    }
+
+    private boolean isBoolean(final Object object) {
+        return confirmType(Boolean.class, object);
     }
 
     private BinaryExpressionCalculator getBinaryCalculatorFor(final BinaryOperator operator) {

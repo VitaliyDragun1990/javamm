@@ -40,4 +40,9 @@ public class BinaryCalculatorFacadeStub implements CalculatorFacade {
     public Object calculate(final ExpressionContext expressionContext, final UnaryOperator operator, final Expression operand) {
         return calculatedValue;
     }
+
+    @Override
+    public boolean isTrue(final ExpressionContext expressionContext, final Expression expression) {
+        return false;
+    }
 }

@@ -18,10 +18,8 @@
 package com.revenat.javamm.interpreter.component.impl.expression.evaluator;
 
 import com.revenat.javamm.code.fragment.expression.TernaryConditionalExpression;
+import com.revenat.javamm.interpreter.component.CalculatorFacade;
 import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
-import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
-
-import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * @author Vitaliy Dragun
@@ -30,6 +28,12 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 public class TernaryConditionalExpressionEvaluator extends AbstractExpressionEvaluator
         implements ExpressionEvaluator<TernaryConditionalExpression> {
 
+    private final CalculatorFacade calculatorFacade;
+
+    public TernaryConditionalExpressionEvaluator(final CalculatorFacade calculatorFacade) {
+        this.calculatorFacade = calculatorFacade;
+    }
+
     @Override
     public Class<TernaryConditionalExpression> getExpressionClass() {
         return TernaryConditionalExpression.class;
@@ -37,23 +41,15 @@ public class TernaryConditionalExpressionEvaluator extends AbstractExpressionEva
 
     @Override
     public Object evaluate(final TernaryConditionalExpression expression) {
-        final Object predicateResult = expression.getPredicateOperand().getValue(getExpressionContext());
-
-        if (isBoolean(predicateResult)) {
-            return evaluate(expression, (Boolean) predicateResult);
-        }
-        throw new JavammLineRuntimeError("First operand of ?: operator should resolve to boolean value");
+        final boolean result = calculatorFacade.isTrue(getExpressionContext(), expression.getPredicateOperand());
+        return evaluate(expression, result);
     }
 
-    private Object evaluate(final TernaryConditionalExpression expression, final Boolean result) {
+    private Object evaluate(final TernaryConditionalExpression expression, final boolean result) {
         if (result) {
             return expression.getTrueClauseOperand().getValue(getExpressionContext());
         } else {
             return expression.getFalseClauseOperand().getValue(getExpressionContext());
         }
-    }
-
-    private boolean isBoolean(final Object object) {
-        return confirmType(Boolean.class, object);
     }
 }

@@ -21,12 +21,13 @@ import com.revenat.javamm.code.exception.ConfigException;
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.operation.Block;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
+import com.revenat.javamm.interpreter.component.BlockOperationInterpreterAware;
 import com.revenat.javamm.interpreter.component.OperationInterpreter;
 
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BinaryOperator;
-
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCurrentRuntime;
 
 import static java.util.function.Function.identity;
@@ -51,20 +52,6 @@ public class BlockOperationInterpreterImpl implements BlockOperationInterpreter 
         this.interpreterMap = buildOperationInterpreterMap(operationInterpreters);
     }
 
-    private Map<Class<? extends Operation>, OperationInterpreter> buildOperationInterpreterMap(
-            final Set<OperationInterpreter<?>> operationInterpreters) {
-        return operationInterpreters.stream()
-                .collect(toUnmodifiableMap(OperationInterpreter::getOperationClass, identity(), checkDuplicates()));
-    }
-
-    private BinaryOperator<OperationInterpreter> checkDuplicates() {
-        return (i1, i2) -> {
-            throw new ConfigException(String.format(
-                    "Duplicate of OperationInterpreter was found for operation:=%s, interpreter1=%s, interpreter2=%s",
-                    i1.getOperationClass().getName(), i1, i2));
-        };
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public void interpret(final Block block) {
@@ -86,5 +73,33 @@ public class BlockOperationInterpreterImpl implements BlockOperationInterpreter 
 
     private void updateCurrentRuntime(final Operation operation) {
         getCurrentRuntime().setCurrentOperation(operation);
+    }
+
+    private Map<Class<? extends Operation>, OperationInterpreter> buildOperationInterpreterMap(
+            final Set<OperationInterpreter<?>> operationInterpreters) {
+        final Map<Class<? extends Operation>, OperationInterpreter> result = composeInterpreters(operationInterpreters);
+        result.values().forEach(this::setBlockOperationInterpreterIfRequired);
+
+        return result;
+    }
+
+    private Map<Class<? extends Operation>, OperationInterpreter> composeInterpreters(
+            final Set<OperationInterpreter<?>> operationInterpreters) {
+        return operationInterpreters.stream()
+                .collect(toUnmodifiableMap(OperationInterpreter::getOperationClass, identity(), checkDuplicates()));
+    }
+
+    private BinaryOperator<OperationInterpreter> checkDuplicates() {
+        return (i1, i2) -> {
+            throw new ConfigException(String.format(
+                    "Duplicate of OperationInterpreter was found for operation:=%s, interpreter1=%s, interpreter2=%s",
+                    i1.getOperationClass().getName(), i1, i2));
+        };
+    }
+
+    private void setBlockOperationInterpreterIfRequired(final OperationInterpreter<?> target) {
+        if (confirmType(BlockOperationInterpreterAware.class, target)) {
+            ((BlockOperationInterpreterAware) target).setBlockOperationInterpreter(this);
+        }
     }
 }

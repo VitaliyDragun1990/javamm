@@ -27,9 +27,12 @@ import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.TernaryConditionalExpression;
+import com.revenat.javamm.interpreter.component.CalculatorFacade;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 import com.revenat.javamm.interpreter.test.helper.CustomAsserts;
 import com.revenat.javamm.interpreter.test.helper.TestCurrentRuntimeManager;
+
+import static com.revenat.javamm.code.util.TypeUtils.getType;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -45,6 +48,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.mockito.stubbing.Answer;
 
 import com.revenat.juinit.addons.ReplaceCamelCase;
 
@@ -61,12 +65,16 @@ class TernaryConditionalExpressionEvaluatorTest {
 
     private static final String FALSE_CLAUSE_VALUE = "false";
 
+    private CalculatorFacade calculatorFacade;
+
     private TernaryConditionalExpressionEvaluator expressionEvaluator;
 
     @BeforeEach
     void setUp() {
-        expressionEvaluator = new TernaryConditionalExpressionEvaluator();
+        calculatorFacade = createCalculatorStub();
+        expressionEvaluator = new TernaryConditionalExpressionEvaluator(calculatorFacade);
         expressionEvaluator.setExpressionContext(mock(ExpressionContext.class));
+
     }
 
     @BeforeAll
@@ -113,7 +121,7 @@ class TernaryConditionalExpressionEvaluatorTest {
 
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> expressionEvaluator.evaluate(ternaryExpression));
 
-        CustomAsserts.assertErrorMessageContains(e, "First operand of ?: operator should resolve to boolean value");
+        CustomAsserts.assertErrorMessageContains(e, "Condition expression should be boolean");
     }
 
     private TernaryConditionalExpression createTernaryExpression(final Object predicateValue,
@@ -128,5 +136,25 @@ class TernaryConditionalExpressionEvaluatorTest {
         when(falseClause.getValue(Mockito.any())).thenReturn(falseClauseValue);
 
         return new TernaryConditionalExpression(predicateClause, trueClause, falseClause);
+    }
+
+    private CalculatorFacade createCalculatorStub() {
+        final CalculatorFacade facade = mock(CalculatorFacade.class);
+
+        when(facade.isTrue(Mockito.any(ExpressionContext.class), Mockito.any())).thenAnswer(facadeBooleanCheckBehaviour());
+
+        return facade;
+    }
+
+    private Answer<?> facadeBooleanCheckBehaviour() {
+        return (invocation) -> {
+                final Expression condition = invocation.getArgument(1);
+                final Object value = condition.getValue(invocation.getArgument(0));
+                if (value == Boolean.TRUE || value == Boolean.FALSE) {
+                    return value;
+                }
+                throw new JavammLineRuntimeError("Condition expression should be boolean. Current type is %s",
+                        getType(value));
+            };
     }
 }

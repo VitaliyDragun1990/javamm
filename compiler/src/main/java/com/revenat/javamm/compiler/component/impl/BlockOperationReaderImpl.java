@@ -46,18 +46,6 @@ public class BlockOperationReaderImpl implements BlockOperationReader {
         this.operationReaders = initializeOperationReaders(operationReaders);
     }
 
-    private List<OperationReader> initializeOperationReaders(final Collection<OperationReader> readers) {
-        final List<OperationReader> result = List.copyOf(readers);
-        result.forEach(this::setOperationReaderIfRequired);
-        return result;
-    }
-
-    private void setOperationReaderIfRequired(final OperationReader operationReader) {
-        if (confirmType(BlockOperationReaderAware.class, operationReader)) {
-            ((BlockOperationReaderAware) operationReader).setBlockOperationReader(this);
-        }
-    }
-
     @Override
     public Block read(final SourceLine startingLine, final ListIterator<SourceLine> compiledCodeIterator) {
         return readBlock(startingLine, compiledCodeIterator, false);
@@ -69,6 +57,17 @@ public class BlockOperationReaderImpl implements BlockOperationReader {
         return readBlock(blockStartingLine, compiledCodeIterator, true);
     }
 
+    private List<OperationReader> initializeOperationReaders(final Collection<OperationReader> readers) {
+        final List<OperationReader> result = List.copyOf(readers);
+        result.forEach(this::setOperationReaderIfRequired);
+        return result;
+    }
+
+    private void setOperationReaderIfRequired(final OperationReader operationReader) {
+        if (confirmType(BlockOperationReaderAware.class, operationReader)) {
+            ((BlockOperationReaderAware) operationReader).setBlockOperationReader(this);
+        }
+    }
 
     private Block readBlock(final SourceLine startingLine,
                             final ListIterator<SourceLine> compiledCodeIterator,

@@ -59,6 +59,7 @@ import com.revenat.javamm.interpreter.component.impl.expression.evaluator.Postfi
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.TernaryConditionalExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.VariableExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.expression.updater.VariableExpressionUpdater;
+import com.revenat.javamm.interpreter.component.impl.operation.block.IfElseOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.PrintlnOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.VariableDeclarationOperationInterpreter;
 
@@ -72,7 +73,7 @@ import java.util.Set;
  *
  */
 public class InterpreterConfigurator {
-    private final CalculatorFacade binaryCalculatorFacade = new CalculatorFacadeImpl(
+    private final CalculatorFacade calculatorFacade = new CalculatorFacadeImpl(
             Set.of(
                     AdditionBinaryExpressionCalculator.createNormalCalculator(),
                     AdditionBinaryExpressionCalculator.createAssignmentCalculator(),
@@ -123,8 +124,8 @@ public class InterpreterConfigurator {
 
     private final Set<ExpressionEvaluator<?>> expressionEvaluators = Set.of(
             new VariableExpressionEvaluator(),
-            new PostfixNotationComplexExpressionEvaluator(binaryCalculatorFacade),
-            new TernaryConditionalExpressionEvaluator()
+            new PostfixNotationComplexExpressionEvaluator(calculatorFacade),
+            new TernaryConditionalExpressionEvaluator(calculatorFacade)
     );
 
     private final Set<ExpressionUpdater<?>> expressionUpdaters = Set.of(
@@ -136,7 +137,8 @@ public class InterpreterConfigurator {
 
     private final Set<OperationInterpreter<?>> operationInterpreters = Set.of(
             new PrintlnOperationInterpreter(expressionContext),
-            new VariableDeclarationOperationInterpreter(expressionContext)
+            new VariableDeclarationOperationInterpreter(expressionContext),
+            new IfElseOperationInterpreter(expressionContext, calculatorFacade)
     );
 
     private final BlockOperationInterpreter blockOperationInterpreter = new BlockOperationInterpreterImpl(

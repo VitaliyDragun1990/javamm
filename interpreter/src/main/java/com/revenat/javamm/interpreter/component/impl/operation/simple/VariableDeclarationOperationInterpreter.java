@@ -61,7 +61,6 @@ public class VariableDeclarationOperationInterpreter
         final Variable variable = operation.getVariable();
 
         assertVariableIsNotDefinedInLocalContext(localContext, variable);
-
         defineVariableInLocalContext(variable, localContext, operation);
     }
 

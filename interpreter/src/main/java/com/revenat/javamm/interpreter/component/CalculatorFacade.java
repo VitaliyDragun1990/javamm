@@ -39,4 +39,7 @@ public interface CalculatorFacade {
     Object calculate(ExpressionContext expressionContext,
                      UnaryOperator operator,
                      Expression operand);
+
+    boolean isTrue(ExpressionContext expressionContext,
+                   Expression expression);
 }

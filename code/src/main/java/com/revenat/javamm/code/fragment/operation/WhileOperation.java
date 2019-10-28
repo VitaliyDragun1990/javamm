@@ -17,30 +17,17 @@
 
 package com.revenat.javamm.code.fragment.operation;
 
-import com.revenat.javamm.code.fragment.Operation;
+import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
 
-import static java.util.Objects.requireNonNull;
-
 /**
+ * Represents {@code while} operation
  * @author Vitaliy Dragun
  *
  */
-abstract class AbstractOperation implements Operation {
-    private final SourceLine sourceLine;
+public class WhileOperation extends AbstractLoopOperation {
 
-    AbstractOperation(final SourceLine sourceLine) {
-        this.sourceLine = requireNonNull(sourceLine);
+    public WhileOperation(final SourceLine sourceLine, final Expression condition, final Block body) {
+        super(sourceLine, condition, body);
     }
-
-    @Override
-    public final SourceLine getSourceLine() {
-        return sourceLine;
-    }
-
-    @Override
-    public String toString() {
-        return sourceLine.toString();
-    }
-
 }

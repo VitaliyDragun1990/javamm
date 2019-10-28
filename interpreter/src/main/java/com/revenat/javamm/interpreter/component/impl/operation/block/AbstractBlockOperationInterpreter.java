@@ -30,12 +30,12 @@ import static java.util.Objects.requireNonNull;
  * @author Vitaliy Dragun
  *
  */
-abstract class AbstractBlockeOperationInterpreter<T extends Operation> extends AbstractOperationInterpreter<T>
+abstract class AbstractBlockOperationInterpreter<T extends Operation> extends AbstractOperationInterpreter<T>
         implements BlockOperationInterpreterAware {
 
     private BlockOperationInterpreter blockOperationInterpreter;
 
-    protected AbstractBlockeOperationInterpreter(final ExpressionContext expressionContext) {
+    protected AbstractBlockOperationInterpreter(final ExpressionContext expressionContext) {
         super(expressionContext);
     }
 

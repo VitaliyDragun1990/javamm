@@ -31,6 +31,8 @@ import java.util.Optional;
 import static com.revenat.javamm.code.syntax.Keywords.ELSE;
 import static com.revenat.javamm.code.syntax.Keywords.IF;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.getTokensBetweenBrackets;
+import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateClosingParenthesisBeforeOpeningCurlyBrace;
+import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateOpeningParenthesisAfterTokenInPosition;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatLineEndsWithOpeningCurlyBrace;
 
 import static java.util.Objects.requireNonNull;
@@ -62,27 +64,6 @@ public class IfElseOperationReader extends AbstractBlockOperationReader<IfElseOp
     protected void validate(final SourceLine sourceLine) {
         final int ifTokenPosition = 0;
         validateIfClause(sourceLine, ifTokenPosition);
-    }
-
-    private void validateIfClause(final SourceLine sourceLine, final int ifTokenPosition) {
-        validateThatLineEndsWithOpeningCurlyBrace(sourceLine);
-        validateThatOpeningParenthesisRightAfterIfToken(sourceLine, ifTokenPosition);
-        validateThatClosingParenthesisRightBeforeOpeningCurlyBrace(sourceLine);
-    }
-
-    private void validateThatOpeningParenthesisRightAfterIfToken(final SourceLine sourceLine,
-                                                                 final int ifTokenPosition) {
-        if (!OPENING_PARENTHESIS.equals(sourceLine.getToken(ifTokenPosition + 1))) {
-            throw new JavammLineSyntaxError(sourceLine, "'%s' expected after '%s'", OPENING_PARENTHESIS, IF);
-        }
-    }
-
-    private void validateThatClosingParenthesisRightBeforeOpeningCurlyBrace(final SourceLine sourceLine) {
-        final String lastButOneToken = sourceLine.getToken(sourceLine.getTokenCount() - 2);
-        if (!CLOSING_PARENTHESIS.equals(lastButOneToken)) {
-            throw new JavammLineSyntaxError(sourceLine, "'%s' expected before '%s'",
-                    CLOSING_PARENTHESIS, OPENING_CURLY_BRACE);
-        }
     }
 
     @Override
@@ -157,6 +138,12 @@ public class IfElseOperationReader extends AbstractBlockOperationReader<IfElseOp
     private void validateElseClause(final SourceLine sourceLine) {
         validateThatLineEndsWithOpeningCurlyBrace(sourceLine);
         validateThatLineContainsOnlyTwoTokens(sourceLine);
+    }
+
+    private void validateIfClause(final SourceLine sourceLine, final int ifTokenPosition) {
+        validateThatLineEndsWithOpeningCurlyBrace(sourceLine);
+        validateOpeningParenthesisAfterTokenInPosition(sourceLine, IF, ifTokenPosition);
+        validateClosingParenthesisBeforeOpeningCurlyBrace(sourceLine);
     }
 
     private void validateThatLineContainsOnlyTwoTokens(final SourceLine sourceLine) {

@@ -18,34 +18,33 @@
 package com.revenat.javamm.interpreter.component.impl.operation.block;
 
 import com.revenat.javamm.code.component.ExpressionContext;
-import com.revenat.javamm.code.fragment.operation.IfElseOperation;
+import com.revenat.javamm.code.fragment.operation.AbstractLoopOperation;
 import com.revenat.javamm.interpreter.component.CalculatorFacade;
+
+import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCurrentRuntime;
 
 /**
  * @author Vitaliy Dragun
  *
  */
-public class IfElseOperationInterpreter extends AbstractBlockOperationInterpreter<IfElseOperation> {
+abstract class AbstractLoopBlockOperationInterpreter<T extends AbstractLoopOperation>
+    extends AbstractBlockOperationInterpreter<T> {
 
-    private final CalculatorFacade calculatorFacade;
+    protected final CalculatorFacade calculatorFacade;
 
-    public IfElseOperationInterpreter(final ExpressionContext expressionContext,
-                                      final CalculatorFacade calculatorFacade) {
+    protected AbstractLoopBlockOperationInterpreter(final ExpressionContext expressionContext,
+                                                    final CalculatorFacade calculatorFacade) {
         super(expressionContext);
         this.calculatorFacade = calculatorFacade;
     }
 
-    @Override
-    public Class<IfElseOperation> getOperationClass() {
-        return IfElseOperation.class;
+    final void interpretLoopBody(final T operation) {
+        checkForTermination();
+        interpretBlock(operation.getBody());
+        getCurrentRuntime().setCurrentOperation(operation);
     }
 
-    @Override
-    protected void interpretOperation(final IfElseOperation operation) {
-        if (calculatorFacade.isTrue(expressionContext, operation.getCondition())) {
-            interpretBlock(operation.getTrueBlock());
-        } else {
-            operation.getFalseBlock().ifPresent(this::interpretBlock);
-        }
+    final boolean isConditionTrue(final T operation) {
+        return calculatorFacade.isTrue(expressionContext, operation.getCondition());
     }
 }

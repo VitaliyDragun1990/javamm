@@ -17,7 +17,7 @@
 
 package com.revenat.javamm.code.fragment.operation;
 
-import com.revenat.javamm.code.fragment.Operation;
+import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
 
 import static java.util.Objects.requireNonNull;
@@ -26,21 +26,23 @@ import static java.util.Objects.requireNonNull;
  * @author Vitaliy Dragun
  *
  */
-abstract class AbstractOperation implements Operation {
-    private final SourceLine sourceLine;
+public abstract class AbstractLoopOperation extends AbstractOperation {
 
-    AbstractOperation(final SourceLine sourceLine) {
-        this.sourceLine = requireNonNull(sourceLine);
+    private final Expression condition;
+
+    private final Block body;
+
+    AbstractLoopOperation(final SourceLine sourceLine, final Expression condition, final Block body) {
+        super(sourceLine);
+        this.condition = requireNonNull(condition);
+        this.body = requireNonNull(body);
     }
 
-    @Override
-    public final SourceLine getSourceLine() {
-        return sourceLine;
+    public Expression getCondition() {
+        return condition;
     }
 
-    @Override
-    public String toString() {
-        return sourceLine.toString();
+    public Block getBody() {
+        return body;
     }
-
 }

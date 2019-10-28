@@ -54,12 +54,11 @@ public abstract class AbstractOperationReaderInvalidValuesIntegrationTest extend
     @Order(1)
     @SuppressWarnings("unchecked")
     protected Stream<DynamicTest> shouldThrowSyntaxError() {
-
         return invalidSourceLineProvider().map(args -> {
             final List<String> lines = (List<String>) args.get()[0];
             final String expectedMessage = (String) args.get()[1];
             final String subName = getSubName(uniqueNames, args);
-            final List<String> invalidLines = getInvalidLines(lines);
+            final List<String> invalidLines = putInsideFunction(lines);
 
             return dynamicTest(
                     buildTestName(subName, lines, expectedMessage),
@@ -79,7 +78,7 @@ public abstract class AbstractOperationReaderInvalidValuesIntegrationTest extend
         };
     }
 
-    private List<String> getInvalidLines(final List<String> lines) {
+    private List<String> putInsideFunction(final List<String> lines) {
         final List<String> invalidLines = new ArrayList<>();
         invalidLines.add(""); // TODO add function declaration
         invalidLines.addAll(lines);

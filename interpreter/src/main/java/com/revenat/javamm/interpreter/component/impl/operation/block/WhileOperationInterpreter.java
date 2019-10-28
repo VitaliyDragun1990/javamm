@@ -18,34 +18,29 @@
 package com.revenat.javamm.interpreter.component.impl.operation.block;
 
 import com.revenat.javamm.code.component.ExpressionContext;
-import com.revenat.javamm.code.fragment.operation.IfElseOperation;
+import com.revenat.javamm.code.fragment.operation.WhileOperation;
 import com.revenat.javamm.interpreter.component.CalculatorFacade;
 
 /**
  * @author Vitaliy Dragun
  *
  */
-public class IfElseOperationInterpreter extends AbstractBlockOperationInterpreter<IfElseOperation> {
+public class WhileOperationInterpreter extends AbstractLoopBlockOperationInterpreter<WhileOperation> {
 
-    private final CalculatorFacade calculatorFacade;
-
-    public IfElseOperationInterpreter(final ExpressionContext expressionContext,
-                                      final CalculatorFacade calculatorFacade) {
-        super(expressionContext);
-        this.calculatorFacade = calculatorFacade;
+    public WhileOperationInterpreter(final ExpressionContext expressionContext,
+                                     final CalculatorFacade calculatorFacade) {
+        super(expressionContext, calculatorFacade);
     }
 
     @Override
-    public Class<IfElseOperation> getOperationClass() {
-        return IfElseOperation.class;
+    public Class<WhileOperation> getOperationClass() {
+        return WhileOperation.class;
     }
 
     @Override
-    protected void interpretOperation(final IfElseOperation operation) {
-        if (calculatorFacade.isTrue(expressionContext, operation.getCondition())) {
-            interpretBlock(operation.getTrueBlock());
-        } else {
-            operation.getFalseBlock().ifPresent(this::interpretBlock);
+    protected void interpretOperation(final WhileOperation operation) {
+        while (isConditionTrue(operation)) {
+            interpretLoopBody(operation);
         }
     }
 }

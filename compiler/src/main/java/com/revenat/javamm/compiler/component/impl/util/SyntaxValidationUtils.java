@@ -38,6 +38,10 @@ public final class SyntaxValidationUtils {
 
     private static final String CLOSING_CURLY_BRACE = "}";
 
+    private static final String OPENING_PARENTHESIS = "(";
+
+    private static final String CLOSING_PARENTHESIS = ")";
+
     private SyntaxValidationUtils() {
     }
 
@@ -53,8 +57,21 @@ public final class SyntaxValidationUtils {
         }
     }
 
-    private static boolean assertContainsOnly(final SourceLine sourceLine, final String expectedToken) {
-        return sourceLine.getTokenCount() == 1 && expectedToken.equals(sourceLine.getFirst());
+    public static void validateOpeningParenthesisAfterTokenInPosition(final SourceLine sourceLine,
+                                                                      final String token,
+                                                                      final int tokenPosition) {
+        if (!OPENING_PARENTHESIS.equals(sourceLine.getToken(tokenPosition + 1))) {
+            throw new JavammLineSyntaxError(sourceLine, "'%s' expected after '%s'", OPENING_PARENTHESIS, token);
+        }
+    }
+
+
+    public static void validateClosingParenthesisBeforeOpeningCurlyBrace(final SourceLine sourceLine) {
+        final String lastButOneToken = sourceLine.getToken(sourceLine.getTokenCount() - 2);
+        if (!CLOSING_PARENTHESIS.equals(lastButOneToken)) {
+            throw new JavammLineSyntaxError(sourceLine, "'%s' expected before '%s'",
+                    CLOSING_PARENTHESIS, OPENING_CURLY_BRACE);
+        }
     }
 
     /**
@@ -93,6 +110,10 @@ public final class SyntaxValidationUtils {
             throw new JavammLineSyntaxError(sourceLine, "A variable expression is expected for %s operator: '%s'",
                     operator.getType(), operator);
         }
+    }
+
+    private static boolean assertContainsOnly(final SourceLine sourceLine, final String expectedToken) {
+        return sourceLine.getTokenCount() == 1 && expectedToken.equals(sourceLine.getFirst());
     }
 
     public enum LanguageFeature {

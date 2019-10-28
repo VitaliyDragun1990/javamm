@@ -25,7 +25,7 @@ import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Represents if-else operation
+ * Represents {@code if-else} operation
  *
  * @author Vitaliy Dragun
  *

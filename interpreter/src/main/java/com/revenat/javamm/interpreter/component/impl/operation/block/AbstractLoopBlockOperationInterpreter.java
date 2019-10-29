@@ -23,6 +23,8 @@ import com.revenat.javamm.interpreter.component.CalculatorFacade;
 
 import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCurrentRuntime;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * @author Vitaliy Dragun
  *
@@ -35,7 +37,7 @@ abstract class AbstractLoopBlockOperationInterpreter<T extends AbstractLoopOpera
     protected AbstractLoopBlockOperationInterpreter(final ExpressionContext expressionContext,
                                                     final CalculatorFacade calculatorFacade) {
         super(expressionContext);
-        this.calculatorFacade = calculatorFacade;
+        this.calculatorFacade = requireNonNull(calculatorFacade);
     }
 
     final void interpretLoopBody(final T operation) {

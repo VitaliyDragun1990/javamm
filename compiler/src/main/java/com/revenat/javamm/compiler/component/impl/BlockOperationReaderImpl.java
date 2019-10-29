@@ -103,7 +103,7 @@ public class BlockOperationReaderImpl implements BlockOperationReader {
     }
 
     private void checkWhetherBlockShouldEndWithClosingBrace(final String moduleName,
-            final boolean closingBraceExpected) {
+                                                            final boolean closingBraceExpected) {
         if (closingBraceExpected) {
             throw new JavammStructSyntaxError("'}' expected to close block statement at the end of file",
                     moduleName);

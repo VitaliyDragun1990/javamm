@@ -59,6 +59,7 @@ import com.revenat.javamm.interpreter.component.impl.expression.evaluator.Postfi
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.TernaryConditionalExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.VariableExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.expression.updater.VariableExpressionUpdater;
+import com.revenat.javamm.interpreter.component.impl.operation.block.DoWhileOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.block.IfElseOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.block.WhileOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.PrintlnOperationInterpreter;
@@ -140,7 +141,8 @@ public class InterpreterConfigurator {
             new PrintlnOperationInterpreter(expressionContext),
             new VariableDeclarationOperationInterpreter(expressionContext),
             new IfElseOperationInterpreter(expressionContext, calculatorFacade),
-            new WhileOperationInterpreter(expressionContext, calculatorFacade)
+            new WhileOperationInterpreter(expressionContext, calculatorFacade),
+            new DoWhileOperationInterpreter(expressionContext, calculatorFacade)
     );
 
     private final BlockOperationInterpreter blockOperationInterpreter = new BlockOperationInterpreterImpl(

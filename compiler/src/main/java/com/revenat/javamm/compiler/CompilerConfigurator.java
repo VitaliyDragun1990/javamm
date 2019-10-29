@@ -43,6 +43,7 @@ import com.revenat.javamm.compiler.component.impl.UnaryAssignmentExpressionResol
 import com.revenat.javamm.compiler.component.impl.VariableBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.expression.builder.PostfixNotationComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.impl.expression.builder.SingleTokenExpressionBuilderImpl;
+import com.revenat.javamm.compiler.component.impl.operation.block.DoWhileOperationRedaer;
 import com.revenat.javamm.compiler.component.impl.operation.block.IfElseOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.block.WhileOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.FinalDeclarationOperationReader;
@@ -101,7 +102,8 @@ public class CompilerConfigurator {
             new VariableDeclarationOperationReader(variableBuilder, expressionResolver),
             new FinalDeclarationOperationReader(variableBuilder, expressionResolver),
             new IfElseOperationReader(expressionResolver),
-            new WhileOperationReader(expressionResolver)
+            new WhileOperationReader(expressionResolver),
+            new DoWhileOperationRedaer(expressionResolver)
     );
 
     private final BlockOperationReader blockOperationReader = new BlockOperationReaderImpl(operationReaders);

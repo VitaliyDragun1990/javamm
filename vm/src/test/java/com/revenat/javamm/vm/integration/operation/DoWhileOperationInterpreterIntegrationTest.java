@@ -60,7 +60,7 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a Javamm virtual machine interpreter")
-public class WhileOperationInterpreterIntegrationTest extends AbstractIntegrationTest {
+public class DoWhileOperationInterpreterIntegrationTest extends AbstractIntegrationTest {
 
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
 
@@ -72,9 +72,9 @@ public class WhileOperationInterpreterIntegrationTest extends AbstractIntegratio
     }
 
     @ParameterizedTest
-    @ArgumentsSource(WhileOperationProvider.class)
+    @ArgumentsSource(DoWhileOperationProvider.class)
     @Order(1)
-    void shouldInterpretWhileOperation(final List<String> lines, final List<Object> expectedOutput) {
+    void shouldInterpretDoWhileOperation(final List<String> lines, final List<Object> expectedOutput) {
         assertDoesNotThrow(() -> runBlock(lines));
 
         assertExpectedOutput(expectedOutput);
@@ -82,17 +82,18 @@ public class WhileOperationInterpreterIntegrationTest extends AbstractIntegratio
 
     @Test
     @Order(2)
-    void shouldFailIfWhileConditionExpressionEvaluatesToNonBooleanResult() {
+    void shouldFailIfDoWhileConditionExpressionEvaluatesToNonBooleanResult() {
         final List<String> whileWithInvalidCondition = of(
-                "while ( 8 + 10 ) {",
+                "do {",
 
-                "}"
+                "}",
+                "while ( 8 + 10 )"
         );
 
         final JavammRuntimeError e = assertThrows(JavammRuntimeError.class, () -> runBlock(whileWithInvalidCondition));
 
         assertErrorMessageContains(e,
-                "Runtime error in 'test' [Line: 2]: Condition expression should be boolean. Current type is integer");
+                "Runtime error in 'test' [Line: 4]: Condition expression should be boolean. Current type is integer");
     }
 
     @ParameterizedTest
@@ -104,8 +105,9 @@ public class WhileOperationInterpreterIntegrationTest extends AbstractIntegratio
     @Order(3)
     void shouldSupportAnInterruptionOfInfiniteLoop(final String condition) throws InterruptedException, ExecutionException {
         final List<String> lines = of(
-                "while ( " + condition + " ) {",
-                "}"
+                "do {",
+                "}",
+                "while ( " + condition + " )"
         );
 
         final Future<?> future = EXECUTOR_SERVICE.submit(() -> runBlock(lines));
@@ -122,25 +124,27 @@ public class WhileOperationInterpreterIntegrationTest extends AbstractIntegratio
         assertThat(getOutput(), equalTo(expectedOutput));
     }
 
-    static class WhileOperationProvider implements ArgumentsProvider {
+    static class DoWhileOperationProvider implements ArgumentsProvider {
 
         @Override
         public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
             return Stream.of(
                     arguments(of(
                             "var i = 0",
-                            "while ( i++ < 5 ) {",
+                            "do {",
                             "   println (i)",
                             "}",
-                            "println ('after while')"
-                    ), of(1, 2, 3, 4, 5, "after while")),
+                            "while ( i++ < 5 )",
+                            "println ('after do while')"
+                    ), of(0, 1, 2, 3, 4, 5, "after do while")),
                     arguments(of(
                             "var i = 0",
-                            "while ( i < 5 ) {",
+                            "do {",
                             "   println (i++)",
                             "}",
-                            "println ('after while')"
-                   ), of(0, 1, 2, 3, 4, "after while"))
+                            "while ( i < 5 )",
+                            "println ('after do while')"
+                   ), of(0, 1, 2, 3, 4, "after do while"))
             );
         }
     }

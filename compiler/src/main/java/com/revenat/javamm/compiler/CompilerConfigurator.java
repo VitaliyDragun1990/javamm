@@ -45,6 +45,7 @@ import com.revenat.javamm.compiler.component.impl.expression.builder.PostfixNota
 import com.revenat.javamm.compiler.component.impl.expression.builder.SingleTokenExpressionBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.operation.block.DoWhileOperationRedaer;
 import com.revenat.javamm.compiler.component.impl.operation.block.IfElseOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.block.SimpleBlockOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.block.WhileOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.FinalDeclarationOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.PrintlnOperationReader;
@@ -103,7 +104,8 @@ public class CompilerConfigurator {
             new FinalDeclarationOperationReader(variableBuilder, expressionResolver),
             new IfElseOperationReader(expressionResolver),
             new WhileOperationReader(expressionResolver),
-            new DoWhileOperationRedaer(expressionResolver)
+            new DoWhileOperationRedaer(expressionResolver),
+            new SimpleBlockOperationReader()
     );
 
     private final BlockOperationReader blockOperationReader = new BlockOperationReaderImpl(operationReaders);

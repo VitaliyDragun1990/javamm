@@ -33,7 +33,7 @@ import java.util.ListIterator;
 
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.isClosingBlockOperation;
-import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatLineContainsOnlyClosingCurlyBrace;
+import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatLineContainsClosingCurlyBraceOnly;
 
 /**
  * @author Vitaliy Dragun
@@ -92,7 +92,7 @@ public class BlockOperationReaderImpl implements BlockOperationReader {
             final SourceLine sourceLine = sourceLines.next();
 
             if (isClosingBlockOperation(sourceLine)) {
-                validateThatLineContainsOnlyClosingCurlyBrace(sourceLine);
+                validateThatLineContainsClosingCurlyBraceOnly(sourceLine);
                 return;
             } else {
                 operations.add(readOperation(sourceLines, sourceLine));

@@ -51,9 +51,15 @@ public final class SyntaxValidationUtils {
         }
     }
 
-    public static void validateThatLineContainsOnlyClosingCurlyBrace(final SourceLine sourceLine) {
+    public static void validateThatLineContainsClosingCurlyBraceOnly(final SourceLine sourceLine) {
         if (!assertContainsOnly(sourceLine, CLOSING_CURLY_BRACE)) {
             throw new JavammLineSyntaxError(sourceLine, "'%s' expected only", CLOSING_CURLY_BRACE);
+        }
+    }
+
+    public static void validateThatLineContainsOpeningCurlyBraceOnly(final SourceLine sourceLine) {
+        if (!assertContainsOnly(sourceLine, OPENING_CURLY_BRACE)) {
+            throw new JavammLineSyntaxError(sourceLine, "'%s' expected only", OPENING_CURLY_BRACE);
         }
     }
 

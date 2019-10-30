@@ -61,6 +61,7 @@ import com.revenat.javamm.interpreter.component.impl.expression.evaluator.Variab
 import com.revenat.javamm.interpreter.component.impl.expression.updater.VariableExpressionUpdater;
 import com.revenat.javamm.interpreter.component.impl.operation.block.DoWhileOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.block.IfElseOperationInterpreter;
+import com.revenat.javamm.interpreter.component.impl.operation.block.SimpleBlockOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.block.WhileOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.PrintlnOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.VariableDeclarationOperationInterpreter;
@@ -142,7 +143,8 @@ public class InterpreterConfigurator {
             new VariableDeclarationOperationInterpreter(expressionContext),
             new IfElseOperationInterpreter(expressionContext, calculatorFacade),
             new WhileOperationInterpreter(expressionContext, calculatorFacade),
-            new DoWhileOperationInterpreter(expressionContext, calculatorFacade)
+            new DoWhileOperationInterpreter(expressionContext, calculatorFacade),
+            new SimpleBlockOperationInterpreter(expressionContext)
     );
 
     private final BlockOperationInterpreter blockOperationInterpreter = new BlockOperationInterpreterImpl(

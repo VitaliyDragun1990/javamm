@@ -48,8 +48,8 @@ public interface LocalContext {
     void setVariableValue(Variable variable, Object value);
 
     /**
-     * Checks whether variable/final with such name has already been defined in this local
-     * context.
+     * Checks whether variable/final with such name has already been defined in this
+     * local context.
      */
     boolean isVariableDefined(Variable variable);
 
@@ -60,4 +60,13 @@ public interface LocalContext {
      *                            local context.
      */
     Object getVariableValue(Variable variable);
+
+    /**
+     * Creates child local context with all content from parent local context and
+     * next features: 1) if variable already defined in parent context, then updating
+     * its value via child local context updates it in the parent; 2) if variable is
+     * not defined in parent context, defines it in child content but not in the
+     * parent
+     */
+    LocalContext createChildLocalContext();
 }

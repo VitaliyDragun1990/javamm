@@ -22,6 +22,7 @@ import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
 import com.revenat.javamm.interpreter.component.CalculatorFacade;
 import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.ExpressionUpdater;
+import com.revenat.javamm.interpreter.component.LocalContextBuilder;
 import com.revenat.javamm.interpreter.component.OperationInterpreter;
 import com.revenat.javamm.interpreter.component.RuntimeBuilder;
 import com.revenat.javamm.interpreter.component.impl.BlockOperationInterpreterImpl;
@@ -152,7 +153,10 @@ public class InterpreterConfigurator {
 
     private final RuntimeBuilder runtimeBuilder = new RuntimeBuilderImpl();
 
-    private final Interpreter interpreter = new InterpreterImpl(blockOperationInterpreter, runtimeBuilder);
+    private final LocalContextBuilder localContextBuilder = new RuntimeBuilderImpl();
+
+    private final Interpreter interpreter =
+            new InterpreterImpl(blockOperationInterpreter, runtimeBuilder, localContextBuilder);
 
     public Interpreter getInterpreter() {
         return interpreter;

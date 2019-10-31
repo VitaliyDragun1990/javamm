@@ -50,4 +50,9 @@ public class LocalContextStub implements LocalContext {
         return variableValue;
     }
 
+    @Override
+    public LocalContext createChildLocalContext() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

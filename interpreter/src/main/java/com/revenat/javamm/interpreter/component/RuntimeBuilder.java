@@ -29,7 +29,5 @@ import com.revenat.javamm.interpreter.model.LocalContext;
  */
 public interface RuntimeBuilder {
 
-    LocalContext buildLocalContext();
-
     CurrentRuntime buildCurrentRuntime();
 }

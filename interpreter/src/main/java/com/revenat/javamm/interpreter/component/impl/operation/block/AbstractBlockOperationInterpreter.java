@@ -23,6 +23,9 @@ import com.revenat.javamm.code.fragment.operation.Block;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreterAware;
 import com.revenat.javamm.interpreter.component.impl.operation.AbstractOperationInterpreter;
+import com.revenat.javamm.interpreter.model.LocalContext;
+
+import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCurrentRuntime;
 
 import static java.util.Objects.requireNonNull;
 
@@ -49,6 +52,32 @@ abstract class AbstractBlockOperationInterpreter<T extends Operation> extends Ab
     }
 
     protected void interpretBlock(final Block block) {
-        getBlockOperationInterpreter().interpret(block);
+        final BlockScopeLocalContextController contextController = new BlockScopeLocalContextController();
+        try {
+            contextController.setChildLocalContextForNestedBlock();
+            getBlockOperationInterpreter().interpret(block);
+        } finally {
+            contextController.disposeChildLocalContext();
+        }
+    }
+
+    static class BlockScopeLocalContextController {
+
+        private final LocalContext parentContext;
+
+        private final LocalContext childContext;
+
+        BlockScopeLocalContextController() {
+            parentContext = getCurrentRuntime().getCurrentLocalContext();
+            childContext = parentContext.createChildLocalContext();
+        }
+
+        void setChildLocalContextForNestedBlock() {
+            getCurrentRuntime().setCurrentLocalContext(childContext);
+        }
+
+        void disposeChildLocalContext() {
+            getCurrentRuntime().setCurrentLocalContext(parentContext);
+        }
     }
 }

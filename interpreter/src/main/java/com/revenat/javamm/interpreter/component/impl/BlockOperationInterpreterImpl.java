@@ -23,7 +23,6 @@ import com.revenat.javamm.code.fragment.operation.Block;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreterAware;
 import com.revenat.javamm.interpreter.component.OperationInterpreter;
-
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BinaryOperator;
@@ -44,6 +43,7 @@ public class BlockOperationInterpreterImpl implements BlockOperationInterpreter 
     /**
      * Creates new block operation interpreter with set of operation interpreters
      * for defined operations
+     * @param localContextBuilder
      *
      * @throws ConfigException if provided set of operation interpreters contains
      *                         several interpreters for the same operation
@@ -52,8 +52,8 @@ public class BlockOperationInterpreterImpl implements BlockOperationInterpreter 
         this.interpreterMap = buildOperationInterpreterMap(operationInterpreters);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
+    @SuppressWarnings("unchecked")
     public void interpret(final Block block) {
         for (final Operation operation : block.getOperations()) {
             final OperationInterpreter operationInterpreter = getInterpreterFor(operation);

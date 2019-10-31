@@ -43,4 +43,10 @@ public class LocalContextDummy implements LocalContext {
     public Object getVariableValue(final Variable variable) {
         return null;
     }
+
+    @Override
+    public LocalContext createChildLocalContext() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

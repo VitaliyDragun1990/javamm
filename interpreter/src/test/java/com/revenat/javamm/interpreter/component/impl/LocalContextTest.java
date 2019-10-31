@@ -99,7 +99,7 @@ class LocalContextTest {
             final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class,
                     () -> localContext.getVariableValue(VARIABLE));
 
-            assertErrorMessageContains(e, "variable is not defined");
+            assertErrorMessageContains(e, "Variable '%s' is not defined", VARIABLE);
         }
 
         @Test
@@ -108,7 +108,7 @@ class LocalContextTest {
             final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class,
                     () -> localContext.getVariableValue(FINAL));
 
-            assertErrorMessageContains(e, "variable is not defined");
+            assertErrorMessageContains(e, "Variable '%s' is not defined", FINAL);
         }
 
         @Test

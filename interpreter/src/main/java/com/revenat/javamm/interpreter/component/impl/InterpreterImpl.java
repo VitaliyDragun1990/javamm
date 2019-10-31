@@ -20,6 +20,7 @@ package com.revenat.javamm.interpreter.component.impl;
 import com.revenat.javamm.code.fragment.ByteCode;
 import com.revenat.javamm.interpreter.Interpreter;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
+import com.revenat.javamm.interpreter.component.LocalContextBuilder;
 import com.revenat.javamm.interpreter.component.RuntimeBuilder;
 import com.revenat.javamm.interpreter.model.CurrentRuntime;
 import com.revenat.javamm.interpreter.model.LocalContext;
@@ -40,10 +41,14 @@ public class InterpreterImpl implements Interpreter {
 
     private final RuntimeBuilder runtimeBuilder;
 
+    private final LocalContextBuilder localContextBuilder;
+
     public InterpreterImpl(final BlockOperationInterpreter blockOperationInterpreter,
-                           final RuntimeBuilder runtimeBuilder) {
+                           final RuntimeBuilder runtimeBuilder,
+                           final LocalContextBuilder localContextBuilder) {
         this.blockOperationInterpreter = requireNonNull(blockOperationInterpreter);
         this.runtimeBuilder = requireNonNull(runtimeBuilder);
+        this.localContextBuilder = requireNonNull(localContextBuilder);
     }
 
     @Override
@@ -51,7 +56,7 @@ public class InterpreterImpl implements Interpreter {
         final CurrentRuntime currentRuntime = runtimeBuilder.buildCurrentRuntime();
         setCurrentRuntime(currentRuntime);
 
-        final LocalContext localContext = runtimeBuilder.buildLocalContext();
+        final LocalContext localContext = localContextBuilder.buildLocalContext();
         currentRuntime.setCurrentLocalContext(localContext);
 
         try {

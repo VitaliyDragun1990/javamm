@@ -86,4 +86,9 @@ public class LocalContextSpy implements LocalContext {
     public Object getVariableValue(final Variable variable) {
         return variableValue;
     }
+
+    @Override
+    public LocalContext createChildLocalContext() {
+        return this;
+    }
 }

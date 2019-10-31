@@ -23,7 +23,6 @@ import com.revenat.javamm.interpreter.model.LocalContext;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -59,8 +58,7 @@ public class LocalContextImpl implements LocalContext {
     @Override
     public Object getVariableValue(final Variable variable) {
         if (!isVariableDefined(variable)) {
-            throw new JavammLineRuntimeError("Can not get value for variable '%s': variable is not defined",
-                    variable.getName());
+            throw new JavammLineRuntimeError("Variable '%s' is not defined", variable);
         }
 
         if (variables.containsKey(variable)) {
@@ -68,6 +66,11 @@ public class LocalContextImpl implements LocalContext {
         } else {
             return finals.get(variable);
         }
+    }
+
+    @Override
+    public LocalContext createChildLocalContext() {
+        return new ChildLocalContext();
     }
 
     private void assertNoSuchFinalDefined(final Variable variable) {
@@ -81,6 +84,41 @@ public class LocalContextImpl implements LocalContext {
             throw new JavammLineRuntimeError(
                     "Can not set value for final '%s': variable with same name is already defined",
                     variable.getName());
+        }
+    }
+
+    private class ChildLocalContext extends LocalContextImpl {
+
+        @Override
+        public void setVariableValue(final Variable variable, final Object value) {
+            if (LocalContextImpl.this.isVariableDefined(variable)) {
+                LocalContextImpl.this.setVariableValue(variable, value);
+            } else {
+                super.setVariableValue(variable, value);
+            }
+        }
+
+        @Override
+        public void setFinalValue(final Variable variable, final Object value) {
+            if (LocalContextImpl.this.isVariableDefined(variable)) {
+                LocalContextImpl.this.setFinalValue(variable, value);
+            } else {
+                super.setFinalValue(variable, value);
+            }
+        }
+
+        @Override
+        public Object getVariableValue(final Variable variable) {
+            if (LocalContextImpl.this.isVariableDefined(variable)) {
+                return LocalContextImpl.this.getVariableValue(variable);
+            } else {
+                return super.getVariableValue(variable);
+            }
+        }
+
+        @Override
+        public boolean isVariableDefined(final Variable variable) {
+            return LocalContextImpl.this.isVariableDefined(variable) || super.isVariableDefined(variable);
         }
     }
 }

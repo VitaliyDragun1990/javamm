@@ -38,14 +38,14 @@ public interface BlockOperationReader {
      *
      * @param blockStartingLine    source line where particular byte code block
      *                             starts
-     * @param compiledCodeIterator iterator that points to a specified place in the
-     *                             compiled code just after source line where
+     * @param sourceCode iterator that points to a specified place in the
+     *                             source code just after source line where
      *                             particular byte code block starts
      * @return byte code {@link Block}
      * @throws JavammLineSyntaxError if some source line can not be read due to
      *                               syntax error
      */
-    Block read(SourceLine blockStartingLine, ListIterator<SourceLine> compiledCodeIterator);
+    Block read(SourceLine blockStartingLine, ListIterator<SourceLine> sourceCode);
 
     /**
      * Reads compiled code starting at specified source line and transforms it into
@@ -54,13 +54,13 @@ public interface BlockOperationReader {
      *
      * @param blockStartingLine    source line where particular byte code block
      *                             starts
-     * @param compiledCodeIterator iterator that points to a specified place in the
-     *                             compiled code just after source line where
+     * @param sourceCode iterator that points to a specified place in the
+     *                             source code just after source line where
      *                             particular byte code block starts
      * @return byte code {@link Block}
      * @throws JavammLineSyntaxError if some source line can not be read due to
      *                               syntax error
      */
     Block readWithExpectedClosingCurlyBrace(SourceLine blockStartingLine,
-            ListIterator<SourceLine> compiledCodeIterator);
+            ListIterator<SourceLine> sourceCode);
 }

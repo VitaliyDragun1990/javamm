@@ -18,8 +18,11 @@
 package com.revenat.javamm.code.fragment.expression;
 
 import com.revenat.javamm.code.fragment.Lexeme;
+import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 
 import java.util.List;
+
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * Represents complex expression which is done using {@code Postfix} notation
@@ -34,6 +37,27 @@ public class PostfixNotationComplexExpression extends ComplexExpression {
     public PostfixNotationComplexExpression(final List<Lexeme> lexemes, final String originalExpression) {
         super(lexemes);
         this.originalExpression = originalExpression;
+    }
+
+    public boolean isBinaryAssignmentExpression() {
+        final List<Lexeme> lexemes = getLexemes();
+
+        if (lexemes.size() > 2) {
+            final Lexeme first = lexemes.get(0);
+            final Lexeme last = lexemes.get(lexemes.size() - 1);
+
+            return isVariableExpression(first) && isBinaryAssignmentOperator(last);
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isVariableExpression(final Lexeme lexeme) {
+        return confirmType(VariableExpression.class, lexeme);
+    }
+
+    private boolean isBinaryAssignmentOperator(final Lexeme lexeme) {
+        return confirmType(BinaryOperator.class, lexeme) && ((BinaryOperator) lexeme).isAssignment();
     }
 
     @Override

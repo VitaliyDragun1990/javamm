@@ -21,6 +21,7 @@ import com.revenat.javamm.compiler.component.BlockOperationReader;
 import com.revenat.javamm.compiler.component.ComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
 import com.revenat.javamm.compiler.component.ExpressionBuilder;
+import com.revenat.javamm.compiler.component.ExpressionOperationBuilder;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.LexemeAmbiguityResolver;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
@@ -34,6 +35,7 @@ import com.revenat.javamm.compiler.component.VariableBuilder;
 import com.revenat.javamm.compiler.component.impl.BlockOperationReaderImpl;
 import com.revenat.javamm.compiler.component.impl.CompilerImpl;
 import com.revenat.javamm.compiler.component.impl.ComplexLexemeValidatorImpl;
+import com.revenat.javamm.compiler.component.impl.ExpressionOperationBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.ExpressionResolverImpl;
 import com.revenat.javamm.compiler.component.impl.LexemeAmbiguityResolverImpl;
 import com.revenat.javamm.compiler.component.impl.LexemeBuilderImpl;
@@ -110,7 +112,10 @@ public class CompilerConfigurator {
             new SimpleBlockOperationReader()
     );
 
-    private final BlockOperationReader blockOperationReader = new BlockOperationReaderImpl(operationReaders);
+    private final ExpressionOperationBuilder expressionOperationBuilder = new ExpressionOperationBuilderImpl();
+
+    private final BlockOperationReader blockOperationReader =
+            new BlockOperationReaderImpl(operationReaders, expressionOperationBuilder, expressionResolver);
 
     private final Compiler compiler = new CompilerImpl(sourceLineReader, blockOperationReader);
 

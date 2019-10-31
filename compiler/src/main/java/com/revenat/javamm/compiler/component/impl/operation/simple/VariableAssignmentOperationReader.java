@@ -58,7 +58,7 @@ public class VariableAssignmentOperationReader extends AbstractOperationReader<V
 
     @Override
     protected void validate(final SourceLine sourceLine) {
-        validateVariableAndExpressionArePresent(sourceLine);
+        validateThatVariableAndExpressionArePresent(sourceLine);
     }
 
     @Override
@@ -99,7 +99,7 @@ public class VariableAssignmentOperationReader extends AbstractOperationReader<V
         return !ALL_KEYWORDS.contains(sourceLine.getFirst());
     }
 
-    private void validateVariableAndExpressionArePresent(final SourceLine sourceLine) {
+    private void validateThatVariableAndExpressionArePresent(final SourceLine sourceLine) {
         if (sourceLine.getTokenCount() <= 2) {
             throw new JavammLineSyntaxError("Missing variable or expression", sourceLine);
         }

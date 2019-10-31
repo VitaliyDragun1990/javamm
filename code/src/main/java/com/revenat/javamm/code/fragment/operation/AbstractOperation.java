@@ -42,5 +42,4 @@ abstract class AbstractOperation implements Operation {
     public String toString() {
         return sourceLine.toString();
     }
-
 }

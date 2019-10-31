@@ -21,8 +21,9 @@ import com.revenat.javamm.code.fragment.Variable;
 import com.revenat.javamm.code.fragment.expression.VariableExpression;
 import com.revenat.javamm.interpreter.component.ExpressionUpdater;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
-import com.revenat.javamm.interpreter.model.CurrentRuntimeProvider;
 import com.revenat.javamm.interpreter.model.LocalContext;
+
+import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCurrentRuntime;
 
 /**
  * Responsible for updating already defined {@linkplain Variable variable}
@@ -44,7 +45,7 @@ public class VariableExpressionUpdater implements ExpressionUpdater<VariableExpr
     }
 
     private void updateVariableIfDefined(final Variable variable, final Object updatedValue) {
-        final LocalContext localContext = CurrentRuntimeProvider.getCurrentRuntime().getCurrentLocalContext();
+        final LocalContext localContext = getCurrentRuntime().getCurrentLocalContext();
 
         if (localContext.isVariableDefined(variable)) {
             localContext.setVariableValue(variable, updatedValue);

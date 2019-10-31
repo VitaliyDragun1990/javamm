@@ -42,7 +42,7 @@ import static java.util.Objects.requireNonNull;
 public class VariableDeclarationOperationReader extends AbstractOperationReader<VariableDeclarationOperation> {
     private static final int VARIABLE_NAME_POSITION = 1;
 
-    private static final int EQUAL_SIGN_POSITION = 2;
+    private static final int ASSIGNMENT_OPERATOR_POSITION = 2;
 
     private static final int EXPRESSION_STARTING_POSITION = 3;
 
@@ -78,13 +78,13 @@ public class VariableDeclarationOperationReader extends AbstractOperationReader<
     @Override
     protected void validate(final SourceLine sourceLine) {
         assertVariableNamePresent(sourceLine);
-        assertEqualSignPosition(sourceLine);
+        assertAssignmentOperatorPosition(sourceLine);
         assertVariableExpression(sourceLine);
     }
 
     @Override
     protected VariableDeclarationOperation get(final SourceLine sourceLine,
-            final ListIterator<SourceLine> compiledCodeIterator) {
+                                               final ListIterator<SourceLine> compiledCodeIterator) {
         final Variable variable = variableBuilder.build(sourceLine.getToken(VARIABLE_NAME_POSITION), sourceLine);
         final Expression expression = getExpression(sourceLine);
         return new VariableDeclarationOperation(sourceLine, isConstant(), variable, expression);
@@ -108,16 +108,16 @@ public class VariableDeclarationOperationReader extends AbstractOperationReader<
         }
     }
 
-    private void assertEqualSignPosition(final SourceLine sourceLine) {
+    private void assertAssignmentOperatorPosition(final SourceLine sourceLine) {
         if (sourceLine.getTokenCount() > 2 &&
-                !sourceLine.getToken(EQUAL_SIGN_POSITION).equals("=")) {
+                !sourceLine.getToken(ASSIGNMENT_OPERATOR_POSITION).equals("=")) {
             throw new JavammLineSyntaxError("'=' is missing or has invalid position", sourceLine);
         }
     }
 
     private void assertVariableExpression(final SourceLine sourceLine) {
         if (sourceLine.getTokenCount() == 3 &&
-                sourceLine.getToken(EQUAL_SIGN_POSITION).equals("=")) {
+                sourceLine.getToken(ASSIGNMENT_OPERATOR_POSITION).equals("=")) {
             throw new JavammLineSyntaxError(missingExpressionErrorMessage(), sourceLine);
         }
     }

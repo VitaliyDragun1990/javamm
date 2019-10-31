@@ -49,6 +49,7 @@ import com.revenat.javamm.compiler.component.impl.operation.block.SimpleBlockOpe
 import com.revenat.javamm.compiler.component.impl.operation.block.WhileOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.FinalDeclarationOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.PrintlnOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.simple.VariableAssignmentOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.VariableDeclarationOperationReader;
 import com.revenat.javamm.compiler.component.impl.parser.custom.TokenParserImpl;
 
@@ -102,6 +103,7 @@ public class CompilerConfigurator {
             new PrintlnOperationReader(expressionResolver),
             new VariableDeclarationOperationReader(variableBuilder, expressionResolver),
             new FinalDeclarationOperationReader(variableBuilder, expressionResolver),
+            new VariableAssignmentOperationReader(expressionResolver),
             new IfElseOperationReader(expressionResolver),
             new WhileOperationReader(expressionResolver),
             new DoWhileOperationRedaer(expressionResolver),

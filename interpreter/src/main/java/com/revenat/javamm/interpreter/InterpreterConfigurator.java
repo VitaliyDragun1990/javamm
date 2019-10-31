@@ -65,6 +65,7 @@ import com.revenat.javamm.interpreter.component.impl.operation.block.IfElseOpera
 import com.revenat.javamm.interpreter.component.impl.operation.block.SimpleBlockOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.block.WhileOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.PrintlnOperationInterpreter;
+import com.revenat.javamm.interpreter.component.impl.operation.simple.VariableAssignmentOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.VariableDeclarationOperationInterpreter;
 
 import java.util.Set;
@@ -142,6 +143,7 @@ public class InterpreterConfigurator {
     private final Set<OperationInterpreter<?>> operationInterpreters = Set.of(
             new PrintlnOperationInterpreter(expressionContext),
             new VariableDeclarationOperationInterpreter(expressionContext),
+            new VariableAssignmentOperationInterpreter(expressionContext),
             new IfElseOperationInterpreter(expressionContext, calculatorFacade),
             new WhileOperationInterpreter(expressionContext, calculatorFacade),
             new DoWhileOperationInterpreter(expressionContext, calculatorFacade),

@@ -34,7 +34,6 @@ public class UnaryPrefixAssignmentExpression extends UnaryAssignmentExpression {
         super(operand, operator);
     }
 
-
     @Override
     public Object getValue(final ExpressionContext expressionContext) {
         final Object value = new PostfixNotationComplexExpression(List.of(getOperand(), getOperator()), toString())

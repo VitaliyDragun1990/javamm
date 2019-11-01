@@ -47,14 +47,14 @@ public class ExpressionOperationBuilderImpl implements ExpressionOperationBuilde
     }
 
     private Expression requireAssignmentExpression(final Expression expression, final SourceLine sourceLine) {
-        if (isAssignment(expression)) {
+        if (isAssignmentExpression(expression)) {
             return expression;
         } else {
             throw new JavammLineSyntaxError(sourceLine, "Expression '%s' is not allowed here", sourceLine.getCommand());
         }
     }
 
-    private boolean isAssignment(final Expression expression) {
+    private boolean isAssignmentExpression(final Expression expression) {
         return isUnaryAssignmentExpression(expression) || isBinaryAssignmentExpression(expression);
     }
 

@@ -61,6 +61,7 @@ import com.revenat.javamm.interpreter.component.impl.expression.evaluator.Ternar
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.VariableExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.expression.updater.VariableExpressionUpdater;
 import com.revenat.javamm.interpreter.component.impl.operation.block.DoWhileOperationInterpreter;
+import com.revenat.javamm.interpreter.component.impl.operation.block.ForOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.block.IfElseOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.block.SimpleBlockOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.block.WhileOperationInterpreter;
@@ -149,6 +150,7 @@ public class InterpreterConfigurator {
             new IfElseOperationInterpreter(expressionContext, calculatorFacade),
             new WhileOperationInterpreter(expressionContext, calculatorFacade),
             new DoWhileOperationInterpreter(expressionContext, calculatorFacade),
+            new ForOperationInterpreter(expressionContext, calculatorFacade),
             new SimpleBlockOperationInterpreter(expressionContext)
     );
 

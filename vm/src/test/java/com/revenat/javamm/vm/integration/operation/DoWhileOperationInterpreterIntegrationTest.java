@@ -17,8 +17,6 @@
 
 package com.revenat.javamm.vm.integration.operation;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -118,10 +116,6 @@ public class DoWhileOperationInterpreterIntegrationTest extends AbstractIntegrat
             // do nothing. TimeoutException is expected.
             assertTrue(future.cancel(true));
         }
-    }
-
-    private void assertExpectedOutput(final List<Object> expectedOutput) {
-        assertThat(getOutput(), equalTo(expectedOutput));
     }
 
     static class DoWhileOperationProvider implements ArgumentsProvider {

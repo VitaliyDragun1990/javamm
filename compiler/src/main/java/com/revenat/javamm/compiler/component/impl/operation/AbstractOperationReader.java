@@ -47,9 +47,9 @@ public abstract class AbstractOperationReader<T extends Operation> implements Op
     }
 
     @Override
-    public T read(final SourceLine startingLine, final ListIterator<SourceLine> compiledCodeIterator) {
-        validate(startingLine);
-        return get(startingLine, compiledCodeIterator);
+    public T read(final SourceLine sourceLine, final ListIterator<SourceLine> sourceCode) {
+        validate(sourceLine);
+        return get(sourceLine, sourceCode);
     }
 
     protected void validate(final SourceLine sourceLine) {

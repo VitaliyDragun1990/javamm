@@ -17,8 +17,6 @@
 
 package com.revenat.javamm.vm.integration;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
@@ -56,10 +54,6 @@ public class BlockScopeVariables_IntegrationTest extends AbstractIntegrationTest
         assertErrorMessageContains(e, expectedErrorMessage);
         assertExpectedOutput(expectedOutput);
 
-    }
-
-    private void assertExpectedOutput(final List<Object> expectedOutput) {
-        assertThat(getOutput(), equalTo(expectedOutput));
     }
 
     static class BlockeScopeProvider implements ArgumentsProvider {

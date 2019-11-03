@@ -17,8 +17,6 @@
 
 package com.revenat.javamm.vm.integration.operation;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
@@ -52,10 +50,6 @@ public class SimpleBlockOperationInterpreterIntegrationTest extends AbstractInte
         assertDoesNotThrow(() -> runBlock(lines));
 
         assertExpectedOutput(expectedOutput);
-    }
-
-    private void assertExpectedOutput(final List<Object> expectedOutput) {
-        assertThat(getOutput(), equalTo(expectedOutput));
     }
 
     static class BlockScopeProvider implements ArgumentsProvider {

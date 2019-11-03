@@ -17,6 +17,9 @@
 
 package com.revenat.javamm.vm.integration;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.vm.VirtualMachine;
 import com.revenat.javamm.vm.VirtualMachineBuilder;
@@ -59,6 +62,10 @@ public abstract class AbstractIntegrationTest {
 
     protected final void runBlock(final String operation) {
         runBlock(List.of(operation));
+    }
+
+    protected void assertExpectedOutput(final List<Object> expectedOutput) {
+        assertThat(getOutput(), equalTo(expectedOutput));
     }
 
     private List<String> putInsideFunction(final List<String> operations) {

@@ -54,6 +54,7 @@ import com.revenat.javamm.compiler.component.impl.operation.block.ForOperationRe
 import com.revenat.javamm.compiler.component.impl.operation.block.IfElseOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.block.SimpleBlockOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.block.WhileOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.simple.ContinueOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.FinalDeclarationOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.PrintlnOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.VariableAssignmentOperationReader;
@@ -144,7 +145,8 @@ public class CompilerConfigurator {
             new WhileOperationReader(expressionResolver),
             new DoWhileOperationRedaer(expressionResolver),
             new ForOperationReader(forOperationHeaderResolver),
-            new SimpleBlockOperationReader()
+            new SimpleBlockOperationReader(),
+            new ContinueOperationReader()
     );
 
     private final BlockOperationReader blockOperationReader =

@@ -17,8 +17,6 @@
 
 package com.revenat.javamm.vm.integration.operation;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
@@ -131,10 +129,6 @@ public class ForOperationInterpreterIntegrationTest extends AbstractIntegrationT
 
         assertErrorMessageContains(e, "Runtime error in 'test' [Line: 5]: Variable 'i' is not defined");
         assertExpectedOutput(of(0, 1, 2, 3, 4));
-    }
-
-    private void assertExpectedOutput(final List<Object> expectedOutput) {
-        assertThat(getOutput(), equalTo(expectedOutput));
     }
 
     static class ForOperationProvider implements ArgumentsProvider {

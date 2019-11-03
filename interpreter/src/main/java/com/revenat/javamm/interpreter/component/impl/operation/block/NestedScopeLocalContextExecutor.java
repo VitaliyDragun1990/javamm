@@ -21,22 +21,37 @@ import com.revenat.javamm.interpreter.model.LocalContext;
 
 import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCurrentRuntime;
 
-class BlockScopeLocalContextController {
+final class NestedScopeLocalContextExecutor {
 
     private final LocalContext parentContext;
 
     private final LocalContext childContext;
 
-    BlockScopeLocalContextController() {
+    private NestedScopeLocalContextExecutor() {
         parentContext = getCurrentRuntime().getCurrentLocalContext();
         childContext = parentContext.createChildLocalContext();
     }
 
-    void setChildLocalContextForNestedBlock() {
+    /**
+     * Creates nested scope with {@linkplain LocalContext child local context} for
+     * provided {@linkplain Runnable action} and destroys such child local context
+     * when specified {@code action} finishes
+     */
+    static void executeInsideNestedScope(final Runnable action) {
+        final NestedScopeLocalContextExecutor scopeExecutor = new NestedScopeLocalContextExecutor();
+        try {
+            scopeExecutor.setChildLocalContextForNestedBlock();
+            action.run();
+        } finally {
+            scopeExecutor.disposeChildLocalContext();
+        }
+    }
+
+    private void setChildLocalContextForNestedBlock() {
         getCurrentRuntime().setCurrentLocalContext(childContext);
     }
 
-    void disposeChildLocalContext() {
+    private void disposeChildLocalContext() {
         getCurrentRuntime().setCurrentLocalContext(parentContext);
     }
 }

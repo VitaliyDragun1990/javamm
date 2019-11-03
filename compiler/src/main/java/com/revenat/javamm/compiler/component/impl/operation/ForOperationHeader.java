@@ -15,29 +15,15 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.code.fragment.operation;
+package com.revenat.javamm.compiler.component.impl.operation;
 
-import com.revenat.javamm.code.fragment.Expression;
-import com.revenat.javamm.code.fragment.SourceLine;
-
-import static java.util.Objects.requireNonNull;
+import static com.revenat.javamm.code.fragment.operation.ForOperation.Builder;
 
 /**
- * Represents well known {@code println} operation
- *
  * @author Vitaliy Dragun
  *
  */
-public class PrintlnOperation extends AbstractOperation
-    implements ForInitOperation, ForUpdateOperation {
-    private final Expression expression;
+public interface ForOperationHeader {
 
-    public PrintlnOperation(final SourceLine sourceLine, final Expression expression) {
-        super(sourceLine);
-        this.expression = requireNonNull(expression);
-    }
-
-    public Expression getExpression() {
-        return expression;
-    }
+    void populate(Builder forOperationBuilder);
 }

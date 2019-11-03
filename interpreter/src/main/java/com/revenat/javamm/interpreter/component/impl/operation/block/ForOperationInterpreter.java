@@ -18,8 +18,16 @@
 package com.revenat.javamm.interpreter.component.impl.operation.block;
 
 import com.revenat.javamm.code.component.ExpressionContext;
+import com.revenat.javamm.code.fragment.Operation;
+import com.revenat.javamm.code.fragment.operation.Block;
+import com.revenat.javamm.code.fragment.operation.ForInitOperation;
 import com.revenat.javamm.code.fragment.operation.ForOperation;
+import com.revenat.javamm.code.fragment.operation.VariableDeclarationOperation;
 import com.revenat.javamm.interpreter.component.CalculatorFacade;
+
+import java.util.Optional;
+
+import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * @author Vitaliy Dragun
@@ -28,7 +36,7 @@ import com.revenat.javamm.interpreter.component.CalculatorFacade;
 public class ForOperationInterpreter extends AbstractLoopBlockOperationInterpreter<ForOperation> {
 
     public ForOperationInterpreter(final ExpressionContext expressionContext,
-                                      final CalculatorFacade calculatorFacade) {
+                                   final CalculatorFacade calculatorFacade) {
         super(expressionContext, calculatorFacade);
     }
 
@@ -39,28 +47,38 @@ public class ForOperationInterpreter extends AbstractLoopBlockOperationInterpret
 
     @Override
     protected void interpretOperation(final ForOperation operation) {
-        final BlockScopeLocalContextController contextController = new BlockScopeLocalContextController();
-        try {
-            contextController.setChildLocalContextForNestedBlock();
+        if (isVariableDeclaredInsideInitializationScope(operation)) {
+            NestedScopeLocalContextExecutor.executeInsideNestedScope(() -> interpretForOperation(operation));
+        } else {
             interpretForOperation(operation);
-        } finally {
-            contextController.disposeChildLocalContext();
         }
     }
 
     private void interpretForOperation(final ForOperation operation) {
-        interpretInitializationClause(operation);
-        while (isConditionTrue(operation)) {
+        for (interpretInitializationClause(operation); isConditionTrue(operation); interpretUpdateClause(operation)) {
             interpretLoopBody(operation);
-            interpretUpdateClause(operation);
         }
     }
 
     private void interpretInitializationClause(final ForOperation operation) {
-        getBlockOperationInterpreter().interpret(operation.getInitialization());
+        operation.getInitOperation().ifPresent(this::interpretAsBlock);
     }
 
     private void interpretUpdateClause(final ForOperation operation) {
-        getBlockOperationInterpreter().interpret(operation.getUpdate());
+        operation.getUpdateOperation().ifPresent(this::interpretAsBlock);
+    }
+
+    private void interpretAsBlock(final Operation operation) {
+        final Block block = new Block(operation, operation.getSourceLine());
+        getBlockOperationInterpreter().interpret(block);
+    }
+
+    private boolean isVariableDeclaredInsideInitializationScope(final ForOperation operation) {
+        final Optional<ForInitOperation> initOperation = operation.getInitOperation();
+        return initOperation.isPresent() && isVariableDeclaration(initOperation.get());
+    }
+
+    private boolean isVariableDeclaration(final ForInitOperation operation) {
+        return confirmType(VariableDeclarationOperation.class, operation);
     }
 }

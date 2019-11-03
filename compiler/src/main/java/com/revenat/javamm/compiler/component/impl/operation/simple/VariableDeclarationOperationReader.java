@@ -26,6 +26,8 @@ import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.VariableBuilder;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.component.impl.operation.AbstractOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.ForInitOperationReader;
+
 import java.util.ListIterator;
 import java.util.Optional;
 
@@ -39,7 +41,8 @@ import static java.util.Objects.requireNonNull;
  * @author Vitaliy Dragun
  *
  */
-public class VariableDeclarationOperationReader extends AbstractOperationReader<VariableDeclarationOperation> {
+public class VariableDeclarationOperationReader extends AbstractOperationReader<VariableDeclarationOperation>
+    implements ForInitOperationReader {
     private static final int VARIABLE_NAME_POSITION = 1;
 
     private static final int ASSIGNMENT_OPERATOR_POSITION = 2;

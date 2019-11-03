@@ -29,7 +29,8 @@ import static java.util.Objects.requireNonNull;
  * @author Vitaliy Dragun
  *
  */
-public final class VariableDeclarationOperation extends AbstractOperation {
+public final class VariableDeclarationOperation extends AbstractOperation
+    implements ForInitOperation {
     private final boolean constant;
 
     private final Variable variable;

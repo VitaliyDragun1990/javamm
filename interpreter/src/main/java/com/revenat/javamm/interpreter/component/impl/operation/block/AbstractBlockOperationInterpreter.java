@@ -49,12 +49,7 @@ abstract class AbstractBlockOperationInterpreter<T extends Operation> extends Ab
     }
 
     protected void interpretBlock(final Block block) {
-        final BlockScopeLocalContextController contextController = new BlockScopeLocalContextController();
-        try {
-            contextController.setChildLocalContextForNestedBlock();
-            getBlockOperationInterpreter().interpret(block);
-        } finally {
-            contextController.disposeChildLocalContext();
-        }
+        NestedScopeLocalContextExecutor.executeInsideNestedScope(
+            () -> getBlockOperationInterpreter().interpret(block));
     }
 }

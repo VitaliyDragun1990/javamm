@@ -23,6 +23,8 @@ import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.component.impl.operation.AbstractOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.ForInitOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.ForUpdateOperationReader;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -36,7 +38,8 @@ import static java.util.Objects.requireNonNull;
  * @author Vitaliy Dragun
  *
  */
-public class PrintlnOperationReader extends AbstractOperationReader<PrintlnOperation> {
+public class PrintlnOperationReader extends AbstractOperationReader<PrintlnOperation>
+    implements ForInitOperationReader, ForUpdateOperationReader {
     private final ExpressionResolver expressionResolver;
 
     public PrintlnOperationReader(final ExpressionResolver expressionResolver) {

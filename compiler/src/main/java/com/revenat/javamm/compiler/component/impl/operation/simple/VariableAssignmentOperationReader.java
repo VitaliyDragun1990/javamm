@@ -24,6 +24,8 @@ import com.revenat.javamm.code.fragment.operation.VariableAssignmentOperation;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.component.impl.operation.AbstractOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.ForInitOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.ForUpdateOperationReader;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -35,7 +37,8 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
  * @author Vitaliy Dragun
  *
  */
-public class VariableAssignmentOperationReader extends AbstractOperationReader<VariableAssignmentOperation> {
+public class VariableAssignmentOperationReader extends AbstractOperationReader<VariableAssignmentOperation>
+     implements ForInitOperationReader, ForUpdateOperationReader {
 
     private static final String ASSIGNMENT_OPERATOR = "=";
 

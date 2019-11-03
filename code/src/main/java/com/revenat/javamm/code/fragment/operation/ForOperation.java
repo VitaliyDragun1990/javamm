@@ -19,6 +19,9 @@ package com.revenat.javamm.code.fragment.operation;
 
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.expression.ConstantExpression;
+
+import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 
@@ -26,27 +29,70 @@ import static java.util.Objects.requireNonNull;
  * @author Vitaliy Dragun
  *
  */
-public class ForOperation extends AbstractLoopOperation {
+public final class ForOperation extends AbstractLoopOperation {
 
-    private final Block initialization;
+    private final ForInitOperation initOperation;
 
-    private final Block update;
+    private final ForUpdateOperation updateOperation;
 
-    public ForOperation(final SourceLine sourceLine,
+    private ForOperation(final SourceLine sourceLine,
                         final Expression condition,
-                        final Block initialization,
-                        final Block update,
+                        final ForInitOperation initOperation,
+                        final ForUpdateOperation updateOperation,
                         final Block body) {
         super(sourceLine, condition, body);
-        this.initialization = requireNonNull(initialization);
-        this.update = requireNonNull(update);
+        this.initOperation = initOperation;
+        this.updateOperation = updateOperation;
     }
 
-    public Block getInitialization() {
-        return initialization;
+    public Optional<ForInitOperation> getInitOperation() {
+        return Optional.ofNullable(initOperation);
     }
 
-    public Block getUpdate() {
-        return update;
+    public Optional<ForUpdateOperation> getUpdateOperation() {
+        return Optional.ofNullable(updateOperation);
+    }
+
+    public static final class Builder {
+
+        private SourceLine sourceLine;
+
+        private ForInitOperation initOperation;
+
+        private Expression condition;
+
+        private ForUpdateOperation updateOperation;
+
+        private Block body;
+
+        public Builder setSourceLine(final SourceLine sourceLine) {
+            this.sourceLine = requireNonNull(sourceLine);
+            return this;
+        }
+
+        public Builder setInitOperation(final ForInitOperation initOperation) {
+            this.initOperation = requireNonNull(initOperation);
+            return this;
+        }
+
+        public Builder setCondition(final Expression condition) {
+            this.condition = requireNonNull(condition);
+            return this;
+        }
+
+        public Builder setUpdateOperation(final ForUpdateOperation updateOperation) {
+            this.updateOperation = requireNonNull(updateOperation);
+            return this;
+        }
+
+        public Builder setBody(final Block body) {
+            this.body = requireNonNull(body);
+            return this;
+        }
+
+        public ForOperation build() {
+            final Expression forCondition = condition == null ? ConstantExpression.valueOf(true) : condition;
+            return new ForOperation(sourceLine, forCondition, initOperation, updateOperation, body);
+        }
     }
 }

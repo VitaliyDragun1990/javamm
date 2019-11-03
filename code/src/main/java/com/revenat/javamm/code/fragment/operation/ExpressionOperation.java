@@ -24,7 +24,8 @@ import com.revenat.javamm.code.fragment.SourceLine;
  * @author Vitaliy Dragun
  *
  */
-public class ExpressionOperation extends AbstractOperation {
+public class ExpressionOperation extends AbstractOperation
+    implements ForInitOperation, ForUpdateOperation {
 
     private final Expression expression;
 

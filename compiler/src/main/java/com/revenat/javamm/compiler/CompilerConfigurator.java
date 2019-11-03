@@ -45,7 +45,11 @@ import com.revenat.javamm.compiler.component.impl.UnaryAssignmentExpressionResol
 import com.revenat.javamm.compiler.component.impl.VariableBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.expression.builder.PostfixNotationComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.impl.expression.builder.SingleTokenExpressionBuilderImpl;
+import com.revenat.javamm.compiler.component.impl.operation.ForInitOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.ForOperationHeaderResolver;
+import com.revenat.javamm.compiler.component.impl.operation.ForUpdateOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.block.DoWhileOperationRedaer;
+import com.revenat.javamm.compiler.component.impl.operation.block.ForOperationHeaderResolverImpl;
 import com.revenat.javamm.compiler.component.impl.operation.block.ForOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.block.IfElseOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.block.SimpleBlockOperationReader;
@@ -102,19 +106,46 @@ public class CompilerConfigurator {
             unaryAssignmentExpressionResolver
     );
 
-    private final Set<OperationReader> operationReaders = Set.of(
-            new PrintlnOperationReader(expressionResolver),
-            new VariableDeclarationOperationReader(variableBuilder, expressionResolver),
-            new FinalDeclarationOperationReader(variableBuilder, expressionResolver),
-            new VariableAssignmentOperationReader(expressionResolver),
-            new IfElseOperationReader(expressionResolver),
-            new WhileOperationReader(expressionResolver),
-            new DoWhileOperationRedaer(expressionResolver),
-            new ForOperationReader(expressionResolver),
-            new SimpleBlockOperationReader()
+    private final PrintlnOperationReader printlnOperationReader = new PrintlnOperationReader(expressionResolver);
+
+    private final VariableDeclarationOperationReader variableDeclarationOperationReader =
+                new VariableDeclarationOperationReader(variableBuilder, expressionResolver);
+
+    private final FinalDeclarationOperationReader finalDeclarationOperationReader =
+                new FinalDeclarationOperationReader(variableBuilder, expressionResolver);
+
+    private final VariableAssignmentOperationReader variableAssignmentOperationReader =
+               new VariableAssignmentOperationReader(expressionResolver);
+
+    private final Set<ForInitOperationReader> initOperationReaders = Set.of(
+            printlnOperationReader,
+            variableDeclarationOperationReader,
+            finalDeclarationOperationReader,
+            variableAssignmentOperationReader
+    );
+
+    private final Set<ForUpdateOperationReader> updateOperationReaders = Set.of(
+            printlnOperationReader,
+            variableAssignmentOperationReader
     );
 
     private final ExpressionOperationBuilder expressionOperationBuilder = new ExpressionOperationBuilderImpl();
+
+    private final ForOperationHeaderResolver forOperationHeaderResolver =
+                new ForOperationHeaderResolverImpl(initOperationReaders, expressionResolver, updateOperationReaders,
+                        expressionOperationBuilder);
+
+    private final Set<OperationReader> operationReaders = Set.of(
+            printlnOperationReader,
+            variableDeclarationOperationReader,
+            finalDeclarationOperationReader,
+            variableAssignmentOperationReader,
+            new IfElseOperationReader(expressionResolver),
+            new WhileOperationReader(expressionResolver),
+            new DoWhileOperationRedaer(expressionResolver),
+            new ForOperationReader(forOperationHeaderResolver),
+            new SimpleBlockOperationReader()
+    );
 
     private final BlockOperationReader blockOperationReader =
             new BlockOperationReaderImpl(operationReaders, expressionOperationBuilder, expressionResolver);

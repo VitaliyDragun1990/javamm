@@ -17,27 +17,14 @@
 
 package com.revenat.javamm.code.fragment.operation;
 
-import com.revenat.javamm.code.fragment.Expression;
-import com.revenat.javamm.code.fragment.SourceLine;
-
-import static java.util.Objects.requireNonNull;
+import com.revenat.javamm.code.fragment.Operation;
 
 /**
- * Represents well known {@code println} operation
+ * Represents update clause of 'for-loop' operation
  *
  * @author Vitaliy Dragun
  *
  */
-public class PrintlnOperation extends AbstractOperation
-    implements ForInitOperation, ForUpdateOperation {
-    private final Expression expression;
+public interface ForUpdateOperation extends Operation {
 
-    public PrintlnOperation(final SourceLine sourceLine, final Expression expression) {
-        super(sourceLine);
-        this.expression = requireNonNull(expression);
-    }
-
-    public Expression getExpression() {
-        return expression;
-    }
 }

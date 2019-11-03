@@ -17,24 +17,20 @@
 
 package com.revenat.javamm.compiler.component.impl.operation.block;
 
-import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
-import com.revenat.javamm.code.fragment.expression.ConstantExpression;
 import com.revenat.javamm.code.fragment.operation.Block;
 import com.revenat.javamm.code.fragment.operation.ForOperation;
-import com.revenat.javamm.compiler.component.ExpressionResolver;
-import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.revenat.javamm.code.fragment.operation.ForOperation.Builder;
+import com.revenat.javamm.compiler.component.impl.operation.ForOperationHeader;
+import com.revenat.javamm.compiler.component.impl.operation.ForOperationHeaderResolver;
 import java.util.ListIterator;
 import java.util.Optional;
-
 import static com.revenat.javamm.code.syntax.Keywords.FOR;
-import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.getTokensBetweenBrackets;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateClosingParenthesisBeforeOpeningCurlyBrace;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateOpeningParenthesisAfterTokenInPosition;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatLineEndsWithOpeningCurlyBrace;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
@@ -42,18 +38,10 @@ import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUt
  */
 public class ForOperationReader extends AbstractBlockOperationReader<ForOperation> {
 
-    private static final int EXPECTED_NUMBER_OF_SEMICOLONS = 2;
+    private final ForOperationHeaderResolver headerResolver;
 
-    private static final String SEMICOLON = ";";
-
-    private static final String OPENING_PARENTHESIS = "(";
-
-    private static final String CLOSING_PARENTHESIS = ")";
-
-    private final ExpressionResolver expressionResolver;
-
-    public ForOperationReader(final ExpressionResolver expressionResolver) {
-        this.expressionResolver = expressionResolver;
+    public ForOperationReader(final ForOperationHeaderResolver headerResolver) {
+        this.headerResolver = requireNonNull(headerResolver);
     }
 
     @Override
@@ -70,79 +58,15 @@ public class ForOperationReader extends AbstractBlockOperationReader<ForOperatio
 
     @Override
     protected ForOperation get(final SourceLine sourceLine, final ListIterator<SourceLine> sourceCode) {
-        final List<String> expressionTokens = extractExpressionTokensFrom(sourceLine);
-
-        final Block initializationClause = getInitializationClause(expressionTokens, sourceLine);
-        final Expression conditionClause = getConditionClause(expressionTokens, sourceLine);
-        final Block updateClause = getUpdateClause(expressionTokens, sourceLine);
+        final ForOperationHeader header = headerResolver.resolve(sourceLine);
         final Block body = getBody(sourceLine, sourceCode);
 
-        return new ForOperation(sourceLine, conditionClause, initializationClause, updateClause, body);
-    }
+        final ForOperation.Builder builder = new Builder();
+        builder.setSourceLine(sourceLine);
+        builder.setBody(body);
+        header.populate(builder);
 
-    private List<String> extractExpressionTokensFrom(final SourceLine sourceLine) {
-        final List<String> expressionTokens =
-                getTokensBetweenBrackets(OPENING_PARENTHESIS, CLOSING_PARENTHESIS, sourceLine, false);
-        validateRightNumberOfSemicolonDelimitersWithinExpression(expressionTokens, sourceLine);
-
-        return expressionTokens;
-    }
-
-    private void validateRightNumberOfSemicolonDelimitersWithinExpression(final List<String> expressionTokens,
-                                                                          final SourceLine sourceLine) {
-        final int numberOfDelimiters = calculateNumberOfSemicolonsAmong(expressionTokens);
-        requireValidNumberOfDelimiters(sourceLine, numberOfDelimiters);
-    }
-
-    private int calculateNumberOfSemicolonsAmong(final List<String> expressionTokens) {
-        int numberOfDelimiters = 0;
-        for (final String token : expressionTokens) {
-            if (SEMICOLON.equals(token)) {
-                numberOfDelimiters++;
-            }
-        }
-        return numberOfDelimiters;
-    }
-
-    private void requireValidNumberOfDelimiters(final SourceLine sourceLine, final int numberOfDelimiters) {
-        if (numberOfDelimiters > EXPECTED_NUMBER_OF_SEMICOLONS) {
-            throw new JavammLineSyntaxError(sourceLine, "Redundant '%s'", SEMICOLON);
-        } else if (numberOfDelimiters < EXPECTED_NUMBER_OF_SEMICOLONS) {
-            throw new JavammLineSyntaxError(sourceLine, "Missing '%s'", SEMICOLON);
-        }
-    }
-
-    private Block getInitializationClause(final List<String> expressionTokens, final SourceLine sourceLine) {
-        final int firstSemicolonIndex = expressionTokens.indexOf(SEMICOLON);
-        final List<String> clauseTokens = expressionTokens.subList(0, firstSemicolonIndex);
-        return readOperation(sourceLine, clauseTokens);
-    }
-
-    private Expression getConditionClause(final List<String> expressionTokens, final SourceLine sourceLine) {
-        final int firstSemicolonIndex = expressionTokens.indexOf(SEMICOLON);
-        final int lastSemicolonIndex = expressionTokens.lastIndexOf(SEMICOLON);
-        final List<String> clauseTokens = expressionTokens.subList(firstSemicolonIndex + 1, lastSemicolonIndex);
-
-        if (clauseTokens.isEmpty()) {
-            return ConstantExpression.valueOf(true);
-        } else {
-            return expressionResolver.resolve(clauseTokens, sourceLine);
-        }
-    }
-
-    private Block getUpdateClause(final List<String> expressionTokens, final SourceLine sourceLine) {
-        final int lastSemicolonIndex = expressionTokens.lastIndexOf(SEMICOLON);
-        final List<String> clauseTokens = expressionTokens.subList(lastSemicolonIndex + 1, expressionTokens.size());
-        return readOperation(sourceLine, clauseTokens);
-    }
-
-
-    private Block readOperation(final SourceLine sourceLine, final List<String> clauseTokens) {
-        final List<SourceLine> clauseLines = new ArrayList<>();
-        if (!clauseTokens.isEmpty()) {
-            clauseLines.add(new SourceLine(sourceLine.getModuleName(), sourceLine.getLineNumber(), clauseTokens));
-        }
-        return getBlockOperationReader().read(sourceLine, clauseLines.listIterator());
+        return builder.build();
     }
 
     private Block getBody(final SourceLine sourceLine, final ListIterator<SourceLine> sourceCode) {

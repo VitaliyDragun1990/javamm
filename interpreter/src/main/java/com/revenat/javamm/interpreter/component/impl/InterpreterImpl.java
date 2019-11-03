@@ -22,6 +22,8 @@ import com.revenat.javamm.interpreter.Interpreter;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
 import com.revenat.javamm.interpreter.component.LocalContextBuilder;
 import com.revenat.javamm.interpreter.component.RuntimeBuilder;
+import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
+import com.revenat.javamm.interpreter.component.impl.operation.exception.InterruptOperationException;
 import com.revenat.javamm.interpreter.model.CurrentRuntime;
 import com.revenat.javamm.interpreter.model.LocalContext;
 
@@ -61,6 +63,8 @@ public class InterpreterImpl implements Interpreter {
 
         try {
             blockOperationInterpreter.interpret(byteCode.getCode());
+        } catch (final InterruptOperationException e) {
+            throw new JavammLineRuntimeError("Operation '%s' not expected here", e.getOperation());
         } finally {
             releaseCurrentRuntime();
         }

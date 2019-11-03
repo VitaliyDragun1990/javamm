@@ -20,6 +20,7 @@ package com.revenat.javamm.interpreter.component.impl.operation.block;
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.operation.AbstractLoopOperation;
 import com.revenat.javamm.interpreter.component.CalculatorFacade;
+import com.revenat.javamm.interpreter.component.impl.operation.exception.ContinueOperationException;
 
 import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCurrentRuntime;
 
@@ -42,7 +43,11 @@ abstract class AbstractLoopBlockOperationInterpreter<T extends AbstractLoopOpera
 
     final void interpretLoopBody(final T operation) {
         checkForTermination();
-        interpretBlock(operation.getBody());
+        try {
+            interpretBlock(operation.getBody());
+        } catch (final ContinueOperationException e) {
+            // do nothing. Current iteration skipped
+        }
         getCurrentRuntime().setCurrentOperation(operation);
     }
 

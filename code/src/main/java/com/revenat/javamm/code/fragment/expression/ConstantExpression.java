@@ -20,6 +20,7 @@ package com.revenat.javamm.code.fragment.expression;
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -83,6 +84,27 @@ public final class ConstantExpression implements Expression {
     @Override
     public Object getValue(final ExpressionContext expressionContext) {
         return value;
+    }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ConstantExpression other = (ConstantExpression) obj;
+        return Objects.equals(value, other.value);
     }
 
     @Override

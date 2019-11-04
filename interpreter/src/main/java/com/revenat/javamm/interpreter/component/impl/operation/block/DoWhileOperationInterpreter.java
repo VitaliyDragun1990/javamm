@@ -38,7 +38,7 @@ public class DoWhileOperationInterpreter extends AbstractLoopBlockOperationInter
     }
 
     @Override
-    protected void interpretOperation(final DoWhileOperation operation) {
+    protected void processLoopOperation(final DoWhileOperation operation) {
         do {
             interpretLoopBody(operation);
         } while (isConditionTrue(operation));

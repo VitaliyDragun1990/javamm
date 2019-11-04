@@ -15,32 +15,30 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.component.impl.operation.block;
+package com.revenat.javamm.interpreter.component.impl.operation.simple;
 
 import com.revenat.javamm.code.component.ExpressionContext;
-import com.revenat.javamm.code.fragment.operation.WhileOperation;
-import com.revenat.javamm.interpreter.component.CalculatorFacade;
+import com.revenat.javamm.code.fragment.operation.BreakOperation;
+import com.revenat.javamm.interpreter.component.impl.operation.AbstractOperationInterpreter;
+import com.revenat.javamm.interpreter.component.impl.operation.exception.BreakOperationException;
 
 /**
  * @author Vitaliy Dragun
  *
  */
-public class WhileOperationInterpreter extends AbstractLoopBlockOperationInterpreter<WhileOperation> {
+public class BreakOperationInterpreter extends AbstractOperationInterpreter<BreakOperation> {
 
-    public WhileOperationInterpreter(final ExpressionContext expressionContext,
-            final CalculatorFacade calculatorFacade) {
-        super(expressionContext, calculatorFacade);
+    public BreakOperationInterpreter(final ExpressionContext expressionContext) {
+        super(expressionContext);
     }
 
     @Override
-    public Class<WhileOperation> getOperationClass() {
-        return WhileOperation.class;
+    public Class<BreakOperation> getOperationClass() {
+        return BreakOperation.class;
     }
 
     @Override
-    protected void processLoopOperation(final WhileOperation operation) {
-        while (isConditionTrue(operation)) {
-            interpretLoopBody(operation);
-        }
+    protected void interpretOperation(final BreakOperation operation) {
+        throw new BreakOperationException();
     }
 }

@@ -47,13 +47,13 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a Javamm virtual machine interpreter")
-public class ContinueOperationInterpreterIntegrationTest extends AbstractIntegrationTest {
+public class BreakOperationInterpreterIntegrationTest extends AbstractIntegrationTest {
 
     @ParameterizedTest
-    @ArgumentsSource(ContinueOperationProider.class)
+    @ArgumentsSource(BreakOperationProider.class)
     @Order(1)
-    void shouldInterpretContinueOperation(final List<String> lines,
-                                          final List<Object> expectedOutput) {
+    void shouldInterpretBreakOperation(final List<String> lines,
+                                       final List<Object> expectedOutput) {
         assertDoesNotThrow(() -> {
             runBlock(lines);
             assertExpectedOutput(expectedOutput);
@@ -62,17 +62,17 @@ public class ContinueOperationInterpreterIntegrationTest extends AbstractIntegra
 
     @Test
     @Order(2)
-    void shouldFailIfContinueOperationOutsideLoopBody() {
-        final List<String> continueOutsideLoopBody = of(
-                "continue"
+    void shouldFailIfBreakOperationOutsideLoopBody() {
+        final List<String> breakOutsideLoopBody = of(
+                "break"
         );
 
-        final JavammRuntimeError e = assertThrows(JavammRuntimeError.class, () -> runBlock(continueOutsideLoopBody));
+        final JavammRuntimeError e = assertThrows(JavammRuntimeError.class, () -> runBlock(breakOutsideLoopBody));
 
-        assertErrorMessageContains(e, "Runtime error in 'test' [Line: 2]: Operation 'continue' not expected here");
+        assertErrorMessageContains(e, "Runtime error in 'test' [Line: 2]: Operation 'break' not expected here");
     }
 
-    static final class ContinueOperationProider implements ArgumentsProvider {
+    static final class BreakOperationProider implements ArgumentsProvider {
 
         @Override
         public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
@@ -80,37 +80,66 @@ public class ContinueOperationInterpreterIntegrationTest extends AbstractIntegra
                     arguments(of(
                             "var i = 0",
                             "while ( i ++ < 5 ) {",
-                            "   println (i)",
                             "   if ( i > 2 ) {",
-                            "       continue",
+                            "       break",
                             "   }",
                             "   println (i)",
                             "}",
                             "println ('after while')"
-                    ), of(1, 1, 2, 2, 3, 4, 5, "after while")),
+                    ), of(1, 2, "after while")),
                     arguments(of(
                             "var i = 0",
                             "do {",
-                            "   println (i)",
                             "   if ( i > 2 ) {",
-                            "       continue",
+                            "       break",
                             "   }",
                             "   println (i)",
                             "}",
                             "while ( i ++ < 5 )",
                             "println ('after do while')"
-                  ), of(0, 0, 1, 1, 2, 2, 3, 4, 5, "after do while")),
+                    ), of(0, 1, 2, "after do while")),
                     arguments(of(
                             "var i = 0",
                             "for ( ; i < 5 ; i ++ ) {",
-                            "   println (i)",
                             "   if ( i > 2 ) {",
-                            "       continue",
+                            "       break",
                             "   }",
                             "   println (i)",
                             "}",
                             "println ('after for')"
-                  ), of(0, 0, 1, 1, 2, 2, 3, 4, "after for"))
+                    ), of(0, 1, 2, "after for")),
+                    // ------------ Interrupts infinite loop
+                    arguments(of(
+                            "var i = 0",
+                            "while ( true ) {",
+                            "   if ( i > 2 ) {",
+                            "       break",
+                            "   }",
+                            "   println (i ++)",
+                            "}",
+                            "println ('after while')"
+                    ), of(0, 1, 2, "after while")),
+                    arguments(of(
+                            "var i = 0",
+                            "do {",
+                            "   if ( i > 2 ) {",
+                            "       break",
+                            "   }",
+                            "   println (i ++)",
+                            "}",
+                            "while ( true )",
+                            "println ('after do while')"
+                    ), of(0, 1, 2, "after do while")),
+                    arguments(of(
+                            "var i = 0",
+                            "for ( ; ; i++ ) {",
+                            "   if ( i > 2 ) {",
+                            "       break",
+                            "   }",
+                            "   println (i)",
+                            "}",
+                            "println ('after for')"
+                 ), of(0, 1, 2, "after for"))
             );
         }
     }

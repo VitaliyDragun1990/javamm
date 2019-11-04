@@ -30,8 +30,6 @@ public final class TernaryConditionalOperator implements Operator {
 
     public static final Lexeme SEPARATOR = new TernarySeparator();
 
-    private static final String CODE = "?"; // TODO: remove ???
-
     private static final String CONTITIONAL = "?";
 
     private static final String SEPARATOR_SYMBOL = ":";
@@ -54,7 +52,7 @@ public final class TernaryConditionalOperator implements Operator {
 
     @Override
     public String getCode() {
-        return CODE;
+        return CONTITIONAL;
     }
 
     @Override
@@ -64,7 +62,7 @@ public final class TernaryConditionalOperator implements Operator {
 
     @Override
     public String toString() {
-        return CODE;
+        return CONTITIONAL;
     }
 
     private static final class TernarySeparator implements Lexeme {

@@ -24,7 +24,6 @@ import com.revenat.javamm.code.fragment.operation.ForInitOperation;
 import com.revenat.javamm.code.fragment.operation.ForOperation;
 import com.revenat.javamm.code.fragment.operation.VariableDeclarationOperation;
 import com.revenat.javamm.interpreter.component.CalculatorFacade;
-
 import java.util.Optional;
 
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
@@ -46,7 +45,7 @@ public class ForOperationInterpreter extends AbstractLoopBlockOperationInterpret
     }
 
     @Override
-    protected void interpretOperation(final ForOperation operation) {
+    protected void processLoopOperation(final ForOperation operation) {
         if (isVariableDeclaredInsideInitializationScope(operation)) {
             NestedScopeLocalContextExecutor.executeInsideNestedScope(() -> interpretForOperation(operation));
         } else {

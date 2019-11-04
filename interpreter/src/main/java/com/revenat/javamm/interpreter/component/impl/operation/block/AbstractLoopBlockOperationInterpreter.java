@@ -20,6 +20,7 @@ package com.revenat.javamm.interpreter.component.impl.operation.block;
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.operation.AbstractLoopOperation;
 import com.revenat.javamm.interpreter.component.CalculatorFacade;
+import com.revenat.javamm.interpreter.component.impl.operation.exception.BreakOperationException;
 import com.revenat.javamm.interpreter.component.impl.operation.exception.ContinueOperationException;
 
 import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCurrentRuntime;
@@ -40,6 +41,17 @@ abstract class AbstractLoopBlockOperationInterpreter<T extends AbstractLoopOpera
         super(expressionContext);
         this.calculatorFacade = requireNonNull(calculatorFacade);
     }
+
+    @Override
+    protected final void interpretOperation(final T operation) {
+        try {
+            processLoopOperation(operation);
+        } catch (final BreakOperationException e) {
+            // do nothing. End loop execution
+        }
+    }
+
+    protected abstract void processLoopOperation(T operation);
 
     final void interpretLoopBody(final T operation) {
         checkForTermination();

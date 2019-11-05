@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.compiler.component.impl.operation.block;
+package com.revenat.javamm.compiler.component.impl.operation.block.forr;
 
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.Block;
@@ -23,6 +23,8 @@ import com.revenat.javamm.code.fragment.operation.ForOperation;
 import com.revenat.javamm.code.fragment.operation.ForOperation.Builder;
 import com.revenat.javamm.compiler.component.impl.operation.ForOperationHeader;
 import com.revenat.javamm.compiler.component.impl.operation.ForOperationHeaderResolver;
+import com.revenat.javamm.compiler.component.impl.operation.block.AbstractBlockOperationReader;
+
 import java.util.ListIterator;
 import java.util.Optional;
 import static com.revenat.javamm.code.syntax.Keywords.FOR;

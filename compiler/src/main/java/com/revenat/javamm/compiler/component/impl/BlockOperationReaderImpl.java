@@ -26,8 +26,7 @@ import com.revenat.javamm.compiler.component.BlockOperationReaderAware;
 import com.revenat.javamm.compiler.component.ExpressionOperationBuilder;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.OperationReader;
-import com.revenat.javamm.compiler.component.error.JavammStructSyntaxError;
-
+import com.revenat.javamm.compiler.component.error.BlockStatementIsNotClosedSyntaxError;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -114,8 +113,7 @@ public class BlockOperationReaderImpl implements BlockOperationReader {
     private void failIfBlockEndNotFound(final String moduleName,
                                         final boolean blockShouldEndWithClosingBrace) {
         if (blockShouldEndWithClosingBrace) {
-            throw new JavammStructSyntaxError("'}' expected to close block statement at the end of file",
-                    moduleName);
+            throw new BlockStatementIsNotClosedSyntaxError(moduleName);
         }
     }
 

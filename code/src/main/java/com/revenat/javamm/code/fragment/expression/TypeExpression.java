@@ -32,7 +32,7 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
  * @author Vitaliy Dragun
  *
  */
-public enum TypeExpression implements Expression {
+public enum TypeExpression implements Expression, CaseExpression {
 
     INTEGER(Integer.class),
 

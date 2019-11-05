@@ -32,24 +32,18 @@ public class DefaultOperation extends AbstractOperation implements SwitchChildOp
         this.body = body;
     }
 
+    @Override
     public Block getBody() {
         return body;
     }
 
     @Override
-    public int hashCode() {
-        return 1;
+    public int compareTo(final SwitchChildOperation o) {
+        return o instanceof DefaultOperation ? 0 : -1;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        return getClass() != obj.getClass();
+    public boolean isDefault() {
+        return true;
     }
-
 }

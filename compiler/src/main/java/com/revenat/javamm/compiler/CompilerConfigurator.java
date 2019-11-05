@@ -45,15 +45,24 @@ import com.revenat.javamm.compiler.component.impl.UnaryAssignmentExpressionResol
 import com.revenat.javamm.compiler.component.impl.VariableBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.expression.builder.PostfixNotationComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.impl.expression.builder.SingleTokenExpressionBuilderImpl;
+import com.revenat.javamm.compiler.component.impl.operation.CaseExpressionResolver;
 import com.revenat.javamm.compiler.component.impl.operation.ForInitOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.ForOperationHeaderResolver;
 import com.revenat.javamm.compiler.component.impl.operation.ForUpdateOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.SwitchChildOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.SwitchChildOperationValidator;
 import com.revenat.javamm.compiler.component.impl.operation.block.DoWhileOperationRedaer;
-import com.revenat.javamm.compiler.component.impl.operation.block.ForOperationHeaderResolverImpl;
-import com.revenat.javamm.compiler.component.impl.operation.block.ForOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.block.IfElseOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.block.SimpleBlockOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.block.WhileOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.block.forr.ForOperationHeaderResolverImpl;
+import com.revenat.javamm.compiler.component.impl.operation.block.forr.ForOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.block.switchh.CaseExpressionResolverImpl;
+import com.revenat.javamm.compiler.component.impl.operation.block.switchh.CaseOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.block.switchh.DefaultOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.block.switchh.SwitchChildOperationReaderImpl;
+import com.revenat.javamm.compiler.component.impl.operation.block.switchh.SwitchChildOperationValidatorImpl;
+import com.revenat.javamm.compiler.component.impl.operation.block.switchh.SwitchOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.BreakOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.ContinueOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.FinalDeclarationOperationReader;
@@ -137,6 +146,13 @@ public class CompilerConfigurator {
                 new ForOperationHeaderResolverImpl(initOperationReaders, expressionResolver, updateOperationReaders,
                         expressionOperationBuilder);
 
+    private final CaseExpressionResolver caseLabelExpressionResolver =
+            new CaseExpressionResolverImpl(expressionResolver);
+
+    private final SwitchChildOperationReader switchChildOperationReader = new SwitchChildOperationReaderImpl();
+
+    private final SwitchChildOperationValidator switchChildOperationValidator = new SwitchChildOperationValidatorImpl();
+
     private final Set<OperationReader> operationReaders = Set.of(
             printlnOperationReader,
             variableDeclarationOperationReader,
@@ -148,7 +164,10 @@ public class CompilerConfigurator {
             new ForOperationReader(forOperationHeaderResolver),
             new SimpleBlockOperationReader(),
             new ContinueOperationReader(),
-            new BreakOperationReader()
+            new BreakOperationReader(),
+            new CaseOperationReader(caseLabelExpressionResolver),
+            new DefaultOperationReader(),
+            new SwitchOperationReader(switchChildOperationReader, switchChildOperationValidator, expressionResolver)
     );
 
     private final BlockOperationReader blockOperationReader =

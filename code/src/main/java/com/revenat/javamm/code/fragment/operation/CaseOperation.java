@@ -17,10 +17,8 @@
 
 package com.revenat.javamm.code.fragment.operation;
 
-import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
-
-import java.util.Objects;
+import com.revenat.javamm.code.fragment.expression.CaseExpression;
 
 import static java.util.Objects.requireNonNull;
 
@@ -30,41 +28,36 @@ import static java.util.Objects.requireNonNull;
  */
 public class CaseOperation extends AbstractOperation implements SwitchChildOperation {
 
-    private final Expression label;
+    private final CaseExpression expression;
 
     private final Block body;
 
-    public CaseOperation(final SourceLine sourceLine, final Expression label, final Block body) {
+    public CaseOperation(final SourceLine sourceLine, final CaseExpression expression, final Block body) {
         super(sourceLine);
-        this.label = requireNonNull(label);
+        this.expression = requireNonNull(expression);
         this.body = requireNonNull(body);
     }
 
-    public Expression getLabel() {
-        return label;
+    public CaseExpression getExpression() {
+        return expression;
     }
 
+    @Override
     public Block getBody() {
         return body;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(label);
+    public int compareTo(final SwitchChildOperation o) {
+        return o instanceof CaseOperation ? compareCaseOperations(this, (CaseOperation) o) : 1;
+    }
+
+    private int compareCaseOperations(final CaseOperation one, final CaseOperation another) {
+        return one.expression.equals(another.expression) ? 0 : 1;
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final CaseOperation other = (CaseOperation) obj;
-        return Objects.equals(label, other.label);
+    public boolean isDefault() {
+        return false;
     }
 }

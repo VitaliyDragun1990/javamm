@@ -15,17 +15,14 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.code.fragment.operation;
+package com.revenat.javamm.code.fragment.expression;
 
-import com.revenat.javamm.code.fragment.Operation;
+import com.revenat.javamm.code.fragment.Expression;
 
 /**
  * @author Vitaliy Dragun
  *
  */
-public interface SwitchChildOperation extends Operation, Comparable<SwitchChildOperation> {
+public interface CaseExpression extends Expression {
 
-    Block getBody();
-
-    boolean isDefault();
 }

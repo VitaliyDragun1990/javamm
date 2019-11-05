@@ -71,12 +71,29 @@ public final class SyntaxValidationUtils {
         }
     }
 
-
     public static void validateClosingParenthesisBeforeOpeningCurlyBrace(final SourceLine sourceLine) {
         final String lastButOneToken = sourceLine.getToken(sourceLine.getTokenCount() - 2);
         if (!CLOSING_PARENTHESIS.equals(lastButOneToken)) {
             throw new JavammLineSyntaxError(sourceLine, "'%s' expected before '%s'",
                     CLOSING_PARENTHESIS, OPENING_CURLY_BRACE);
+        }
+    }
+
+    public static void validateTokenRightBeforeOpeningCurlyBrace(final String expectedToken,
+                                                                 final SourceLine sourceLine) {
+        final String lastButOneToken = sourceLine.getToken(sourceLine.getTokenCount() - 2);
+        if (!expectedToken.equals(lastButOneToken)) {
+            throw new JavammLineSyntaxError(sourceLine, "'%s' expected before '%s'",
+                    expectedToken, OPENING_CURLY_BRACE);
+        }
+    }
+
+    public static void validateOneTokenAfterAnotherOne(final String expectedToken,
+                                                       final String anotherToken,
+                                                       final int anotherTokenPosition,
+                                                       final SourceLine sourceLine) {
+        if (!expectedToken.equals(sourceLine.getToken(anotherTokenPosition + 1))) {
+            throw new JavammLineSyntaxError(sourceLine, "'%s' expected after '%s'", expectedToken, anotherToken);
         }
     }
 

@@ -192,7 +192,16 @@ public class SwitchOperationReader_Expected_Fail_IntegrationTest
 
                                 "}",
                                 "}"
-                        ), "Syntax error in 'module1' [Line: 3]: Duplicate case label '1'")
+                        ), "Syntax error in 'module1' [Line: 5]: Duplicate case label '1'"),
+                arguments(
+                        of(
+                                "switch ( a ) {",
+                                "case 1 : {",
+                                "   break",
+                                "   println ( a )",
+                                "}",
+                                "}"
+                                ), "Syntax error in 'module1' [Line: 5]: Unreachable code")
                 ), "case");
     }
 
@@ -265,7 +274,16 @@ public class SwitchOperationReader_Expected_Fail_IntegrationTest
 
                                 "}",
                                 "}"
-                        ), "Syntax error in 'module1' [Line: 5]: Duplicate default label")
+                        ), "Syntax error in 'module1' [Line: 5]: Duplicate default label"),
+                arguments(
+                        of(
+                                "switch ( a ) {",
+                                "default : {",
+                                "   break",
+                                "   println ( a )",
+                                "}",
+                                "}"
+                                ), "Syntax error in 'module1' [Line: 5]: Unreachable code")
                 ), "default");
     }
 }

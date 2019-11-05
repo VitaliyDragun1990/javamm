@@ -15,17 +15,17 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.code.fragment.operation;
-
-import com.revenat.javamm.code.fragment.Operation;
+package com.revenat.javamm.compiler.component.error;
 
 /**
  * @author Vitaliy Dragun
  *
  */
-public interface SwitchChildOperation extends Operation, Comparable<SwitchChildOperation> {
+public class BlockStatementIsNotClosedSyntaxError extends JavammStructSyntaxError {
 
-    Block getBody();
+    private static final long serialVersionUID = 1L;
 
-    boolean isDefault();
+    public BlockStatementIsNotClosedSyntaxError(final String moduleName) {
+        super("'}' expected to close block statement at the end of file", moduleName);
+    }
 }

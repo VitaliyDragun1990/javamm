@@ -26,7 +26,7 @@ import com.revenat.javamm.code.fragment.Expression;
  * @author Vitaliy Dragun
  *
  */
-public final class NullValueExpression implements Expression {
+public final class NullValueExpression implements Expression, CaseExpression {
     private static final NullValueExpression INSTANCE = new NullValueExpression();
 
     private NullValueExpression() {

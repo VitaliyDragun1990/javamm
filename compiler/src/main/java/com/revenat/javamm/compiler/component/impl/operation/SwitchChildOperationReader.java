@@ -15,17 +15,20 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.code.fragment.operation;
+package com.revenat.javamm.compiler.component.impl.operation;
 
-import com.revenat.javamm.code.fragment.Operation;
+import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.operation.SwitchChildOperation;
+import com.revenat.javamm.compiler.component.BlockOperationReader;
+
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * @author Vitaliy Dragun
  *
  */
-public interface SwitchChildOperation extends Operation, Comparable<SwitchChildOperation> {
+public interface SwitchChildOperationReader {
 
-    Block getBody();
-
-    boolean isDefault();
+    List<SwitchChildOperation> read(SourceLine sourceLine, ListIterator<SourceLine> sourceCode, BlockOperationReader blockOperationReader);
 }

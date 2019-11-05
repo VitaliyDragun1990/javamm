@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.compiler.component.impl.operation.block;
+package com.revenat.javamm.compiler.component.impl.operation.block.forr;
 
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;

@@ -42,8 +42,9 @@ public abstract class AbstractBinaryExpressionCalculator implements BinaryExpres
     }
 
     @Override
-    public Object calculate(final ExpressionContext expressionContext, final Expression expression1,
-            final Expression expression2) {
+    public Object calculate(final ExpressionContext expressionContext,
+                            final Expression expression1,
+                            final Expression expression2) {
         final Object value1 = expression1.getValue(expressionContext);
         final Object value2 = expression2.getValue(expressionContext);
 

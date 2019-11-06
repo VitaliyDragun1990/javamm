@@ -49,20 +49,4 @@ public class SwitchOperation extends AbstractOperation {
     public List<SwitchChildOperation> getChildOperations() {
         return childOperations;
     }
-
-//    public static void main(final String[] args) {
-//        final String hello ="hello";
-//
-//        switch (hello) {
-//        default : {
-//            System.out.println("loozer");
-//        }
-//        case "hellos": {
-//            System.out.println("Hello");
-//        }
-//        case "hi": {
-//            System.out.println("hi");
-//        }
-//        }
-//    }
 }

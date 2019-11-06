@@ -64,6 +64,7 @@ import com.revenat.javamm.interpreter.component.impl.operation.block.DoWhileOper
 import com.revenat.javamm.interpreter.component.impl.operation.block.ForOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.block.IfElseOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.block.SimpleBlockOperationInterpreter;
+import com.revenat.javamm.interpreter.component.impl.operation.block.SwitchOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.block.WhileOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.BreakOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.ContinueOperationInterpreter;
@@ -155,7 +156,8 @@ public class InterpreterConfigurator {
             new ForOperationInterpreter(expressionContext, calculatorFacade),
             new SimpleBlockOperationInterpreter(expressionContext),
             new ContinueOperationInterpreter(expressionContext),
-            new BreakOperationInterpreter(expressionContext)
+            new BreakOperationInterpreter(expressionContext),
+            new SwitchOperationInterpreter(expressionContext, calculatorFacade)
     );
 
     private final BlockOperationInterpreter blockOperationInterpreter = new BlockOperationInterpreterImpl(

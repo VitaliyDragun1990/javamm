@@ -18,15 +18,19 @@
 package com.revenat.javamm.compiler.component.impl.operation;
 
 import com.revenat.javamm.code.fragment.SourceLine;
-import com.revenat.javamm.code.fragment.expression.CaseExpression;
+import com.revenat.javamm.code.fragment.operation.SwitchBodyEntry;
+import com.revenat.javamm.compiler.component.BlockOperationReader;
 
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * @author Vitaliy Dragun
  *
  */
-public interface CaseExpressionResolver {
+public interface SwitchBodyReader {
 
-    CaseExpression resolve(List<String> expressionTokens, SourceLine sourceLine);
+    List<SwitchBodyEntry> read(String moduleName,
+                               ListIterator<SourceLine> sourceCode,
+                               BlockOperationReader blockOperationReader);
 }

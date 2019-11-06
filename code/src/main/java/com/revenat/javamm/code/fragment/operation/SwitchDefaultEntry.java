@@ -17,33 +17,14 @@
 
 package com.revenat.javamm.code.fragment.operation;
 
-import com.revenat.javamm.code.fragment.SourceLine;
-
 /**
  * @author Vitaliy Dragun
  *
  */
-public class DefaultOperation extends AbstractOperation implements SwitchChildOperation {
-
-    private final Block body;
-
-    public DefaultOperation(final SourceLine sourceLine, final Block body) {
-        super(sourceLine);
-        this.body = body;
-    }
+public interface SwitchDefaultEntry extends SwitchBodyEntry {
 
     @Override
-    public Block getBody() {
-        return body;
-    }
-
-    @Override
-    public int compareTo(final SwitchChildOperation o) {
-        return o instanceof DefaultOperation ? 0 : -1;
-    }
-
-    @Override
-    public boolean isDefault() {
+    default boolean isDefault() {
         return true;
     }
 }

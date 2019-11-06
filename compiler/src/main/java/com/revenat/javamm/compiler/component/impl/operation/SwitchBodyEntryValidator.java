@@ -15,17 +15,15 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.code.fragment.operation;
+package com.revenat.javamm.compiler.component.impl.operation;
 
-import com.revenat.javamm.code.fragment.Operation;
+import com.revenat.javamm.code.fragment.operation.SwitchBodyEntry;
 
 /**
  * @author Vitaliy Dragun
  *
  */
-public interface SwitchChildOperation extends Operation, Comparable<SwitchChildOperation> {
+public interface SwitchBodyEntryValidator {
 
-    Block getBody();
-
-    boolean isDefault();
+    void validate(SwitchBodyEntry entry);
 }

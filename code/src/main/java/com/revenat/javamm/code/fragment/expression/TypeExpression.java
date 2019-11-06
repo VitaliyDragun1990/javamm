@@ -32,7 +32,7 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
  * @author Vitaliy Dragun
  *
  */
-public enum TypeExpression implements Expression, CaseExpression {
+public enum TypeExpression implements Expression, CaseValueExpression {
 
     INTEGER(Integer.class),
 
@@ -71,6 +71,11 @@ public enum TypeExpression implements Expression, CaseExpression {
 
     @Override
     public Object getValue(final ExpressionContext expressionContext) {
+        return this;
+    }
+
+    @Override
+    public Object getValue() {
         return this;
     }
 

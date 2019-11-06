@@ -19,11 +19,10 @@ package com.revenat.javamm.compiler.component.impl.operation.block.switchh;
 
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
-import com.revenat.javamm.code.fragment.operation.SwitchChildOperation;
+import com.revenat.javamm.code.fragment.operation.SwitchBodyEntry;
 import com.revenat.javamm.code.fragment.operation.SwitchOperation;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
-import com.revenat.javamm.compiler.component.impl.operation.SwitchChildOperationReader;
-import com.revenat.javamm.compiler.component.impl.operation.SwitchChildOperationValidator;
+import com.revenat.javamm.compiler.component.impl.operation.SwitchBodyReader;
 import com.revenat.javamm.compiler.component.impl.operation.block.AbstractBlockOperationReader;
 
 import java.util.List;
@@ -46,18 +45,14 @@ public class SwitchOperationReader extends AbstractBlockOperationReader<SwitchOp
 
     private static final String OPENING_PARENTHESIS = "(";
 
-    private final SwitchChildOperationReader childOperationReader;
-
-    private final SwitchChildOperationValidator childOperationValidator;
+    private final SwitchBodyReader bodyReader;
 
     private final ExpressionResolver expressionResolver;
 
 
-    public SwitchOperationReader(final SwitchChildOperationReader childOperationReader,
-                                 final SwitchChildOperationValidator childOperationValidator,
+    public SwitchOperationReader(final SwitchBodyReader childOperationReader,
                                  final ExpressionResolver expressionResolver) {
-        this.childOperationReader = childOperationReader;
-        this.childOperationValidator = childOperationValidator;
+        this.bodyReader = childOperationReader;
         this.expressionResolver = expressionResolver;
     }
 
@@ -80,10 +75,9 @@ public class SwitchOperationReader extends AbstractBlockOperationReader<SwitchOp
     @Override
     protected SwitchOperation get(final SourceLine sourceLine, final ListIterator<SourceLine> sourceCode) {
         final Expression condition = getCondition(sourceLine);
-        final List<SwitchChildOperation> childOperations =
-                childOperationReader.read(sourceLine, sourceCode, getBlockOperationReader());
-        childOperationValidator.validate(childOperations);
-        return new SwitchOperation(sourceLine, condition, childOperations);
+        final List<SwitchBodyEntry> entries =
+                bodyReader.read(sourceLine.getModuleName(), sourceCode, getBlockOperationReader());
+        return new SwitchOperation(sourceLine, condition, entries);
     }
 
     private Expression getCondition(final SourceLine sourceLine) {

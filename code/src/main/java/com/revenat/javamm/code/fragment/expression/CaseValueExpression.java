@@ -17,37 +17,13 @@
 
 package com.revenat.javamm.code.fragment.expression;
 
-import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 
 /**
- * Represents {@code null} expression
- *
  * @author Vitaliy Dragun
  *
  */
-public final class NullValueExpression implements Expression, CaseValueExpression {
-    private static final NullValueExpression INSTANCE = new NullValueExpression();
+public interface CaseValueExpression extends Expression {
 
-    private NullValueExpression() {
-    }
-
-    public static NullValueExpression getInstance() {
-        return INSTANCE;
-    }
-
-    @Override
-    public Object getValue(final ExpressionContext expressionContext) {
-        return null;
-    }
-
-    @Override
-    public Object getValue() {
-        return null;
-    }
-
-    @Override
-    public String toString() {
-        return "null";
-    }
+    Object getValue();
 }

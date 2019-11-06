@@ -32,13 +32,13 @@ public class SwitchOperation extends AbstractOperation {
 
     private final Expression condition;
 
-    private final List<SwitchChildOperation> childOperations;
+    private final List<SwitchBodyEntry> entries;
 
     public SwitchOperation(final SourceLine sourceLine,
                            final Expression condition,
-                           final List<SwitchChildOperation> childOperations) {
+                           final List<SwitchBodyEntry> entries) {
         super(sourceLine);
-        this.childOperations = List.copyOf(childOperations);
+        this.entries = List.copyOf(entries);
         this.condition = requireNonNull(condition);
     }
 
@@ -46,7 +46,7 @@ public class SwitchOperation extends AbstractOperation {
         return condition;
     }
 
-    public List<SwitchChildOperation> getChildOperations() {
-        return childOperations;
+    public List<SwitchBodyEntry> getEntries() {
+        return entries;
     }
 }

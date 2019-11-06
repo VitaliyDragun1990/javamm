@@ -15,17 +15,17 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.compiler.component.error;
+package com.revenat.javamm.code.fragment.operation;
+
+import com.revenat.javamm.code.fragment.CompiledCodeFragment;
 
 /**
  * @author Vitaliy Dragun
  *
  */
-public class BlockStatementIsNotClosedSyntaxError extends JavammStructSyntaxError {
+public interface SwitchBodyEntry extends CompiledCodeFragment {
 
-    private static final long serialVersionUID = 1L;
+    Block getBody();
 
-    public BlockStatementIsNotClosedSyntaxError(final String moduleName) {
-        super("'}' expected to close block statement at the end of file", moduleName);
-    }
+    boolean isDefault();
 }

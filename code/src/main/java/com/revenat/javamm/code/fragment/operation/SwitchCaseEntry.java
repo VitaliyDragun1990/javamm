@@ -15,17 +15,20 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.compiler.component.impl.operation;
+package com.revenat.javamm.code.fragment.operation;
 
-import com.revenat.javamm.code.fragment.operation.SwitchChildOperation;
-
-import java.util.List;
+import com.revenat.javamm.code.fragment.expression.CaseValueExpression;
 
 /**
  * @author Vitaliy Dragun
  *
  */
-public interface SwitchChildOperationValidator {
+public interface SwitchCaseEntry extends SwitchBodyEntry {
 
-    void validate(List<SwitchChildOperation> switchChildOperations);
+    CaseValueExpression getExpression();
+
+    @Override
+    default boolean isDefault() {
+        return false;
+    }
 }

@@ -19,11 +19,11 @@ package com.revenat.javamm.compiler.component.impl.operation.block.switchh;
 
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
-import com.revenat.javamm.code.fragment.expression.CaseExpression;
+import com.revenat.javamm.code.fragment.expression.CaseValueExpression;
 import com.revenat.javamm.code.util.TypeUtils;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
-import com.revenat.javamm.compiler.component.impl.operation.CaseExpressionResolver;
+import com.revenat.javamm.compiler.component.impl.operation.CaseValueExpressionResolver;
 
 import java.util.List;
 
@@ -31,16 +31,16 @@ import java.util.List;
  * @author Vitaliy Dragun
  *
  */
-public class CaseExpressionResolverImpl implements CaseExpressionResolver {
+public class CaseValueExpressionResolverImpl implements CaseValueExpressionResolver {
 
     private final ExpressionResolver expressionResolver;
 
-    public CaseExpressionResolverImpl(final ExpressionResolver expressionResolver) {
+    public CaseValueExpressionResolverImpl(final ExpressionResolver expressionResolver) {
         this.expressionResolver = expressionResolver;
     }
 
     @Override
-    public CaseExpression resolve(final List<String> expressionTokens, final SourceLine sourceLine) {
+    public CaseValueExpression resolve(final List<String> expressionTokens, final SourceLine sourceLine) {
         requireSingleTokenOnly(expressionTokens, sourceLine);
         final Expression expression = expressionResolver.resolve(expressionTokens, sourceLine);
         return requireCaseLabelExpression(expression, sourceLine);
@@ -52,9 +52,9 @@ public class CaseExpressionResolverImpl implements CaseExpressionResolver {
         }
     }
 
-    private CaseExpression requireCaseLabelExpression(final Expression expression, final SourceLine sourceLine) {
-        if (TypeUtils.confirmType(CaseExpression.class, expression)) {
-            return (CaseExpression) expression;
+    private CaseValueExpression requireCaseLabelExpression(final Expression expression, final SourceLine sourceLine) {
+        if (TypeUtils.confirmType(CaseValueExpression.class, expression)) {
+            return (CaseValueExpression) expression;
         }
         throw new JavammLineSyntaxError(sourceLine, "A constant expected between 'case' and ':'");
     }

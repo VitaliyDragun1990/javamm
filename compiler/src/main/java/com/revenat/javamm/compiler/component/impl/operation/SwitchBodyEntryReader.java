@@ -15,14 +15,21 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.code.fragment.expression;
+package com.revenat.javamm.compiler.component.impl.operation;
 
-import com.revenat.javamm.code.fragment.Expression;
+import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.operation.SwitchBodyEntry;
+import com.revenat.javamm.compiler.component.BlockOperationReader;
+
+import java.util.ListIterator;
 
 /**
  * @author Vitaliy Dragun
  *
  */
-public interface CaseExpression extends Expression {
+public interface SwitchBodyEntryReader<T extends SwitchBodyEntry> {
 
+    boolean canRead(SourceLine sourceLine);
+
+    T read(SourceLine sourceLine, ListIterator<SourceLine> sourceCode, BlockOperationReader blockOperationReader);
 }

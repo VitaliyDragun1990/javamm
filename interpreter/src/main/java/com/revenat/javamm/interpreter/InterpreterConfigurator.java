@@ -157,7 +157,7 @@ public class InterpreterConfigurator {
             new SimpleBlockOperationInterpreter(expressionContext),
             new ContinueOperationInterpreter(expressionContext),
             new BreakOperationInterpreter(expressionContext),
-            new SwitchOperationInterpreter(expressionContext, calculatorFacade)
+            new SwitchOperationInterpreter(expressionContext)
     );
 
     private final BlockOperationInterpreter blockOperationInterpreter = new BlockOperationInterpreterImpl(

@@ -18,18 +18,13 @@
 package com.revenat.javamm.interpreter.component.impl.operation.block;
 
 import com.revenat.javamm.code.component.ExpressionContext;
-import com.revenat.javamm.code.fragment.Expression;
-import com.revenat.javamm.code.fragment.operation.CaseOperation;
-import com.revenat.javamm.code.fragment.operation.SwitchChildOperation;
+import com.revenat.javamm.code.fragment.operation.SwitchBodyEntry;
+import com.revenat.javamm.code.fragment.operation.SwitchCaseEntry;
 import com.revenat.javamm.code.fragment.operation.SwitchOperation;
-import com.revenat.javamm.interpreter.component.CalculatorFacade;
 import com.revenat.javamm.interpreter.component.impl.operation.exception.BreakOperationException;
 
 import java.util.List;
-
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.PREDICATE_EQUALS;
-
-import static java.util.Objects.requireNonNull;
+import java.util.Objects;
 
 /**
  * @author Vitaliy Dragun
@@ -37,12 +32,8 @@ import static java.util.Objects.requireNonNull;
  */
 public class SwitchOperationInterpreter extends AbstractBlockOperationInterpreter<SwitchOperation> {
 
-    private final CalculatorFacade calcualtorFacade;
-
-    public SwitchOperationInterpreter(final ExpressionContext expressionContext,
-                                      final CalculatorFacade calcualtorFacade) {
+    public SwitchOperationInterpreter(final ExpressionContext expressionContext) {
         super(expressionContext);
-        this.calcualtorFacade = requireNonNull(calcualtorFacade);
     }
 
     @Override
@@ -52,46 +43,41 @@ public class SwitchOperationInterpreter extends AbstractBlockOperationInterprete
 
     @Override
     protected void interpretOperation(final SwitchOperation operation) {
-        final int matchPosition = findMatchedLabelPosition(operation);
-        interpretOperations(getLablesBeginningAtPosition(matchPosition, operation));
+        final Object switchConditionValue = operation.getCondition().getValue(expressionContext);
+        interpretEntries(findMatchedEntries(switchConditionValue, operation.getEntries()));
     }
 
-    private int findMatchedLabelPosition(final SwitchOperation operation) {
-        final List<SwitchChildOperation> labels = operation.getChildOperations();
-
-        int defaultLabelPosition = labels.size();
-        for (int i = 0; i < labels.size(); i++) {
-            final SwitchChildOperation currentLabel = labels.get(i);
-            defaultLabelPosition = currentLabel.isDefault() ? i : defaultLabelPosition;
-            if (areMatch(operation, currentLabel)) {
-                return i;
+    private List<SwitchBodyEntry> findMatchedEntries(final Object switchValue, final List<SwitchBodyEntry> entries) {
+        int defaultEntryPosition = entries.size();
+        for (int i = 0; i < entries.size(); i++) {
+            final SwitchBodyEntry current = entries.get(i);
+            defaultEntryPosition = current.isDefault() ? i : defaultEntryPosition;
+            if (areMatch(switchValue, current)) {
+                return entries.subList(i, entries.size());
             }
         }
-        return defaultLabelPosition;
+        return entries.subList(defaultEntryPosition, entries.size());
     }
 
-    private List<SwitchChildOperation> getLablesBeginningAtPosition(final int biginningPosition,
-                                                                    final SwitchOperation switchOperation) {
-        return switchOperation
-                .getChildOperations()
-                .subList(biginningPosition, switchOperation.getChildOperations().size());
-    }
-
-    private void interpretOperations(final List<SwitchChildOperation> operations) {
-        try {
-            for (final SwitchChildOperation operation : operations) {
-                interpretBlock(operation.getBody());
+    private void interpretEntries(final List<SwitchBodyEntry> entries) {
+        for (final SwitchBodyEntry entry : entries) {
+            try {
+                interpretBlock(entry.getBody());
+            } catch (final BreakOperationException e) {
+                break;
             }
-        } catch (final BreakOperationException e) {
-            // do nothing. Stop evaluating switch body
         }
     }
 
-    private boolean areMatch(final SwitchOperation operation, final SwitchChildOperation label) {
-        return !label.isDefault() && areEqual(operation.getCondition(), ((CaseOperation) label).getExpression());
+    private boolean areMatch(final Object switchConditionValue, final SwitchBodyEntry entry) {
+        return !entry.isDefault() && areEqual(switchConditionValue, getCaseValue(entry));
     }
 
-    private boolean areEqual(final Expression first, final Expression second) {
-        return (Boolean) calcualtorFacade.calculate(expressionContext, first, PREDICATE_EQUALS, second);
+    private Object getCaseValue(final SwitchBodyEntry entry) {
+        return ((SwitchCaseEntry) entry).getExpression().getValue();
+    }
+
+    private boolean areEqual(final Object switchConditionValue, final Object caseExpressionValue) {
+        return Objects.equals(switchConditionValue, caseExpressionValue);
     }
 }

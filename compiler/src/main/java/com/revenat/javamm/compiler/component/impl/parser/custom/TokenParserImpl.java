@@ -19,7 +19,7 @@ package com.revenat.javamm.compiler.component.impl.parser.custom;
 
 import com.revenat.javamm.compiler.component.TokenParser;
 import com.revenat.javamm.compiler.component.impl.parser.custom.CommentDiscarder.CommentFreeSourceLine;
-import com.revenat.javamm.compiler.component.impl.parser.custom.StringLiteralExtractor.StringLiteralHolder;
+import com.revenat.javamm.compiler.component.impl.parser.custom.StringLiteralParser.LiteralParserResult;
 import com.revenat.javamm.compiler.model.TokenParserResult;
 
 import java.util.ArrayList;
@@ -31,65 +31,61 @@ import java.util.List;
  */
 public class TokenParserImpl implements TokenParser {
 
-    private final StringLiteralExtractor stringLiteralExtractor;
+    private final StringLiteralParser stringLiteralParser;
 
-    private final LineSplitter lineSplitter;
+    private final ByDelimiterSplitter byDelimiterSplitter;
 
     public TokenParserImpl() {
-        stringLiteralExtractor = new StringLiteralExtractor();
-        lineSplitter = new LineSplitter();
+        stringLiteralParser = new StringLiteralParser();
+        byDelimiterSplitter = new ByDelimiterSplitter();
     }
 
     @Override
     public TokenParserResult parseLine(final String sourceCodeLine, final boolean isMultilineCommentStartedBefore) {
         final String trimmedLine = trimAllWhitespaceCharacters(sourceCodeLine);
 
-        return parseTrimmed(trimmedLine, isMultilineCommentStartedBefore);
+        return trimmedLine.isEmpty() ? emptyResult(isMultilineCommentStartedBefore) :
+            parse(trimmedLine, isMultilineCommentStartedBefore);
     }
 
-    private TokenParserResult parseTrimmed(final String line, final boolean isMultilineCommentStartedBefore) {
-        if (line.isEmpty()) {
-            return new TokenParserResult(List.of(), isMultilineCommentStartedBefore);
-        } else {
-            return parseIntoTokens(line, isMultilineCommentStartedBefore);
-        }
+    private TokenParserResult parse(final String line, final boolean isMultilineCommentStartedBefore) {
+        final CommentFreeSourceLine commentFreeLine = discardAllComments(line, isMultilineCommentStartedBefore);
+
+        return commentFreeLine.isEmpty() ? emptyResult(commentFreeLine.multilineCommentStarted) :
+            resultWithTokens(splitIntoTokens(commentFreeLine.content), commentFreeLine.multilineCommentStarted);
     }
 
-    private TokenParserResult parseIntoTokens(final String line, final boolean isMultilineCommentStartedBefore) {
-        final CommentFreeSourceLine commentFreeLine =
-                new CommentDiscarder(line, isMultilineCommentStartedBefore).discardComments();
+    private CommentFreeSourceLine discardAllComments(final String line, final boolean isMultilineCommentStartedBefore) {
+        return new CommentDiscarder(line, isMultilineCommentStartedBefore).discardComments();
+    }
 
+    private List<String> splitIntoTokens(final String line) {
         final List<String> tokens = new ArrayList<>();
-        split(commentFreeLine.content, tokens);
 
-        return new TokenParserResult(tokens, commentFreeLine.multilineCommentStarted);
-    }
-
-    private void split(final String line, final List<String> tokens) {
-        if (line.isEmpty()) {
-            return;
+        final List<LiteralParserResult> results = stringLiteralParser.parse(line);
+        for (final LiteralParserResult result : results) {
+            result.getHeadFragment().ifPresent(fragment -> tokens.addAll(splitByDelimiters(fragment)));
+            result.getLiteral().ifPresent(tokens::add);
+            result.getTailFragment().ifPresent(tail -> tokens.addAll(splitByDelimiters(tail)));
         }
 
-        if (stringLiteralExtractor.isStringLiteralPresent(line)) {
-            extractStringLiteral(line, tokens);
-        } else {
-            splitByDelimiters(line, tokens);
-        }
+        return tokens;
     }
 
-    private void extractStringLiteral(final String line, final List<String> tokens) {
-        final StringLiteralHolder literalHolder = stringLiteralExtractor.extract(line);
-
-        splitByDelimiters(literalHolder.beforeLiteralFragment, tokens);
-        tokens.add(literalHolder.literal);
-        split(literalHolder.afterLiteralFragment, tokens);
-    }
-
-    private void splitByDelimiters(final String line, final List<String> tokens) {
-        tokens.addAll(lineSplitter.splitByDelimiters(line));
+    private List<String> splitByDelimiters(final String line) {
+        return byDelimiterSplitter.splitByDelimiters(line);
     }
 
     private String trimAllWhitespaceCharacters(final String sourceCodeLine) {
         return sourceCodeLine.replaceAll("(^\\h*)|(\\h*$)", "").trim();
+    }
+
+    private TokenParserResult emptyResult(final boolean isMultilineCommentStartedBefore) {
+        return new TokenParserResult(isMultilineCommentStartedBefore);
+    }
+
+    private TokenParserResult resultWithTokens(final List<String> tokens,
+                                               final boolean isMultilineCommentStartedBefore) {
+        return new TokenParserResult(tokens, isMultilineCommentStartedBefore);
     }
 }

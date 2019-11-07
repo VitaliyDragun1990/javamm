@@ -17,6 +17,10 @@
 
 package com.revenat.javamm.compiler.component.impl.parser.custom;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 /**
  * Checks whether string literal (text fragments surrounded by either single
  * quote ' or by double quote '' notation) is present in the specified source
@@ -25,20 +29,45 @@ package com.revenat.javamm.compiler.component.impl.parser.custom;
  * @author Vitaliy Dragun
  *
  */
-class StringLiteralExtractor {
+class StringLiteralParser {
 
     private static final String SINGLE_QUOTE_NOTATION = "'";
 
     private static final String DOUBLE_QUOTE_NOTATION = "\"";
 
-    boolean isStringLiteralPresent(final String line) {
+    List<LiteralParserResult> parse(final String line) {
+        final List<LiteralParserResult> literals = new ArrayList<>();
+
+        if (isStringLiteralPresent(line)) {
+            parse(line, literals);
+        } else {
+            literals.add(new LiteralParserResult(line, "", ""));
+        }
+        return literals;
+    }
+
+    private void parse(final String line, final List<LiteralParserResult> result) {
+        String targetLine = line;
+        while (true) {
+            final LiteralParserResult literal = extractFrom(targetLine);
+            if (isStringLiteralPresent(literal.tailFragment)) {
+                result.add(new LiteralParserResult(literal.headFragment, literal.literal, ""));
+                targetLine = literal.tailFragment;
+            } else {
+                result.add(literal);
+                break;
+            }
+        }
+    }
+
+    private boolean isStringLiteralPresent(final String line) {
         final int singleIndex = line.indexOf(SINGLE_QUOTE_NOTATION);
         final int doubleIndex = line.indexOf(DOUBLE_QUOTE_NOTATION);
 
         return singleIndex >= 0 || doubleIndex >= 0;
     }
 
-    StringLiteralHolder extract(final String line) {
+    private LiteralParserResult extractFrom(final String line) {
         final int singleIndex = line.indexOf(SINGLE_QUOTE_NOTATION);
         final int doubleIndex = line.indexOf(DOUBLE_QUOTE_NOTATION);
 
@@ -55,13 +84,13 @@ class StringLiteralExtractor {
         }
     }
 
-    private StringLiteralHolder quotedLiteralFrom(final String line, final String quotedNotation) {
+    private LiteralParserResult quotedLiteralFrom(final String line, final String quotedNotation) {
         final int fromPosition = getFromPosition(line, quotedNotation);
         final int toPosition = getToPosition(line, fromPosition, quotedNotation);
         final String quotedString = getQuotedString(line, fromPosition, toPosition);
         final String beforeLiteralFragment = line.substring(0, fromPosition);
         final String afterLiteralFragment = line.substring(toPosition + 1, line.length());
-        return new StringLiteralHolder(quotedString, beforeLiteralFragment, afterLiteralFragment);
+        return new LiteralParserResult(beforeLiteralFragment, quotedString, afterLiteralFragment);
     }
 
     private int getFromPosition(final String line, final String quoteNotation) {
@@ -80,20 +109,32 @@ class StringLiteralExtractor {
         return line.substring(fromPosition, toPosition + 1);
     }
 
-    static class StringLiteralHolder {
+    static final class LiteralParserResult {
 
-        final String literal;
+        private final String literal;
 
-        final String beforeLiteralFragment;
+        private final String headFragment;
 
-        final String afterLiteralFragment;
+        private final String tailFragment;
 
-        StringLiteralHolder(final String literal,
-                            final String beforeLiteralFragment,
-                            final String afterLiteralFragment) {
+        private LiteralParserResult(final String headFragment,
+                            final String literal,
+                            final String tailFragment) {
             this.literal = literal;
-            this.beforeLiteralFragment = beforeLiteralFragment;
-            this.afterLiteralFragment = afterLiteralFragment;
+            this.headFragment = headFragment;
+            this.tailFragment = tailFragment;
+        }
+
+        Optional<String> getHeadFragment() {
+            return headFragment.isEmpty() ? Optional.empty() : Optional.of(headFragment);
+        }
+
+        Optional<String> getTailFragment() {
+            return tailFragment.isEmpty() ? Optional.empty() : Optional.of(tailFragment);
+        }
+
+        Optional<String> getLiteral() {
+            return literal.isEmpty() ? Optional.empty() : Optional.of(literal);
         }
     }
 }

@@ -19,57 +19,44 @@ package com.revenat.javamm.compiler.component.impl.parser.custom;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.revenat.javamm.code.syntax.SyntaxUtils.isSignificantDelimiter;
 
 /**
- * Splits specified source line using appropriate delimiters
- *
  * @author Vitaliy Dragun
  *
  */
-class LineSplitter {
+class SignificantDelimiterParser {
 
-    List<String> splitByDelimiters(final String line) {
-        if (!line.isEmpty()) {
-            final List<String> splittedByWhitespaces = splitByWhitespaceDelimiters(line);
-            return splitBySignificantDelimiters(splittedByWhitespaces);
+    List<String> parseIfPresent(final String line) {
+        if (isSignificantDelimiterPresent(line)) {
+            return process(line);
         }
-        return List.of();
+        return List.of(line);
     }
 
-    private List<String> splitByWhitespaceDelimiters(final String line) {
-        return List.of(line.trim().split("\\s+"));
+    private List<String> process(final String line) {
+        final int from = findDelimiterStartIndex(line);
+        final int to = findDelimiterEndIndex(line, from);
+        final String delimiterPart = line.substring(from, to);
+        return Stream
+                .of(Stream.of(line.substring(0, from)),
+                    parse(delimiterPart).stream(),
+                    parseIfPresent(line.substring(to)).stream())
+                .flatMap(Function.identity())
+                .filter(t -> !t.isEmpty())
+                .collect(Collectors.toList());
     }
 
-    private List<String> splitBySignificantDelimiters(final List<String> tokens) {
+    private List<String> parse(final String delimiters) {
         final List<String> result = new ArrayList<>();
 
-        for (final String token : tokens) {
-            if (!token.isEmpty()) {
-                final int delimiterStartIndex = findDelimiterStartIndex(token);
-                if (delimiterStartIndex != -1) {
-                    final int delimiterEndIndex = findDelimiterEndIndex(token, delimiterStartIndex);
-                    final String delimiterPart = token.substring(delimiterStartIndex, delimiterEndIndex);
-
-                    result.addAll(splitBySignificantDelimiters(List.of(token.substring(0, delimiterStartIndex))));
-                    result.addAll(parseDelimiters(delimiterPart));
-                    result.addAll(splitBySignificantDelimiters(List.of(token.substring(delimiterEndIndex))));
-                } else {
-                    result.add(token);
-                }
-            }
-        }
+        parseDelimiters(delimiters, 0, delimiters.length(), result);
 
         return result;
-    }
-
-    private List<String> parseDelimiters(final String delimiterPart) {
-        final List<String> delimiters = new ArrayList<>();
-
-        parseDelimiters(delimiterPart, 0, delimiterPart.length(), delimiters);
-
-        return delimiters;
     }
 
     private void parseDelimiters(final String delimiterPart, final int from, final int to, final List<String> result) {
@@ -84,7 +71,10 @@ class LineSplitter {
         } else {
             parseDelimiters(delimiterPart, from, to - 1, result);
         }
+    }
 
+    private boolean isSignificantDelimiterPresent(final String line) {
+        return findDelimiterStartIndex(line) != -1;
     }
 
     private int findDelimiterStartIndex(final String token) {
@@ -97,9 +87,6 @@ class LineSplitter {
     }
 
     private int findDelimiterEndIndex(final String token, final int delimiterStartIndex) {
-        if (delimiterStartIndex == -1) {
-            return -1;
-        }
         for (int i = delimiterStartIndex + 1; i < token.length(); i++) {
             if (!isSignificantDelimiter(token.substring(i, i + 1))) {
                 return i;

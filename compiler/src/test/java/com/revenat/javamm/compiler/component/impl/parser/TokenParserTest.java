@@ -20,9 +20,13 @@ package com.revenat.javamm.compiler.component.impl.parser;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+import com.revenat.javamm.code.fragment.operator.BinaryOperator;
+import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.TokenParser;
 import com.revenat.javamm.compiler.component.impl.parser.custom.TokenParserImpl;
 import com.revenat.javamm.compiler.model.TokenParserResult;
@@ -36,6 +40,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -43,6 +48,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.EnumSource.Mode;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.revenat.juinit.addons.ReplaceCamelCase;
@@ -236,24 +243,40 @@ class TokenParserTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {
-            "+", "++", "+=", "-", "--", "*", "*=", "/", "/=", "%", "%=",
-            ">", ">>", ">=", ">>>", ">>=", ">>>=", "<", "<<", "<=", "<<=",
-            "!", "!=", "=", "==", "&", "&&", "&=", "|", "||", "|=", "^", "^=", "~",
-            "?"
-    })
+    @EnumSource(value = BinaryOperator.class, names = "PREDICATE_TYPEOF", mode = Mode.EXCLUDE)
     @Order(11)
-    void shouldSupportAllOperatorTokens(final String operatorToken) {
-        final String sourceLine = sourceLine("var a = b[operatorToken]c", operatorToken);
+    void shouldSupportAllBinaryOperatorTokens(final BinaryOperator operator) {
+        final String sourceLine = sourceLine("var a = b[operatorToken]c", operator.getCode());
 
         final TokenParserResult result = tokenParser.parseLine(sourceLine, false);
 
-        assertTokens(result, "var", "a", "=", "b", operatorToken, "c");
+        assertTokens(result, "var", "a", "=", "b", operator.getCode(), "c");
+    }
+
+    @ParameterizedTest
+    @EnumSource(UnaryOperator.class)
+    @Order(12)
+    void shouldSupportAllUnaryOperatorTokens(final UnaryOperator operator) {
+        final String sourceLine = sourceLine("var a = [operatorToken]c", operator.getCode());
+
+        final TokenParserResult result = tokenParser.parseLine(sourceLine, false);
+
+        assertTokens(result, "var", "a", "=", operator.getCode(), "c");
+    }
+
+    @Test
+    @Order(13)
+    void shouldSupportTernaryOperatorTokens() {
+        final String sourceLine = "var a = b ? c : d";
+
+        final TokenParserResult result = tokenParser.parseLine(sourceLine, false);
+
+        assertTokens(result, "var", "a", "=", "b", "?", "c", ":", "d");
     }
 
     @ParameterizedTest(name = "[{index}] -> {0}")
     @ArgumentsSource(ComplexExpressionProvider.class)
-    @Order(12)
+    @Order(14)
     void shouldBeAbleToSplitLineUsingAllSupportedDelimiters(final String sourceLine,
                                                             final List<String> expectedTokens) {
         final TokenParserResult result = tokenParser.parseLine(sourceLine, false);

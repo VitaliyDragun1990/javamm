@@ -17,6 +17,11 @@
 
 package com.revenat.javamm.code.syntax;
 
+import com.revenat.javamm.code.fragment.operator.BinaryOperator;
+import com.revenat.javamm.code.fragment.operator.TernaryConditionalOperator;
+import com.revenat.javamm.code.fragment.operator.UnaryOperator;
+
+import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -41,13 +46,13 @@ public final class Delimiters {
 
     public static final Set<Character> STRING_DELIMITERS = Set.of('\'', '"');
 
-    public static final Set<String> OPERATOR_TOKEN_DELIMITERS =
-            Set.of(
-                "+", "++", "+=", "-", "--", "-=", "*", "*=", "/", "/=", "%", "%=",
-                ">", ">>", ">=", ">>>", ">>=", ">>>=", "<", "<<", "<=", "<<=",
-                "!", "!=", "=", "==", "&", "&&", "&=", "|", "||", "|=", "^", "^=", "~",
-                "?"
-            );
+    /*
+      "+", "++", "+=", "-", "--", "-=", "*", "*=", "/", "/=", "%", "%=",
+      ">", ">>", ">=", ">>>", ">>=", ">>>=", "<", "<<", "<=", "<<=",
+      "!", "!=", "=", "==", "&", "&&", "&=", "|", "||", "|=", "^", "^=", "~",
+      "?"
+    */
+    public static final Set<String> OPERATOR_TOKEN_DELIMITERS = operatorTokenDelimiters();
 
     /**
      * https://www.cis.upenn.edu/~matuszek/General/JavaSyntax/parentheses.html
@@ -82,5 +87,30 @@ public final class Delimiters {
             .collect(toUnmodifiableSet());
 
     private Delimiters() {
+    }
+
+    private static Set<String> operatorTokenDelimiters() {
+        return Stream.of(
+                binaryOperatorTokenProvider(),
+                unaryOperatorTokenProvider(),
+                ternaryOperatorTokenProvider(),
+                Stream.of("=")
+        ).flatMap(identity())
+         .collect(toUnmodifiableSet());
+    }
+
+    private static Stream<String> binaryOperatorTokenProvider() {
+        return Arrays.stream(BinaryOperator.values())
+                .filter(op -> op != BinaryOperator.PREDICATE_TYPEOF)
+                .map(BinaryOperator::getCode);
+    }
+
+    private static Stream<String> unaryOperatorTokenProvider() {
+        return Arrays.stream(UnaryOperator.values())
+                .map(UnaryOperator::getCode);
+    }
+
+    private static Stream<String> ternaryOperatorTokenProvider() {
+        return Stream.of(TernaryConditionalOperator.OPERATOR.getCode());
     }
 }

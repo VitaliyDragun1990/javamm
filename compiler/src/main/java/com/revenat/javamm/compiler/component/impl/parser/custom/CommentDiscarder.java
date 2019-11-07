@@ -43,13 +43,12 @@ class CommentDiscarder {
 
     private Character stringLiteralQuote;
 
-
     CommentDiscarder(final String sourceLine, final boolean multilineCommentStarted) {
         this.sourceLine = toChars(sourceLine).listIterator();
         commentFreeContent = new StringBuilder();
         commentedOutContent = new StringBuilder();
         this.multilineCommentStarted = multilineCommentStarted;
-        endStringLiteral();
+        stringLiteralQuote = null;
     }
 
     CommentFreeSourceLine discardComments() {
@@ -148,6 +147,10 @@ class CommentDiscarder {
         protected CommentFreeSourceLine(final String content, final boolean multilineCommentStarted) {
             this.content = content;
             this.multilineCommentStarted = multilineCommentStarted;
+        }
+
+        boolean isEmpty() {
+            return content.isEmpty();
         }
     }
 }

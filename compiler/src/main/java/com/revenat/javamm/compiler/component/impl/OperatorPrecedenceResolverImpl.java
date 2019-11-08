@@ -126,7 +126,9 @@ public class OperatorPrecedenceResolverImpl implements OperatorPrecedenceResolve
             entry(ASSIGNMENT_BITWISE_SHIFT_RIGHT_ZERO_FILL, MAX_PRECEDENCE - 13),
             entry(ASSIGNMENT_BITWISE_AND, MAX_PRECEDENCE - 13),
             entry(ASSIGNMENT_BITWISE_XOR, MAX_PRECEDENCE - 13),
-            entry(ASSIGNMENT_BITWISE_OR, MAX_PRECEDENCE - 13)
+            entry(ASSIGNMENT_BITWISE_OR, MAX_PRECEDENCE - 13),
+
+            entry(UnaryOperator.HASH_CODE, 0)
             );
 
     static {

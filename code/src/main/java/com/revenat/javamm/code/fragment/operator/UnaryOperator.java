@@ -39,6 +39,8 @@ public enum UnaryOperator implements Operator {
 
     BITWISE_INVERSE("~"),
 
+    HASH_CODE("#"),
+
     LOGICAL_NOT("!");
 
     private final String code;

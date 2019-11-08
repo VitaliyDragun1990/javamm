@@ -1,5 +1,2 @@
-for (var i = 0; i < 10; i++) {	
-	println(i + " -> before ")
-	break
-	println(i + " -> after")
-}
+var a = #"Hello world"
+println(a)

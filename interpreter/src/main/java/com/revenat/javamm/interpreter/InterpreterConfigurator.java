@@ -30,6 +30,7 @@ import com.revenat.javamm.interpreter.component.impl.CalculatorFacadeImpl;
 import com.revenat.javamm.interpreter.component.impl.ExpressionContextImpl;
 import com.revenat.javamm.interpreter.component.impl.InterpreterImpl;
 import com.revenat.javamm.interpreter.component.impl.RuntimeBuilderImpl;
+import com.revenat.javamm.interpreter.component.impl.calculator.HashCodeUnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.binary.AdditionBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.binary.DivisionBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.binary.ModulusBinaryExpressionCalculator;
@@ -129,7 +130,8 @@ public class InterpreterConfigurator {
 
                     new BitwiseInverseUnaryExpressionCalculator(),
 
-                    new LogicalNotUnaryExpressionCalculator()
+                    new LogicalNotUnaryExpressionCalculator(),
+                    new HashCodeUnaryExpressionCalculator()
                     ));
 
     private final Set<ExpressionEvaluator<?>> expressionEvaluators = Set.of(

@@ -20,7 +20,6 @@ package com.revenat.javamm.compiler.component.impl.operation.block.forr;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.Block;
 import com.revenat.javamm.code.fragment.operation.ForOperation;
-import com.revenat.javamm.code.fragment.operation.ForOperation.Builder;
 import com.revenat.javamm.compiler.component.impl.operation.ForOperationHeader;
 import com.revenat.javamm.compiler.component.impl.operation.ForOperationHeaderResolver;
 import com.revenat.javamm.compiler.component.impl.operation.block.AbstractBlockOperationReader;
@@ -63,12 +62,7 @@ public class ForOperationReader extends AbstractBlockOperationReader<ForOperatio
         final ForOperationHeader header = headerResolver.resolve(sourceLine);
         final Block body = getBody(sourceLine, sourceCode);
 
-        final ForOperation.Builder builder = new Builder();
-        builder.setSourceLine(sourceLine);
-        builder.setBody(body);
-        header.populate(builder);
-
-        return builder.build();
+        return header.mergeWith(body, sourceLine);
     }
 
     private Block getBody(final SourceLine sourceLine, final ListIterator<SourceLine> sourceCode) {

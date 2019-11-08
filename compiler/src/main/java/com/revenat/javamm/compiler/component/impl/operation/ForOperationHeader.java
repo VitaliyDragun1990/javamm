@@ -17,7 +17,9 @@
 
 package com.revenat.javamm.compiler.component.impl.operation;
 
-import static com.revenat.javamm.code.fragment.operation.ForOperation.Builder;
+import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.operation.Block;
+import com.revenat.javamm.code.fragment.operation.ForOperation;
 
 /**
  * @author Vitaliy Dragun
@@ -25,5 +27,5 @@ import static com.revenat.javamm.code.fragment.operation.ForOperation.Builder;
  */
 public interface ForOperationHeader {
 
-    void populate(Builder forOperationBuilder);
+    ForOperation mergeWith(Block forOperationBody, SourceLine sourceLine);
 }

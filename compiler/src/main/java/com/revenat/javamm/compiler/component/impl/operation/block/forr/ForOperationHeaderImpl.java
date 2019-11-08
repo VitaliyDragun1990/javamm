@@ -18,7 +18,10 @@
 package com.revenat.javamm.compiler.component.impl.operation.block.forr;
 
 import com.revenat.javamm.code.fragment.Expression;
+import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.operation.Block;
 import com.revenat.javamm.code.fragment.operation.ForInitOperation;
+import com.revenat.javamm.code.fragment.operation.ForOperation;
 import com.revenat.javamm.code.fragment.operation.ForOperation.Builder;
 import com.revenat.javamm.code.fragment.operation.ForUpdateOperation;
 import com.revenat.javamm.compiler.component.impl.operation.ForOperationHeader;
@@ -27,7 +30,7 @@ import com.revenat.javamm.compiler.component.impl.operation.ForOperationHeader;
  * @author Vitaliy Dragun
  *
  */
-public class ForOperationHeaderImpl implements ForOperationHeader {
+class ForOperationHeaderImpl implements ForOperationHeader {
 
     private ForInitOperation initOperation;
 
@@ -35,23 +38,31 @@ public class ForOperationHeaderImpl implements ForOperationHeader {
 
     private ForUpdateOperation updateOperation;
 
-    public void setInitOperation(final ForInitOperation initOperation) {
+    void setInitOperation(final ForInitOperation initOperation) {
         this.initOperation = initOperation;
     }
 
-    public void setCondition(final Expression condition) {
+    void setCondition(final Expression condition) {
         this.condition = condition;
     }
 
-    public void setUpdateOperation(final ForUpdateOperation updateOperation) {
+    void setUpdateOperation(final ForUpdateOperation updateOperation) {
         this.updateOperation = updateOperation;
     }
 
-    @Override
-    public void populate(final Builder builder) {
+    private void setHeaderValuesTo(final Builder builder) {
         setInitOperationIfPresent(builder);
         setConditionIfPresent(builder);
         setUpdateOperationIfPresent(builder);
+    }
+
+    @Override
+    public ForOperation mergeWith(final Block forOperationBody, final SourceLine sourceLine) {
+        final ForOperation.Builder builder = new Builder();
+        builder.setSourceLine(sourceLine);
+        builder.setBody(forOperationBody);
+        setHeaderValuesTo(builder);
+        return builder.build();
     }
 
     private void setUpdateOperationIfPresent(final Builder builder) {

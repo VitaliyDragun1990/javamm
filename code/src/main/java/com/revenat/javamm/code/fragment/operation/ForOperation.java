@@ -36,10 +36,10 @@ public final class ForOperation extends AbstractLoopOperation {
     private final ForUpdateOperation updateOperation;
 
     private ForOperation(final SourceLine sourceLine,
-                        final Expression condition,
-                        final ForInitOperation initOperation,
-                        final ForUpdateOperation updateOperation,
-                        final Block body) {
+                         final Expression condition,
+                         final ForInitOperation initOperation,
+                         final ForUpdateOperation updateOperation,
+                         final Block body) {
         super(sourceLine, condition, body);
         this.initOperation = initOperation;
         this.updateOperation = updateOperation;

@@ -121,7 +121,7 @@ class LexemeBuilderIntegrationTest {
     @ParameterizedTest
     @CsvSource({
         "[ a,                [",
-        "10 + #,             #",
+        "10 + @,             @",
         "10 + :,             :",
         "a > 2 ? b,          ?",
         "a > 2 ? b : c :,    :",

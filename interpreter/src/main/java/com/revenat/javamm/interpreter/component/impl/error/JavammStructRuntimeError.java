@@ -15,23 +15,26 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.code.fragment;
+package com.revenat.javamm.interpreter.component.impl.error;
 
-import com.revenat.javamm.code.fragment.function.DeveloperFunction;
+import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 
-import java.util.Optional;
+import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 
 /**
- * Represents compiled suite of operations that can be executed by the interpreter.
- *
  * @author Vitaliy Dragun
  *
  */
-public interface ByteCode extends FunctionStorage<DeveloperFunction> {
+public class JavammStructRuntimeError extends JavammRuntimeError {
 
-    FunctionName getMainFunctionName();
+    private static final long serialVersionUID = 1L;
 
-    default Optional<DeveloperFunction> getMainFunction() {
-        return getFunction(getMainFunctionName());
+    public JavammStructRuntimeError(final String message, final Object...args) {
+        super(buildErrorMessage(format(requireNonNull(message), args)));
+    }
+
+    private static String buildErrorMessage(final String message) {
+        return format("Runtime error: %s", message);
     }
 }

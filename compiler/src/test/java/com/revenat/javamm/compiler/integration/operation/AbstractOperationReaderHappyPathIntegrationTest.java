@@ -74,7 +74,7 @@ public abstract class AbstractOperationReaderHappyPathIntegrationTest extends Ab
     }
 
     private List<Class<? extends Operation>> getCompiledOperations(final ByteCode byteCode) {
-        return byteCode.getCode().getOperations().stream()
+        return byteCode.getMainFunction().orElseThrow().getBody().getOperations().stream()
                 .map(Operation::getClass)
                 .collect(toList());
     }

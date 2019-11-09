@@ -18,15 +18,21 @@
 package com.revenat.javamm.interpreter.component.impl;
 
 import com.revenat.javamm.code.fragment.ByteCode;
+import com.revenat.javamm.code.fragment.function.DeveloperFunction;
+import com.revenat.javamm.code.fragment.operation.Block;
 import com.revenat.javamm.interpreter.Interpreter;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
 import com.revenat.javamm.interpreter.component.LocalContextBuilder;
 import com.revenat.javamm.interpreter.component.RuntimeBuilder;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
+import com.revenat.javamm.interpreter.component.impl.error.JavammStructRuntimeError;
 import com.revenat.javamm.interpreter.component.impl.operation.exception.InterruptOperationException;
 import com.revenat.javamm.interpreter.model.CurrentRuntime;
 import com.revenat.javamm.interpreter.model.LocalContext;
 
+import java.util.Optional;
+
+import static com.revenat.javamm.code.syntax.Keywords.FUNCTION;
 import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.releaseCurrentRuntime;
 import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.setCurrentRuntime;
 
@@ -55,14 +61,29 @@ public class InterpreterImpl implements Interpreter {
 
     @Override
     public void interpret(final ByteCode byteCode) {
+        final Optional<DeveloperFunction> mainFunctionOptional = byteCode.getMainFunction();
+        if (mainFunctionOptional.isPresent()) {
+            interpretFunction(mainFunctionOptional.get());
+        } else {
+            throw new JavammStructRuntimeError("Main function not found, please define the main function as: '%s %s'",
+                    FUNCTION, byteCode.getMainFunctionName());
+        }
+    }
+
+    private void interpretFunction(final DeveloperFunction mainFunction) {
         final CurrentRuntime currentRuntime = runtimeBuilder.buildCurrentRuntime();
+        final LocalContext localContext = localContextBuilder.buildLocalContext();
+
+        currentRuntime.setCurrentLocalContext(localContext);
+        currentRuntime.setCurrentSourceLine(mainFunction.getDeclarationSourceLine());
         setCurrentRuntime(currentRuntime);
 
-        final LocalContext localContext = localContextBuilder.buildLocalContext();
-        currentRuntime.setCurrentLocalContext(localContext);
+        interpretBlock(mainFunction.getBody());
+    }
 
+    private void interpretBlock(final Block block) {
         try {
-            blockOperationInterpreter.interpret(byteCode.getCode());
+            blockOperationInterpreter.interpret(block);
         } catch (final InterruptOperationException e) {
             throw new JavammLineRuntimeError("Operation '%s' not expected here", e.getOperation());
         } finally {

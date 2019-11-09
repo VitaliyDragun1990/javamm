@@ -64,6 +64,8 @@
 						--add-opens
 						javamm.code/com.revenat.javamm.code.fragment.operator=ALL-UNNAMED
 						--add-opens
+						javamm.code/com.revenat.javamm.code.fragment.function=ALL-UNNAMED
+						--add-opens
 						javamm.code/com.revenat.javamm.code.syntax=ALL-UNNAMED
 					</argLine>
 				</configuration>

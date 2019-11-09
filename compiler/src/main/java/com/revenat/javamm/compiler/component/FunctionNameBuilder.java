@@ -15,18 +15,20 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.compiler.component;
+
+import com.revenat.javamm.code.fragment.FunctionName;
+import com.revenat.javamm.code.fragment.SourceLine;
+
+import java.util.List;
+
 /**
  * @author Vitaliy Dragun
  *
  */
-module javamm.code {
-    exports com.revenat.javamm.code.fragment;
-    exports com.revenat.javamm.code.fragment.operation;
-    exports com.revenat.javamm.code.fragment.expression;
-    exports com.revenat.javamm.code.fragment.operator;
-    exports com.revenat.javamm.code.fragment.function;
-    exports com.revenat.javamm.code.component;
-    exports com.revenat.javamm.code.exception;
-    exports com.revenat.javamm.code.syntax;
-    exports com.revenat.javamm.code.util;
+public interface FunctionNameBuilder {
+
+    boolean isValid(String name);
+
+    FunctionName build(String name, List<?> arguments, SourceLine sourceLine);
 }

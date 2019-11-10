@@ -26,6 +26,20 @@ import java.util.List;
  */
 public final class SyntaxParseUtils {
 
+    private static final String OPENING_CURLY_BRACE = "{";
+
+    private static final String CLOSING_CURLY_BRACE = "}";
+
+    private static final String OPENING_SQUARE_BRACKET = "[";
+
+    private static final String CLOSING_SQUARE_BRACKET = "]";
+
+    private static final String OPENING_PARENTHESIS = "(";
+
+    private static final String CLOSING_PARENTHESIS = ")";
+
+    private static final TokenGroupSplitter TOKEN_GROUP_SPLITTER = new TokenGroupSplitter(",");
+
     private SyntaxParseUtils() {
     }
 
@@ -49,5 +63,33 @@ public final class SyntaxParseUtils {
 
     public static boolean isClosingBlockOperation(final SourceLine sourceLine) {
         return "}".equals(sourceLine.getFirst());
+    }
+
+    public static List<List<String>> groupTokensByComma(final List<String> tokens, final SourceLine sourceLine) {
+        return TOKEN_GROUP_SPLITTER.split(tokens, sourceLine);
+    }
+
+    public static boolean isOpeningBracket(final String token) {
+        return OPENING_CURLY_BRACE.equals(token) ||
+                OPENING_PARENTHESIS.equals(token) ||
+                OPENING_SQUARE_BRACKET.equals(token);
+    }
+
+    public static boolean isMatchingBrackets(final String tokenA, final String tokenB) {
+        return isMatchingParentheses(tokenA, tokenB) ||
+                isMatchingSquareBrackets(tokenA, tokenB) ||
+                isMatchingCurlyBraces(tokenA, tokenB);
+    }
+
+    private static boolean isMatchingParentheses(final String tokenA, final String tokenB) {
+        return OPENING_PARENTHESIS.equals(tokenA) && CLOSING_PARENTHESIS.equals(tokenB);
+    }
+
+    private static boolean isMatchingSquareBrackets(final String tokenA, final String tokenB) {
+        return OPENING_SQUARE_BRACKET.equals(tokenA) && CLOSING_SQUARE_BRACKET.equals(tokenB);
+    }
+
+    private static boolean isMatchingCurlyBraces(final String tokenA, final String tokenB) {
+        return OPENING_CURLY_BRACE.equals(tokenA) && CLOSING_CURLY_BRACE.equals(tokenB);
     }
 }

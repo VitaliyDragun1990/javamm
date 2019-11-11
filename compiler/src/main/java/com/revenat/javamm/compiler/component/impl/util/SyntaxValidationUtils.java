@@ -21,8 +21,12 @@ import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.Operator;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.VariableExpression;
+import com.revenat.javamm.code.syntax.Delimiters;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 
+import static com.revenat.javamm.code.syntax.Delimiters.CLOSING_PARENTHESIS;
+import static com.revenat.javamm.code.syntax.Delimiters.OPENING_CURLY_BRACE;
+import static com.revenat.javamm.code.syntax.Delimiters.OPENING_PARENTHESIS;
 import static com.revenat.javamm.code.syntax.Keywords.ALL_KEYWORDS;
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
@@ -34,13 +38,7 @@ import static java.lang.Character.isLetter;
  */
 public final class SyntaxValidationUtils {
 
-    private static final String OPENING_CURLY_BRACE = "{";
-
-    private static final String CLOSING_CURLY_BRACE = "}";
-
-    private static final String OPENING_PARENTHESIS = "(";
-
-    private static final String CLOSING_PARENTHESIS = ")";
+    public static final int MAX_ALLOWED_PARAMETER_COUNT = 5;
 
     private SyntaxValidationUtils() {
     }
@@ -52,8 +50,8 @@ public final class SyntaxValidationUtils {
     }
 
     public static void validateThatLineContainsClosingCurlyBraceOnly(final SourceLine sourceLine) {
-        if (!assertContainsOnly(sourceLine, CLOSING_CURLY_BRACE)) {
-            throw new JavammLineSyntaxError(sourceLine, "'%s' expected only", CLOSING_CURLY_BRACE);
+        if (!assertContainsOnly(sourceLine, Delimiters.CLOSING_CURLY_BRACE)) {
+            throw new JavammLineSyntaxError(sourceLine, "'%s' expected only", Delimiters.CLOSING_CURLY_BRACE);
         }
     }
 
@@ -119,7 +117,7 @@ public final class SyntaxValidationUtils {
     public static void validateThatNameIsNotKeyword(final LanguageFeature feature, final String name,
             final SourceLine sourceLine) {
         if (ALL_KEYWORDS.contains(name)) {
-            throw new JavammLineSyntaxError(sourceLine, "The keyword '%s' can not be used as %s name", name,
+            throw new JavammLineSyntaxError(sourceLine, "The keyword '%s' can not be used as a %s name", name,
                     feature.getName());
         }
     }

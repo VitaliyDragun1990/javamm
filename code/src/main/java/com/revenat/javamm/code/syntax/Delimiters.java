@@ -46,6 +46,18 @@ public final class Delimiters {
 
     public static final Set<Character> STRING_DELIMITERS = Set.of('\'', '"');
 
+    public static final String OPENING_CURLY_BRACE = "{";
+
+    public static final String CLOSING_CURLY_BRACE = "}";
+
+    public static final String OPENING_SQUARE_BRACKET = "[";
+
+    public static final String CLOSING_SQUARE_BRACKET = "]";
+
+    public static final String OPENING_PARENTHESIS = "(";
+
+    public static final String CLOSING_PARENTHESIS = ")";
+
     /*
       "+", "++", "+=", "-", "--", "-=", "*", "*=", "/", "/=", "%", "%=",
       ">", ">>", ">=", ">>>", ">>=", ">>>=", "<", "<<", "<=", "<<=",
@@ -63,9 +75,9 @@ public final class Delimiters {
      * <> - angle brackets
      */
     private static final Set<String> NOT_OPERATOR_TOKEN_DELIMITERS = Set.of(
-            "(", ")",
-            "{", "}",
-            "[", "]",
+            OPENING_PARENTHESIS, CLOSING_PARENTHESIS,
+            OPENING_CURLY_BRACE, CLOSING_CURLY_BRACE,
+            OPENING_SQUARE_BRACKET, CLOSING_SQUARE_BRACKET,
             ":",
             ",",
             ";"

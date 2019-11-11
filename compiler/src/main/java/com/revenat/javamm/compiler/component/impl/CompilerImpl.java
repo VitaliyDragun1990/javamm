@@ -23,14 +23,18 @@ import com.revenat.javamm.code.fragment.FunctionName;
 import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.function.DeveloperFunction;
-import com.revenat.javamm.code.fragment.operation.Block;
 import com.revenat.javamm.compiler.Compiler;
-import com.revenat.javamm.compiler.component.BlockOperationReader;
 import com.revenat.javamm.compiler.component.FunctionNameBuilder;
+import com.revenat.javamm.compiler.component.FunctionReader;
 import com.revenat.javamm.compiler.component.SourceLineReader;
+import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
+
+import static com.revenat.javamm.code.fragment.SourceLine.EMPTY_SOURCE_LINE;
 
 import static java.util.Objects.requireNonNull;
 
@@ -46,29 +50,56 @@ public class CompilerImpl implements Compiler {
 
     private final SourceLineReader sourceLineReader;
 
-    private final BlockOperationReader blockOperationReader;
+    private final FunctionReader functionReader;
 
-    public CompilerImpl(final FunctionNameBuilder functionNameBuilder,
-                        final SourceLineReader sourceLineReader,
-                        final BlockOperationReader blockOperationReader) {
+    public CompilerImpl(final SourceLineReader sourceLineReader,
+                        final FunctionNameBuilder functionNameBuilder,
+                        final FunctionReader functionReader) {
         this.sourceLineReader = requireNonNull(sourceLineReader);
-        this.blockOperationReader = requireNonNull(blockOperationReader);
         this.functionNameBuilder = requireNonNull(functionNameBuilder);
+        this.functionReader = requireNonNull(functionReader);
     }
 
     @Override
     public ByteCode compile(final SourceCode... sourceCodes) {
-        final SourceCode sourceCode = sourceCodes[0];
-        final List<SourceLine> sourceLines = sourceLineReader.read(sourceCode);
-        final SourceLine sourceLine = new SourceLine(sourceCode.getModuleName(), 0, List.of());
-        final Block block = blockOperationReader.read(sourceLine, sourceLines.listIterator());
+        final FunctionName mainFunctionName = functionNameBuilder.build("main", List.of(), EMPTY_SOURCE_LINE);
+        final Map<FunctionName, DeveloperFunction> definedFunctions = new LinkedHashMap<>();
 
-        final FunctionName mainFunctionName = functionNameBuilder.build("main", List.of(), sourceLine);
-        final DeveloperFunction mainFunction = new DeveloperFunction.Builder()
-            .setName(mainFunctionName)
-            .setBody(block)
-            .build();
-        return new ByteCodeimpl(Map.of(mainFunctionName, mainFunction), mainFunctionName);
+        for (final SourceCode sourceCode : sourceCodes) {
+            readFunctionDefinitionsFrom(sourceCode, definedFunctions);
+        }
+
+        return new ByteCodeimpl(definedFunctions, mainFunctionName);
+    }
+
+    private void readFunctionDefinitionsFrom(final SourceCode sourceCode,
+                                             final Map<FunctionName, DeveloperFunction> definedFunctions) {
+        final List<SourceLine> sourceLines = sourceLineReader.read(sourceCode);
+        final ListIterator<SourceLine> lineIterator = sourceLines.listIterator();
+
+        while (lineIterator.hasNext()) {
+            final DeveloperFunction function = readFunctionDefinition(lineIterator, definedFunctions);
+            definedFunctions.put(function.getName(), function);
+        }
+    }
+
+    private DeveloperFunction readFunctionDefinition(final ListIterator<SourceLine> sourceLines,
+                                                     final Map<FunctionName, DeveloperFunction> definedFunctions) {
+        final DeveloperFunction function = functionReader.read(sourceLines);
+        requireUnique(function, definedFunctions);
+        return function;
+    }
+
+    private void requireUnique(final DeveloperFunction function,
+                               final Map<FunctionName, DeveloperFunction> definedFunctions) {
+        if (definedFunctions.containsKey(function.getName())) {
+            throw duplicateFunctionDefinitionError(function);
+        }
+    }
+
+    private JavammLineSyntaxError duplicateFunctionDefinitionError(final DeveloperFunction function) {
+        return new JavammLineSyntaxError(function.getDeclarationSourceLine(),
+                "Function '%s' is already defined", function.getName());
     }
 
     private static final class ByteCodeimpl extends AbstractFunctionStorage<DeveloperFunction> implements ByteCode {

@@ -18,25 +18,22 @@
 package com.revenat.javamm.compiler.component.impl.util;
 
 import com.revenat.javamm.code.fragment.SourceLine;
+
 import java.util.List;
+
+import static com.revenat.javamm.code.syntax.Delimiters.CLOSING_CURLY_BRACE;
+import static com.revenat.javamm.code.syntax.Delimiters.CLOSING_PARENTHESIS;
+import static com.revenat.javamm.code.syntax.Delimiters.CLOSING_SQUARE_BRACKET;
+import static com.revenat.javamm.code.syntax.Delimiters.OPENING_CURLY_BRACE;
+import static com.revenat.javamm.code.syntax.Delimiters.OPENING_PARENTHESIS;
+import static com.revenat.javamm.code.syntax.Delimiters.OPENING_SQUARE_BRACKET;
+
 
 /**
  * @author Vitaliy Dragun
  *
  */
 public final class SyntaxParseUtils {
-
-    private static final String OPENING_CURLY_BRACE = "{";
-
-    private static final String CLOSING_CURLY_BRACE = "}";
-
-    private static final String OPENING_SQUARE_BRACKET = "[";
-
-    private static final String CLOSING_SQUARE_BRACKET = "]";
-
-    private static final String OPENING_PARENTHESIS = "(";
-
-    private static final String CLOSING_PARENTHESIS = ")";
 
     private static final TokenGroupSplitter TOKEN_GROUP_SPLITTER = new TokenGroupSplitter(",");
 

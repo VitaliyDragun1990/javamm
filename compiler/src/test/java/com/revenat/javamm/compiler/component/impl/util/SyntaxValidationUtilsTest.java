@@ -61,7 +61,7 @@ class SyntaxValidationUtilsTest {
     }
 
     private void assertNameIsNotKeywordErrorMessage(final JavammSyntaxError e, final String name) {
-        assertThat(e.getMessage(), containsString("The keyword '" + name + "' can not be used as variable name"));
+        assertThat(e.getMessage(), containsString("The keyword '" + name + "' can not be used as a variable name"));
     }
 
     @Nested

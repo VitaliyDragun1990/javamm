@@ -31,8 +31,8 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.provider.Arguments;
@@ -61,10 +61,8 @@ public abstract class AbstractOperationReaderHappyPathIntegrationTest extends Ab
 
     private Executable testBody(final List<String> lines) {
         return () -> {
-            final ByteCode byteCode = assertDoesNotThrow(() -> compile(lines));
-
+            final ByteCode byteCode = assertDoesNotThrow(() -> wrapInsideMainFunctionAndCompile(lines, true));
             final List<Class<? extends Operation>> actualOperations = getCompiledOperations(byteCode);
-
             assertSingleOperationOfExpectedClass(actualOperations);
         };
     }

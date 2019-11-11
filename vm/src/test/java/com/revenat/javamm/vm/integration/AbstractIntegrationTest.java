@@ -54,8 +54,8 @@ public abstract class AbstractIntegrationTest {
         System.setOut(originalOutputStream);
     }
 
-    protected final void runBlock(final List<String> operations) {
-        final List<String> validOperations = putInsideFunction(operations);
+    protected final void runBlock(final List<String> lines) {
+        final List<String> validOperations = putInsideMainFunction(lines);
 
         virtualMachine.run(new TestSourceCode(validOperations, MODULE_NAME));
     }
@@ -68,10 +68,11 @@ public abstract class AbstractIntegrationTest {
         assertThat(getOutput(), equalTo(expectedOutput));
     }
 
-    private List<String> putInsideFunction(final List<String> operations) {
+    private List<String> putInsideMainFunction(final List<String> lines) {
         final List<String> validOperations = new ArrayList<>();
-        validOperations.add(""); // TODO Add function declaration here
-        validOperations.addAll(operations);
+        validOperations.add("function main() {");
+        validOperations.addAll(lines);
+        validOperations.add("}");
         return validOperations;
     }
 

@@ -22,6 +22,7 @@ import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.compiler.Compiler;
 import com.revenat.javamm.compiler.CompilerConfigurator;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,6 +35,17 @@ public abstract class AbstractIntegrationTest {
     private static final String ANY_MODULE = "module1";
 
     private final Compiler compiler = new CompilerConfigurator().getCompiler();
+
+    protected ByteCode wrapInsideMainFunctionAndCompile(final List<String> lines, final boolean wihtClosingCurlyBrace) {
+        final List<String> result = new ArrayList<>();
+        result.add("function main() {");
+        result.addAll(lines);
+        if (wihtClosingCurlyBrace) {
+            result.add("}");
+        }
+
+        return compile(result);
+    }
 
     protected ByteCode compile(final List<String> lines) {
         return compiler.compile(new SourceCode() {

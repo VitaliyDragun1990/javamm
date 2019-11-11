@@ -58,11 +58,10 @@ public abstract class AbstractOperationReaderInvalidValuesIntegrationTest extend
             final List<String> lines = (List<String>) args.get()[0];
             final String expectedMessage = (String) args.get()[1];
             final String subName = getSubName(uniqueNames, args);
-            final List<String> invalidLines = putInsideFunction(lines);
 
             return dynamicTest(
                     buildTestName(subName, lines, expectedMessage),
-                    buildTestBody(invalidLines, expectedMessage));
+                    buildTestBody(lines, expectedMessage));
         });
 
     }
@@ -71,18 +70,11 @@ public abstract class AbstractOperationReaderInvalidValuesIntegrationTest extend
         return format("%s :: %s -> '%s'", subName, String.join(" ", lines), expectedMessage);
     }
 
-    private Executable buildTestBody(final List<String> invalidLines, final String expectedMessage) {
+    private Executable buildTestBody(final List<String> lines, final String expectedMessage) {
         return () -> {
-            final JavammSyntaxError e = assertThrows(JavammSyntaxError.class, () ->  compile(invalidLines));
+            final JavammSyntaxError e = assertThrows(JavammSyntaxError.class, () ->  wrapInsideMainFunctionAndCompile(lines, false));
             assertErrorMessageContains(e, expectedMessage);
         };
-    }
-
-    private List<String> putInsideFunction(final List<String> lines) {
-        final List<String> invalidLines = new ArrayList<>();
-        invalidLines.add(""); // TODO add function declaration
-        invalidLines.addAll(lines);
-        return invalidLines;
     }
 
     private String getSubName(final Set<String> names, final Arguments args) {

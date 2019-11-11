@@ -84,6 +84,8 @@
 						--add-opens
 						javamm.compiler/com.revenat.javamm.compiler.integration.operation=ALL-UNNAMED
 						--add-opens
+						javamm.compiler/com.revenat.javamm.compiler.integration.function=ALL-UNNAMED
+						--add-opens
 						javamm.compiler/com.revenat.javamm.compiler.integration.builder=ALL-UNNAMED
 					</argLine>
 				</configuration>

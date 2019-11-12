@@ -24,19 +24,19 @@ import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.function.DeveloperFunction;
 import com.revenat.javamm.compiler.Compiler;
+import com.revenat.javamm.compiler.component.FunctionDefinitionsReader;
 import com.revenat.javamm.compiler.component.FunctionNameBuilder;
-import com.revenat.javamm.compiler.component.FunctionReader;
 import com.revenat.javamm.compiler.component.SourceLineReader;
-import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
-
-import java.util.LinkedHashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.revenat.javamm.code.fragment.SourceLine.EMPTY_SOURCE_LINE;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Default implementation that supports only single source code module
@@ -50,56 +50,35 @@ public class CompilerImpl implements Compiler {
 
     private final SourceLineReader sourceLineReader;
 
-    private final FunctionReader functionReader;
+    private final FunctionDefinitionsReader functionDefinitionsReader;
 
     public CompilerImpl(final SourceLineReader sourceLineReader,
                         final FunctionNameBuilder functionNameBuilder,
-                        final FunctionReader functionReader) {
+                        final FunctionDefinitionsReader functionDefinitionsReader) {
         this.sourceLineReader = requireNonNull(sourceLineReader);
         this.functionNameBuilder = requireNonNull(functionNameBuilder);
-        this.functionReader = requireNonNull(functionReader);
+        this.functionDefinitionsReader = requireNonNull(functionDefinitionsReader);
     }
 
     @Override
     public ByteCode compile(final SourceCode... sourceCodes) {
         final FunctionName mainFunctionName = functionNameBuilder.build("main", List.of(), EMPTY_SOURCE_LINE);
-        final Map<FunctionName, DeveloperFunction> definedFunctions = new LinkedHashMap<>();
+        final List<SourceLine> aggregateSourceLines = getAggregateSourceLines(sourceCodes);
+        final List<DeveloperFunction> definedFunctions = functionDefinitionsReader.read(aggregateSourceLines);
 
-        for (final SourceCode sourceCode : sourceCodes) {
-            readFunctionDefinitionsFrom(sourceCode, definedFunctions);
-        }
-
-        return new ByteCodeimpl(definedFunctions, mainFunctionName);
+        return new ByteCodeimpl(asMap(definedFunctions), mainFunctionName);
     }
 
-    private void readFunctionDefinitionsFrom(final SourceCode sourceCode,
-                                             final Map<FunctionName, DeveloperFunction> definedFunctions) {
-        final List<SourceLine> sourceLines = sourceLineReader.read(sourceCode);
-        final ListIterator<SourceLine> lineIterator = sourceLines.listIterator();
-
-        while (lineIterator.hasNext()) {
-            final DeveloperFunction function = readFunctionDefinition(lineIterator, definedFunctions);
-            definedFunctions.put(function.getName(), function);
-        }
+    private List<SourceLine> getAggregateSourceLines(final SourceCode... sourceCodes) {
+        return Arrays.stream(sourceCodes)
+                .map(sourceLineReader::read)
+                .flatMap(List<SourceLine>::stream)
+                .collect(toList());
     }
 
-    private DeveloperFunction readFunctionDefinition(final ListIterator<SourceLine> sourceLines,
-                                                     final Map<FunctionName, DeveloperFunction> definedFunctions) {
-        final DeveloperFunction function = functionReader.read(sourceLines);
-        requireUnique(function, definedFunctions);
-        return function;
-    }
-
-    private void requireUnique(final DeveloperFunction function,
-                               final Map<FunctionName, DeveloperFunction> definedFunctions) {
-        if (definedFunctions.containsKey(function.getName())) {
-            throw duplicateFunctionDefinitionError(function);
-        }
-    }
-
-    private JavammLineSyntaxError duplicateFunctionDefinitionError(final DeveloperFunction function) {
-        return new JavammLineSyntaxError(function.getDeclarationSourceLine(),
-                "Function '%s' is already defined", function.getName());
+    private Map<FunctionName, DeveloperFunction> asMap(final List<DeveloperFunction> definedFunctions) {
+        return definedFunctions.stream()
+                .collect(Collectors.toMap(DeveloperFunction::getName, identity()));
     }
 
     private static final class ByteCodeimpl extends AbstractFunctionStorage<DeveloperFunction> implements ByteCode {

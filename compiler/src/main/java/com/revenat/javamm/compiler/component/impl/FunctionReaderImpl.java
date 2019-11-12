@@ -65,9 +65,9 @@ public class FunctionReaderImpl implements FunctionReader {
 
         final List<Variable> parameters = getFunctionParameters(functionDefinitionLine);
         final FunctionName functionName = getFunctionName(functionDefinitionLine, parameters);
-        final Block dunctionBody = getFunctionBody(sourceCode, functionDefinitionLine);
+        final Block functionBody = getFunctionBody(sourceCode, functionDefinitionLine);
 
-        return buildFunction(parameters, functionName, dunctionBody);
+        return buildFunction(functionName, parameters, functionBody);
     }
 
     private List<Variable> getFunctionParameters(final SourceLine functionDefinitionLine) {
@@ -84,12 +84,12 @@ public class FunctionReaderImpl implements FunctionReader {
         return blockOperationReader.readWithExpectedClosingCurlyBrace(functionDefinitionLine, sourceCode);
     }
 
-    private DeveloperFunction buildFunction(final List<Variable> parameters,
-                                            final FunctionName functionName,
-                                            final Block dunctionBody) {
+    private DeveloperFunction buildFunction(final FunctionName name,
+                                            final List<Variable> parameters,
+                                            final Block body) {
         return new DeveloperFunction.Builder()
-                .setName(functionName)
-                .setBody(dunctionBody)
+                .setName(name)
+                .setBody(body)
                 .setParameters(parameters)
                 .build();
     }

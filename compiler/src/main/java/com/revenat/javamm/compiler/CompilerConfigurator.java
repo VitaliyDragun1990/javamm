@@ -23,6 +23,7 @@ import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
 import com.revenat.javamm.compiler.component.ExpressionBuilder;
 import com.revenat.javamm.compiler.component.ExpressionOperationBuilder;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
+import com.revenat.javamm.compiler.component.FunctionDefinitionsReader;
 import com.revenat.javamm.compiler.component.FunctionNameBuilder;
 import com.revenat.javamm.compiler.component.FunctionParametersBuilder;
 import com.revenat.javamm.compiler.component.FunctionReader;
@@ -40,6 +41,7 @@ import com.revenat.javamm.compiler.component.impl.CompilerImpl;
 import com.revenat.javamm.compiler.component.impl.ComplexLexemeValidatorImpl;
 import com.revenat.javamm.compiler.component.impl.ExpressionOperationBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.ExpressionResolverImpl;
+import com.revenat.javamm.compiler.component.impl.FunctionDefinitionsReaderImpl;
 import com.revenat.javamm.compiler.component.impl.FunctionNameBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.FunctionParametersBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.FunctionReaderImpl;
@@ -193,7 +195,11 @@ public class CompilerConfigurator {
     private final FunctionReader functionReader =
             new FunctionReaderImpl(functionNameBuilder, functionParametersBuilder, blockOperationReader);
 
-    private final Compiler compiler = new CompilerImpl(sourceLineReader, functionNameBuilder, functionReader);
+    private final FunctionDefinitionsReader functionDefinitionsReader =
+            new FunctionDefinitionsReaderImpl(functionReader);
+
+    private final Compiler compiler =
+            new CompilerImpl(sourceLineReader, functionNameBuilder, functionDefinitionsReader);
 
     public Compiler getCompiler() {
         return compiler;

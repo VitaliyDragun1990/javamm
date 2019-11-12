@@ -35,7 +35,6 @@ import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUt
  */
 public class FunctionParametersBuilderImpl implements FunctionParametersBuilder {
 
-
     private final VariableBuilder variableBuilder;
 
     public FunctionParametersBuilderImpl(final VariableBuilder variableBuilder) {

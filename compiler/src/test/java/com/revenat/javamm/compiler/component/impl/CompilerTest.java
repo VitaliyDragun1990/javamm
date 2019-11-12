@@ -18,122 +18,121 @@
 package com.revenat.javamm.compiler.component.impl;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.quality.Strictness.LENIENT;
 
 import com.revenat.javamm.code.fragment.ByteCode;
+import com.revenat.javamm.code.fragment.FunctionName;
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.function.DeveloperFunction;
 import com.revenat.javamm.code.fragment.operation.Block;
 import com.revenat.javamm.compiler.Compiler;
-import com.revenat.javamm.compiler.component.BlockOperationReader;
+import com.revenat.javamm.compiler.component.FunctionDefinitionsReader;
+import com.revenat.javamm.compiler.component.FunctionNameBuilder;
 import com.revenat.javamm.compiler.component.SourceLineReader;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
 
 import com.revenat.juinit.addons.ReplaceCamelCase;
 
-@Disabled("figure out how to implement with mockito")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("compiler")
-class CompilerImplTest {
-    private final static List<String> SOURCE_CODE_LINES = List.of("println(test");
-    private final static SourceLine OPERATION_SOURCE_LINE = new SourceLine("", 1, List.of("println", "(", "test", ")"));
-    private final static List<SourceLine> COMPILED_SOURCE_LINES = List.of(OPERATION_SOURCE_LINE);
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = LENIENT)
+class CompilerTest {
+
+    private static final SourceLine ANY_SOURCE_LINE = new SourceLine("test", 1, List.of());
+
+    private static final List<Object> NO_PARAMETERS = List.of();
+
+    private static final String MAIN_FUNCTION_NAME = "main";
+
+    @Mock
+    private FunctionNameBuilder functionNameBuilder;
+
+    @Mock
+    private SourceLineReader sourceLineReader;
+
+    @Mock
+    private FunctionDefinitionsReader functionDefinitionsReader;
 
     private Compiler compiler;
 
-    private final SourceCodeStub sourceCodeStub = new SourceCodeStub();
-    private final SourceLineReaderSpy sourceLineReaderSpy = new SourceLineReaderSpy();
-    private final BlockOperationReaderSpy blockOperationReaderSpy = new BlockOperationReaderSpy();
-
     @BeforeEach
     void setUp() {
-//        compiler = new CompilerImpl(sourceLineReaderSpy, blockOperationReaderSpy);
+        compiler = new CompilerImpl(sourceLineReader, functionNameBuilder, functionDefinitionsReader);
+        when(functionNameBuilder.build(any(), any(), any())).thenReturn(mock(FunctionName.class));
     }
 
     @Test
-    void shouldCompileSourceCodeIntoByteCode() {
-        final ByteCode byteCode = compiler.compile(sourceCodeStub);
+    @Order(1)
+    void shouldDefineMainFunctionName(@Mock final FunctionName mainFunctionName, @Mock final SourceCode sourceCode) {
+        when(functionNameBuilder.build(eq(MAIN_FUNCTION_NAME), eq(NO_PARAMETERS), any())).thenReturn(mainFunctionName);
 
-        assertNotNull(byteCode, "compiled byte code can not be null");
-        assertCallToSourceLineReader();
-        assertCallToBlockOperationReader();
+        final ByteCode byteCode = compiler.compile(sourceCode);
+
+        assertThat(byteCode.getMainFunctionName(), equalTo(mainFunctionName));
     }
 
-    private void assertCallToBlockOperationReader() {
-        assertThat("block operation reader should have been called once",
-                blockOperationReaderSpy.getCallTimesFor(COMPILED_SOURCE_LINES.listIterator()), equalTo(1));
+    @Test
+    @Order(2)
+    void shouldReadFunctionDefinitions(@Mock final SourceCode sourceCode,
+                                       @Mock final SourceLine sourceLineA,
+                                       @Mock final SourceLine sourceLineB) {
+        final List<SourceLine> sourceLines = List.of(sourceLineA, sourceLineB);
+        final List<DeveloperFunction> expectedFunctions = createDummyFunctions(2);
+        when(sourceLineReader.read(sourceCode)).thenReturn(sourceLines);
+        when(functionDefinitionsReader.read(sourceLines)).thenReturn(expectedFunctions);
+
+        final ByteCode byteCode = compiler.compile(sourceCode);
+
+        final Collection<DeveloperFunction> actualFunctions = byteCode.getAllFunctions();
+
+        assertEqualContent(actualFunctions, expectedFunctions);
     }
 
-    private void assertCallToSourceLineReader() {
-        assertThat("source line reader should have been called once",
-                sourceLineReaderSpy.getCallTimesFor(sourceCodeStub), equalTo(1));
+    private void assertEqualContent(final Collection<DeveloperFunction> actualFunctions,
+                                    final List<DeveloperFunction> expectedFunctions) {
+        assertThat(actualFunctions, hasSize(expectedFunctions.size()));
+        assertThat(actualFunctions, hasItems(expectedFunctions.toArray(new DeveloperFunction[0])));
     }
 
-    private class SourceCodeStub implements SourceCode {
-
-        @Override
-        public String getModuleName() {
-            return "";
+    private List<DeveloperFunction> createDummyFunctions(final int quantity) {
+        final List<DeveloperFunction> functions = new ArrayList<>();
+        for (int i = 0; i < quantity; i++) {
+            final FunctionName functionName = mock(FunctionName.class);
+            when(functionName.getName()).thenReturn("function" + i);
+            final Block functionBody = new Block(mock(Operation.class), ANY_SOURCE_LINE);
+            final DeveloperFunction dummy = new DeveloperFunction.Builder()
+                    .setBody(functionBody)
+                    .setName(functionName)
+                    .setDeclarationSourceLine(ANY_SOURCE_LINE)
+                    .build();
+            functions.add(dummy);
         }
-
-        @Override
-        public List<String> getLines() {
-            return SOURCE_CODE_LINES;
-        }
-
+        return functions;
     }
-
-    private class SourceLineReaderSpy implements SourceLineReader {
-        private final Map<SourceCode, Integer> callMap = new HashMap<>();
-
-        @Override
-        public List<SourceLine> read(final SourceCode sourceCode) {
-            callMap.merge(sourceCode, 1, (a, b) -> a + b);
-            return COMPILED_SOURCE_LINES;
-        }
-
-        int getCallTimesFor(final SourceCode arg) {
-            return callMap.getOrDefault(arg, 0);
-        }
-    }
-
-    private class BlockOperationReaderSpy implements BlockOperationReader {
-        final Operation DUMMY_OPERATION = () -> OPERATION_SOURCE_LINE;
-        final Map<SourceLine, Integer> callMap = new HashMap<>();
-
-        @Override
-        public Block read(final SourceLine startingLine, final ListIterator<SourceLine> compiledCodeIterator) {
-            callMap.merge(compiledCodeIterator.next(), 1, (a, b) -> a + b);
-            compiledCodeIterator.previous();
-            return new Block(DUMMY_OPERATION, SourceLine.EMPTY_SOURCE_LINE);
-        }
-
-        @Override
-        public Block readWithExpectedClosingCurlyBrace(final SourceLine blockStartingLine,
-                final ListIterator<SourceLine> compiledCodeIterator) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        int getCallTimesFor(final ListIterator<SourceLine> compiledCodeIterator) {
-            return callMap.getOrDefault(compiledCodeIterator.next(), 0);
-        }
-
-    }
-
 }

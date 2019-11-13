@@ -23,10 +23,14 @@ import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import java.util.List;
 
 /**
+ * Simple token extractor which extracts all tokens found between first
+ * occurrence of provided opening bracket and last occurrence of provided
+ * closing bracket.
+ *
  * @author Vitaliy Dragun
  *
  */
-class TokensBetweenBracketsExtractor {
+class SimpleTokensBetweenBracketsExtractor {
 
     private static final String MISSING_BRACKET_TEMPLATE = "Missing '%s'";
 
@@ -38,10 +42,8 @@ class TokensBetweenBracketsExtractor {
 
     private final boolean allowEmptyResult;
 
-    TokensBetweenBracketsExtractor(final String openingBracket,
-                                   final String closingBracket,
-                                   final boolean allowEmptyResult,
-                                   final SourceLine sourceLine) {
+    SimpleTokensBetweenBracketsExtractor(final String openingBracket, final String closingBracket,
+            final boolean allowEmptyResult, final SourceLine sourceLine) {
         this.openingBracket = openingBracket;
         this.closingBracket = closingBracket;
         this.allowEmptyResult = allowEmptyResult;
@@ -84,9 +86,8 @@ class TokensBetweenBracketsExtractor {
         }
     }
 
-    private List<String> getTokensBetweenBrackets(final List<String> tokens,
-                                                  final int openingBracketPosition,
-                                                  final int closingBracketsPosition) {
+    private List<String> getTokensBetweenBrackets(final List<String> tokens, final int openingBracketPosition,
+            final int closingBracketsPosition) {
         final List<String> tokensBetweenBrackets = tokens.subList(openingBracketPosition + 1, closingBracketsPosition);
 
         validateSize(tokensBetweenBrackets);
@@ -96,13 +97,11 @@ class TokensBetweenBracketsExtractor {
 
     private void validateSize(final List<String> tokensBetweenBrackets) {
         if (!allowEmptyResult && tokensBetweenBrackets.isEmpty()) {
-            throw syntaxError("An expression is expected between '%s' and '%s'",
-                    openingBracket, closingBracket);
+            throw syntaxError("An expression is expected between '%s' and '%s'", openingBracket, closingBracket);
         }
     }
 
-    private JavammLineSyntaxError syntaxError(final String message,
-                                              final Object...args) {
+    private JavammLineSyntaxError syntaxError(final String message, final Object... args) {
         return new JavammLineSyntaxError(sourceLine, message, args);
     }
 }

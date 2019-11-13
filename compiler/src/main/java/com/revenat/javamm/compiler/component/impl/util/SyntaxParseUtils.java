@@ -19,6 +19,7 @@ package com.revenat.javamm.compiler.component.impl.util;
 
 import com.revenat.javamm.code.fragment.SourceLine;
 
+import java.util.Iterator;
 import java.util.List;
 
 import static com.revenat.javamm.code.syntax.Delimiters.CLOSING_CURLY_BRACE;
@@ -54,8 +55,17 @@ public final class SyntaxParseUtils {
                                                         final List<String> tokens,
                                                         final SourceLine sourceLine,
                                                         final boolean allowEmptyResult) {
-        return new TokensBetweenBracketsExtractor(openingBracket, closingBracket, allowEmptyResult, sourceLine)
+        return new SimpleTokensBetweenBracketsExtractor(openingBracket, closingBracket, allowEmptyResult, sourceLine)
                 .extract(tokens);
+    }
+
+    public static List<String> getTokensUntilClosingBracketIsMet(final String openingBracket,
+                                                                         final String closingBracket,
+                                                                         final Iterator<String> tokens,
+                                                                         final SourceLine sourceLine,
+                                                                         final boolean allowEmptyResult) {
+        return new AdvancedTokensBetweenBracketsExtractor(openingBracket, closingBracket)
+                .extract(tokens, sourceLine, allowEmptyResult);
     }
 
     public static boolean isClosingBlockOperation(final SourceLine sourceLine) {

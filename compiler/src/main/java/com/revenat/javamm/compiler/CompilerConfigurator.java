@@ -111,7 +111,10 @@ public class CompilerConfigurator {
 
     private final LexemeAmbiguityResolver lexemeAmbiguityResolver = new LexemeAmbiguityResolverImpl();
 
+    private final FunctionNameBuilder functionNameBuilder = new FunctionNameBuilderImpl();
+
     private final LexemeBuilder lexemeBuilder = new LexemeBuilderImpl(singleTokenExpressionBuilder,
+                                                                      functionNameBuilder,
                                                                       lexemeAmbiguityResolver);
 
     private final ComplexLexemeValidator lexemeValidator = new ComplexLexemeValidatorImpl(operatorPrecedenceResolver);
@@ -186,8 +189,6 @@ public class CompilerConfigurator {
 
     private final BlockOperationReader blockOperationReader =
             new BlockOperationReaderImpl(operationReaders, expressionOperationBuilder, expressionResolver);
-
-    private final FunctionNameBuilder functionNameBuilder = new FunctionNameBuilderImpl();
 
     private final FunctionParametersBuilder functionParametersBuilder =
             new FunctionParametersBuilderImpl(variableBuilder);

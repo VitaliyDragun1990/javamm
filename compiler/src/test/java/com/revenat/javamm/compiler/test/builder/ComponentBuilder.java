@@ -21,6 +21,7 @@ import com.revenat.javamm.compiler.component.ComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
 import com.revenat.javamm.compiler.component.ExpressionBuilder;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
+import com.revenat.javamm.compiler.component.FunctionNameBuilder;
 import com.revenat.javamm.compiler.component.LexemeAmbiguityResolver;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
 import com.revenat.javamm.compiler.component.OperatorPrecedenceResolver;
@@ -29,6 +30,7 @@ import com.revenat.javamm.compiler.component.UnaryAssignmentExpressionResolver;
 import com.revenat.javamm.compiler.component.VariableBuilder;
 import com.revenat.javamm.compiler.component.impl.ComplexLexemeValidatorImpl;
 import com.revenat.javamm.compiler.component.impl.ExpressionResolverImpl;
+import com.revenat.javamm.compiler.component.impl.FunctionNameBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.LexemeAmbiguityResolverImpl;
 import com.revenat.javamm.compiler.component.impl.LexemeBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.OperatorPrecedenceResolverImpl;
@@ -62,7 +64,10 @@ public final class ComponentBuilder {
 
     private final LexemeAmbiguityResolver lexemeAmbiguityResolver = new LexemeAmbiguityResolverImpl();
 
+    private final FunctionNameBuilder functionNameBuilder = new FunctionNameBuilderImpl();
+
     private final LexemeBuilder lexemeBuilder = new LexemeBuilderImpl(singleTokenExpressionBuilder,
+                                                                      functionNameBuilder,
                                                                       lexemeAmbiguityResolver);
 
     private final ComplexLexemeValidator lexemeValidator = new ComplexLexemeValidatorImpl(operatorPrecedenceResolver);

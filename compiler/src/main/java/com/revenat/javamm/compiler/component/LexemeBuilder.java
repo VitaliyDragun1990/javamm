@@ -31,4 +31,6 @@ import java.util.List;
 public interface LexemeBuilder {
 
     List<Lexeme> build(List<String> tokens, SourceLine sourceLine);
+
+    void setExpressionResolver(ExpressionResolver expressionResolver);
 }

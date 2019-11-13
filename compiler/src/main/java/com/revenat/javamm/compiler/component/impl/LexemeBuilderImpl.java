@@ -18,12 +18,16 @@
 package com.revenat.javamm.compiler.component.impl;
 
 import com.revenat.javamm.code.fragment.Expression;
+import com.revenat.javamm.code.fragment.FunctionName;
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.Parenthesis;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.expression.FunctionInvocationExpression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.code.fragment.operator.TernaryConditionalOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
+import com.revenat.javamm.compiler.component.ExpressionResolver;
+import com.revenat.javamm.compiler.component.FunctionNameBuilder;
 import com.revenat.javamm.compiler.component.LexemeAmbiguityResolver;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
 import com.revenat.javamm.compiler.component.SingleTokenExpressionBuilder;
@@ -32,8 +36,16 @@ import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+
+import static com.revenat.javamm.code.syntax.Delimiters.CLOSING_PARENTHESIS;
+import static com.revenat.javamm.code.syntax.Delimiters.OPENING_PARENTHESIS;
+import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.getTokensUntilClosingBracketIsMet;
+import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.groupTokensByComma;
+
 import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 /**
  * @author Vitaliy Dragun
@@ -43,12 +55,23 @@ public class LexemeBuilderImpl implements LexemeBuilder {
 
     private final SingleTokenExpressionBuilder singleTokenExpressionBuilder;
 
+    private final FunctionNameBuilder functionNameBuilder;
+
     private final LexemeAmbiguityResolver lexemeAmbiguityResolver;
 
+    private ExpressionResolver expressionResolver;
+
     public LexemeBuilderImpl(final SingleTokenExpressionBuilder singleTokenExpressionBuilder,
+                             final FunctionNameBuilder functionNameBuilder,
                              final LexemeAmbiguityResolver lexemeAmbiguityResolver) {
-        this.singleTokenExpressionBuilder = singleTokenExpressionBuilder;
-        this.lexemeAmbiguityResolver = lexemeAmbiguityResolver;
+        this.singleTokenExpressionBuilder = requireNonNull(singleTokenExpressionBuilder);
+        this.functionNameBuilder = requireNonNull(functionNameBuilder);
+        this.lexemeAmbiguityResolver = requireNonNull(lexemeAmbiguityResolver);
+    }
+
+    @Override
+    public void setExpressionResolver(final ExpressionResolver expressionResolver) {
+        this.expressionResolver = expressionResolver;
     }
 
     @Override
@@ -56,13 +79,59 @@ public class LexemeBuilderImpl implements LexemeBuilder {
         final List<Lexeme> lexemes = new ArrayList<>();
 
         for (final ListIterator<String> source = tokens.listIterator(); source.hasNext();) {
-            buildLexeme(source.next(), lexemes, source, sourceLine);
+            if (isFunctionInvocationPressent(source)) {
+                lexemes.add(buildFunctionInvocationExpression(source, sourceLine));
+            } else {
+                buildSimpleLexeme(source.next(), lexemes, source, sourceLine);
+            }
         }
 
         return List.copyOf(lexemes);
     }
 
-    private void buildLexeme(final String currentToken,
+    private FunctionInvocationExpression buildFunctionInvocationExpression(final ListIterator<String> tokens,
+                                                                           final SourceLine sourceLine) {
+        final String functionNameToken = tokens.next();
+        final List<String> functionParamTokens =
+                getTokensUntilClosingBracketIsMet(tokens.next(), CLOSING_PARENTHESIS, tokens, sourceLine, true);
+        final List<List<String>> paramGroups = groupTokensByComma(functionParamTokens, sourceLine);
+
+        return new FunctionInvocationExpression(
+                buildFunctionName(functionNameToken, paramGroups, sourceLine),
+                buildFunctionParams(paramGroups, sourceLine));
+    }
+
+    private FunctionName buildFunctionName(final String nameToken,
+                                           final List<List<String>> paramGroups,
+                                           final SourceLine sourceLine) {
+        return functionNameBuilder.build(nameToken, paramGroups, sourceLine);
+    }
+
+    private List<Expression> buildFunctionParams(final List<List<String>> paramGroups, final SourceLine sourceLine) {
+        return paramGroups.stream()
+                .map(group -> expressionResolver.resolve(group, sourceLine))
+                .collect(toUnmodifiableList());
+    }
+
+    private boolean isFunctionInvocationPressent(final ListIterator<String> tokens) {
+        final String currentLexeme = tokens.next();
+        if (tokens.hasNext()) {
+            final String nextLexeme = tokens.next();
+            tokens.previous();
+            tokens.previous();
+            return isFunctionNameWithOpeningParenthesis(currentLexeme, nextLexeme);
+        } else {
+            tokens.previous();
+            return false;
+        }
+    }
+
+    private boolean isFunctionNameWithOpeningParenthesis(final String currentLexeme, final String nextLexeme) {
+        return OPENING_PARENTHESIS.equals(nextLexeme) &&
+                functionNameBuilder.isValid(currentLexeme);
+    }
+
+    private void buildSimpleLexeme(final String currentToken,
                              final List<Lexeme> lexemes,
                              final ListIterator<String> tokens,
                              final SourceLine sourceLine) {
@@ -99,15 +168,15 @@ public class LexemeBuilderImpl implements LexemeBuilder {
     }
 
     private UnaryOperator unaryOperatorFrom(final String token) {
-        return UnaryOperator.of(token).get();
+        return UnaryOperator.of(token).orElseThrow();
     }
 
     private BinaryOperator binaryOpertorFrom(final String token) {
-        return BinaryOperator.of(token).get();
+        return BinaryOperator.of(token).orElseThrow();
     }
 
     private Parenthesis parenthesisFrom(final String token) {
-        return Parenthesis.of(token).get();
+        return Parenthesis.of(token).orElseThrow();
     }
 
     private boolean isSingleTokenExpression(final String token) {
@@ -178,7 +247,7 @@ public class LexemeBuilderImpl implements LexemeBuilder {
                     resolvedLexemes.add(TernaryConditionalOperator.SEPARATOR);
                     isSeparatorFound = true;
                 } else {
-                    buildLexeme(token, resolvedLexemes, tokens, sourceLine);
+                    buildSimpleLexeme(token, resolvedLexemes, tokens, sourceLine);
                 }
             }
 

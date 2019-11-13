@@ -115,10 +115,10 @@ public class LexemeAmbiguityResolverImpl implements LexemeAmbiguityResolver {
     }
 
     private UnaryOperator unaryOperatorFor(final String code) {
-        return UnaryOperator.of(code).get();
+        return UnaryOperator.of(code).orElseThrow();
     }
 
     private BinaryOperator binaryOperatorFor(final String code) {
-        return BinaryOperator.of(code).get();
+        return BinaryOperator.of(code).orElseThrow();
     }
 }

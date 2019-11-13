@@ -80,6 +80,8 @@ public class ExpressionResolverImpl implements ExpressionResolver {
         this.lexemeValidator = requireNonNull(lexemeValidator);
         this.unaryAssignmentExpressionResolver = requireNonNull(unaryAssignmentExpressionResolver);
         this.operatorPrecedenceResolver = new OperatorPrecedenceResolverImpl();
+
+        this.lexemeBuilder.setExpressionResolver(this);
     }
 
     @Override

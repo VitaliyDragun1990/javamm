@@ -19,6 +19,7 @@ package com.revenat.javamm.compiler.test.doubles;
 
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
 
 import java.util.HashMap;
@@ -35,5 +36,9 @@ public class LexemeBuilderStub implements LexemeBuilder {
     @Override
     public List<Lexeme> build(final List<String> tokens, final SourceLine sourceLine) {
         return lexemesToBuild.get(tokens);
+    }
+
+    @Override
+    public void setExpressionResolver(final ExpressionResolver expressionResolver) {
     }
 }

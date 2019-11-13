@@ -1,3 +1,7 @@
 function main() {
-	println("Hello world")
+	helloWorld()
+}
+
+function helloWorld() {
+	println('Hello world')
 }

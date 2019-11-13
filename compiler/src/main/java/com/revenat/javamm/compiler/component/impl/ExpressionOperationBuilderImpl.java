@@ -19,6 +19,7 @@ package com.revenat.javamm.compiler.component.impl;
 
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.expression.FunctionInvocationExpression;
 import com.revenat.javamm.code.fragment.expression.PostfixNotationComplexExpression;
 import com.revenat.javamm.code.fragment.expression.UnaryPostfixAssignmentExpression;
 import com.revenat.javamm.code.fragment.expression.UnaryPrefixAssignmentExpression;
@@ -38,7 +39,8 @@ public class ExpressionOperationBuilderImpl implements ExpressionOperationBuilde
 
     private static final Set<Class<? extends Expression>> UNARY_ASSIGNMENT_EXPRESSIONS = Set.of(
             UnaryPrefixAssignmentExpression.class,
-            UnaryPostfixAssignmentExpression.class
+            UnaryPostfixAssignmentExpression.class,
+            FunctionInvocationExpression.class
     );
 
     @Override

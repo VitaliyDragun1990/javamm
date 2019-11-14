@@ -18,6 +18,7 @@
 package com.revenat.javamm.interpreter.component.impl;
 
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.interpreter.component.FunctionInvoker;
 import com.revenat.javamm.interpreter.model.CurrentRuntime;
 import com.revenat.javamm.interpreter.model.LocalContext;
 
@@ -28,9 +29,16 @@ import static java.util.Objects.requireNonNull;
  *
  */
 public class CurrentRuntimeImpl implements CurrentRuntime {
+
     private SourceLine currentSourceLine;
 
     private LocalContext currentLocalContext;
+
+    private final FunctionInvoker functionInvoker;
+
+    public CurrentRuntimeImpl(final FunctionInvoker functionInvoker) {
+        this.functionInvoker = requireNonNull(functionInvoker);
+    }
 
     @Override
     public String getCurrentModuleName() {
@@ -55,5 +63,10 @@ public class CurrentRuntimeImpl implements CurrentRuntime {
     @Override
     public void setCurrentLocalContext(final LocalContext currentLocalContext) {
         this.currentLocalContext = requireNonNull(currentLocalContext, "currentLocalContext can not be null");
+    }
+
+    @Override
+    public FunctionInvoker getCurrentFunctionInvoker() {
+        return functionInvoker;
     }
 }

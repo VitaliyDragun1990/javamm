@@ -19,6 +19,7 @@ package com.revenat.javamm.interpreter.model;
 
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.interpreter.component.FunctionInvoker;
 
 /**
  * Represents current runtime environment in which interpreter operates at the
@@ -77,4 +78,6 @@ public interface CurrentRuntime {
     default void setCurrentOperation(final Operation operation) {
         setCurrentSourceLine(operation.getSourceLine());
     }
+
+    FunctionInvoker getCurrentFunctionInvoker();
 }

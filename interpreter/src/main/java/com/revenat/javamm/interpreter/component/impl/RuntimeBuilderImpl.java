@@ -17,6 +17,7 @@
 
 package com.revenat.javamm.interpreter.component.impl;
 
+import com.revenat.javamm.interpreter.component.FunctionInvoker;
 import com.revenat.javamm.interpreter.component.LocalContextBuilder;
 import com.revenat.javamm.interpreter.component.RuntimeBuilder;
 import com.revenat.javamm.interpreter.model.CurrentRuntime;
@@ -34,7 +35,7 @@ public class RuntimeBuilderImpl implements RuntimeBuilder, LocalContextBuilder {
     }
 
     @Override
-    public CurrentRuntime buildCurrentRuntime() {
-        return new CurrentRuntimeImpl();
+    public CurrentRuntime buildCurrentRuntime(final FunctionInvoker functionInvoker) {
+        return new CurrentRuntimeImpl(functionInvoker);
     }
 }

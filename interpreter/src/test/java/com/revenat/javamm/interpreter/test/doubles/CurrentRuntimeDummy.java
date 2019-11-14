@@ -18,6 +18,7 @@
 package com.revenat.javamm.interpreter.test.doubles;
 
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.interpreter.component.FunctionInvoker;
 import com.revenat.javamm.interpreter.model.CurrentRuntime;
 import com.revenat.javamm.interpreter.model.LocalContext;
 
@@ -44,5 +45,11 @@ public class CurrentRuntimeDummy implements CurrentRuntime {
 
     @Override
     public void setCurrentLocalContext(final LocalContext localContext) {
+    }
+
+    @Override
+    public FunctionInvoker getCurrentFunctionInvoker() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

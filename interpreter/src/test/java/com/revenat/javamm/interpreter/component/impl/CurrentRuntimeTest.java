@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.interpreter.component.FunctionInvoker;
 import com.revenat.javamm.interpreter.model.CurrentRuntime;
 import com.revenat.javamm.interpreter.model.LocalContext;
 import com.revenat.javamm.interpreter.test.doubles.LocalContextDummy;
@@ -34,23 +35,30 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.revenat.juinit.addons.ReplaceCamelCase;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a current runtime")
+@ExtendWith(MockitoExtension.class)
 class CurrentRuntimeTest {
     private static final SourceLine CURRENT_SOURCE_LINE = SourceLine.EMPTY_SOURCE_LINE;
     private static final LocalContext DUMMY_LOCAL_CONTEXT = new LocalContextDummy();
     private static final Operation OPERATION_STUB = () -> CURRENT_SOURCE_LINE;
+
+    @Mock
+    private FunctionInvoker functionInvoker;
 
     private CurrentRuntime runtime;
 
 
     @BeforeEach
     void setUp() {
-        runtime = new CurrentRuntimeImpl();
+        runtime = new CurrentRuntimeImpl(functionInvoker);
     }
 
     @Test

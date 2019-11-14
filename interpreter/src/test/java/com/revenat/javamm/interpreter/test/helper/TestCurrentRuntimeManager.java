@@ -19,6 +19,7 @@ package com.revenat.javamm.interpreter.test.helper;
 
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.interpreter.component.FunctionInvoker;
 import com.revenat.javamm.interpreter.model.CurrentRuntime;
 import com.revenat.javamm.interpreter.model.CurrentRuntimeProvider;
 import com.revenat.javamm.interpreter.model.LocalContext;
@@ -108,6 +109,12 @@ public final class TestCurrentRuntimeManager {
         public void setCurrentOperation(final Operation operation) {
             processedOperations.add(operation);
             CurrentRuntime.super.setCurrentOperation(operation);
+        }
+
+        @Override
+        public FunctionInvoker getCurrentFunctionInvoker() {
+            // TODO Auto-generated method stub
+            return null;
         }
     }
 }

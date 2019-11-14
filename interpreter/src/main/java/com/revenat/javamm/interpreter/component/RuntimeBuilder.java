@@ -29,5 +29,5 @@ import com.revenat.javamm.interpreter.model.LocalContext;
  */
 public interface RuntimeBuilder {
 
-    CurrentRuntime buildCurrentRuntime();
+    CurrentRuntime buildCurrentRuntime(FunctionInvoker functionInvoker);
 }

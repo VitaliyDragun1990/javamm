@@ -19,6 +19,7 @@ package com.revenat.javamm.interpreter.component.impl;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.revenat.javamm.interpreter.component.FunctionInvoker;
 import com.revenat.javamm.interpreter.component.RuntimeBuilder;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -29,12 +30,16 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.revenat.juinit.addons.ReplaceCamelCase;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a runtime builder")
+@ExtendWith(MockitoExtension.class)
 class RuntimeBuilderTest {
     private RuntimeBuilder runtimeBuilder;
 
@@ -52,7 +57,7 @@ class RuntimeBuilderTest {
 
     @Test
     @Order(2)
-    void shouldBuildInstanceOfCurrentRuntime() {
-        assertNotNull(runtimeBuilder.buildCurrentRuntime());
+    void shouldBuildInstanceOfCurrentRuntime(@Mock final FunctionInvoker functionInvoker) {
+        assertNotNull(runtimeBuilder.buildCurrentRuntime(functionInvoker));
     }
 }

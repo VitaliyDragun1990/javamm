@@ -20,15 +20,21 @@ package com.revenat.javamm.interpreter;
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
 import com.revenat.javamm.interpreter.component.CalculatorFacade;
+import com.revenat.javamm.interpreter.component.DeveloperFunctionInvoker;
 import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.ExpressionUpdater;
+import com.revenat.javamm.interpreter.component.FunctionInvokerBuilder;
 import com.revenat.javamm.interpreter.component.LocalContextBuilder;
+import com.revenat.javamm.interpreter.component.LocalContextManager;
 import com.revenat.javamm.interpreter.component.OperationInterpreter;
 import com.revenat.javamm.interpreter.component.RuntimeBuilder;
 import com.revenat.javamm.interpreter.component.impl.BlockOperationInterpreterImpl;
 import com.revenat.javamm.interpreter.component.impl.CalculatorFacadeImpl;
+import com.revenat.javamm.interpreter.component.impl.DeveloperFunctionInvokerImpl;
 import com.revenat.javamm.interpreter.component.impl.ExpressionContextImpl;
+import com.revenat.javamm.interpreter.component.impl.FunctionInvokerBuilderImpl;
 import com.revenat.javamm.interpreter.component.impl.InterpreterImpl;
+import com.revenat.javamm.interpreter.component.impl.LocalContextManagerImpl;
 import com.revenat.javamm.interpreter.component.impl.RuntimeBuilderImpl;
 import com.revenat.javamm.interpreter.component.impl.calculator.HashCodeUnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.binary.AdditionBinaryExpressionCalculator;
@@ -57,6 +63,7 @@ import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsLess
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsLessThanOrEqualsBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsNotEqualsBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.TypeOfBinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.expression.evaluator.FunctionInvocationExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.PostfixNotationComplexExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.TernaryConditionalExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.impl.expression.evaluator.VariableExpressionEvaluator;
@@ -137,7 +144,8 @@ public class InterpreterConfigurator {
     private final Set<ExpressionEvaluator<?>> expressionEvaluators = Set.of(
             new VariableExpressionEvaluator(),
             new PostfixNotationComplexExpressionEvaluator(calculatorFacade),
-            new TernaryConditionalExpressionEvaluator(calculatorFacade)
+            new TernaryConditionalExpressionEvaluator(calculatorFacade),
+            new FunctionInvocationExpressionEvaluator()
     );
 
     private final Set<ExpressionUpdater<?>> expressionUpdaters = Set.of(
@@ -169,8 +177,16 @@ public class InterpreterConfigurator {
 
     private final LocalContextBuilder localContextBuilder = new RuntimeBuilderImpl();
 
+    private final LocalContextManager localContextManager = new LocalContextManagerImpl(localContextBuilder);
+
+    private final DeveloperFunctionInvoker developerFunctionInvoker =
+            new DeveloperFunctionInvokerImpl(localContextManager, blockOperationInterpreter, expressionContext);
+
+    private final FunctionInvokerBuilder functionInvokerBuilder =
+            new FunctionInvokerBuilderImpl(developerFunctionInvoker);
+
     private final Interpreter interpreter =
-            new InterpreterImpl(blockOperationInterpreter, runtimeBuilder, localContextBuilder);
+            new InterpreterImpl(functionInvokerBuilder, runtimeBuilder);
 
     public Interpreter getInterpreter() {
         return interpreter;

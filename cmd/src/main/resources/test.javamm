@@ -1,7 +1,14 @@
 function main() {
-	helloWorld()
+	final message = 'Hello'
+	say(message)
+	println(message)
+	say()
 }
-
-function helloWorld() {
-	println('Hello world')
+function say(message) {
+	println(message)
+	message = 'Bye'
+	println(message)
+}
+function say() {
+	println('Another say')
 }

@@ -69,7 +69,7 @@ public class ContinueOperationInterpreterIntegrationTest extends AbstractIntegra
 
         final JavammRuntimeError e = assertThrows(JavammRuntimeError.class, () -> runBlock(continueOutsideLoopBody));
 
-        assertErrorMessageContains(e, "Runtime error in 'test' [Line: 2]: Operation 'continue' not expected here");
+        assertErrorMessageContains(e, "Runtime error in 'test' [Line: 2]: Operation 'continue' is not expected here");
     }
 
     static final class ContinueOperationProider implements ArgumentsProvider {

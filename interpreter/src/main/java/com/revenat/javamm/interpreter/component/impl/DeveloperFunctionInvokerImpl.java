@@ -80,7 +80,7 @@ public class DeveloperFunctionInvokerImpl implements DeveloperFunctionInvoker {
     private Object interpretFunctionBody(final DeveloperFunction function) {
         try {
             blockOperationInterpreter.interpret(function.getBody());
-            return null;
+            return com.revenat.javamm.code.fragment.Void.INSTANCE;
         } catch (final InterruptOperationException e) {
             throw new JavammLineRuntimeError("Operation '%s' is not expected here", e.getOperation());
         }

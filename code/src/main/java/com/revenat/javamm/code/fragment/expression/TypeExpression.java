@@ -40,7 +40,9 @@ public enum TypeExpression implements Expression, CaseValueExpression {
 
     BOOLEAN(Boolean.class),
 
-    DOUBLE(Double.class);
+    DOUBLE(Double.class),
+
+    VOID(com.revenat.javamm.code.fragment.Void.class);
 
     private static final Map<String, TypeExpression> ALL_TYPES = Arrays
             .stream(TypeExpression.values())

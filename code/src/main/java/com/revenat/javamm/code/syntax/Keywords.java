@@ -77,6 +77,8 @@ public final class Keywords {
 
     public static final String BOOLEAN = "boolean";
 
+    public static final String VOID = "void";
+
     public static final Collection<String> ALL_KEYWORDS = keywords();
 
     private Keywords() {

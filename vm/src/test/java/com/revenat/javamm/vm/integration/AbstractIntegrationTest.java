@@ -54,6 +54,10 @@ public abstract class AbstractIntegrationTest {
         System.setOut(originalOutputStream);
     }
 
+    protected final void runCode(final List<String> lines) {
+        virtualMachine.run(new TestSourceCode(lines, MODULE_NAME));
+    }
+
     protected final void runBlock(final List<String> lines) {
         final List<String> validOperations = putInsideMainFunction(lines);
 

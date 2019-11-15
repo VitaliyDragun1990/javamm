@@ -78,6 +78,7 @@ import com.revenat.javamm.interpreter.component.impl.operation.simple.BreakOpera
 import com.revenat.javamm.interpreter.component.impl.operation.simple.ContinueOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.ExpressionOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.PrintlnOperationInterpreter;
+import com.revenat.javamm.interpreter.component.impl.operation.simple.ReturnOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.VariableAssignmentOperationInterpreter;
 import com.revenat.javamm.interpreter.component.impl.operation.simple.VariableDeclarationOperationInterpreter;
 
@@ -167,7 +168,8 @@ public class InterpreterConfigurator {
             new SimpleBlockOperationInterpreter(expressionContext),
             new ContinueOperationInterpreter(expressionContext),
             new BreakOperationInterpreter(expressionContext),
-            new SwitchOperationInterpreter(expressionContext)
+            new SwitchOperationInterpreter(expressionContext),
+            new ReturnOperationInterpreter(expressionContext)
     );
 
     private final BlockOperationInterpreter blockOperationInterpreter = new BlockOperationInterpreterImpl(

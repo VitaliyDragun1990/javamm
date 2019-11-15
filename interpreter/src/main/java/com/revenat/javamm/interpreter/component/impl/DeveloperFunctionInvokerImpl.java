@@ -26,6 +26,7 @@ import com.revenat.javamm.interpreter.component.DeveloperFunctionInvoker;
 import com.revenat.javamm.interpreter.component.LocalContextManager;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 import com.revenat.javamm.interpreter.component.impl.operation.exception.InterruptOperationException;
+import com.revenat.javamm.interpreter.component.impl.operation.exception.ReturnOperationException;
 import com.revenat.javamm.interpreter.model.LocalContext;
 
 import java.util.List;
@@ -81,6 +82,8 @@ public class DeveloperFunctionInvokerImpl implements DeveloperFunctionInvoker {
         try {
             blockOperationInterpreter.interpret(function.getBody());
             return com.revenat.javamm.code.fragment.Void.INSTANCE;
+        } catch (final ReturnOperationException e) {
+            return e.getReturnValue();
         } catch (final InterruptOperationException e) {
             throw new JavammLineRuntimeError("Operation '%s' is not expected here", e.getOperation());
         }

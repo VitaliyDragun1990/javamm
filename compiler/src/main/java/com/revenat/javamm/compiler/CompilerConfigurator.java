@@ -76,6 +76,7 @@ import com.revenat.javamm.compiler.component.impl.operation.simple.BreakOperatio
 import com.revenat.javamm.compiler.component.impl.operation.simple.ContinueOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.FinalDeclarationOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.PrintlnOperationReader;
+import com.revenat.javamm.compiler.component.impl.operation.simple.ReturnOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.VariableAssignmentOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.simple.VariableDeclarationOperationReader;
 import com.revenat.javamm.compiler.component.impl.parser.custom.TokenParserImpl;
@@ -184,7 +185,8 @@ public class CompilerConfigurator {
             new SimpleBlockOperationReader(),
             new ContinueOperationReader(),
             new BreakOperationReader(),
-            new SwitchOperationReader(switchBodyReader, expressionResolver)
+            new SwitchOperationReader(switchBodyReader, expressionResolver),
+            new ReturnOperationReader(expressionResolver)
     );
 
     private final BlockOperationReader blockOperationReader =

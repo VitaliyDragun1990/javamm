@@ -19,7 +19,10 @@ package com.revenat.javamm.interpreter.model;
 
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.function.DeveloperFunction;
 import com.revenat.javamm.interpreter.component.FunctionInvoker;
+
+import java.util.List;
 
 /**
  * Represents current runtime environment in which interpreter operates at the
@@ -80,4 +83,21 @@ public interface CurrentRuntime {
     }
 
     FunctionInvoker getCurrentFunctionInvoker();
+
+    /**
+     * Designates that flow of execution enters given {@linkplain DeveloperFunction
+     * developer function}
+     */
+    void enterToFunction(DeveloperFunction developerFunction);
+
+    /**
+     * Designates that flow of execution exists from currently executed function
+     */
+    void exitFromFunction();
+
+    /**
+     * Returns current stack trace which represents flow of execution's path from
+     * main function to currently executing line of code
+     */
+    List<StackTraceItem> getCurrentStackTrace();
 }

@@ -25,7 +25,6 @@ import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.ExpressionUpdater;
 import com.revenat.javamm.interpreter.component.FunctionInvokerBuilder;
 import com.revenat.javamm.interpreter.component.LocalContextBuilder;
-import com.revenat.javamm.interpreter.component.LocalContextManager;
 import com.revenat.javamm.interpreter.component.OperationInterpreter;
 import com.revenat.javamm.interpreter.component.RuntimeBuilder;
 import com.revenat.javamm.interpreter.component.impl.BlockOperationInterpreterImpl;
@@ -34,7 +33,6 @@ import com.revenat.javamm.interpreter.component.impl.DeveloperFunctionInvokerImp
 import com.revenat.javamm.interpreter.component.impl.ExpressionContextImpl;
 import com.revenat.javamm.interpreter.component.impl.FunctionInvokerBuilderImpl;
 import com.revenat.javamm.interpreter.component.impl.InterpreterImpl;
-import com.revenat.javamm.interpreter.component.impl.LocalContextManagerImpl;
 import com.revenat.javamm.interpreter.component.impl.RuntimeBuilderImpl;
 import com.revenat.javamm.interpreter.component.impl.calculator.HashCodeUnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.binary.AdditionBinaryExpressionCalculator;
@@ -179,10 +177,8 @@ public class InterpreterConfigurator {
 
     private final LocalContextBuilder localContextBuilder = new RuntimeBuilderImpl();
 
-    private final LocalContextManager localContextManager = new LocalContextManagerImpl(localContextBuilder);
-
     private final DeveloperFunctionInvoker developerFunctionInvoker =
-            new DeveloperFunctionInvokerImpl(localContextManager, blockOperationInterpreter, expressionContext);
+            new DeveloperFunctionInvokerImpl(localContextBuilder, blockOperationInterpreter, expressionContext);
 
     private final FunctionInvokerBuilder functionInvokerBuilder =
             new FunctionInvokerBuilderImpl(developerFunctionInvoker);

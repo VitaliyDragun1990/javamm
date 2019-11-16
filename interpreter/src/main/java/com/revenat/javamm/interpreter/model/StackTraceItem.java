@@ -15,27 +15,22 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.interpreter.error;
+package com.revenat.javamm.interpreter.model;
 
-import com.revenat.javamm.code.exception.JavammError;
-import com.revenat.javamm.interpreter.model.StackTraceItem;
-
-import java.util.List;
+import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.function.DeveloperFunction;
 
 /**
- * Signals about runtime error
- *
  * @author Vitaliy Dragun
  *
  */
-public abstract class JavammRuntimeError extends JavammError {
-    private static final long serialVersionUID = 3854577680820104365L;
+public interface StackTraceItem {
 
-    public JavammRuntimeError(final String message) {
-        super(message);
-    }
+    DeveloperFunction getFunction();
 
-    public List<StackTraceItem> getCurrentStackTrace() {
-        return List.of();
-    }
+    String getModuleName();
+
+    int getSourceLineNumber();
+
+    SourceLine getSourceLine();
 }

@@ -18,10 +18,19 @@
 package com.revenat.javamm.interpreter.component.impl;
 
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.function.DeveloperFunction;
 import com.revenat.javamm.interpreter.component.FunctionInvoker;
+import com.revenat.javamm.interpreter.component.impl.model.StackTraceItemImpl;
 import com.revenat.javamm.interpreter.model.CurrentRuntime;
 import com.revenat.javamm.interpreter.model.LocalContext;
+import com.revenat.javamm.interpreter.model.StackTraceItem;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+
+import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -35,6 +44,10 @@ public class CurrentRuntimeImpl implements CurrentRuntime {
     private LocalContext currentLocalContext;
 
     private final FunctionInvoker functionInvoker;
+
+    private final Deque<StackTraceItem> currentStackTrace = new ArrayDeque<>();
+
+    private DeveloperFunction currentFunction;
 
     public CurrentRuntimeImpl(final FunctionInvoker functionInvoker) {
         this.functionInvoker = requireNonNull(functionInvoker);
@@ -68,5 +81,35 @@ public class CurrentRuntimeImpl implements CurrentRuntime {
     @Override
     public FunctionInvoker getCurrentFunctionInvoker() {
         return functionInvoker;
+    }
+
+    @Override
+    public void enterToFunction(final DeveloperFunction function) {
+        if (currentFunction != null) {
+            currentStackTrace.push(new StackTraceItemImpl(currentFunction, currentSourceLine));
+        }
+        currentFunction = function;
+        setCurrentSourceLine(function.getDeclarationSourceLine());
+    }
+
+    @Override
+    public void exitFromFunction() {
+        final StackTraceItem item = currentStackTrace.poll();
+        if (item != null) {
+            currentFunction = item.getFunction();
+            setCurrentSourceLine(item.getSourceLine());
+        } else {
+            currentFunction = null;
+        }
+    }
+
+    @Override
+    public List<StackTraceItem> getCurrentStackTrace() {
+        final List<StackTraceItem> stackTrace = new ArrayList<>();
+        if (currentFunction != null) {
+            stackTrace.add(new StackTraceItemImpl(currentFunction, currentSourceLine));
+        }
+        stackTrace.addAll(currentStackTrace);
+        return unmodifiableList(stackTrace);
     }
 }

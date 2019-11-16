@@ -23,10 +23,12 @@ import com.revenat.javamm.code.fragment.Variable;
 import com.revenat.javamm.code.fragment.function.DeveloperFunction;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
 import com.revenat.javamm.interpreter.component.DeveloperFunctionInvoker;
-import com.revenat.javamm.interpreter.component.LocalContextManager;
+import com.revenat.javamm.interpreter.component.LocalContextBuilder;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 import com.revenat.javamm.interpreter.component.impl.operation.exception.InterruptOperationException;
 import com.revenat.javamm.interpreter.component.impl.operation.exception.ReturnOperationException;
+import com.revenat.javamm.interpreter.model.CurrentRuntime;
+import com.revenat.javamm.interpreter.model.CurrentRuntimeProvider;
 import com.revenat.javamm.interpreter.model.LocalContext;
 
 import java.util.List;
@@ -39,33 +41,49 @@ import static java.util.Objects.requireNonNull;
  */
 public class DeveloperFunctionInvokerImpl implements DeveloperFunctionInvoker {
 
-    private final LocalContextManager localContextManager;
+    private final LocalContextBuilder localContextBuilder;
 
     private final BlockOperationInterpreter blockOperationInterpreter;
 
     private final ExpressionContext expressionContext;
 
-    public DeveloperFunctionInvokerImpl(final LocalContextManager localContextManager,
+    public DeveloperFunctionInvokerImpl(final LocalContextBuilder localContextBuilder,
                                         final BlockOperationInterpreter blockOperationInterpreter,
                                         final ExpressionContext expressionContext) {
-        this.localContextManager = requireNonNull(localContextManager);
+        this.localContextBuilder = requireNonNull(localContextBuilder);
         this.blockOperationInterpreter = requireNonNull(blockOperationInterpreter);
         this.expressionContext = requireNonNull(expressionContext);
     }
 
     @Override
     public Object invokeMain(final DeveloperFunction mainFunction) {
-        localContextManager.setNewLocalContext(mainFunction.getDeclarationSourceLine());
-        return interpretFunctionBody(mainFunction);
+        final CurrentRuntime currentRuntime = getCurrentRuntime();
+        final LocalContext localContext = localContextBuilder.buildLocalContext();
+
+        try {
+            currentRuntime.setCurrentLocalContext(localContext);
+            currentRuntime.enterToFunction(mainFunction);
+            return interpretFunctionBody(mainFunction);
+        } finally {
+            currentRuntime.exitFromFunction();
+        }
     }
 
     @Override
     public Object invoke(final DeveloperFunction function, final List<Expression> arguments) {
-        return localContextManager.executeInSeparateLocalContext(
-            localContext ->
-                setFunctionParametersIntoLocalContext(function.getParameters(), arguments, localContext),
-            () -> interpretFunctionBody(function),
-            function.getDeclarationSourceLine());
+        final CurrentRuntime currentRuntime = getCurrentRuntime();
+        final LocalContext currentLocalContext = currentRuntime.getCurrentLocalContext();
+
+        final LocalContext separateLocalContext = localContextBuilder.buildLocalContext();
+        setFunctionParametersIntoLocalContext(function.getParameters(), arguments, separateLocalContext);
+        try {
+            currentRuntime.setCurrentLocalContext(separateLocalContext);
+            currentRuntime.enterToFunction(function);
+            return interpretFunctionBody(function);
+        } finally {
+            currentRuntime.setCurrentLocalContext(currentLocalContext);
+            currentRuntime.exitFromFunction();
+        }
     }
 
     private void setFunctionParametersIntoLocalContext(final List<Variable> parameters,
@@ -87,5 +105,9 @@ public class DeveloperFunctionInvokerImpl implements DeveloperFunctionInvoker {
         } catch (final InterruptOperationException e) {
             throw new JavammLineRuntimeError("Operation '%s' is not expected here", e.getOperation());
         }
+    }
+
+    private CurrentRuntime getCurrentRuntime() {
+        return CurrentRuntimeProvider.getCurrentRuntime();
     }
 }

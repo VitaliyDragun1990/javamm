@@ -18,11 +18,14 @@
 package com.revenat.javamm.interpreter.component.impl.error;
 
 import com.revenat.javamm.interpreter.error.JavammRuntimeError;
+import com.revenat.javamm.interpreter.model.CurrentRuntime;
+import com.revenat.javamm.interpreter.model.CurrentRuntimeProvider;
+import com.revenat.javamm.interpreter.model.StackTraceItem;
 
-import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCurrentRuntime;
+import java.util.List;
 
 import static java.lang.String.format;
-import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 
 /**
@@ -34,18 +37,39 @@ import static java.util.Objects.requireNonNull;
 public class JavammLineRuntimeError extends JavammRuntimeError {
     private static final long serialVersionUID = -2098638364439526984L;
 
+    private final transient List<StackTraceItem> currentStackTrace;
+
     public JavammLineRuntimeError(final String message) {
-        super(buildErrorMessage(requireNonNull(message)));
+        super(message);
+        this.currentStackTrace = getCurrentRuntime().getCurrentStackTrace();
     }
 
     public JavammLineRuntimeError(final String template, final Object...args) {
         this(format(template, args));
     }
 
-    private static String buildErrorMessage(final String message) {
-        return format("Runtime error in '%s' [Line: %s]: %s",
-                getCurrentRuntime().getCurrentModuleName(),
-                getCurrentRuntime().getCurrentSourceLine().getLineNumber(),
-                message);
+    @Override
+    public String getMessage() {
+        return format("Runtime error: %s%s%s",
+                super.getMessage(),
+                System.lineSeparator(),
+                buildStackTrace()
+                );
+    }
+
+    private String buildStackTrace() {
+        return String.join(System.lineSeparator(),
+                           currentStackTrace.stream()
+                               .map(this::toString)
+                               .collect(toUnmodifiableList())
+        );
+    }
+
+    private String toString(final StackTraceItem item) {
+        return format("    at %s [%s:%s]", item.getFunction(), item.getModuleName(), item.getSourceLineNumber());
+    }
+
+    private static CurrentRuntime getCurrentRuntime() {
+        return CurrentRuntimeProvider.getCurrentRuntime();
     }
 }

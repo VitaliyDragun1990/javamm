@@ -23,7 +23,6 @@ import com.revenat.javamm.interpreter.component.FunctionInvoker;
 import com.revenat.javamm.interpreter.component.RuntimeBuilder;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -41,18 +40,14 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @DisplayName("a runtime builder")
 @ExtendWith(MockitoExtension.class)
 class RuntimeBuilderTest {
+
+    private static final int ANY_VALID_MAX_STACK_SIZE = 10;
+
     private RuntimeBuilder runtimeBuilder;
 
     @BeforeEach
     void setUp() {
-        runtimeBuilder = new RuntimeBuilderImpl();
-    }
-
-    @Disabled
-    @Test
-    @Order(1)
-    void shouldBuildInstanceOfLocalContext() {
-//        assertNotNull(runtimeBuilder.buildLocalContext());
+        runtimeBuilder = new RuntimeBuilderImpl(ANY_VALID_MAX_STACK_SIZE);
     }
 
     @Test

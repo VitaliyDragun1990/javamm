@@ -29,6 +29,12 @@ import com.revenat.javamm.interpreter.model.LocalContext;
  */
 public class RuntimeBuilderImpl implements RuntimeBuilder, LocalContextBuilder {
 
+    private final int maxStackSize;
+
+    public RuntimeBuilderImpl(final int maxStackSize) {
+        this.maxStackSize = maxStackSize;
+    }
+
     @Override
     public LocalContext buildLocalContext() {
         return new LocalContextImpl();
@@ -36,6 +42,6 @@ public class RuntimeBuilderImpl implements RuntimeBuilder, LocalContextBuilder {
 
     @Override
     public CurrentRuntime buildCurrentRuntime(final FunctionInvoker functionInvoker) {
-        return new CurrentRuntimeImpl(functionInvoker);
+        return new CurrentRuntimeImpl(functionInvoker, maxStackSize);
     }
 }

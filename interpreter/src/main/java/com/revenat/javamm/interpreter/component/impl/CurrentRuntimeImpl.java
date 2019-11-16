@@ -20,6 +20,7 @@ package com.revenat.javamm.interpreter.component.impl;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.function.DeveloperFunction;
 import com.revenat.javamm.interpreter.component.FunctionInvoker;
+import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 import com.revenat.javamm.interpreter.component.impl.model.StackTraceItemImpl;
 import com.revenat.javamm.interpreter.model.CurrentRuntime;
 import com.revenat.javamm.interpreter.model.LocalContext;
@@ -39,18 +40,21 @@ import static java.util.Objects.requireNonNull;
  */
 public class CurrentRuntimeImpl implements CurrentRuntime {
 
+    private final FunctionInvoker functionInvoker;
+
+    private final int maxStackSize;
+
+    private final Deque<StackTraceItem> currentStackTrace = new ArrayDeque<>();
+
     private SourceLine currentSourceLine;
 
     private LocalContext currentLocalContext;
 
-    private final FunctionInvoker functionInvoker;
-
-    private final Deque<StackTraceItem> currentStackTrace = new ArrayDeque<>();
-
     private DeveloperFunction currentFunction;
 
-    public CurrentRuntimeImpl(final FunctionInvoker functionInvoker) {
+    public CurrentRuntimeImpl(final FunctionInvoker functionInvoker, final int maxStackSize) {
         this.functionInvoker = requireNonNull(functionInvoker);
+        this.maxStackSize = maxStackSize;
     }
 
     @Override
@@ -88,8 +92,15 @@ public class CurrentRuntimeImpl implements CurrentRuntime {
         if (currentFunction != null) {
             currentStackTrace.push(new StackTraceItemImpl(currentFunction, currentSourceLine));
         }
+        validateNoStackOverflow();
         currentFunction = function;
         setCurrentSourceLine(function.getDeclarationSourceLine());
+    }
+
+    private void validateNoStackOverflow() {
+        if (currentStackTrace.size() == maxStackSize - 1 /* - 1 because currentFunction is also count*/) {
+            throw new JavammLineRuntimeError("Stack overflow error. Max stack size is %d", maxStackSize);
+        }
     }
 
     @Override

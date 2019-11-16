@@ -173,9 +173,13 @@ public class InterpreterConfigurator {
     private final BlockOperationInterpreter blockOperationInterpreter = new BlockOperationInterpreterImpl(
             operationInterpreters);
 
-    private final RuntimeBuilder runtimeBuilder = new RuntimeBuilderImpl();
+    private final int maxStackSize = 10;
 
-    private final LocalContextBuilder localContextBuilder = new RuntimeBuilderImpl();
+    private final RuntimeBuilderImpl runtimeBuilderImpl = new RuntimeBuilderImpl(maxStackSize);
+
+    private final RuntimeBuilder runtimeBuilder = runtimeBuilderImpl;
+
+    private final LocalContextBuilder localContextBuilder = runtimeBuilderImpl;
 
     private final DeveloperFunctionInvoker developerFunctionInvoker =
             new DeveloperFunctionInvokerImpl(localContextBuilder, blockOperationInterpreter, expressionContext);

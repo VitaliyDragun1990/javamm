@@ -46,6 +46,10 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @DisplayName("a current runtime")
 @ExtendWith(MockitoExtension.class)
 class CurrentRuntimeTest {
+    /**
+     *
+     */
+    private static final int ANY_MAX_STACK_SIZE = 10;
     private static final SourceLine CURRENT_SOURCE_LINE = SourceLine.EMPTY_SOURCE_LINE;
     private static final LocalContext DUMMY_LOCAL_CONTEXT = new LocalContextDummy();
     private static final Operation OPERATION_STUB = () -> CURRENT_SOURCE_LINE;
@@ -58,7 +62,7 @@ class CurrentRuntimeTest {
 
     @BeforeEach
     void setUp() {
-        runtime = new CurrentRuntimeImpl(functionInvoker);
+        runtime = new CurrentRuntimeImpl(functionInvoker, ANY_MAX_STACK_SIZE);
     }
 
     @Test

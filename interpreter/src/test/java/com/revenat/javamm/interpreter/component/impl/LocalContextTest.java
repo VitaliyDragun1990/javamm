@@ -21,12 +21,12 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.Variable;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
-import com.revenat.javamm.interpreter.model.CurrentRuntimeProvider;
 import com.revenat.javamm.interpreter.model.LocalContext;
-import com.revenat.javamm.interpreter.test.doubles.CurrentRuntimeStub;
 import com.revenat.javamm.interpreter.test.doubles.VariableStub;
+import com.revenat.javamm.interpreter.test.helper.TestCurrentRuntimeManager;
 
 import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
 
@@ -55,7 +55,7 @@ class LocalContextTest {
 
     @BeforeAll
     static void setTestCurrentRuntime() {
-        CurrentRuntimeProvider.setCurrentRuntime(CurrentRuntimeStub.simple());
+        TestCurrentRuntimeManager.setFakeCurrentRuntime(SourceLine.EMPTY_SOURCE_LINE);
     }
 
     void assertNotDefined(final Variable variable) {

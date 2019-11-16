@@ -70,7 +70,7 @@ public class BlockScopeVariables_IntegrationTest extends AbstractIntegrationTest
                             "}",
                             "println (a)",
                             "println (b)"
-                    ), of(5, 3), "Runtime error in 'test' [Line: 8]: Variable 'b' is not defined"),
+                    ), of(5, 3), buildErrorMsg("Variable 'b' is not defined", 8)),
                     // 2 ------------------------------------
                     arguments(of(
                             "var a = 3",
@@ -81,7 +81,7 @@ public class BlockScopeVariables_IntegrationTest extends AbstractIntegrationTest
                             "}",
                             "println (a)",
                             "println (b)"
-                    ), of(3, 5, 3), "Runtime error in 'test' [Line: 9]: Variable 'b' is not defined"),
+                    ), of(3, 5, 3), buildErrorMsg("Variable 'b' is not defined", 9)),
                     // 3 ------------------------------------
                     arguments(of(
                             "var a = 3",
@@ -92,7 +92,7 @@ public class BlockScopeVariables_IntegrationTest extends AbstractIntegrationTest
                             "}",
                             "println (a)",
                             "println (b)"
-                            ), of(3, 5, 4), "Runtime error in 'test' [Line: 9]: Variable 'b' is not defined")
+                            ), of(3, 5, 4), buildErrorMsg("Variable 'b' is not defined", 9))
             );
         }
     }

@@ -69,7 +69,7 @@ public class BreakOperationInterpreterIntegrationTest extends AbstractIntegratio
 
         final JavammRuntimeError e = assertThrows(JavammRuntimeError.class, () -> runBlock(breakOutsideLoopBody));
 
-        assertErrorMessageContains(e, "Runtime error in 'test' [Line: 2]: Operation 'break' is not expected here");
+        assertErrorMessageContains(e, buildErrorMsg("Operation 'break' is not expected here", 2));
     }
 
     static final class BreakOperationProider implements ArgumentsProvider {

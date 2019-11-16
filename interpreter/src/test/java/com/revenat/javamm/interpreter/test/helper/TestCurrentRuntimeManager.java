@@ -19,10 +19,12 @@ package com.revenat.javamm.interpreter.test.helper;
 
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.function.DeveloperFunction;
 import com.revenat.javamm.interpreter.component.FunctionInvoker;
 import com.revenat.javamm.interpreter.model.CurrentRuntime;
 import com.revenat.javamm.interpreter.model.CurrentRuntimeProvider;
 import com.revenat.javamm.interpreter.model.LocalContext;
+import com.revenat.javamm.interpreter.model.StackTraceItem;
 import com.revenat.javamm.interpreter.test.doubles.LocalContextSpy;
 
 import java.util.ArrayList;
@@ -115,6 +117,23 @@ public final class TestCurrentRuntimeManager {
         public FunctionInvoker getCurrentFunctionInvoker() {
             // TODO Auto-generated method stub
             return null;
+        }
+
+        @Override
+        public void enterToFunction(final DeveloperFunction developerFunction) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void exitFromFunction() {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public List<StackTraceItem> getCurrentStackTrace() {
+            return List.of();
         }
     }
 }

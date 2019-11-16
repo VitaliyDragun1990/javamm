@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static java.lang.System.lineSeparator;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -70,6 +72,11 @@ public abstract class AbstractIntegrationTest {
 
     protected void assertExpectedOutput(final List<Object> expectedOutput) {
         assertThat(getOutput(), equalTo(expectedOutput));
+    }
+
+    public static String buildErrorMsg(final String msg, final int lineNumber) {
+        return String.format("Runtime error: %s%s    at main() [%s:%s]",
+                msg, lineSeparator(), MODULE_NAME, lineNumber);
     }
 
     private List<String> putInsideMainFunction(final List<String> lines) {

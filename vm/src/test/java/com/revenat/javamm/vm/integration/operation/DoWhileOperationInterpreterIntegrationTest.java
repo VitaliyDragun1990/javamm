@@ -90,8 +90,7 @@ public class DoWhileOperationInterpreterIntegrationTest extends AbstractIntegrat
 
         final JavammRuntimeError e = assertThrows(JavammRuntimeError.class, () -> runBlock(whileWithInvalidCondition));
 
-        assertErrorMessageContains(e,
-                "Runtime error in 'test' [Line: 4]: Condition expression should be boolean. Current type is integer");
+        assertErrorMessageContains(e, buildErrorMsg("Condition expression should be boolean. Current type is integer", 4));
     }
 
     @ParameterizedTest

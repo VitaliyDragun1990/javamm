@@ -89,8 +89,7 @@ public class WhileOperationInterpreterIntegrationTest extends AbstractIntegratio
 
         final JavammRuntimeError e = assertThrows(JavammRuntimeError.class, () -> runBlock(whileWithInvalidCondition));
 
-        assertErrorMessageContains(e,
-                "Runtime error in 'test' [Line: 2]: Condition expression should be boolean. Current type is integer");
+        assertErrorMessageContains(e, buildErrorMsg("Condition expression should be boolean. Current type is integer", 2));
     }
 
     @ParameterizedTest

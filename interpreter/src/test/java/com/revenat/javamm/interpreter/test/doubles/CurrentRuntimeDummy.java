@@ -18,9 +18,13 @@
 package com.revenat.javamm.interpreter.test.doubles;
 
 import com.revenat.javamm.code.fragment.SourceLine;
+import com.revenat.javamm.code.fragment.function.DeveloperFunction;
 import com.revenat.javamm.interpreter.component.FunctionInvoker;
 import com.revenat.javamm.interpreter.model.CurrentRuntime;
 import com.revenat.javamm.interpreter.model.LocalContext;
+import com.revenat.javamm.interpreter.model.StackTraceItem;
+
+import java.util.List;
 
 public class CurrentRuntimeDummy implements CurrentRuntime {
 
@@ -49,6 +53,24 @@ public class CurrentRuntimeDummy implements CurrentRuntime {
 
     @Override
     public FunctionInvoker getCurrentFunctionInvoker() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void enterToFunction(final DeveloperFunction developerFunction) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void exitFromFunction() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public List<StackTraceItem> getCurrentStackTrace() {
         // TODO Auto-generated method stub
         return null;
     }

@@ -21,4 +21,16 @@
  */
 module temp {
     requires javamm.code;
+
+    // AWT & swing
+    requires java.desktop;
+
+    // SWT
+    requires swt;
+
+    // JavaFX
+    requires javafx.graphics;
+    requires javafx.controls;
+    exports com.revenat.temp.gui.gui4_javafx to javafx.graphics;
+
 }

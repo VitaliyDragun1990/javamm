@@ -15,20 +15,25 @@
  * limitations under the License.
  */
 
+package com.revenat.javamm.ide.controller;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+
 /**
  * @author Vitaliy Dragun
  *
  */
-module javamm.ide {
-    requires javamm.code;
-    requires javamm.compiler;
-    requires javamm.interpreter;
-    requires javamm.vm;
+public class MainWindowController {
 
-    requires javafx.controls;
-    requires javafx.graphics;
-    requires javafx.fxml;
-    exports com.revenat.javamm.ide to javafx.graphics;
-    exports com.revenat.javamm.ide.controller to javafx.fxml;
-    opens com.revenat.javamm.ide.controller to javafx.fxml;
+    @FXML
+    private VBox actionPane;
+
+    @FXML
+    private TabPane codeTabPane;
+
+    @FXML
+    private BorderPane consolePane;
 }

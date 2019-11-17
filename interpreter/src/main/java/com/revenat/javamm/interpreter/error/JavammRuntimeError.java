@@ -35,6 +35,15 @@ public abstract class JavammRuntimeError extends JavammError {
         super(message);
     }
 
+    @Override
+    public String getMessage() {
+        return getSimpleMessage();
+    }
+
+    public final String getSimpleMessage() {
+        return String.format("Runtime error: %s", super.getMessage());
+    }
+
     public List<StackTraceItem> getCurrentStackTrace() {
         return List.of();
     }

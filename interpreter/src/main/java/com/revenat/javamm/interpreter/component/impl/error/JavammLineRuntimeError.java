@@ -25,6 +25,7 @@ import com.revenat.javamm.interpreter.model.StackTraceItem;
 import java.util.List;
 
 import static java.lang.String.format;
+import static java.lang.System.lineSeparator;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
 
@@ -57,15 +58,20 @@ public class JavammLineRuntimeError extends JavammRuntimeError {
                 );
     }
 
+    @Override
+    public List<StackTraceItem> getCurrentStackTrace() {
+        return currentStackTrace;
+    }
+
     private String buildStackTrace() {
-        return String.join(System.lineSeparator(),
+        return String.join(lineSeparator(),
                            currentStackTrace.stream()
-                               .map(this::toString)
+                               .map(this::toStackTraceString)
                                .collect(toUnmodifiableList())
         );
     }
 
-    private String toString(final StackTraceItem item) {
+    private String toStackTraceString(final StackTraceItem item) {
         return format("    at %s [%s:%s]", item.getFunction(), item.getModuleName(), item.getSourceLineNumber());
     }
 

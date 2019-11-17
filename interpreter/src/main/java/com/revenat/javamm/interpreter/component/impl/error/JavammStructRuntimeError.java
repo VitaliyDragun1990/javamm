@@ -20,7 +20,6 @@ package com.revenat.javamm.interpreter.component.impl.error;
 import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 
 import static java.lang.String.format;
-import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
@@ -31,10 +30,6 @@ public class JavammStructRuntimeError extends JavammRuntimeError {
     private static final long serialVersionUID = 1L;
 
     public JavammStructRuntimeError(final String message, final Object...args) {
-        super(buildErrorMessage(format(requireNonNull(message), args)));
-    }
-
-    private static String buildErrorMessage(final String message) {
-        return format("Runtime error: %s", message);
+        super(format(message, args));
     }
 }

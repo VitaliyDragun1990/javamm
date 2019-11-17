@@ -69,7 +69,7 @@ public class FunctionInvokerBuilderImpl implements FunctionInvokerBuilder {
                 return developerFunctionInvoker.invokeMain(functionOptional.get());
             } else {
                 throw new JavammStructRuntimeError(
-                        "Main function not found, please define the main functions as: '%s %s'",
+                        "Main function not found, please define the main function as: '%s %s'",
                         FUNCTION, byteCode.getMainFunctionName());
             }
         }

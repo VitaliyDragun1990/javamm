@@ -90,6 +90,9 @@ import java.util.Set;
  *
  */
 public class InterpreterConfigurator {
+
+    public static final int MAX_STACK_SIZE = 10;
+
     private final CalculatorFacade calculatorFacade = new CalculatorFacadeImpl(
             Set.of(
                     AdditionBinaryExpressionCalculator.createNormalCalculator(),
@@ -173,9 +176,8 @@ public class InterpreterConfigurator {
     private final BlockOperationInterpreter blockOperationInterpreter = new BlockOperationInterpreterImpl(
             operationInterpreters);
 
-    private final int maxStackSize = 10;
 
-    private final RuntimeBuilderImpl runtimeBuilderImpl = new RuntimeBuilderImpl(maxStackSize);
+    private final RuntimeBuilderImpl runtimeBuilderImpl = new RuntimeBuilderImpl(MAX_STACK_SIZE);
 
     private final RuntimeBuilder runtimeBuilder = runtimeBuilderImpl;
 

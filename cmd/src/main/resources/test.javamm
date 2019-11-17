@@ -1,33 +1,11 @@
 function main() {
-	final a = 5
-	println(factorialRecursive(a))
-	println(factorialRecursive(a, 1))
-	println(factorialIterative(a))
+ 	first()
 }
 
-function factorialRecursive(value) {
-	if(value <= 1) {
-		return 1
-	}
-	else {
-		return value * factorialRecursive(value - 1)
-	}
+function first() {
+   second()
 }
 
-function factorialRecursive(value, initResult) {
-	if(value <= 1) {
-		return initResult
-	}
-	else {
-		final newInitResult = initResult * value
-		return factorialRecursive(value - 1, newInitResult)
-	}
-}
-
-function factorialIterative(value) {
-	var result = 1
-	for(var i = 1; i <= value; i++) {
-		result *= i
-	}
-	return result
+function second() {
+   var a = 1 / 0
 }

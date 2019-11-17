@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.revenat.javamm.vm.integration.operation;
+package com.revenat.javamm.vm.integration.function;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.params.provider.Arguments.arguments;

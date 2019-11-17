@@ -38,7 +38,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractIntegrationTest {
 
-    private static final String MODULE_NAME = "test";
+    public static final String MODULE_NAME = "test";
 
     private final PrintStream originalOutputStream = System.out;
 
@@ -77,6 +77,11 @@ public abstract class AbstractIntegrationTest {
     public static String buildErrorMsg(final String msg, final int lineNumber) {
         return String.format("Runtime error: %s%s    at main() [%s:%s]",
                 msg, lineSeparator(), MODULE_NAME, lineNumber);
+    }
+
+    public static String buildErrorMsg(final String msg, final String fullStackTrace) {
+        return String.format("Runtime error: %s%s%s",
+                msg, lineSeparator(), fullStackTrace);
     }
 
     private List<String> putInsideMainFunction(final List<String> lines) {

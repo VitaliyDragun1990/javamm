@@ -17,6 +17,7 @@
 
 package com.revenat.javamm.ide;
 
+import com.revenat.javamm.ide.ui.listener.ActionListener;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -43,12 +44,22 @@ public class JavammIDEApplication extends Application {
         final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/javafx/main-window.fxml"));
         final Scene scene = new Scene(fxmlLoader.load());
 
+        defineCloseRequestHandler(primaryStage, fxmlLoader.getController());
+
         primaryStage.setTitle("Javamm Simple IDE");
         primaryStage.setScene(scene);
 
         centerByScreen(primaryStage, DEFAULT_WIDTH_PERCENTAGE, DEFAULT_HEIGHT_PERCENTAGE);
 
         primaryStage.show();
+    }
+
+    private void defineCloseRequestHandler(final Stage state, final ActionListener controller) {
+        state.setOnCloseRequest(we -> {
+            if (!controller.onExitAction()) {
+                we.consume();
+            }
+        });
     }
 
     @Override

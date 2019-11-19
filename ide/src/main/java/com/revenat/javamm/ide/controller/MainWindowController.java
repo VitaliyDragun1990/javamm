@@ -42,7 +42,7 @@ public class MainWindowController implements ActionListener {
 
     /**
      * Controller lifecycle method. Will be called by javafx framework
-     * whet this controller has been fully initialized
+     * after this controller has been fully initialized
      */
     @FXML
     private void initialize() {
@@ -71,8 +71,11 @@ public class MainWindowController implements ActionListener {
 
     @Override
     public boolean onExitAction() {
+        if (actionPane.isExitActionDisabled()) {
+            return false;
+        }
         getStage().close();
-        return false;
+        return true;
     }
 
     protected Stage getStage() {

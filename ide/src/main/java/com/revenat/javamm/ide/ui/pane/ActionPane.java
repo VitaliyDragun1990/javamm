@@ -27,8 +27,14 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
+import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 
 /**
  * Provides pane with buttons for every possible action that can be performed with the javamm IDE
@@ -54,6 +60,9 @@ public final class ActionPane extends VBox implements ActionStateManager {
 
     @FXML
     private MenuItem miRedo;
+
+    @FXML
+    private MenuItem miFormat;
 
     @FXML
     private MenuItem miRun;
@@ -87,8 +96,10 @@ public final class ActionPane extends VBox implements ActionStateManager {
 
     private ActionListener actionListener;
 
+    private Map<MenuItem, Boolean> controlElementsState;
+
     public ActionPane() throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/javafx/action-pane.fxml"));
+        final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/javafx/action-pane.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
         fxmlLoader.load();
@@ -98,138 +109,227 @@ public final class ActionPane extends VBox implements ActionStateManager {
         this.actionListener = requireNonNull(actionListener);
     }
 
+    /**
+     * Component lifecycle method. Will be called by javafx framework
+     * after this component has been fully initialized
+     */
     @FXML
-    private void onNewAction(ActionEvent event) {
+    private void initialize() {
+        bindMenuItemsToCorrespondingToolbarButtons();
+        setDefaultControlElementsState();
+        customizeButtonsTooltipWithHotKeyCombination();
+    }
+
+    /**
+     * Binds menu item disable properties with corresponding toolbars buttons
+     * disable properties
+     */
+    private void bindMenuItemsToCorrespondingToolbarButtons() {
+        miNew.disableProperty().bindBidirectional(tbNew.disableProperty());
+        miOpen.disableProperty().bindBidirectional(tbOpen.disableProperty());
+        miSave.disableProperty().bindBidirectional(tbSave.disableProperty());
+
+        miUndo.disableProperty().bindBidirectional(tbUndo.disableProperty());
+        miRedo.disableProperty().bindBidirectional(tbRedo.disableProperty());
+        miFormat.disableProperty().bindBidirectional(tbFormat.disableProperty());
+
+        miRun.disableProperty().bindBidirectional(tbRun.disableProperty());
+        miTerminate.disableProperty().bindBidirectional(tbTerminate.disableProperty());
+    }
+
+    /**
+     * Sets default state for main menu items and toolbars buttons
+     */
+    private void setDefaultControlElementsState() {
+        disableSaveAction();
+        disableUndoAction();
+        disableRedoAction();
+        disableFormatAction();
+        disableRunAction();
+        disableTerminateAction();
+    }
+
+    /**
+     * Completes all toolbar's buttons tooltip with hot key combination
+     * from corresponding menu item
+     */
+    private void customizeButtonsTooltipWithHotKeyCombination() {
+        customizeButtonTooltipWithHotKeyCombination(tbNew, miNew);
+        customizeButtonTooltipWithHotKeyCombination(tbOpen, miOpen);
+        customizeButtonTooltipWithHotKeyCombination(tbSave, miSave);
+
+        customizeButtonTooltipWithHotKeyCombination(tbUndo, miUndo);
+        customizeButtonTooltipWithHotKeyCombination(tbRedo, miRedo);
+        customizeButtonTooltipWithHotKeyCombination(tbFormat, miFormat);
+
+        customizeButtonTooltipWithHotKeyCombination(tbRun, miRun);
+        customizeButtonTooltipWithHotKeyCombination(tbTerminate, miTerminate);
+    }
+
+    private void customizeButtonTooltipWithHotKeyCombination(final Button toolTipSource, final MenuItem hotKeySource) {
+        final String template = "%s (%s)";
+        toolTipSource.getTooltip().setText(format(template,
+            toolTipSource.getTooltip().getText(), hotKeySource.getAccelerator().getDisplayText()));
+    }
+
+    @FXML
+    private void onNewAction(final ActionEvent event) {
         actionListener.onNewAction();
+        enableFormatAction();
+        enableRunAction();
     }
 
     @FXML
-    private void onOpenAction(ActionEvent event) {
-        actionListener.onOpenAction();
+    private void onOpenAction(final ActionEvent event) {
+        if (actionListener.onOpenAction()) {
+            enableFormatAction();
+            enableRunAction();
+        }
     }
 
     @FXML
-    private void onSaveAction(ActionEvent event) {
-        actionListener.onSaveAction();
+    private void onSaveAction(final ActionEvent event) {
+        if (actionListener.onSaveAction()) {
+            disableSaveAction();
+        }
     }
 
     @FXML
-    private void onExitAction(ActionEvent event) {
+    private void onExitAction(final ActionEvent event) {
         actionListener.onExitAction();
     }
 
     @FXML
-    private void onUndoAction(ActionEvent event) {
+    private void onUndoAction(final ActionEvent event) {
         actionListener.onUndoAction();
     }
 
     @FXML
-    private void onRedoAction(ActionEvent event) {
+    private void onRedoAction(final ActionEvent event) {
         actionListener.onRedoAction();
     }
 
     @FXML
-    private void onFormatAction(ActionEvent event) {
+    private void onFormatAction(final ActionEvent event) {
         actionListener.onFormatAction();
     }
 
     @FXML
-    private void onRunAction(ActionEvent event) {
+    private void onRunAction(final ActionEvent event) {
+        preserveCurrentStateAndDisable(miNew, miOpen, miSave, miExit, miUndo, miRedo, miFormat, miRun);
+        enableTerminateAction();
         actionListener.onRunAction();
     }
 
+    private void preserveCurrentStateAndDisable(final MenuItem... items) {
+        final List<MenuItem> menuItems = Arrays.asList(items);
+        controlElementsState = menuItems.stream().collect(toMap(identity(), MenuItem::isDisable));
+        menuItems.forEach(mi -> mi.setDisable(true));
+    }
+
     @FXML
-    private void onTerminateAction(ActionEvent event) {
+    private void onTerminateAction(final ActionEvent event) {
         actionListener.onTerminateAction();
+        restorePreservedState();
+        disableTerminateAction();
+    }
+
+    private void restorePreservedState() {
+        controlElementsState.forEach(MenuItem::setDisable);
+        controlElementsState.clear();
     }
 
     @Override
     public void enableNewAction() {
-
+        miNew.setDisable(false);
     }
 
     @Override
     public void disableNewAction() {
-
+        miNew.setDisable(true);
     }
 
     @Override
     public void enableOpenAction() {
-
+        miOpen.setDisable(false);
     }
 
     @Override
     public void disableOpenAction() {
-
+        miOpen.setDisable(true);
     }
 
     @Override
     public void enableSaveAction() {
-
+        miSave.setDisable(false);
     }
 
     @Override
     public void disableSaveAction() {
-
+        miSave.setDisable(true);
     }
 
     @Override
     public void enableExitAction() {
-
+        miExit.setDisable(false);
     }
 
     @Override
     public void disableExitAction() {
-
+        miExit.setDisable(true);
     }
 
     @Override
     public void enableUndoAction() {
-
+        miUndo.setDisable(false);
     }
 
     @Override
     public void disableUndoAction() {
-
+        miUndo.setDisable(true);
     }
 
     @Override
     public void enableRedoAction() {
-
+        miRedo.setDisable(false);
     }
 
     @Override
     public void disableRedoAction() {
-
+        miRedo.setDisable(true);
     }
 
     @Override
     public void enableFormatAction() {
-
+        miFormat.setDisable(false);
     }
 
     @Override
     public void disableFormatAction() {
-
+        miFormat.setDisable(true);
     }
 
     @Override
     public void enableRunAction() {
-
+        miRun.setDisable(false);
     }
 
     @Override
     public void disableRunAction() {
-
+        miRun.setDisable(true);
     }
 
     @Override
     public void enableTerminateAction() {
-
+        miTerminate.setDisable(false);
     }
 
     @Override
     public void disableTerminateAction() {
+        miTerminate.setDisable(true);
+    }
 
+    public boolean isExitActionDisabled() {
+        return miExit.isDisable();
     }
 }

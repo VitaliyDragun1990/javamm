@@ -113,7 +113,7 @@
             </MenuItem>
         </Menu>
         <Menu fx:id="mLaunch" text="_Launch">
-            <MenuItem fx:id="miLaunch" onAction="#onRunAction" text="_Run">
+            <MenuItem fx:id="miRun" onAction="#onRunAction" text="_Run">
                 <graphic>
                     <FontIcon iconLiteral="$fontIconRun" iconSize="$iconSize" iconColor="$runIconColor" />
                 </graphic>

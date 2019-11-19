@@ -30,7 +30,6 @@ import com.revenat.javamm.code.fragment.expression.TypeExpression;
 import com.revenat.javamm.code.fragment.expression.VariableExpression;
 import com.revenat.javamm.compiler.component.SingleTokenExpressionBuilder;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
-import com.revenat.javamm.compiler.component.impl.expression.builder.SingleTokenExpressionBuilderImpl;
 import com.revenat.javamm.compiler.test.doubles.ExpressionContextDummy;
 import com.revenat.javamm.compiler.test.doubles.VariableBuilderStub;
 import com.revenat.javamm.compiler.test.doubles.VariableDummy;
@@ -65,34 +64,34 @@ class SingleTokenExpressionBuilderTest {
     private static final Variable DUMMY_VARIABLE = new VariableDummy();
 
     private VariableBuilderStub variableBuilderStub;
-    private SingleTokenExpressionBuilder expresssionBuilder;
+    private SingleTokenExpressionBuilder expressionBuilder;
 
     @BeforeEach
     void setUp() {
         variableBuilderStub = new VariableBuilderStub();
         variableBuilderStub.setVariableToBuild(DUMMY_VARIABLE);
-        expresssionBuilder = new SingleTokenExpressionBuilderImpl(variableBuilderStub);
+        expressionBuilder = new SingleTokenExpressionBuilderImpl(variableBuilderStub);
     }
 
     private void assertSupport(final String... tokens) {
-        assertTrue(expresssionBuilder.canBuild(List.of(tokens)));
+        assertTrue(expressionBuilder.canBuild(List.of(tokens)));
     }
 
     private void assertNotSupport(final String... tokens) {
-        assertFalse(expresssionBuilder.canBuild(List.of(tokens)));
+        assertFalse(expressionBuilder.canBuild(List.of(tokens)));
     }
 
     private void assertFailToBuild(final String token) {
-        assertThrows(JavammLineSyntaxError.class, () -> expresssionBuilder.build(List.of(token), DUMMY_SOURCE_LINE));
+        assertThrows(JavammLineSyntaxError.class, () -> expressionBuilder.build(List.of(token), DUMMY_SOURCE_LINE));
     }
 
     private void assertExpressionType(final String token, final Class<? extends Expression> expressionType) {
-        final Expression expression = expresssionBuilder.build(List.of(token), DUMMY_SOURCE_LINE);
+        final Expression expression = expressionBuilder.build(List.of(token), DUMMY_SOURCE_LINE);
         assertThat(expression.getClass(), equalTo(expressionType));
     }
 
     private void assertConstantExpression(final String token, final Class<?> constantType) {
-        final Expression expression = expresssionBuilder.build(List.of(token), DUMMY_SOURCE_LINE);
+        final Expression expression = expressionBuilder.build(List.of(token), DUMMY_SOURCE_LINE);
         assertThat(expression.getClass(), equalTo(ConstantExpression.class));
         assertThat(expression.getValue(new ExpressionContextDummy()).getClass(), equalTo(constantType));
     }
@@ -201,7 +200,7 @@ class SingleTokenExpressionBuilderTest {
 
     @Test
     @Order(13)
-    void shouldFailToBuildExpressionIfStringLiteralOpenAndCloseDelimetersMismatch() {
+    void shouldFailToBuildExpressionIfStringLiteralOpenAndCloseDelimitersMismatch() {
         assertFailToBuild("'test\"");
         assertFailToBuild("\"test'");
     }

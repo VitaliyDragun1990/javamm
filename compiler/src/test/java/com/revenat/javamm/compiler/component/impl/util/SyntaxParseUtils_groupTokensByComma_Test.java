@@ -84,9 +84,9 @@ public class SyntaxParseUtils_groupTokensByComma_Test {
             "sum ( 4 , , a ) , { 1 , , 2 } , a [ sum ( 3 , , 5 ) ] );           sum ( 4 , , a )|{ 1 , , 2 }|a [ sum ( 3 , , 5 ) ] )",
     })
     @Order(3)
-    void shouldGroupProvidedTokensByComma(final String sourceExpression, final String expectedGrups) {
+    void shouldGroupProvidedTokensByComma(final String sourceExpression, final String expectedGroups) {
         final List<String> tokens = splitBy(sourceExpression, " ");
-        final List<List<String>> expectedResult = splitBy(expectedGrups, "\\|").stream()
+        final List<List<String>> expectedResult = splitBy(expectedGroups, "\\|").stream()
                 .map(group -> splitBy(group, " "))
                 .collect(Collectors.toUnmodifiableList());
 

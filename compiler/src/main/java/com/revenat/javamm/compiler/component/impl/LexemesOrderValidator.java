@@ -106,7 +106,7 @@ final class LexemesOrderValidator {
 
             assertNoSequentialBinaryOperators(current, next);
             assertNoOperatorWithoutExpression(current, next);
-            assertCorreclyPlacedParentheses(current, next);
+            assertCorrectlyPlacedParentheses(current, next);
             requireVariableExpressionForBinaryAssignmentOperator(current, next);
 
             lastValidatedLexeme = current;
@@ -144,8 +144,8 @@ final class LexemesOrderValidator {
         }
     }
 
-    private void assertCorreclyPlacedParentheses(final Lexeme current,
-                                                 final Lexeme next) {
+    private void assertCorrectlyPlacedParentheses(final Lexeme current,
+                                                  final Lexeme next) {
         if (isOpeningParenthesis(current) && isClosingParenthesis(next)) {
             throw syntaxError("Parentheses are incorrectly placed");
         }

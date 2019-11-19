@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Shell;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public class SwtApplicationWindow {
 
     private static final int WIDTH = 600;

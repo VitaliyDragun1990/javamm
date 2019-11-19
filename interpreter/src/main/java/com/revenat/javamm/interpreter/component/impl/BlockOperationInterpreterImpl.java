@@ -43,8 +43,6 @@ public class BlockOperationInterpreterImpl implements BlockOperationInterpreter 
     /**
      * Creates new block operation interpreter with set of operation interpreters
      * for defined operations
-     * @param localContextBuilder
-     *
      * @throws ConfigException if provided set of operation interpreters contains
      *                         several interpreters for the same operation
      */

@@ -197,7 +197,7 @@ public class ExpressionResolverImpl implements ExpressionResolver {
         private List<Lexeme> buildPredicateClause(final ListIterator<Lexeme> lexemes) {
             final List<Lexeme> predicateClause = buildPredicateClauseWithLexemesUpToTernaryOperator(lexemes);
 
-            moveRedunduntLexemesToHead(predicateClause);
+            moveRedundantLexemesToHead(predicateClause);
             return requireNotEmptyClause(predicateClause, "predicate clause");
         }
 
@@ -213,7 +213,7 @@ public class ExpressionResolverImpl implements ExpressionResolver {
             return predicateClause;
         }
 
-        private void moveRedunduntLexemesToHead(final List<Lexeme> predicateClause) {
+        private void moveRedundantLexemesToHead(final List<Lexeme> predicateClause) {
             int danglingParenthesis = 0;
 
             for (int i = predicateClause.size() - 1; i >= 0; i--) {

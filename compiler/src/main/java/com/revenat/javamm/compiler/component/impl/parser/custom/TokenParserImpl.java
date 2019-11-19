@@ -41,22 +41,22 @@ public class TokenParserImpl implements TokenParser {
     }
 
     @Override
-    public TokenParserResult parseLine(final String sourceCodeLine, final boolean isMultilineCommentStartedBefore) {
+    public TokenParserResult parseLine(final String sourceCodeLine, final boolean isMultiLineCommentStartedBefore) {
         final String trimmedLine = trimAllWhitespaceCharacters(sourceCodeLine);
 
-        return trimmedLine.isEmpty() ? emptyResult(isMultilineCommentStartedBefore) :
-            parse(trimmedLine, isMultilineCommentStartedBefore);
+        return trimmedLine.isEmpty() ? emptyResult(isMultiLineCommentStartedBefore) :
+            parse(trimmedLine, isMultiLineCommentStartedBefore);
     }
 
-    private TokenParserResult parse(final String line, final boolean isMultilineCommentStartedBefore) {
-        final CommentFreeSourceLine commentFreeLine = discardAllComments(line, isMultilineCommentStartedBefore);
+    private TokenParserResult parse(final String line, final boolean isMultiLineCommentStartedBefore) {
+        final CommentFreeSourceLine commentFreeLine = discardAllComments(line, isMultiLineCommentStartedBefore);
 
-        return commentFreeLine.isEmpty() ? emptyResult(commentFreeLine.multilineCommentStarted) :
-            resultWithTokens(splitIntoTokens(commentFreeLine.content), commentFreeLine.multilineCommentStarted);
+        return commentFreeLine.isEmpty() ? emptyResult(commentFreeLine.multiLineCommentStarted) :
+            resultWithTokens(splitIntoTokens(commentFreeLine.content), commentFreeLine.multiLineCommentStarted);
     }
 
-    private CommentFreeSourceLine discardAllComments(final String line, final boolean isMultilineCommentStartedBefore) {
-        return new CommentDiscarder(line, isMultilineCommentStartedBefore).discardComments();
+    private CommentFreeSourceLine discardAllComments(final String line, final boolean isMultiLineCommentStartedBefore) {
+        return new CommentDiscarder(line, isMultiLineCommentStartedBefore).discardComments();
     }
 
     private List<String> splitIntoTokens(final String line) {
@@ -80,12 +80,12 @@ public class TokenParserImpl implements TokenParser {
         return sourceCodeLine.replaceAll("(^\\h*)|(\\h*$)", "").trim();
     }
 
-    private TokenParserResult emptyResult(final boolean isMultilineCommentStartedBefore) {
-        return new TokenParserResult(isMultilineCommentStartedBefore);
+    private TokenParserResult emptyResult(final boolean isMultiLineCommentStartedBefore) {
+        return new TokenParserResult(isMultiLineCommentStartedBefore);
     }
 
     private TokenParserResult resultWithTokens(final List<String> tokens,
-                                               final boolean isMultilineCommentStartedBefore) {
-        return new TokenParserResult(tokens, isMultilineCommentStartedBefore);
+                                               final boolean isMultiLineCommentStartedBefore) {
+        return new TokenParserResult(tokens, isMultiLineCommentStartedBefore);
     }
 }

@@ -29,6 +29,7 @@ import java.util.List;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public class JavammSimpleVmVersion {
 
     public static void main(final String[] args) throws IOException {

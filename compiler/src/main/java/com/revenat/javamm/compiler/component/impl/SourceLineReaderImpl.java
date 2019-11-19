@@ -42,22 +42,22 @@ public class SourceLineReaderImpl implements SourceLineReader {
     private List<SourceLine> readLines(final List<String> sourceCodeLines, final String moduleName) {
         final List<SourceLine> result = new ArrayList<>();
 
-        boolean isMultilineCommentStarted = false;
+        boolean isMultiLineCommentStarted = false;
 
         for (int i = 0; i < sourceCodeLines.size(); i++) {
-            final TokenParserResult parserResult = parseLine(sourceCodeLines.get(i), isMultilineCommentStarted);
+            final TokenParserResult parserResult = parseLine(sourceCodeLines.get(i), isMultiLineCommentStarted);
 
             if (parserResult.isNotEmpty()) {
                 result.add(new SourceLine(moduleName, i + 1, parserResult.getTokens()));
             }
 
-            isMultilineCommentStarted = parserResult.isMultilineCommentStarted();
+            isMultiLineCommentStarted = parserResult.isMultiLineCommentStarted();
         }
 
         return List.copyOf(result);
     }
 
-    private TokenParserResult parseLine(final String codeLine, final boolean isMultilineCommentStarted) {
-        return tokenParser.parseLine(codeLine, isMultilineCommentStarted);
+    private TokenParserResult parseLine(final String codeLine, final boolean isMultiLineCommentStarted) {
+        return tokenParser.parseLine(codeLine, isMultiLineCommentStarted);
     }
 }

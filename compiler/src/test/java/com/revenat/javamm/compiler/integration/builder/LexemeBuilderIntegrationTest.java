@@ -167,7 +167,7 @@ class LexemeBuilderIntegrationTest {
     private List<Class<? extends Lexeme>> parseLexemes(final String expectedLexemes) {
         final String[] tokens = expectedLexemes.split(":");
 
-        return Stream.of(tokens).map(token -> LEXEMES.get(token)).collect(toList());
+        return Stream.of(tokens).map(LEXEMES::get).collect(toList());
     }
 
     private List<String> parseTokens(final String tokens) {

@@ -28,6 +28,7 @@ import java.util.List;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public final class Example05Annotations {
 
     private Example05Annotations() {
@@ -73,8 +74,8 @@ public final class Example05Annotations {
     }
 
     private static void setEmptyList(final Object instance, final Field field, final SetEmptyList annotation) throws IllegalAccessException {
-        final List<?> emtpyList = annotation.useNewStyle() ? List.of() : Collections.emptyList();
-        field.set(instance, emtpyList);
+        final List<?> emptyList = annotation.useNewStyle() ? List.of() : Collections.emptyList();
+        field.set(instance, emptyList);
     }
 
     @FunctionalInterface

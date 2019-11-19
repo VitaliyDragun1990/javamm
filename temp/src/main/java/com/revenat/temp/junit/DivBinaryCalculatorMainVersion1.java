@@ -20,6 +20,7 @@ package com.revenat.temp.junit;
  * @author devonline
  * @link http://devonline.academy/javamm
  */
+@SuppressWarnings("CheckStyle")
 public final class DivBinaryCalculatorMainVersion1 {
 
     private DivBinaryCalculatorMainVersion1() {

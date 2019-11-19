@@ -27,6 +27,7 @@ import java.util.List;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public final class Example02InvokeMethodByName {
 
     private Example02InvokeMethodByName() {

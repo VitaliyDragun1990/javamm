@@ -25,6 +25,7 @@ import java.util.stream.IntStream;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public class Example04SumOfNumbers {
 
     private Example04SumOfNumbers() {
@@ -41,7 +42,7 @@ public class Example04SumOfNumbers {
         System.out.println(sum);
 
         //Functional: reduce
-        System.out.println(numbers.stream().reduce((n1, n2) -> n1 + n2).orElse(0));
+        System.out.println(numbers.stream().reduce(Integer::sum).orElse(0));
 
         //Functional: sum
         System.out.println(numbers.stream().mapToInt(value -> value).sum());

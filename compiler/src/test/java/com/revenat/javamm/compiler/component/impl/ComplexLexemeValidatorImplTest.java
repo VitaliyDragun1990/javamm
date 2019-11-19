@@ -89,7 +89,7 @@ class ComplexLexemeValidatorImplTest {
     @Test
     @Order(1)
     void shouldFailIfNoLexemesToValidate() {
-        final IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> validate());
+        final IllegalArgumentException e = assertThrows(IllegalArgumentException.class, this::validate);
 
         assertErrorMessageContains(e, "Found no lexemes to validate");
     }

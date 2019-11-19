@@ -40,7 +40,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("a bitwise '&' binary expression calculator")
-class BitwiseAndBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
+class BitwiseAndBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
 
     @Test
     @Order(1)
@@ -69,7 +69,7 @@ class BitwiseAndBinaryExpressionCalculatorTest extends AbstractBinaryExpressionm
     @ParameterizedTest
     @MethodSource("unsupportedPairsProvider")
     @Order(4)
-    void shouldFailToCalculateforUnsupportedTypes(final Object value1, final Object value2) {
+    void shouldFailToCalculateForUnsupportedTypes(final Object value1, final Object value2) {
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(value1, value2));
 
         assertErrorMessageContains(e, "Operator '&' is not supported for types: %s and %s",

@@ -56,7 +56,7 @@ class SyntaxValidationUtilsTest {
         SyntaxValidationUtils.validateThatNameIsNotKeyword(LANGUAGE_FEATURE, name, DUMMY_SOURCE_LINE);
     }
 
-    private void assertFirstCaharcterIsNotLetterErrorMessage(final JavammSyntaxError e, final String name) {
+    private void assertFirstCharacterIsNotLetterErrorMessage(final JavammSyntaxError e, final String name) {
         assertThat(e.getMessage(), containsString("The variable name must start with letter: '" + name + "'"));
     }
 
@@ -83,7 +83,7 @@ class SyntaxValidationUtilsTest {
             final JavammLineSyntaxError e = assertThrows(
                     JavammLineSyntaxError.class,
                     () -> validateFirstCharacterIsLetter(name));
-            assertFirstCaharcterIsNotLetterErrorMessage(e, name);
+            assertFirstCharacterIsNotLetterErrorMessage(e, name);
         }
     }
 

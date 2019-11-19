@@ -35,6 +35,7 @@ import static java.util.stream.Collectors.joining;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("checkstyle:UncommentedMain")
 public class ClassViewer {
 
     private final Object objectToInspect;

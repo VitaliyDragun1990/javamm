@@ -65,13 +65,13 @@ class AbstractOperationInterpreterTest {
     @Test
     @Order(3)
     void shouldFailToInterpretIfTerminated() {
-        abstractInterpreter.setTerimated(true);
+        abstractInterpreter.setTerminated(true);
 
         assertThrows(TerminateInterpreterException.class, () -> abstractInterpreter.interpret(new OperationDummy()));
     }
 
-    private class AbstractOperationInterpreterSpy extends AbstractOperationInterpreter<OperationDummy> {
-        private boolean isTerimated = false;
+    private static class AbstractOperationInterpreterSpy extends AbstractOperationInterpreter<OperationDummy> {
+        private boolean isTerminated = false;
         private  OperationDummy interpretedOperation = null;
 
         public AbstractOperationInterpreterSpy(final ExpressionContext expressionContext) {
@@ -82,8 +82,8 @@ class AbstractOperationInterpreterTest {
             return interpretedOperation;
         }
 
-         void setTerimated(final boolean isTerimated) {
-            this.isTerimated = isTerimated;
+         void setTerminated(final boolean isTerminated) {
+            this.isTerminated = isTerminated;
         }
 
         @Override
@@ -98,7 +98,7 @@ class AbstractOperationInterpreterTest {
 
         @Override
         protected boolean isTerminated() {
-            return isTerimated;
+            return isTerminated;
         }
     }
 }

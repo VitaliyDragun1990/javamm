@@ -40,7 +40,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("logical and (&&) binary expression calculator")
-public class LogicalAndBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
+public class LogicalAndBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
 
     @Test
     @Order(1)

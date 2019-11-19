@@ -24,6 +24,7 @@ import java.util.Random;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public class Example05Optional {
 
     private static final boolean NOT_NULL = new Random().nextBoolean();

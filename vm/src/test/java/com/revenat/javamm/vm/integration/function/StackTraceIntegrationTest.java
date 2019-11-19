@@ -53,7 +53,7 @@ public class StackTraceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     @Order(1)
-    void shouldThorwRuntimeErrorWithStackTrace() {
+    void shouldThrowRuntimeErrorWithStackTrace() {
         final List<String> lines = List.of(
                 "function main() {",
                 "   first()",
@@ -107,7 +107,7 @@ public class StackTraceIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     @Order(3)
-    void shouldThrowRuntimeErrorWithoutStackTraceIfNoFunctionWasInvoken() {
+    void shouldThrowRuntimeErrorWithoutStackTraceIfNoFunctionWasInvoked() {
         final List<String> lines = List.of(
                 "function test() {",
                 "}"

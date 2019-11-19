@@ -42,7 +42,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("a division '/' binary expression calculator")
-class DivisionBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
+class DivisionBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
 
     @Test
     @Order(1)

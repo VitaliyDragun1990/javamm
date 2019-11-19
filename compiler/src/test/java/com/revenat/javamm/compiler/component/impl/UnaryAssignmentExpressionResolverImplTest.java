@@ -69,8 +69,7 @@ class UnaryAssignmentExpressionResolverImplTest {
 
     private List<Lexeme> buildLexemesFrom(final String expression) {
         final List<String> tokens = List.of(expression.split(" "));
-        final List<Lexeme> lexemes =  lexemeBuilder.build(tokens, SOURCE_LINE);
-        return lexemes;
+        return lexemeBuilder.build(tokens, SOURCE_LINE);
     }
 
     private List<Lexeme> resolve(final String expression) {
@@ -137,10 +136,10 @@ class UnaryAssignmentExpressionResolverImplTest {
         "( a ++ ) / 2,        5, 1"
     })
     @Order(4)
-    void shouldResolvePostfixUnaryAssignmentExpression(final String expresison,
+    void shouldResolvePostfixUnaryAssignmentExpression(final String expression,
                                                        final int expectedLexemeCount,
                                                        final int expectedResolvedExpressionPosition) {
-        final List<Lexeme> resolvedLexemes = resolve(expresison);
+        final List<Lexeme> resolvedLexemes = resolve(expression);
 
         assertResolvedLexemeCount(resolvedLexemes, expectedLexemeCount);
         assertResolvedExpressionInPositions(resolvedLexemes, UnaryPostfixAssignmentExpression.class, expectedResolvedExpressionPosition);
@@ -214,7 +213,7 @@ class UnaryAssignmentExpressionResolverImplTest {
             "( ( 2 + a ) ) --,  --"
     })
     @Order(8)
-    void shouldFailIfArgumentForUnaryAssignmentOperatorIsNotASignleExpression(final String expression, final String operatorCode) {
+    void shouldFailIfArgumentForUnaryAssignmentOperatorIsNotASingleExpression(final String expression, final String operatorCode) {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> resolve(expression));
 
         assertErrorMessageContains(e, "Invalid argument for '%s' operator", operatorCode);

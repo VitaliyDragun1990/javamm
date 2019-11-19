@@ -50,7 +50,7 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 public class BreakOperationInterpreterIntegrationTest extends AbstractIntegrationTest {
 
     @ParameterizedTest
-    @ArgumentsSource(BreakOperationProider.class)
+    @ArgumentsSource(BreakOperationProvider.class)
     @Order(1)
     void shouldInterpretBreakOperation(final List<String> lines,
                                        final List<Object> expectedOutput) {
@@ -72,7 +72,7 @@ public class BreakOperationInterpreterIntegrationTest extends AbstractIntegratio
         assertErrorMessageContains(e, buildErrorMsg("Operation 'break' is not expected here", 2));
     }
 
-    static final class BreakOperationProider implements ArgumentsProvider {
+    static final class BreakOperationProvider implements ArgumentsProvider {
 
         @Override
         public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {

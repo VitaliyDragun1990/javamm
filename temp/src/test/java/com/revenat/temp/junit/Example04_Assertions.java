@@ -57,7 +57,7 @@ class Example04_Assertions {
         assertNotEquals(2, 3);
 
         assertSame(Boolean.TRUE, Boolean.parseBoolean("true"));
-        assertNotSame(Integer.MAX_VALUE, Integer.valueOf(Integer.MAX_VALUE));
+        assertNotSame(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
         assertNull(Map.of().get("hello"));
         assertNotNull(Map.of().getOrDefault("hello", "default"));

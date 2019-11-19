@@ -20,6 +20,7 @@ package com.revenat.temp.validation;
  * @author devonline
  * @link http://devonline.academy/javamm
  */
+@SuppressWarnings("CheckStyle")
 public final class Example02WithValidationMain {
 
     private Example02WithValidationMain() {

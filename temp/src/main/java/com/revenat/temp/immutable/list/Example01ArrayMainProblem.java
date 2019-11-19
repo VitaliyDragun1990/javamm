@@ -22,6 +22,7 @@ import java.util.Arrays;
  * @author devonline
  * @link http://devonline.academy/javamm
  */
+@SuppressWarnings("CheckStyle")
 public final class Example01ArrayMainProblem {
 
     private Example01ArrayMainProblem() {

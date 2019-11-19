@@ -67,7 +67,7 @@ public final class AdditionBinaryExpressionCalculator extends AbstractArithmetic
     }
 
     private String calculateStringConcatenation(final Object value1, final Object value2) {
-        return String.valueOf(value1) + String.valueOf(value2);
+        return value1 + String.valueOf(value2);
     }
 
     private boolean eitherOneIsString(final Object value1, final Object value2) {

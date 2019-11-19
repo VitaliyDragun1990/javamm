@@ -47,7 +47,7 @@ class CurrentRuntimeProviderTest {
     @Test
     @Order(1)
     void shouldFailToProvideCurrentRuntimeIfNotSetBefore() {
-        assertThrows(NullPointerException.class, () -> CurrentRuntimeProvider.getCurrentRuntime());
+        assertThrows(NullPointerException.class, CurrentRuntimeProvider::getCurrentRuntime);
     }
 
     @Test
@@ -71,6 +71,6 @@ class CurrentRuntimeProviderTest {
 
         CurrentRuntimeProvider.releaseCurrentRuntime();
 
-        assertThrows(NullPointerException.class, () -> CurrentRuntimeProvider.getCurrentRuntime());
+        assertThrows(NullPointerException.class, CurrentRuntimeProvider::getCurrentRuntime);
     }
 }

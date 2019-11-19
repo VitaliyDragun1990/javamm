@@ -80,7 +80,7 @@ public class FunctionInvokerBuilderImpl implements FunctionInvokerBuilder {
             if (functionOptional.isPresent()) {
                 return developerFunctionInvoker.invoke(functionOptional.get(), arguments);
             } else {
-             // TODO: Add support for standard functions -> try to find and call library function
+                // TODO: Add support for standard functions -> try to find and call library function
                 throw new JavammLineRuntimeError("Function '%s' is not defined", functionName);
             }
         }

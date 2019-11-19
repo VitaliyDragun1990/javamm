@@ -43,10 +43,10 @@ public class CaseEntryReader implements SwitchBodyEntryReader<SwitchCaseEntry> {
 
     private static final String COLON = ":";
 
-    private final CaseValueExpressionResolver labelExpressionresolver;
+    private final CaseValueExpressionResolver labelExpressionResolver;
 
-    public CaseEntryReader(final CaseValueExpressionResolver labelExpressionresolver) {
-        this.labelExpressionresolver = labelExpressionresolver;
+    public CaseEntryReader(final CaseValueExpressionResolver labelExpressionResolver) {
+        this.labelExpressionResolver = labelExpressionResolver;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class CaseEntryReader implements SwitchBodyEntryReader<SwitchCaseEntry> {
 
     private CaseValueExpression getExpression(final SourceLine sourceLine) {
         final List<String> expressionTokens = sourceLine.subList(1, sourceLine.indexOf(COLON));
-        return labelExpressionresolver.resolve(expressionTokens, sourceLine);
+        return labelExpressionResolver.resolve(expressionTokens, sourceLine);
     }
 
     private void validateSemicolonRightBeforeOpeningCurlyBrace(final SourceLine sourceLine) {

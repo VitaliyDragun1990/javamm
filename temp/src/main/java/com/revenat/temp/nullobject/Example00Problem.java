@@ -23,6 +23,7 @@ import java.util.function.Supplier;
  * @author devonline
  * @link http://devonline.academy/javamm
  */
+@SuppressWarnings("CheckStyle")
 public final class Example00Problem {
 
     private Example00Problem() {

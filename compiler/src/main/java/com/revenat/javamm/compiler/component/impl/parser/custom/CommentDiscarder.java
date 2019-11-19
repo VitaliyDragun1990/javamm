@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-import static com.revenat.javamm.code.syntax.Delimiters.END_MULTILINE_COMMENT;
-import static com.revenat.javamm.code.syntax.Delimiters.START_MULTILINE_COMMENT;
+import static com.revenat.javamm.code.syntax.Delimiters.END_MULTI_LINE_COMMENT;
+import static com.revenat.javamm.code.syntax.Delimiters.START_MULTI_LINE_COMMENT;
 import static com.revenat.javamm.code.syntax.Delimiters.START_SINGLE_LINE_COMMENT;
 
 /**
@@ -39,15 +39,15 @@ class CommentDiscarder {
 
     private final StringBuilder commentedOutContent;
 
-    private boolean multilineCommentStarted;
+    private boolean multiLineCommentStarted;
 
     private Character stringLiteralQuote;
 
-    CommentDiscarder(final String sourceLine, final boolean multilineCommentStarted) {
+    CommentDiscarder(final String sourceLine, final boolean multiLineCommentStarted) {
         this.sourceLine = toChars(sourceLine).listIterator();
         commentFreeContent = new StringBuilder();
         commentedOutContent = new StringBuilder();
-        this.multilineCommentStarted = multilineCommentStarted;
+        this.multiLineCommentStarted = multiLineCommentStarted;
         stringLiteralQuote = null;
     }
 
@@ -55,10 +55,10 @@ class CommentDiscarder {
         while (sourceLine.hasNext()) {
             final Character current = sourceLine.next();
 
-            if (isWithinMultilineComment()) {
+            if (isWithinMultiLineComment()) {
                 commentedOutContent.append(current);
-                if (isMultilineCommentEndDetected()) {
-                    endMultilineComment();
+                if (isMultiLineCommentEndDetected()) {
+                    endMultiLineComment();
                 }
             } else if (isWithinStringLiteral()) {
                 commentFreeContent.append(current);
@@ -69,18 +69,18 @@ class CommentDiscarder {
                 commentFreeContent.append(current);
                 if (isStringLiteralQuote(current)) {
                     startStringLiteral(current);
-                } else if (isMultilineCommentStartDetected()) {
-                    startMultilineComment();
+                } else if (isMultiLineCommentStartDetected()) {
+                    startMultiLineComment();
                 } else if (isSingleLineCommentDetected()) {
-                    discardSingleLineCommentCotent();
+                    discardSingleLineCommentContent();
                     break;
                 }
             }
         }
-        return new CommentFreeSourceLine(commentFreeContent.toString(), isWithinMultilineComment());
+        return new CommentFreeSourceLine(commentFreeContent.toString(), isWithinMultiLineComment());
     }
 
-    private void discardSingleLineCommentCotent() {
+    private void discardSingleLineCommentContent() {
         commentFreeContent.delete(commentFreeContent.length() - 2, commentFreeContent.length());
     }
 
@@ -88,13 +88,13 @@ class CommentDiscarder {
         return commentFreeContent.indexOf(START_SINGLE_LINE_COMMENT) != -1;
     }
 
-    private void startMultilineComment() {
-        discardSingleLineCommentCotent();
-        multilineCommentStarted = true;
+    private void startMultiLineComment() {
+        discardSingleLineCommentContent();
+        multiLineCommentStarted = true;
     }
 
-    private boolean isMultilineCommentStartDetected() {
-        return commentFreeContent.indexOf(START_MULTILINE_COMMENT) != -1;
+    private boolean isMultiLineCommentStartDetected() {
+        return commentFreeContent.indexOf(START_MULTI_LINE_COMMENT) != -1;
     }
 
     private void startStringLiteral(final Character c) {
@@ -109,17 +109,17 @@ class CommentDiscarder {
         return c.equals(stringLiteralQuote);
     }
 
-    private void endMultilineComment() {
-        multilineCommentStarted = false;
+    private void endMultiLineComment() {
+        multiLineCommentStarted = false;
         commentedOutContent.delete(0, commentedOutContent.length());
     }
 
-    private boolean isWithinMultilineComment() {
-        return multilineCommentStarted;
+    private boolean isWithinMultiLineComment() {
+        return multiLineCommentStarted;
     }
 
-    private boolean isMultilineCommentEndDetected() {
-        return commentedOutContent.indexOf(END_MULTILINE_COMMENT) != -1;
+    private boolean isMultiLineCommentEndDetected() {
+        return commentedOutContent.indexOf(END_MULTI_LINE_COMMENT) != -1;
     }
 
     private boolean isStringLiteralQuote(final Character c) {
@@ -142,11 +142,11 @@ class CommentDiscarder {
     static class CommentFreeSourceLine {
         final String content;
 
-        final boolean multilineCommentStarted;
+        final boolean multiLineCommentStarted;
 
-        protected CommentFreeSourceLine(final String content, final boolean multilineCommentStarted) {
+        protected CommentFreeSourceLine(final String content, final boolean multiLineCommentStarted) {
             this.content = content;
-            this.multilineCommentStarted = multilineCommentStarted;
+            this.multiLineCommentStarted = multiLineCommentStarted;
         }
 
         boolean isEmpty() {

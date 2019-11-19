@@ -125,8 +125,8 @@ public class IfElseOperationReader extends AbstractBlockOperationReader<IfElseOp
     private Optional<Block> readElseIfBlock(final SourceLine sourceLine, final ListIterator<SourceLine> codeIterator) {
         final int ifTokenPosition = 1;
         validateIfClause(sourceLine, ifTokenPosition);
-        final IfElseOperation elseIfOpertion = get(sourceLine, codeIterator);
-        return Optional.of(new Block(elseIfOpertion, sourceLine));
+        final IfElseOperation elseIfOperation = get(sourceLine, codeIterator);
+        return Optional.of(new Block(elseIfOperation, sourceLine));
     }
 
     private Optional<Block> readElseBlock(final ListIterator<SourceLine> codeIterator,

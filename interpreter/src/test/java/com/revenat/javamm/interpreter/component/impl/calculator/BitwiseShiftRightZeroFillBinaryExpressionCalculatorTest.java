@@ -40,7 +40,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("a bitwise shift right zero fill '>>>' binary expression calculator")
-class BitwiseShiftRightZeroFillBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
+class BitwiseShiftRightZeroFillBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
 
     @Test
     @Order(1)

@@ -120,7 +120,7 @@ class CalculatorFacadeTest {
 
     @Test
     @Order(3)
-    void canoNotBeCreatedWithoutCalculatosForBinaryOperators() {
+    void canNotBeCreatedWithoutCalculatorsForBinaryOperators() {
         final Set<BinaryExpressionCalculator> notAllBinaryCalculators = calculatorsForAllOperatorsExcept(ARITHMETIC_ADDITION);
         final Set<UnaryExpressionCalculator> allUnaryCalculators = calculatorsFor(UnaryOperator.values());
 
@@ -132,7 +132,7 @@ class CalculatorFacadeTest {
 
     @Test
     @Order(4)
-    void canoNotBeCreatedWithoutCalculatosForUnaryOperators() {
+    void canNotBeCreatedWithoutCalculatorsForUnaryOperators() {
         final Set<BinaryExpressionCalculator> allBinaryCalculators = calculatorsFor(BinaryOperator.values());
         final Set<UnaryExpressionCalculator> notAllUnaryCalculators = calculatorsForAllOperatorsExcept(ARITHMETICAL_UNARY_PLUS);
 

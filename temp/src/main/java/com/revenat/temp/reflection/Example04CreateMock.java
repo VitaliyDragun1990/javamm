@@ -31,6 +31,7 @@ import java.util.Map;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public class Example04CreateMock {
 
     private Example04CreateMock() {

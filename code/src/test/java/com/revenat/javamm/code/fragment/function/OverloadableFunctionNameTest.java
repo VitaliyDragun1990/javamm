@@ -96,7 +96,7 @@ class OverloadableFunctionNameTest {
 
     @Test
     @Order(6)
-    void shouldCompareByFullNamesInLexicographicalOrderAgainsAnotherOverloadableFunctionName() {
+    void shouldCompareByFullNamesInLexicographicalOrderAgainstAnotherOverloadableFunctionName() {
         assertInRelativeOrder(createOverloadableName("a", 0), createOverloadableName("a", 5));
         assertInRelativeOrder(createOverloadableName("aa", 2), createOverloadableName("ab", 2));
         assertInRelativeOrder(createOverloadableName("aa", 2), createOverloadableName("aa", 2));
@@ -104,7 +104,7 @@ class OverloadableFunctionNameTest {
 
     @Test
     @Order(7)
-    void shouldCompareByNamesInLexicographicalOrderAgainsAnotherNonOverloadableFunctionName() {
+    void shouldCompareByNamesInLexicographicalOrderAgainstAnotherNonOverloadableFunctionName() {
         assertInRelativeOrder(createOverloadableName("a", 5), createSimpleName("a"));
         assertInRelativeOrder(createOverloadableName("aaaa", 0), createSimpleName("aaab"));
     }
@@ -142,14 +142,14 @@ class OverloadableFunctionNameTest {
         return new SimpleFunctionName(name);
     }
 
-    private class SimpleOverloadableFunctionName extends OverloadableFunctionName {
+    private static class SimpleOverloadableFunctionName extends OverloadableFunctionName {
 
         public SimpleOverloadableFunctionName(final String name, final int argumentCount) {
             super(name, argumentCount);
         }
     }
 
-    private class SimpleFunctionName implements FunctionName {
+    private static class SimpleFunctionName implements FunctionName {
         private final String name;
 
         private SimpleFunctionName(final String name) {

@@ -60,7 +60,7 @@ import com.revenat.javamm.compiler.component.impl.operation.ForUpdateOperationRe
 import com.revenat.javamm.compiler.component.impl.operation.SwitchBodyEntryReader;
 import com.revenat.javamm.compiler.component.impl.operation.SwitchBodyEntryValidator;
 import com.revenat.javamm.compiler.component.impl.operation.SwitchBodyReader;
-import com.revenat.javamm.compiler.component.impl.operation.block.DoWhileOperationRedaer;
+import com.revenat.javamm.compiler.component.impl.operation.block.DoWhileOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.block.IfElseOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.block.SimpleBlockOperationReader;
 import com.revenat.javamm.compiler.component.impl.operation.block.WhileOperationReader;
@@ -180,7 +180,7 @@ public class CompilerConfigurator {
             variableAssignmentOperationReader,
             new IfElseOperationReader(expressionResolver),
             new WhileOperationReader(expressionResolver),
-            new DoWhileOperationRedaer(expressionResolver),
+            new DoWhileOperationReader(expressionResolver),
             new ForOperationReader(forOperationHeaderResolver),
             new SimpleBlockOperationReader(),
             new ContinueOperationReader(),

@@ -41,7 +41,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("> binary expression calculator")
-class IsGreaterThanBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
+class IsGreaterThanBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
 
     @Test
     @Order(1)

@@ -20,6 +20,7 @@ package com.revenat.temp.nullobject;
  * @author devonline
  * @link http://devonline.academy/javamm
  */
+@SuppressWarnings("CheckStyle")
 public final class Example03MethodArgumentMain {
 
     private Example03MethodArgumentMain() {

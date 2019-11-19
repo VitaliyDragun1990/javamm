@@ -40,7 +40,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("a bitwise '|' binary expression calculator")
-class BitwiseOrBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
+class BitwiseOrBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
 
     @Test
     @Order(1)

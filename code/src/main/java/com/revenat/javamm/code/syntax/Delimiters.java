@@ -36,9 +36,9 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
  */
 public final class Delimiters {
 
-    public static final String START_MULTILINE_COMMENT = "/*";
+    public static final String START_MULTI_LINE_COMMENT = "/*";
 
-    public static final String END_MULTILINE_COMMENT = "*/";
+    public static final String END_MULTI_LINE_COMMENT = "*/";
 
     public static final String START_SINGLE_LINE_COMMENT = "//";
 
@@ -94,7 +94,7 @@ public final class Delimiters {
             Stream.of(
                     OPERATOR_TOKEN_DELIMITERS.stream(),
                     NOT_OPERATOR_TOKEN_DELIMITERS.stream(),
-                    Stream.of(START_MULTILINE_COMMENT, END_MULTILINE_COMMENT, START_SINGLE_LINE_COMMENT)
+                    Stream.of(START_MULTI_LINE_COMMENT, END_MULTI_LINE_COMMENT, START_SINGLE_LINE_COMMENT)
                     ).flatMap(identity())
             .collect(toUnmodifiableSet());
 

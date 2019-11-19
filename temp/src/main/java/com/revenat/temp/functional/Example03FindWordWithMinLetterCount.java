@@ -31,6 +31,7 @@ import static java.util.stream.Collectors.toMap;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public class Example03FindWordWithMinLetterCount {
 
     private Example03FindWordWithMinLetterCount() {

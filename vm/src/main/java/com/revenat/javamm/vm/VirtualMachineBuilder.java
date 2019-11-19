@@ -49,7 +49,7 @@ public class VirtualMachineBuilder {
         return new InterpreterConfigurator();
     }
 
-    private static class VirtualMachineImpl implements VirtualMachine {
+    private static final class VirtualMachineImpl implements VirtualMachine {
         private final Compiler compiler;
 
         private final Interpreter interpreter;

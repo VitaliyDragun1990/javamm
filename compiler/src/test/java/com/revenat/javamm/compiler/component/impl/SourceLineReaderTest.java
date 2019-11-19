@@ -48,14 +48,14 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 class SourceLineReaderTest {
     private static final String MODULE_NAME = "test";
 
-    private SourceLineReader sourceLineRedaer;
+    private SourceLineReader sourceLineReader;
 
     private TokenParserStub tokenParser;
 
     @BeforeEach
     void setUp() {
         tokenParser = new TokenParserStub();
-        sourceLineRedaer = new SourceLineReaderImpl(tokenParser);
+        sourceLineReader = new SourceLineReaderImpl(tokenParser);
     }
 
     private SourceCode sourceCode(final String... lines) {
@@ -73,7 +73,7 @@ class SourceLineReaderTest {
     @Test
     @Order(1)
     void shouldReturnEmptyListWhenSourceCodeIsEmpty() {
-        final List<SourceLine> sourceLines = sourceLineRedaer.read(sourceCode());
+        final List<SourceLine> sourceLines = sourceLineReader.read(sourceCode());
 
         assertThat(sourceLines, is(empty()));
     }
@@ -81,7 +81,7 @@ class SourceLineReaderTest {
     @Test
     @Order(2)
     void shouldReturnUnmodifiableList() {
-        final List<SourceLine> sourceLines = sourceLineRedaer.read(sourceCode());
+        final List<SourceLine> sourceLines = sourceLineReader.read(sourceCode());
 
         assertUnmodifiable(sourceLines);
     }
@@ -91,7 +91,7 @@ class SourceLineReaderTest {
     void shouldReturnSingleSourceLineForSourceCodeWithSingleLine() {
         tokenParser.defineAnswer("var a = 10", false, new TokenParserResult(tokens("var", "a", "=", "10"), false));
 
-        final List<SourceLine> sourceLines = sourceLineRedaer.read(sourceCode("var a = 10"));
+        final List<SourceLine> sourceLines = sourceLineReader.read(sourceCode("var a = 10"));
 
         assertThat(sourceLines, hasSize(1));
     }
@@ -101,7 +101,7 @@ class SourceLineReaderTest {
     void sourceLineShouldContainCorrectModuleName() {
         tokenParser.defineAnswer("var a = 10", false, new TokenParserResult(tokens("var", "a", "=", "10"), false));
 
-        final List<SourceLine> sourceLines = sourceLineRedaer.read(sourceCode("var a = 10"));
+        final List<SourceLine> sourceLines = sourceLineReader.read(sourceCode("var a = 10"));
         final SourceLine sourceLine = sourceLines.get(0);
 
         assertThat(sourceLine.getModuleName(), equalTo(MODULE_NAME));
@@ -112,7 +112,7 @@ class SourceLineReaderTest {
     void shouldIgnoreEmptyLinesInSourceCode() {
         tokenParser.defineAnswer("var a = 10", false, new TokenParserResult(tokens("var", "a", "=", "10"), false));
 
-        final List<SourceLine> sourceLines = sourceLineRedaer.read(sourceCode("", "var a = 10", ""));
+        final List<SourceLine> sourceLines = sourceLineReader.read(sourceCode("", "var a = 10", ""));
 
         assertThat(sourceLines, hasSize(1));
     }
@@ -123,7 +123,7 @@ class SourceLineReaderTest {
         tokenParser.defineAnswer("println(20)", false, new TokenParserResult(tokens("println", "(", "20", ")"), false));
         tokenParser.defineAnswer("var a = 10", false, new TokenParserResult(tokens("var", "a", "=", "10"), false));
 
-        final List<SourceLine> sourceLines = sourceLineRedaer.read(sourceCode("println(20)", "", "var a = 10"));
+        final List<SourceLine> sourceLines = sourceLineReader.read(sourceCode("println(20)", "", "var a = 10"));
 
         assertThat(sourceLines.get(0).getLineNumber(), equalTo(1));
         assertThat(sourceLines.get(1).getLineNumber(), equalTo(3));
@@ -131,21 +131,21 @@ class SourceLineReaderTest {
 
     @Test
     @Order(7)
-    void shouldHandleMultilineComments() {
+    void shouldHandleMultiLineComments() {
         final String[] lines = { "/* var a = 10", "comment goes on", "comment ends */ var b = 10" };
         tokenParser.defineAnswer("/* var a = 10", false, new TokenParserResult(true));
         tokenParser.defineAnswer("comment goes on", true, new TokenParserResult(true));
         tokenParser.defineAnswer("comment ends */ var b = 10", true,
                 new TokenParserResult(tokens("var", "b", "=", "10"), false));
 
-        final List<SourceLine> sourceLines = sourceLineRedaer.read(sourceCode(lines));
+        final List<SourceLine> sourceLines = sourceLineReader.read(sourceCode(lines));
 
         assertThat(sourceLines, hasSize(1));
         final SourceLine sourceLine = sourceLines.get(0);
         assertThat(sourceLine.getTokens(), equalTo(tokens("var", "b", "=", "10")));
     }
 
-    private class SourceCodeStub implements SourceCode {
+    private static class SourceCodeStub implements SourceCode {
         private final List<String> lines;
 
         public SourceCodeStub(final List<String> lines) {
@@ -168,13 +168,13 @@ class SourceLineReaderTest {
         private static final TokenParserResult LINE_WITHOUT_TOKENS = new TokenParserResult(false);
         private final Map<String, TokenParserResult> answers = new HashMap<>();
 
-        public void defineAnswer(final String arg, final boolean isMultilineStarted, final TokenParserResult answer) {
-            answers.put(arg + Boolean.toString(isMultilineStarted), answer);
+        public void defineAnswer(final String arg, final boolean isMultiLineStarted, final TokenParserResult answer) {
+            answers.put(arg + isMultiLineStarted, answer);
         }
 
         @Override
-        public TokenParserResult parseLine(final String sourceCodeLine, final boolean isMultilineCommentStartedBefore) {
-            return answers.getOrDefault(sourceCodeLine + Boolean.toString(isMultilineCommentStartedBefore), LINE_WITHOUT_TOKENS);
+        public TokenParserResult parseLine(final String sourceCodeLine, final boolean isMultiLineCommentStartedBefore) {
+            return answers.getOrDefault(sourceCodeLine + isMultiLineCommentStartedBefore, LINE_WITHOUT_TOKENS);
         }
     }
 }

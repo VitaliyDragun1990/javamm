@@ -69,7 +69,7 @@ class AbstractOperationTest {
         assertThat(abstractOperation.toString(), equalTo(sourceLineSpy.toString()));
     }
 
-    private class TestAbstractOperation extends AbstractOperation {
+    private static class TestAbstractOperation extends AbstractOperation {
 
         public TestAbstractOperation(final SourceLine sourceLine) {
             super(sourceLine);

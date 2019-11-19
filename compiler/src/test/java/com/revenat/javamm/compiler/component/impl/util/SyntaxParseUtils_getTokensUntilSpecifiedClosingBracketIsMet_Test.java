@@ -87,7 +87,7 @@ class SyntaxParseUtils_getTokensUntilSpecifiedClosingBracketIsMet_Test {
                                                                                     final int iteratorPosition,
                                                                                     final String expected) {
         final SourceLine sourceLine = new SourceLine(ANY_MODULE_NAME, ANY_LINE_NUMBER, toList(source));
-        final Iterator<String> expressionTokens = getIneratorInPosition(source, iteratorPosition);
+        final Iterator<String> expressionTokens = getIteratorInPosition(source, iteratorPosition);
 
         final List<String> actualTokens = getTokensUntilClosingBracketIsMet(openingBracket,
                                                                                      closingBracket,
@@ -113,7 +113,7 @@ class SyntaxParseUtils_getTokensUntilSpecifiedClosingBracketIsMet_Test {
                                              final String source,
                                              final int iteratorPosition) {
         final SourceLine sourceLine = new SourceLine(ANY_MODULE_NAME, ANY_LINE_NUMBER, toList(source));
-        final Iterator<String> expressionTokens = getIneratorInPosition(source, iteratorPosition);
+        final Iterator<String> expressionTokens = getIteratorInPosition(source, iteratorPosition);
 
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
                 () -> getTokensUntilClosingBracketIsMet(openingBracket,
@@ -138,7 +138,7 @@ class SyntaxParseUtils_getTokensUntilSpecifiedClosingBracketIsMet_Test {
                                                                                 final String source,
                                                                                 final int iteratorPosition) {
         final SourceLine sourceLine = new SourceLine(ANY_MODULE_NAME, ANY_LINE_NUMBER, toList(source));
-        final Iterator<String> expressionTokens = getIneratorInPosition(source, iteratorPosition);
+        final Iterator<String> expressionTokens = getIteratorInPosition(source, iteratorPosition);
 
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
                 () -> getTokensUntilClosingBracketIsMet(openingBracket,
@@ -151,7 +151,7 @@ class SyntaxParseUtils_getTokensUntilSpecifiedClosingBracketIsMet_Test {
                 ANY_MODULE_NAME, ANY_LINE_NUMBER, openingBracket, closingBracket);
     }
 
-    private Iterator<String> getIneratorInPosition(final String tokenString, final int iteratorPosition) {
+    private Iterator<String> getIteratorInPosition(final String tokenString, final int iteratorPosition) {
         final List<String> tokens = toList(tokenString);
         final Iterator<String> iterator = tokens.iterator();
         for (int i = 0; i < iteratorPosition; i++) {

@@ -66,7 +66,7 @@ public class CompilerImpl implements Compiler {
         final List<SourceLine> aggregateSourceLines = getAggregateSourceLines(sourceCodes);
         final List<DeveloperFunction> definedFunctions = functionDefinitionsReader.read(aggregateSourceLines);
 
-        return new ByteCodeimpl(asMap(definedFunctions), mainFunctionName);
+        return new ByteCodeImpl(asMap(definedFunctions), mainFunctionName);
     }
 
     private List<SourceLine> getAggregateSourceLines(final SourceCode... sourceCodes) {
@@ -81,11 +81,11 @@ public class CompilerImpl implements Compiler {
                 .collect(Collectors.toMap(DeveloperFunction::getName, identity()));
     }
 
-    private static final class ByteCodeimpl extends AbstractFunctionStorage<DeveloperFunction> implements ByteCode {
+    private static final class ByteCodeImpl extends AbstractFunctionStorage<DeveloperFunction> implements ByteCode {
 
         private final FunctionName mainFunctionName;
 
-        protected ByteCodeimpl(final Map<FunctionName, DeveloperFunction> functionRegistry,
+        protected ByteCodeImpl(final Map<FunctionName, DeveloperFunction> functionRegistry,
                                final FunctionName mainFunctionName) {
             super(functionRegistry);
             this.mainFunctionName = requireNonNull(mainFunctionName);

@@ -57,7 +57,7 @@ import com.revenat.javamm.interpreter.component.impl.calculator.logical.unary.Lo
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsEqualsBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsGreaterThanBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsGreaterThanOrEqualsBinaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsLessThanBinaryExpressionCaluclator;
+import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsLessThanBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsLessThanOrEqualsBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsNotEqualsBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.TypeOfBinaryExpressionCalculator;
@@ -126,7 +126,7 @@ public class InterpreterConfigurator {
                     new IsNotEqualsBinaryExpressionCalculator(),
                     new IsGreaterThanBinaryExpressionCalculator(),
                     new IsGreaterThanOrEqualsBinaryExpressionCalculator(),
-                    new IsLessThanBinaryExpressionCaluclator(),
+                    new IsLessThanBinaryExpressionCalculator(),
                     new IsLessThanOrEqualsBinaryExpressionCalculator(),
                     new TypeOfBinaryExpressionCalculator()
 

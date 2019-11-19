@@ -79,7 +79,7 @@ public class LexemeBuilderImpl implements LexemeBuilder {
         final List<Lexeme> lexemes = new ArrayList<>();
 
         for (final ListIterator<String> source = tokens.listIterator(); source.hasNext();) {
-            if (isFunctionInvocationPressent(source)) {
+            if (isFunctionInvocationPresent(source)) {
                 lexemes.add(buildFunctionInvocationExpression(source, sourceLine));
             } else {
                 buildSimpleLexeme(source.next(), lexemes, source, sourceLine);
@@ -113,7 +113,7 @@ public class LexemeBuilderImpl implements LexemeBuilder {
                 .collect(toUnmodifiableList());
     }
 
-    private boolean isFunctionInvocationPressent(final ListIterator<String> tokens) {
+    private boolean isFunctionInvocationPresent(final ListIterator<String> tokens) {
         final String currentLexeme = tokens.next();
         if (tokens.hasNext()) {
             final String nextLexeme = tokens.next();
@@ -154,7 +154,7 @@ public class LexemeBuilderImpl implements LexemeBuilder {
                                      final ListIterator<String> tokens,
                                      final SourceLine sourceLine) {
         if (isBinaryOperator(currentToken)) {
-            lexemes.add(resolveAmbiguity(binaryOpertorFrom(currentToken), lexemes));
+            lexemes.add(resolveAmbiguity(binaryOperatorFrom(currentToken), lexemes));
         } else if (isUnaryOperator(currentToken)) {
             lexemes.add(resolveAmbiguity(unaryOperatorFrom(currentToken), lexemes));
         } else {
@@ -171,7 +171,7 @@ public class LexemeBuilderImpl implements LexemeBuilder {
         return UnaryOperator.of(token).orElseThrow();
     }
 
-    private BinaryOperator binaryOpertorFrom(final String token) {
+    private BinaryOperator binaryOperatorFrom(final String token) {
         return BinaryOperator.of(token).orElseThrow();
     }
 
@@ -196,7 +196,7 @@ public class LexemeBuilderImpl implements LexemeBuilder {
     }
 
     private boolean isTernaryOperator(final String token) {
-        return TernaryConditionalOperator.isContitional(token);
+        return TernaryConditionalOperator.isConditional(token);
     }
 
     private boolean isUnaryOperator(final String token) {

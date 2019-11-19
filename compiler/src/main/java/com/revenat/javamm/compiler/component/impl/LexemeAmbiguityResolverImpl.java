@@ -61,14 +61,14 @@ public class LexemeAmbiguityResolverImpl implements LexemeAmbiguityResolver {
      */
     @Override
     public Lexeme resolve(final Lexeme lexeme, final int position, final List<Lexeme> lexemes) {
-        if (isAmbigousOperator(lexeme)) {
+        if (isAmbiguousOperator(lexeme)) {
             return resolveAmbiguity((Operator) lexeme, position, lexemes);
         } else {
             return lexeme;
         }
     }
 
-    private boolean isAmbigousOperator(final Lexeme lexeme) {
+    private boolean isAmbiguousOperator(final Lexeme lexeme) {
         return AMBIGUOUS_OPERATORS.contains(lexeme);
     }
 
@@ -82,36 +82,37 @@ public class LexemeAmbiguityResolverImpl implements LexemeAmbiguityResolver {
 
     private boolean shouldBeUnaryOperator(final List<Lexeme> lexemes, final int position) {
         final boolean isFirstLexeme = position == 0;
-        final int previousLexemPosition = position - 1;
+        final int previousLexemePosition = position - 1;
 
         return isFirstLexeme ||
-               previousLexemIsAnOpeningParenthesis(previousLexemPosition, lexemes) ||
-               previousLexemeIsBinaryOperator(previousLexemPosition, lexemes) ||
-               previousLexemeIsAmbigousOrNotAssignmentUnary(previousLexemPosition, lexemes);
+               previousLexemeIsAnOpeningParenthesis(previousLexemePosition, lexemes) ||
+               previousLexemeIsBinaryOperator(previousLexemePosition, lexemes) ||
+               previousLexemeIsAmbiguousOrNotAssignmentUnary(previousLexemePosition, lexemes);
     }
 
-    private boolean previousLexemeIsAmbigousOrNotAssignmentUnary(final int previousLexemPosition,
-                                                                 final List<Lexeme> lexemes) {
-        return previousLexemeIsAmbigousUnary(previousLexemPosition, lexemes) ||
-               previousLexemeIsUnaryButNotAssignment(previousLexemPosition, lexemes);
+    private boolean previousLexemeIsAmbiguousOrNotAssignmentUnary(final int previousLexemePosition,
+                                                                  final List<Lexeme> lexemes) {
+        return previousLexemeIsAmbiguousUnary(previousLexemePosition, lexemes) ||
+               previousLexemeIsUnaryButNotAssignment(previousLexemePosition, lexemes);
     }
 
-    private boolean previousLexemeIsAmbigousUnary(final int previousLexemPosition, final List<Lexeme> lexemes) {
-        final Lexeme previousLexeme = lexemes.get(previousLexemPosition);
-        return isUnaryOperator(previousLexeme) && isAmbigousOperator(previousLexeme);
+    private boolean previousLexemeIsAmbiguousUnary(final int previousLexemePosition, final List<Lexeme> lexemes) {
+        final Lexeme previousLexeme = lexemes.get(previousLexemePosition);
+        return isUnaryOperator(previousLexeme) && isAmbiguousOperator(previousLexeme);
     }
 
-    private boolean previousLexemeIsUnaryButNotAssignment(final int previousLexemPosition, final List<Lexeme> lexemes) {
-        final Lexeme previousLexeme = lexemes.get(previousLexemPosition);
+    private boolean previousLexemeIsUnaryButNotAssignment(final int previousLexemePosition,
+                                                          final List<Lexeme> lexemes) {
+        final Lexeme previousLexeme = lexemes.get(previousLexemePosition);
         return isUnaryOperator(previousLexeme) && !isUnaryAssignmentOperator(previousLexeme);
     }
 
-    private boolean previousLexemeIsBinaryOperator(final int previousLexemPosition, final List<Lexeme> lexemes) {
-        return isBinaryOperator(lexemes.get(previousLexemPosition));
+    private boolean previousLexemeIsBinaryOperator(final int previousLexemePosition, final List<Lexeme> lexemes) {
+        return isBinaryOperator(lexemes.get(previousLexemePosition));
     }
 
-    private boolean previousLexemIsAnOpeningParenthesis(final int previousLexemPosition, final List<Lexeme> lexemes) {
-        return lexemes.get(previousLexemPosition) == OPENING_PARENTHESIS;
+    private boolean previousLexemeIsAnOpeningParenthesis(final int previousLexemePosition, final List<Lexeme> lexemes) {
+        return lexemes.get(previousLexemePosition) == OPENING_PARENTHESIS;
     }
 
     private UnaryOperator unaryOperatorFor(final String code) {

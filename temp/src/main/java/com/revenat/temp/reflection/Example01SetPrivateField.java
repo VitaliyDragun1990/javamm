@@ -31,6 +31,7 @@ import java.util.List;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public final class Example01SetPrivateField {
 
     private Example01SetPrivateField() {

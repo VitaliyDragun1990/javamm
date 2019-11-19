@@ -50,7 +50,7 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 public class ContinueOperationInterpreterIntegrationTest extends AbstractIntegrationTest {
 
     @ParameterizedTest
-    @ArgumentsSource(ContinueOperationProider.class)
+    @ArgumentsSource(ContinueOperationProvider.class)
     @Order(1)
     void shouldInterpretContinueOperation(final List<String> lines,
                                           final List<Object> expectedOutput) {
@@ -72,7 +72,7 @@ public class ContinueOperationInterpreterIntegrationTest extends AbstractIntegra
         assertErrorMessageContains(e, buildErrorMsg("Operation 'continue' is not expected here", 2));
     }
 
-    static final class ContinueOperationProider implements ArgumentsProvider {
+    static final class ContinueOperationProvider implements ArgumentsProvider {
 
         @Override
         public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {

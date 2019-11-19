@@ -25,6 +25,7 @@ import java.util.List;
  * @author devonline
  * @link http://devonline.academy/javamm
  */
+@SuppressWarnings("CheckStyle")
 public final class Example04ListOldAndNewStyles {
 
     private Example04ListOldAndNewStyles() {

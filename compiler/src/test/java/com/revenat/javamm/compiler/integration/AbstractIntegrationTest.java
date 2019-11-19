@@ -36,11 +36,11 @@ public abstract class AbstractIntegrationTest {
 
     private final Compiler compiler = new CompilerConfigurator().getCompiler();
 
-    protected ByteCode wrapInsideMainFunctionAndCompile(final List<String> lines, final boolean wihtClosingCurlyBrace) {
+    protected ByteCode wrapInsideMainFunctionAndCompile(final List<String> lines, final boolean withClosingCurlyBrace) {
         final List<String> result = new ArrayList<>();
         result.add("function main() {");
         result.addAll(lines);
-        if (wihtClosingCurlyBrace) {
+        if (withClosingCurlyBrace) {
             result.add("}");
         }
 

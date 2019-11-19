@@ -25,6 +25,7 @@ import static java.lang.Character.isUpperCase;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public class Example01FindTheFirstUpperWord {
     private Example01FindTheFirstUpperWord() {
     }

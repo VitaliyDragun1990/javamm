@@ -22,6 +22,7 @@ import java.util.List;
  * @author devonline
  * @link http://devonline.academy/javamm
  */
+@SuppressWarnings("CheckStyle")
 public final class Example01ReturnValueMain {
 
     private Example01ReturnValueMain() {

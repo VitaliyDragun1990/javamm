@@ -40,7 +40,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("a logical '||' binary expression calculator")
-class LogicalOrBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
+class LogicalOrBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
 
     @Test
     @Order(1)
@@ -78,9 +78,7 @@ class LogicalOrBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmC
     void shouldFailIfFirstOperandIsNotABoolean(final Object operand1) {
         final boolean operand2 = true;
 
-        final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> {
-            calculate(operand1, operand2);
-        });
+        final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(operand1, operand2));
 
         assertErrorMessageContains(e, "Operator '||' is not supported for types: %s and %s",
                 getType(operand1), getType(operand2));
@@ -92,9 +90,7 @@ class LogicalOrBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmC
     void shouldFailIfFirstOperandIsFalseAndSecondOperandIsNotABoolean(final Object operand2) {
         final boolean operand1 = false;
 
-        final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> {
-            calculate(operand1, operand2);
-        });
+        final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(operand1, operand2));
 
         assertErrorMessageContains(e, "Operator '||' is not supported for types: %s and %s",
                 getType(operand1), getType(operand2));

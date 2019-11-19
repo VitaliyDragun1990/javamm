@@ -25,6 +25,7 @@ import static java.util.Comparator.naturalOrder;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public class Example02FindTheMinLetterCount {
     private Example02FindTheMinLetterCount() {
     }

@@ -59,10 +59,10 @@ public class PostfixNotationComplexExpressionBuilder implements ComplexExpressio
 
     @Override
     public ComplexExpression build(final List<Lexeme> lexemes, final SourceLine sourceLine) {
-        return new PostfixNotationComplexExpression(getInPostifxNotation(lexemes, sourceLine), toString(lexemes));
+        return new PostfixNotationComplexExpression(getInPostfixNotation(lexemes, sourceLine), toString(lexemes));
     }
 
-    private List<Lexeme> getInPostifxNotation(final List<Lexeme> lexemes, final SourceLine sourceLine) {
+    private List<Lexeme> getInPostfixNotation(final List<Lexeme> lexemes, final SourceLine sourceLine) {
         final List<Lexeme> result = new ArrayList<>();
         final Deque<Lexeme> stack = new ArrayDeque<>();
 

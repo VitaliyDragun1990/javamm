@@ -29,11 +29,12 @@ import org.junit.jupiter.api.Test;
 class StackTest {
 
 
+    @SuppressWarnings("InnerClassMayBeStatic")
     @Nested
     class ANewStack {
 
         @Test
-        void isInstantiatedWitnNewStack() {
+        void isInstantiatedWithNewStack() {
         }
 
         @Test

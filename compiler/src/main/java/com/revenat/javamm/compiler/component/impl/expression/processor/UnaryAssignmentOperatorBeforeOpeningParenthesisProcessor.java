@@ -70,8 +70,7 @@ class UnaryAssignmentOperatorBeforeOpeningParenthesisProcessor extends UnaryAssi
         }
     }
 
-    private void buildUnaryAssignmentExpression(final Lexeme next) {
-        final Lexeme operatorArgument = next;
+    private void buildUnaryAssignmentExpression(final Lexeme operatorArgument) {
 
         if (source.hasNext()) {
             final Lexeme assumedParenthesis = source.next();

@@ -44,13 +44,13 @@ class BitwiseInverseUnaryExpressionCalculatorTest extends AbstractUnaryExpressio
 
     @Test
     @Order(1)
-    void shoudlSupportBitwiseInverseOperator() {
+    void shouldSupportBitwiseInverseOperator() {
         assertSupportOperator(UnaryOperator.BITWISE_INVERSE);
     }
 
     @Test
     @Order(2)
-    void shoultCalcuateByteInversionForIntegers() {
+    void shouldCalculateByteInversionForIntegers() {
         assertThat(calculate(2), is(-3));
         assertThat(calculate(-3), is(2));
         assertThat(calculate(0), is(-1));

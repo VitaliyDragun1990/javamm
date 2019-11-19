@@ -20,6 +20,7 @@ package com.revenat.temp.immutable.simple;
  * @author devonline
  * @link http://devonline.academy/javamm
  */
+@SuppressWarnings("CheckStyle")
 public class Example02SimpleNotJavaStyle {
 
     public final int param1;

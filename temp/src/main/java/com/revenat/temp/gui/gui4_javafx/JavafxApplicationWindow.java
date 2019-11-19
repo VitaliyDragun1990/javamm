@@ -30,6 +30,7 @@ import javafx.stage.Stage;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public class JavafxApplicationWindow extends Application {
 
     private static final int WIDTH = 600;

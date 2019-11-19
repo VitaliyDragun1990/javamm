@@ -92,7 +92,7 @@ class BlockTest {
         assertThat(block.toString(), containsString(blockOperationB.toString()));
     }
 
-    private class OperationStub implements Operation {
+    private static class OperationStub implements Operation {
         private final SourceLine sourceLine;
 
         public OperationStub(final SourceLine sourceLine) {

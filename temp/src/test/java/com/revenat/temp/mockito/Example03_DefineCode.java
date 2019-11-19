@@ -53,12 +53,9 @@ class Example03_DefineCode {
     void when_example() {
         // Prepare
         when(list.isEmpty()).thenReturn(false);
-        when(list.isEmpty()).thenAnswer(new Answer<Boolean>() {
-            @Override
-            public Boolean answer(final InvocationOnMock invocation) {
-                return Boolean.parseBoolean(System.getProperty("IS_DEV_ENVIRONMENT"));
-            }
-        });
+        when(list.isEmpty()).thenAnswer(
+            (Answer<Boolean>) invocation -> Boolean.parseBoolean(System.getProperty("IS_DEV_ENVIRONMENT"))
+        );
         when(list.isEmpty())
             .thenAnswer((Answer<Boolean>) invocation ->
                 Boolean.parseBoolean(System.getProperty("IS_DEV_ENVIRONMENT")));

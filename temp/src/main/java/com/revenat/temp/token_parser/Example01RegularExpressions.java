@@ -26,9 +26,10 @@ import java.util.regex.Pattern;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public class Example01RegularExpressions {
     private static final String ALL_OPERATORS_PATTERN =
-            "\\+{1,2}=?|\\-{1,2}=?|\\*=?|\\/=?|%=?|!=?|>{1,3}=?|<{1,2}=?|&{1,2}=?|\\|{1,2}=?|\\^=?|={1,2}|[()\\=\\[\\]{};,?:~]";
+            "\\+{1,2}=?|-{1,2}=?|\\*=?|/=?|%=?|!=?|>{1,3}=?|<{1,2}=?|&{1,2}=?|\\|{1,2}=?|\\^=?|={1,2}|[()=\\[\\]{};,?:~]";
 
     private static final String WORDS_PATTERN ="\\b\\w+";
     private static final String STRING_LITERAL_PATTERN ="\"([^\"\\\\]|\\\\.)*\"|\'([^\'\\\\]|\\\\.)*\'";

@@ -44,8 +44,8 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 public class BlockScopeVariables_IntegrationTest extends AbstractIntegrationTest {
 
     @ParameterizedTest
-    @ArgumentsSource(BlockeScopeProvider.class)
-    @DisplayName("should throw runtime error if try to acceess variable defined inside inner scope from outside")
+    @ArgumentsSource(BlockScopeProvider.class)
+    @DisplayName("should throw runtime error if try to access variable defined inside inner scope from outside")
     void shouldThrowRuntimeError(final List<String> lines,
                                  final List<Object> expectedOutput,
                                  final String expectedErrorMessage) {
@@ -56,7 +56,7 @@ public class BlockScopeVariables_IntegrationTest extends AbstractIntegrationTest
 
     }
 
-    static class BlockeScopeProvider implements ArgumentsProvider {
+    static class BlockScopeProvider implements ArgumentsProvider {
 
         @Override
         public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {

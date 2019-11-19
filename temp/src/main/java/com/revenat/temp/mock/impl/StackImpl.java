@@ -16,11 +16,11 @@
 
 package com.revenat.temp.mock.impl;
 
+import com.revenat.temp.mock.Stack;
+
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
-
-import com.revenat.temp.mock.Stack;
 
 /**
  * @author devonline

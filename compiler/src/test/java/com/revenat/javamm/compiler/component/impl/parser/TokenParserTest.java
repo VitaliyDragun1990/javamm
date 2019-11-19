@@ -77,7 +77,7 @@ class TokenParserTest {
         final TokenParserResult result = tokenParser.parseLine(sourceLine, false);
 
         assertEmpty(result);
-        assertMultilineCommentNotStarted(result);
+        assertMultiLineCommentNotStarted(result);
     }
 
     @ParameterizedTest
@@ -95,7 +95,7 @@ class TokenParserTest {
         final TokenParserResult result = tokenParser.parseLine(sourceLine, false);
 
         assertEmpty(result);
-        assertMultilineCommentNotStarted(result);
+        assertMultiLineCommentNotStarted(result);
     }
 
     @ParameterizedTest
@@ -106,11 +106,11 @@ class TokenParserTest {
         "/* 1 + 1,  false"
     })
     @Order(3)
-    void shouldCorrectlyHandleStartedMultilineComment(final String sourceLine, final boolean isMultilineCommendStartedBefore) {
-        final TokenParserResult result = tokenParser.parseLine(sourceLine, isMultilineCommendStartedBefore);
+    void shouldCorrectlyHandleStartedMultiLineComment(final String sourceLine, final boolean isMultiLneCommendStartedBefore) {
+        final TokenParserResult result = tokenParser.parseLine(sourceLine, isMultiLneCommendStartedBefore);
 
         assertEmpty(result);
-        assertMultilineCommentStarted(result);
+        assertMultiLineCommentStarted(result);
     }
 
     @ParameterizedTest
@@ -121,11 +121,11 @@ class TokenParserTest {
         "/*1 + 1 */,    false"
     })
     @Order(4)
-    void shouldCorrectlyDetermineWhenMultilineCommentCompletes(final String sourceLine, final boolean isMultilineCommentStartedBefore) {
-        final TokenParserResult result = tokenParser.parseLine(sourceLine, isMultilineCommentStartedBefore);
+    void shouldCorrectlyDetermineWhenMultiLineCommentCompletes(final String sourceLine, final boolean isMultiLineCommentStartedBefore) {
+        final TokenParserResult result = tokenParser.parseLine(sourceLine, isMultiLineCommentStartedBefore);
 
         assertEmpty(result);
-        assertMultilineCommentNotStarted(result);
+        assertMultiLineCommentNotStarted(result);
     }
 
     @ParameterizedTest
@@ -176,7 +176,7 @@ class TokenParserTest {
         final TokenParserResult result = assertDoesNotThrow(() -> tokenParser.parseLine(sourceLine, false));
 
         assertTokens(result, sourceLine);
-        assertMultilineCommentNotStarted(result);
+        assertMultiLineCommentNotStarted(result);
     }
 
     @ParameterizedTest
@@ -224,20 +224,20 @@ class TokenParserTest {
     @Order(9)
     void shouldNotEvaluateCommentsIfTheyInsideStringConstants(final String sourceLine,
                                                               final String expectedTokens,
-                                                              final boolean multilineCommentStartedBefore) {
-        final TokenParserResult result = tokenParser.parseLine(sourceLine, multilineCommentStartedBefore);
+                                                              final boolean multiLineCommentStartedBefore) {
+        final TokenParserResult result = tokenParser.parseLine(sourceLine, multiLineCommentStartedBefore);
 
         assertTokens(result, tokensFrom(expectedTokens, ":"));
 
     }
 
-    @ParameterizedTest(name = "[{index}] -> [{0}] (multilineCommentStartedBefore= {1})")
+    @ParameterizedTest(name = "[{index}] -> [{0}] (multiLineCommentStartedBefore= {1})")
     @ArgumentsSource(DifferentSourcesButSameResultProvider.class)
     @Order(10)
     void shouldIgnoreAllCommentedOutStuff(final String sourceLine,
-                                          final boolean multilineCommentStartedBefore,
+                                          final boolean multiLineCommentStartedBefore,
                                           final TokenParserResult expectedResult) {
-        final TokenParserResult result = tokenParser.parseLine(sourceLine, multilineCommentStartedBefore);
+        final TokenParserResult result = tokenParser.parseLine(sourceLine, multiLineCommentStartedBefore);
 
         assertExpectedResult(result, expectedResult);
     }
@@ -290,7 +290,7 @@ class TokenParserTest {
 
     private void assertExpectedResult(final TokenParserResult actualResult, final TokenParserResult expectedResult) {
         assertThat(actualResult.getTokens(), equalTo(expectedResult.getTokens()));
-        assertThat(actualResult.isMultilineCommentStarted(), equalTo(expectedResult.isMultilineCommentStarted()));
+        assertThat(actualResult.isMultiLineCommentStarted(), equalTo(expectedResult.isMultiLineCommentStarted()));
     }
 
     private String[] tokensFrom(final String expectedTokens, final String separator) {
@@ -306,12 +306,12 @@ class TokenParserTest {
         assertTokens(result, List.of(expectedTokens));
     }
 
-    private void assertMultilineCommentStarted(final TokenParserResult result) {
-        assertTrue(result.isMultilineCommentStarted(), "Should detect that multiline comment started");
+    private void assertMultiLineCommentStarted(final TokenParserResult result) {
+        assertTrue(result.isMultiLineCommentStarted(), "Should detect that multiLine comment started");
     }
 
-    private void assertMultilineCommentNotStarted(final TokenParserResult result) {
-        assertFalse(result.isMultilineCommentStarted(), "Should not detect that multiline comment started");
+    private void assertMultiLineCommentNotStarted(final TokenParserResult result) {
+        assertFalse(result.isMultiLineCommentStarted(), "Should not detect that multiLine comment started");
     }
 
     private void assertEmpty(final TokenParserResult result) {
@@ -325,14 +325,14 @@ class TokenParserTest {
         @Override
         public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
             return Stream.of(
-                    multilineCommentNotStartedBeforeAndNotStartedAfter(),
-                    multilineCommentNotStartedBeforeButStartedAfter(),
-                    multilineCommentStartedBeforeButNotStartedAfter(),
-                    multilineCommentStartedBeforeAndStartedAfter()
+                    multiLineCommentNotStartedBeforeAndNotStartedAfter(),
+                    multiLineCommentNotStartedBeforeButStartedAfter(),
+                    multiLineCommentStartedBeforeButNotStartedAfter(),
+                    multiLineCommentStartedBeforeAndStartedAfter()
                     ).flatMap(identity());
         }
 
-        private Stream<Arguments> multilineCommentNotStartedBeforeAndNotStartedAfter() {
+        private Stream<Arguments> multiLineCommentNotStartedBeforeAndNotStartedAfter() {
             return Stream.of(
                     arguments("var a = 3", false, parserResult(expectedTokens, false)),
                     arguments("var a = 3 // 4 - 5", false, parserResult(expectedTokens, false)),
@@ -345,7 +345,7 @@ class TokenParserTest {
                     );
         }
 
-        private Stream<Arguments> multilineCommentNotStartedBeforeButStartedAfter() {
+        private Stream<Arguments> multiLineCommentNotStartedBeforeButStartedAfter() {
             return Stream.of(
                     arguments("var a = 3 /* 2 + 2", false, parserResult(expectedTokens, true)),
                     arguments("var a = 3 /* 2 + 2 */ /* 3 + 3", false, parserResult(expectedTokens, true)),
@@ -353,7 +353,7 @@ class TokenParserTest {
                     );
         }
 
-        private Stream<Arguments> multilineCommentStartedBeforeButNotStartedAfter() {
+        private Stream<Arguments> multiLineCommentStartedBeforeButNotStartedAfter() {
             return Stream.of(
                     arguments("2 + 2 */ var a = 3", true, parserResult(expectedTokens, false)),
                     arguments("2 + 2 */ var a = 3 // 4 - 5", true, parserResult(expectedTokens, false)),
@@ -362,7 +362,7 @@ class TokenParserTest {
                     );
         }
 
-        private Stream<Arguments> multilineCommentStartedBeforeAndStartedAfter() {
+        private Stream<Arguments> multiLineCommentStartedBeforeAndStartedAfter() {
             return Stream.of(
                     arguments("2 + 2 */ var a = 3 /* 3 + 3", true, parserResult(expectedTokens, true)),
                     arguments("2 + 2 */ /* 3 + 3 */ var a = 3 /* 4 + 4 */ /* 5 + 5", true, parserResult(expectedTokens, true)),
@@ -370,8 +370,8 @@ class TokenParserTest {
                     );
         }
 
-        private TokenParserResult parserResult(final List<String> tokens, final boolean isMultilineStartedBefore) {
-            return new TokenParserResult(tokens, isMultilineStartedBefore);
+        private TokenParserResult parserResult(final List<String> tokens, final boolean isMultiLineStartedBefore) {
+            return new TokenParserResult(tokens, isMultiLineStartedBefore);
         }
     }
 

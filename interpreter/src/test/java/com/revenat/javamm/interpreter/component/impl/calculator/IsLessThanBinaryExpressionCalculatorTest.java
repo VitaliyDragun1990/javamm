@@ -19,11 +19,11 @@ package com.revenat.javamm.interpreter.component.impl.calculator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
-import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsGreaterThanOrEqualsBinaryExpressionCalculator;
+import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsLessThanBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 import com.revenat.javamm.interpreter.test.helper.CustomAsserts;
 
@@ -40,34 +40,34 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-@DisplayName(">= binary expression calculator")
-class IsGreaterThanOrEqualsBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
+@DisplayName("< binary expression calculator")
+class IsLessThanBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
 
     @Test
     @Order(1)
-    void shouldSupportGreaterOrEqualsBinaryOperator() {
-        assertCalculatorSupportsOperator(calculator, BinaryOperator.PREDICATE_GREATER_THAN_OR_EQUALS);
+    void shouldSupportLessThanBinaryOperator() {
+        assertCalculatorSupportsOperator(calculator, BinaryOperator.PREDICATE_LESS_THAN);
     }
 
     @Test
     @Order(2)
-    void shouldCalculateGreaterOrEqualsOperationForNumbers() {
-        assertThat(calculate(2, 1), is(true));
-        assertThat(calculate(5.5, 3), is(true));
-        assertThat(calculate(10, 9.99), is(true));
-        assertThat(calculate(5, 5.0), is(true));
-        assertThat(calculate(10.00001, 10.00000001), is(true));
-        assertThat(calculate(0, 0.001), is(false));
-        assertThat(calculate(100, 100.00000001), is(false));
+    void shouldCalculateLessThanOperationForNumbers() {
+        assertThat(calculate(0, 0.001), is(true));
+        assertThat(calculate(100, 100.00000001), is(true));
+        assertThat(calculate(10.00001, 10.00000001), is(false));
+        assertThat(calculate(2, 1), is(false));
+        assertThat(calculate(5.5, 3), is(false));
+        assertThat(calculate(10, 9.99), is(false));
+        assertThat(calculate(5, 5.0), is(false));
     }
 
     @ParameterizedTest
     @MethodSource("unsupportedPairsProvider")
     @Order(3)
-    void shouldFailToCalculateGreaterOrEqualsOperationForTypesOtherThanNumbers(final Object value1, final Object value2) {
+    void shouldFailToCalculateLessThanOperationForTypesOtherThanNumbers(final Object value1, final Object value2) {
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(value1, value2));
 
-        CustomAsserts.assertErrorMessageContains(e, "Operator '>=' is not supported for types: %s and %s",
+        CustomAsserts.assertErrorMessageContains(e, "Operator '<' is not supported for types: %s and %s",
                 getType(value1), getType(value2));
     }
 
@@ -87,6 +87,6 @@ class IsGreaterThanOrEqualsBinaryExpressionCalculatorTest extends AbstractBinary
 
     @Override
     protected BinaryExpressionCalculator createCalculatorUnderTest() {
-        return new IsGreaterThanOrEqualsBinaryExpressionCalculator();
+        return new IsLessThanBinaryExpressionCalculator();
     }
 }

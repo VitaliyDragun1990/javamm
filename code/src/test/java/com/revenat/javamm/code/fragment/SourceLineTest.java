@@ -58,13 +58,13 @@ class SourceLineTest {
 
     @Test
     @Order(2)
-    void shoudlContainLineNumber() {
+    void shouldContainLineNumber() {
         assertThat(sourceLine.getLineNumber(), equalTo(LINE_NUMBER));
     }
 
     @Test
     @Order(3)
-    void shouldContaintTokens() {
+    void shouldContainTokens() {
         assertThat(sourceLine.getTokens(), equalTo(TOKENS));
     }
 
@@ -122,7 +122,7 @@ class SourceLineTest {
 
     @Test
     @Order(12)
-    void shouldCompareFirstByModuleNameInLexicographicallOrder() {
+    void shouldCompareFirstByModuleNameInLexicographicalOrder() {
         final SourceLine another = new SourceLine("another test", 1, List.of());
 
         assertGreaterThan(sourceLine, another);

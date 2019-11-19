@@ -44,7 +44,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("typeof binary expression calculator")
-class TypeOfBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
+class TypeOfBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
 
     @Test
     @Order(1)

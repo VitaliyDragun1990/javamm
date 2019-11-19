@@ -57,7 +57,7 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
-@DisplayName("a function defenitions reader")
+@DisplayName("a function definitions reader")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = LENIENT)
 class FunctionDefinitionsReaderTest {

@@ -20,6 +20,7 @@ package com.revenat.temp.immutable.list;
  * @author devonline
  * @link http://devonline.academy/javamm
  */
+@SuppressWarnings("CheckStyle")
 public final class Example07ValidUsageForArray {
 
     private Example07ValidUsageForArray() {

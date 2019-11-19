@@ -36,11 +36,11 @@ public class FunctionInvocationExpressionEvaluator implements ExpressionEvaluato
 
     @Override
     public Object evaluate(final FunctionInvocationExpression expression) {
-        final FunctionInvoker functionInvoker = getFunctionInnvoker();
+        final FunctionInvoker functionInvoker = getFunctionInvoker();
         return functionInvoker.invoke(expression.getFunctionName(), expression.getArguments());
     }
 
-    private FunctionInvoker getFunctionInnvoker() {
+    private FunctionInvoker getFunctionInvoker() {
         return getCurrentRuntime().getCurrentFunctionInvoker();
     }
 }

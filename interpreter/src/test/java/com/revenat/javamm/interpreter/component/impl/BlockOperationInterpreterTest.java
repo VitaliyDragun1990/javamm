@@ -92,7 +92,7 @@ class BlockOperationInterpreterTest {
 
     @Test
     @Order(2)
-    void canNotBeCreaterWithSeveralInterpretersForSameOperation() {
+    void canNotBeCreatedWithSeveralInterpretersForSameOperation() {
         assertThrows(ConfigException.class,
                 () -> new BlockOperationInterpreterImpl(Set.of(OPERATION_A_INTERPRETER, ANOTHER_OPERATION_A_INTERPRETER)));
     }

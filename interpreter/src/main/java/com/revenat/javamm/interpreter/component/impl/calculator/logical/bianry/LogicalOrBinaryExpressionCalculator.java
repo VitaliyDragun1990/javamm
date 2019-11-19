@@ -41,7 +41,7 @@ public class LogicalOrBinaryExpressionCalculator extends AbstractLogicalBinaryEx
                             final Expression expression2) {
         final Object operand1 = expression1.getValue(expressionContext);
 
-        if (isTruthy(operand1)) {
+        if (isTruth(operand1)) {
             return true;
         } else {
             return calculate(operand1, expression2.getValue(expressionContext));
@@ -53,7 +53,7 @@ public class LogicalOrBinaryExpressionCalculator extends AbstractLogicalBinaryEx
         return (Boolean) value1 || (Boolean) value2;
     }
 
-    private boolean isTruthy(final Object operand) {
+    private boolean isTruth(final Object operand) {
         return operand instanceof Boolean && (Boolean) operand;
     }
 }

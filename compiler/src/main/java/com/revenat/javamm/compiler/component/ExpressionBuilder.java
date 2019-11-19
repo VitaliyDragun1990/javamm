@@ -48,7 +48,7 @@ public interface ExpressionBuilder {
      *
      * @param expressionTokens tokens that form assumed expression
      * @param sourceLine       source line where assumed expression is defined
-     * @return newly builded expression
+     * @return newly built expression
      * @throws JavammSyntaxError if can not build expression due to syntax error
      *                           presents in the expression tokens
      */

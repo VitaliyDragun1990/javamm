@@ -26,6 +26,7 @@ import java.util.Set;
  * @author devonline
  * @link http://devonline.academy/javamm
  */
+@SuppressWarnings("CheckStyle")
 public final class HelloWorld {
     public static final Set<String> OPERATOR_TOKEN_DELIMITERS =
             Set.of(
@@ -37,7 +38,7 @@ public final class HelloWorld {
     public static final List<String> sorted = new ArrayList<>(OPERATOR_TOKEN_DELIMITERS);
 
     static {
-        Collections.sort(sorted, (a, b) -> b.length() - a.length());
+        sorted.sort((a, b) -> b.length() - a.length());
     }
 
     private HelloWorld() {

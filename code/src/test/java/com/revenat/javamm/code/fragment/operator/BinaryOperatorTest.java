@@ -77,8 +77,8 @@ class BinaryOperatorTest {
             "?"
     })
     @Order(2)
-    void canNotBeCreatedFromUnsupportedToken(final String unsupportedtToken) {
-        assertCanNotBeCreatedFrom(unsupportedtToken);
+    void canNotBeCreatedFromUnsupportedToken(final String unsupportedToken) {
+        assertCanNotBeCreatedFrom(unsupportedToken);
     }
 
     @ParameterizedTest

@@ -41,7 +41,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 
 @DisplayName("a multiplication '*' binary expression calculator")
-class MultiplicationBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
+class MultiplicationBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
 
     @Test
     @Order(1)

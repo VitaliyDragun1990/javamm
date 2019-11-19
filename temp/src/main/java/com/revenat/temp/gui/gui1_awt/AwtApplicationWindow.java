@@ -31,6 +31,7 @@ import java.awt.event.WindowEvent;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("ALL")
 public class AwtApplicationWindow extends Frame {
 
     private static final long serialVersionUID = 1L;

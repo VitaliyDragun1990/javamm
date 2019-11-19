@@ -31,15 +31,15 @@ public class TokenParserResult {
 
     private final List<String> tokens;
 
-    private final boolean isMultilineCommentStarted;
+    private final boolean isMultiLineCommentStarted;
 
-    public TokenParserResult(final List<String> tokens, final boolean isMultilineCommentStarted) {
+    public TokenParserResult(final List<String> tokens, final boolean isMultiLineCommentStarted) {
         this.tokens = List.copyOf(tokens);
-        this.isMultilineCommentStarted = isMultilineCommentStarted;
+        this.isMultiLineCommentStarted = isMultiLineCommentStarted;
     }
 
-    public TokenParserResult(final boolean isMultilineCommentStarted) {
-        this(List.of(), isMultilineCommentStarted);
+    public TokenParserResult(final boolean isMultiLineCommentStarted) {
+        this(List.of(), isMultiLineCommentStarted);
     }
 
     public boolean isNotEmpty() {
@@ -50,7 +50,7 @@ public class TokenParserResult {
         return tokens;
     }
 
-    public boolean isMultilineCommentStarted() {
-        return isMultilineCommentStarted;
+    public boolean isMultiLineCommentStarted() {
+        return isMultiLineCommentStarted;
     }
 }

@@ -43,7 +43,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("predicate equals binary expression calculator")
-class IsEqualsBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
+class IsEqualsBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
 
     @Test
     @Order(1)
@@ -117,18 +117,16 @@ class IsEqualsBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCa
     }
 
     @ParameterizedTest
-    @MethodSource("uncompatiblePairsProvider")
+    @MethodSource("incompatiblePairsProvider")
     @Order(8)
     void shouldFailToCalculateEqualsBetweenBooleanAndNotBooleanType(final Object value1, final Object value2) {
-        final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> {
-            calculate(value1, value2);
-        });
+        final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(value1, value2));
 
         assertErrorMessageContains(e, "Operator '==' is not supported for types: %s and %s",
                 getType(value1), getType(value2));
     }
 
-    static Stream<Arguments> uncompatiblePairsProvider() {
+    static Stream<Arguments> incompatiblePairsProvider() {
         return Stream.of(
                 Arguments.arguments(0, false),
                 Arguments.arguments(false, 0),

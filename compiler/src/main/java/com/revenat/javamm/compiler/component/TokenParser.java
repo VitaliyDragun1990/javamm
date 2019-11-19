@@ -20,7 +20,7 @@ package com.revenat.javamm.compiler.component;
 import com.revenat.javamm.compiler.model.TokenParserResult;
 
 /**
- * Parses source code line into meaningful tokens taking into account multiline
+ * Parses source code line into meaningful tokens taking into account multi line
  * comment occurrence.
  *
  * @author Vitaliy Dragun
@@ -28,5 +28,5 @@ import com.revenat.javamm.compiler.model.TokenParserResult;
  */
 public interface TokenParser {
 
-    TokenParserResult parseLine(String sourceCodeLine, boolean isMultilineCommentStartedBefore);
+    TokenParserResult parseLine(String sourceCodeLine, boolean isMultiLineCommentStartedBefore);
 }

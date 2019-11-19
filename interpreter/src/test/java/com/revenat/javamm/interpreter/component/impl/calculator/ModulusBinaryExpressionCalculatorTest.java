@@ -40,7 +40,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("a modulus '%' binary expression calculator")
-class ModulusBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
+class ModulusBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
 
     @Test
     @Order(1)

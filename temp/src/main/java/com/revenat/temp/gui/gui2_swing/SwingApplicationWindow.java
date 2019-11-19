@@ -17,9 +17,6 @@
 
 package com.revenat.temp.gui.gui2_swing;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -28,11 +25,14 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 /**
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public class SwingApplicationWindow extends JFrame {
 
     private static final long serialVersionUID = 1L;

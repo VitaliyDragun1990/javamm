@@ -55,9 +55,7 @@ public final class SortedOperatorMapBuilder {
     }
 
     private Map<String, SortedSet<String>> unmodifiableMap(final Map<String, SortedSet<String>> map) {
-        for (final Map.Entry<String, SortedSet<String>> entry : map.entrySet()) {
-            map.put(entry.getKey(), Collections.unmodifiableSortedSet(entry.getValue()));
-        }
+        map.replaceAll((k, v) -> Collections.unmodifiableSortedSet(v));
         return Map.copyOf(map);
     }
 }

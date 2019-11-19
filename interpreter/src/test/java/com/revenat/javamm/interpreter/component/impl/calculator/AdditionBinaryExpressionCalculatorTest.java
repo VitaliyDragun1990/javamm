@@ -40,7 +40,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 @DisplayName("an addition '+' binary expression calculator")
-class AdditionBinaryExpressionCalculatorTest extends AbstractBinaryExpressionmCalculatorTest {
+class AdditionBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
 
     @Test
     @Order(1)

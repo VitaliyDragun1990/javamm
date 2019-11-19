@@ -26,6 +26,7 @@ import java.util.List;
  * @author Vitaliy Dragun
  *
  */
+@SuppressWarnings("CheckStyle")
 public final class Example03CreateObjectByClassName {
 
     private Example03CreateObjectByClassName() {

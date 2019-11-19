@@ -80,7 +80,7 @@ class StringLiteralParser {
             return quotedLiteralFrom(line, DOUBLE_QUOTE_NOTATION);
         } else {
             throw new IllegalArgumentException("Can not extract string literal from line which does not contain it. " +
-                    "Check literal precence before calling extract() with isStringLiteralPresent() method");
+                    "Check literal presence before calling extract() with isStringLiteralPresent() method");
         }
     }
 

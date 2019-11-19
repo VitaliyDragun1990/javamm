@@ -233,7 +233,7 @@ public class ExpressionResolverIntegrationTest {
     })
     @Order(9)
     void shouldResolveTernaryConditionalExpressionFollowedBySomeDifferentExpression(final String expression,
-                                                                                    final int expectedLexemCount,
+                                                                                    final int expectedLexemeCount,
                                                                                     final int expectedPosition,
                                                                                     final String expectedPredicate,
                                                                                     final String expectedTrueClause,
@@ -241,7 +241,7 @@ public class ExpressionResolverIntegrationTest {
         final Expression result = resolve(expression);
 
         final List<Lexeme> resolved = assertPostfixComplexExpression(result).getLexemes();
-        assertThat(resolved, hasSize(expectedLexemCount));
+        assertThat(resolved, hasSize(expectedLexemeCount));
         assertTernaryConditionalExpression(resolved.get(expectedPosition), expectedPredicate, expectedTrueClause, expectedFalseClause);
     }
 
@@ -252,7 +252,7 @@ public class ExpressionResolverIntegrationTest {
     })
     @Order(10)
     void shouldResolveTernaryConditionalExpressionFollowedByAnotherTernaryExpression(final String expression,
-                                                                                     final int expectedLexemCount,
+                                                                                     final int expectedLexemeCount,
                                                                                      final int expectedSecondTernaryPosition,
                                                                                      final String secondTernaryExpectedPredicate,
                                                                                      final String secondTernaryExpectedTrueClause,
@@ -260,7 +260,7 @@ public class ExpressionResolverIntegrationTest {
         final Expression result = resolve(expression);
 
         final List<Lexeme> resolved = assertPostfixComplexExpression(result).getLexemes();
-        assertThat(resolved, hasSize(expectedLexemCount));
+        assertThat(resolved, hasSize(expectedLexemeCount));
         assertTernaryConditionalExpression(resolved.get(expectedSecondTernaryPosition),
                                            secondTernaryExpectedPredicate,
                                            secondTernaryExpectedTrueClause,

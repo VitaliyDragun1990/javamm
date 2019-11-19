@@ -23,6 +23,7 @@ import com.revenat.javamm.ide.ui.pane.CodeTabPane;
 import com.revenat.javamm.ide.ui.pane.ConsolePane;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.stage.Stage;
 
 /**
  * @author Vitaliy Dragun
@@ -39,6 +40,15 @@ public class MainWindowController implements ActionListener {
     @FXML
     private ConsolePane consolePane;
 
+    /**
+     * Controller lifecycle method. Will be called by javafx framework
+     * whet this controller has been fully initialized
+     */
+    @FXML
+    private void initialize() {
+        actionPane.setActionListener(this);
+    }
+
     @FXML
     public void onCloseAction(final ActionEvent actionEvent) {
         System.exit(0);
@@ -46,7 +56,7 @@ public class MainWindowController implements ActionListener {
 
     @Override
     public void onNewAction() {
-
+        System.out.println("onNewAction");
     }
 
     @Override
@@ -61,7 +71,12 @@ public class MainWindowController implements ActionListener {
 
     @Override
     public boolean onExitAction() {
+        getStage().close();
         return false;
+    }
+
+    protected Stage getStage() {
+        return (Stage) actionPane.getScene().getWindow();
     }
 
     @Override

@@ -17,23 +17,75 @@
 
 package com.revenat.javamm.ide.controller;
 
+import com.revenat.javamm.ide.ui.listener.ActionListener;
+import com.revenat.javamm.ide.ui.pane.ActionPane;
+import com.revenat.javamm.ide.ui.pane.CodeTabPane;
+import com.revenat.javamm.ide.ui.pane.ConsolePane;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TabPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 
 /**
  * @author Vitaliy Dragun
  *
  */
-public class MainWindowController {
+public class MainWindowController implements ActionListener {
 
     @FXML
-    private VBox actionPane;
+    private ActionPane actionPane;
 
     @FXML
-    private TabPane codeTabPane;
+    private CodeTabPane codeTabPane;
 
     @FXML
-    private BorderPane consolePane;
+    private ConsolePane consolePane;
+
+    @FXML
+    public void onCloseAction(final ActionEvent actionEvent) {
+        System.exit(0);
+    }
+
+    @Override
+    public void onNewAction() {
+
+    }
+
+    @Override
+    public boolean onOpenAction() {
+        return false;
+    }
+
+    @Override
+    public boolean onSaveAction() {
+        return false;
+    }
+
+    @Override
+    public boolean onExitAction() {
+        return false;
+    }
+
+    @Override
+    public void onUndoAction() {
+
+    }
+
+    @Override
+    public void onRedoAction() {
+
+    }
+
+    @Override
+    public void onFormatAction() {
+
+    }
+
+    @Override
+    public void onRunAction() {
+
+    }
+
+    @Override
+    public void onTerminateAction() {
+
+    }
 }

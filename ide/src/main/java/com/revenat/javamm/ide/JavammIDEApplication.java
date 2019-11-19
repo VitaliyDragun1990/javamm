@@ -17,12 +17,12 @@
 
 package com.revenat.javamm.ide;
 
-import static com.revenat.javamm.ide.util.UIUtils.centerByScreen;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import static com.revenat.javamm.ide.util.UIUtils.centerByScreen;
 
 /**
  * @author Vitaliy Dragun
@@ -46,7 +46,7 @@ public class JavammIDEApplication extends Application {
         primaryStage.setTitle("Javamm Simple IDE");
         primaryStage.setScene(scene);
 
-       centerByScreen(primaryStage, DEFAULT_WIDTH_PERCENTAGE, DEFAULT_HEIGHT_PERCENTAGE);
+        centerByScreen(primaryStage, DEFAULT_WIDTH_PERCENTAGE, DEFAULT_HEIGHT_PERCENTAGE);
 
         primaryStage.show();
     }

@@ -31,4 +31,5 @@ module javamm.ide {
     exports com.revenat.javamm.ide to javafx.graphics;
     exports com.revenat.javamm.ide.controller to javafx.fxml;
     opens com.revenat.javamm.ide.controller to javafx.fxml;
+    exports com.revenat.javamm.ide.ui.pane to javafx.fxml;
 }

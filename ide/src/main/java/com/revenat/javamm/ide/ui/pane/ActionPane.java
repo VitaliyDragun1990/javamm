@@ -19,7 +19,14 @@ package com.revenat.javamm.ide.ui.pane;
 
 import com.revenat.javamm.ide.ui.listener.ActionListener;
 import com.revenat.javamm.ide.ui.listener.ActionStateManager;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
+
+import java.io.IOException;
 
 import static java.util.Objects.requireNonNull;
 
@@ -30,10 +37,110 @@ import static java.util.Objects.requireNonNull;
  */
 public final class ActionPane extends VBox implements ActionStateManager {
 
+    @FXML
+    private MenuItem miNew;
+
+    @FXML
+    private MenuItem miOpen;
+
+    @FXML
+    private MenuItem miSave;
+
+    @FXML
+    private MenuItem miExit;
+
+    @FXML
+    private MenuItem miUndo;
+
+    @FXML
+    private MenuItem miRedo;
+
+    @FXML
+    private MenuItem miRun;
+
+    @FXML
+    private MenuItem miTerminate;
+
+    @FXML
+    private Button tbNew;
+
+    @FXML
+    private Button tbOpen;
+
+    @FXML
+    private Button tbSave;
+
+    @FXML
+    private Button tbUndo;
+
+    @FXML
+    private Button tbRedo;
+
+    @FXML
+    private Button tbFormat;
+
+    @FXML
+    private Button tbRun;
+
+    @FXML
+    private Button tbTerminate;
+
     private ActionListener actionListener;
+
+    public ActionPane() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/javafx/action-pane.fxml"));
+        fxmlLoader.setRoot(this);
+        fxmlLoader.setController(this);
+        fxmlLoader.load();
+    }
 
     public void setActionListener(final ActionListener actionListener) {
         this.actionListener = requireNonNull(actionListener);
+    }
+
+    @FXML
+    private void onNewAction(ActionEvent event) {
+        System.out.println("onNewAction");
+    }
+
+    @FXML
+    private void onOpenAction(ActionEvent event) {
+        System.out.println("onOpenAction");
+    }
+
+    @FXML
+    private void onSaveAction(ActionEvent event) {
+        System.out.println("onSaveAction");
+    }
+
+    @FXML
+    private void onExitAction(ActionEvent event) {
+        System.out.println("onExitAction");
+    }
+
+    @FXML
+    private void onUndoAction(ActionEvent event) {
+        System.out.println("onUndoAction");
+    }
+
+    @FXML
+    private void onRedoAction(ActionEvent event) {
+        System.out.println("onRedoAction");
+    }
+
+    @FXML
+    private void onFormatAction(ActionEvent event) {
+        System.out.println("onFormatAction");
+    }
+
+    @FXML
+    private void onRunAction(ActionEvent event) {
+        System.out.println("onRunAction");
+    }
+
+    @FXML
+    private void onTerminateAction(ActionEvent event) {
+        System.out.println("onTerminateAction");
     }
 
     @Override

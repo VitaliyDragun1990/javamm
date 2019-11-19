@@ -1,35 +1,58 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.revenat</groupId>
-    <artifactId>javamm</artifactId>
-    <version>1.0</version>
-  </parent>
-  <artifactId>ide</artifactId>
-  
-  <name>Javamm IDE</name>
-  <description>Simple GUI IDE for javamm programming language</description>
-  
-  <properties>
-  	<javafx.version>11.0.2</javafx.version>
-  </properties>
-  
-  	<dependencies>
-		<dependency>
-			<groupId>com.revenat</groupId>
-			<artifactId>vm</artifactId>
-			<version>1.0</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-controls</artifactId>
-			<version>${javafx.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-fxml</artifactId>
-			<version>${javafx.version}</version>
-		</dependency>
-	</dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.revenat</groupId>
+        <artifactId>javamm</artifactId>
+        <version>1.0</version>
+    </parent>
+    <artifactId>ide</artifactId>
+
+    <name>Javamm IDE</name>
+    <description>Simple GUI IDE for javamm programming language</description>
+
+    <properties>
+        <javafx.version>11.0.2</javafx.version>
+        <ikonli.icons.version>2.4.0</ikonli.icons.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.revenat</groupId>
+            <artifactId>vm</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-javafx</artifactId>
+            <version>${ikonli.icons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-materialdesign-pack</artifactId>
+            <version>${ikonli.icons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-devicons-pack</artifactId>
+            <version>${ikonli.icons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-typicons-pack</artifactId>
+            <version>${ikonli.icons.version}</version>
+        </dependency>
+    </dependencies>
 </project>

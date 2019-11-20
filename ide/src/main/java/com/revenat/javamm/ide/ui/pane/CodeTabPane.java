@@ -17,10 +17,35 @@
 
 package com.revenat.javamm.ide.ui.pane;
 
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
+import static java.lang.String.format;
+
 /**
+ * Container for {@linkplain CodeTab code tab} elements
+ *
  * @author Vitaliy Dragun
  */
 public final class CodeTabPane extends TabPane {
+
+    private int untitledCounter = 1;
+
+    public CodeTabPane() {
+        setTabClosingPolicy(TabClosingPolicy.ALL_TABS);
+    }
+
+    public void newCodeEditor() {
+        final String tabTitle = generateNewTabName();
+        final CodeEditorPane codeEditorPane = new CodeEditorPane();
+        final Tab tab = new CodeTab(tabTitle, codeEditorPane);
+
+        getTabs().add(tab); // add new tab
+        getSelectionModel().select(tab); // select new tab
+        codeEditorPane.requestFocus(); // focus on new tab
+    }
+
+    private String generateNewTabName() {
+        return format("Untitled-%s.javamm", untitledCounter++);
+    }
 }

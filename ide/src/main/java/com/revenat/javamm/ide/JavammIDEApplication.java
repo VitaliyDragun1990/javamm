@@ -17,6 +17,7 @@
 
 package com.revenat.javamm.ide;
 
+import com.revenat.javamm.ide.component.ComponentFactoryProvider;
 import com.revenat.javamm.ide.ui.listener.ActionListener;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -64,6 +65,6 @@ public class JavammIDEApplication extends Application {
 
     @Override
     public void stop() throws Exception {
-        // TODO Auto-generated method stub
+        ComponentFactoryProvider.getComponentFactory().release();
     }
 }

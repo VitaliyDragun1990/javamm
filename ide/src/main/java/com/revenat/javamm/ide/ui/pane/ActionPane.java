@@ -37,7 +37,7 @@ import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
 /**
- * Provides pane with buttons for every possible action that can be performed with the javamm IDE
+ * Manages state of the action pane control elements
  *
  * @author Vitaliy Dragun
  */
@@ -116,7 +116,7 @@ public final class ActionPane extends VBox implements ActionStateManager {
     @FXML
     private void initialize() {
         bindMenuItemsToCorrespondingToolbarButtons();
-        setDefaultControlElementsState();
+        setInitialControlElementsState();
         customizeButtonsTooltipWithHotKeyCombination();
     }
 
@@ -140,7 +140,7 @@ public final class ActionPane extends VBox implements ActionStateManager {
     /**
      * Sets default state for main menu items and toolbars buttons
      */
-    private void setDefaultControlElementsState() {
+    private void setInitialControlElementsState() {
         disableSaveAction();
         disableUndoAction();
         disableRedoAction();
@@ -166,10 +166,16 @@ public final class ActionPane extends VBox implements ActionStateManager {
         customizeButtonTooltipWithHotKeyCombination(tbTerminate, miTerminate);
     }
 
-    private void customizeButtonTooltipWithHotKeyCombination(final Button toolTipSource, final MenuItem hotKeySource) {
+    /**
+     * Customizes specified button tooltip with hot key combination from given menu item
+     *
+     * @param btn button which tooltip should be customized
+     * @param mi  menu item whose hot key combination should be used
+     */
+    private void customizeButtonTooltipWithHotKeyCombination(final Button btn, final MenuItem mi) {
         final String template = "%s (%s)";
-        toolTipSource.getTooltip().setText(format(template,
-            toolTipSource.getTooltip().getText(), hotKeySource.getAccelerator().getDisplayText()));
+        btn.getTooltip().setText(format(template,
+            btn.getTooltip().getText(), mi.getAccelerator().getDisplayText()));
     }
 
     @FXML
@@ -221,17 +227,17 @@ public final class ActionPane extends VBox implements ActionStateManager {
         actionListener.onRunAction();
     }
 
-    private void preserveCurrentStateAndDisable(final MenuItem... items) {
-        final List<MenuItem> menuItems = Arrays.asList(items);
-        controlElementsState = menuItems.stream().collect(toMap(identity(), MenuItem::isDisable));
-        menuItems.forEach(mi -> mi.setDisable(true));
-    }
-
     @FXML
     private void onTerminateAction(final ActionEvent event) {
         actionListener.onTerminateAction();
         restorePreservedState();
         disableTerminateAction();
+    }
+
+    private void preserveCurrentStateAndDisable(final MenuItem... items) {
+        final List<MenuItem> menuItems = Arrays.asList(items);
+        controlElementsState = menuItems.stream().collect(toMap(identity(), MenuItem::isDisable));
+        menuItems.forEach(mi -> mi.setDisable(true));
     }
 
     private void restorePreservedState() {

@@ -17,24 +17,31 @@
 
 package com.revenat.javamm.ide.ui.pane;
 
+import com.revenat.javamm.ide.component.Releasable;
+import com.revenat.javamm.ide.component.SyntaxHighlighter;
 import javafx.scene.layout.StackPane;
-
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
+
+import static com.revenat.javamm.ide.component.ComponentFactoryProvider.getComponentFactory;
+import static com.revenat.javamm.ide.util.ResourceUtils.getClassPathResource;
 
 /**
  * Pane with code area
  *
  * @author Vitaliy Dragun
  */
-public final class CodeEditorPane extends StackPane {
+public final class CodeEditorPane extends StackPane implements Releasable {
 
     private final CodeArea codeArea = new CodeArea();
+
+    private final SyntaxHighlighter syntaxHighlighter = getComponentFactory().createSyntaxHighlighter(codeArea);
 
     public CodeEditorPane() {
         enableLineNumeration();
         enableScrollingFacility();
+        enableSyntaxHighlighting();
     }
 
     @Override
@@ -42,11 +49,25 @@ public final class CodeEditorPane extends StackPane {
         codeArea.requestFocus();
     }
 
-    private void enableScrollingFacility() {
-        getChildren().add(new VirtualizedScrollPane<>(codeArea));
+    @Override
+    public void release() {
+        syntaxHighlighter.disable();
     }
 
     private void enableLineNumeration() {
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
+    }
+
+    private void enableScrollingFacility() {
+        getChildren().add(new VirtualizedScrollPane<>(codeArea));
+    }
+
+    private void enableSyntaxHighlighting() {
+        loadSyntaxStyles();
+        syntaxHighlighter.enable();
+    }
+
+    private void loadSyntaxStyles() {
+        getStylesheets().add(getClassPathResource("/style/code-editor-pane.css").toExternalForm());
     }
 }

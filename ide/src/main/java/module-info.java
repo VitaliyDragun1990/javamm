@@ -35,6 +35,7 @@ module javamm.ide {
     requires org.kordamp.ikonli.typicons;
     requires richtextfx;
     requires flowless;
+    requires reactfx;
 
     exports com.revenat.javamm.ide to javafx.graphics;
     exports com.revenat.javamm.ide.controller to javafx.fxml;

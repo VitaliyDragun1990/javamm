@@ -17,6 +17,9 @@
 
 package com.revenat.javamm.ide.ui.pane.action;
 
+import com.revenat.javamm.ide.component.VirtualMachineRunner;
+import com.revenat.javamm.ide.component.VirtualMachineRunner.CompleteStatus;
+import com.revenat.javamm.ide.component.VirtualMachineRunner.VirtualMachineRunCompletedListener;
 import com.revenat.javamm.ide.ui.listener.ActionListener;
 import com.revenat.javamm.ide.ui.listener.ActionStateManager;
 import com.revenat.javamm.ide.ui.pane.action.state.ActionPaneState;
@@ -39,7 +42,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Vitaliy Dragun
  */
-public final class ActionPane extends VBox implements ActionStateManager {
+public final class ActionPane extends VBox implements ActionStateManager, VirtualMachineRunCompletedListener {
 
     @FXML
     private MenuItem miNew;
@@ -204,6 +207,11 @@ public final class ActionPane extends VBox implements ActionStateManager {
     @FXML
     private void onTerminateAction(final ActionEvent event) {
         actionState.onTerminate();
+    }
+
+    @Override
+    public void onRunCompleted(final CompleteStatus status) {
+        actionState.onRunCompleted();
     }
 
     @Override

@@ -17,10 +17,15 @@
 
 package com.revenat.javamm.ide.ui.pane.code;
 
+import com.revenat.javamm.code.fragment.SourceCode;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Container for {@linkplain CodeTab code tab} elements
@@ -45,6 +50,10 @@ public final class CodeTabPane extends TabPane {
         codeEditorPane.requestFocus(); // set focus on code editing area
     }
 
+    public List<SourceCode> getAllSourceCode() {
+        return collectSourceCodeFromAllTabs();
+    }
+
     private void selectSpecifiedTab(final Tab tab) {
         getSelectionModel().select(tab);
     }
@@ -55,5 +64,9 @@ public final class CodeTabPane extends TabPane {
 
     private String generateNewTabName() {
         return format("Untitled-%s.javamm", untitledCounter++);
+    }
+
+    private List<SourceCode> collectSourceCodeFromAllTabs() {
+        return getTabs().stream().map(t -> ((CodeTab) t).getSourceCode()).collect(toList());
     }
 }

@@ -17,13 +17,17 @@
 
 package com.revenat.javamm.ide.component.impl;
 
-import com.revenat.javamm.ide.component.SyntaxHighlighter;
+import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.ide.component.ComponentFactory;
+import com.revenat.javamm.ide.component.SyntaxHighlighter;
+import com.revenat.javamm.ide.component.VirtualMachineRunner;
+import com.revenat.javamm.vm.VirtualMachine;
+import com.revenat.javamm.vm.VirtualMachineBuilder;
+import org.fxmisc.richtext.CodeArea;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import org.fxmisc.richtext.CodeArea;
 
 /**
  * @author Vitaliy Dragun
@@ -35,6 +39,12 @@ public class ComponentFactoryImpl implements ComponentFactory {
     @Override
     public SyntaxHighlighter createSyntaxHighlighter(final CodeArea codeArea) {
         return new JavammAsyncSyntaxHighlighter(codeArea, executorService);
+    }
+
+    @Override
+    public VirtualMachineRunner createVirtualMachineRunner(final List<SourceCode> sourceCodes) {
+        final VirtualMachine virtualMachine = new VirtualMachineBuilder().build();
+        return new VirtualMachineRunnerImpl(virtualMachine, sourceCodes);
     }
 
     @Override

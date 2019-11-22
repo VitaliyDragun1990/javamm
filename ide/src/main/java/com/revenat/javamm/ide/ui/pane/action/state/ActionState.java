@@ -38,5 +38,7 @@ public interface ActionState {
 
     void onRun();
 
+    void onRunCompleted();
+
     void onTerminate();
 }

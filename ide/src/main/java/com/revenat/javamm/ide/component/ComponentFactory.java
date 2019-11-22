@@ -17,7 +17,10 @@
 
 package com.revenat.javamm.ide.component;
 
+import com.revenat.javamm.code.fragment.SourceCode;
 import org.fxmisc.richtext.CodeArea;
+
+import java.util.List;
 
 /**
  * Responsible for building all kind of components
@@ -34,4 +37,12 @@ public interface ComponentFactory extends Releasable {
      * @return instance of asynchronous syntax highlighter
      */
     SyntaxHighlighter createSyntaxHighlighter(CodeArea codeArea);
+
+    /**
+     * Creates new instance of {@linkplain VirtualMachineRunner virtual machine runner}
+     *
+     * @param sourceCodes list of {@linkplain SourceCode source code} which should be executed by virtual machine
+     * @return new instance of {@linkplain VirtualMachineRunner virtual machine runner}
+     */
+    VirtualMachineRunner createVirtualMachineRunner(List<SourceCode> sourceCodes);
 }

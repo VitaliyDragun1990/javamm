@@ -15,37 +15,36 @@
  *
  */
 
-package com.revenat.javamm.ide.ui.pane.code;
+package com.revenat.javamm.ide.model;
 
 import com.revenat.javamm.code.fragment.SourceCode;
-import com.revenat.javamm.ide.model.StringSourceCode;
-import javafx.scene.control.Tab;
+
+import java.time.Instant;
+import java.util.List;
 
 import static java.util.Objects.requireNonNull;
 
 /**
- * Represents named tab with {@linkplain CodeEditorPane code editor pane}
- *
  * @author Vitaliy Dragun
  */
-public class CodeTab extends Tab {
+public class StringSourceCode implements SourceCode {
 
     private final String moduleName;
 
-    public CodeTab(final String moduleName, final CodeEditorPane content) {
-        super(requireNonNull(moduleName), requireNonNull(content));
-        this.moduleName = moduleName;
+    private final List<String> lines;
+
+    public StringSourceCode(final String moduleName, final List<String> lines) {
+        this.moduleName = requireNonNull(moduleName);
+        this.lines = List.copyOf(lines);
     }
 
+    @Override
     public String getModuleName() {
         return moduleName;
     }
 
-    public SourceCode getSourceCode() {
-        return new StringSourceCode(moduleName, getCodeEditorPane().getCodeLines());
-    }
-
-    private CodeEditorPane getCodeEditorPane() {
-        return (CodeEditorPane) getContent();
+    @Override
+    public List<String> getLines() {
+        return lines;
     }
 }

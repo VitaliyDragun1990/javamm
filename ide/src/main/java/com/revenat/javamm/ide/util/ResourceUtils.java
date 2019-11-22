@@ -19,6 +19,9 @@ package com.revenat.javamm.ide.util;
 
 import com.revenat.javamm.code.exception.ConfigException;
 
+import javafx.fxml.FXMLLoader;
+
+import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -29,11 +32,44 @@ public final class ResourceUtils {
     private ResourceUtils() {
     }
 
+    /**
+     * Returns {@linkplain URL url} for specified {@code classpathResourceName}
+     *
+     * @param classpathResourceName class path to requested resource
+     * @return {@linkplain URL url} for class path resource
+     */
     public static URL getClassPathResource(final String classpathResourceName) {
         final URL url = ResourceUtils.class.getResource(classpathResourceName);
         if (url == null) {
             throw new ConfigException("Class path resource not found: " + classpathResourceName);
         }
         return url;
+    }
+
+    /**
+     * Loads data from {@code *.fxml} resource, making provided {@code component} both {@code root}
+     * and {@code controller} for specified resource
+     *
+     * @param component component into which data will be loaded
+     * @param resource  {@code *.fxml} resource to load data from
+     */
+    public static void loadFromFxmlResource(final Object component, final String resource) {
+        FXMLLoader fxmlLoader = createLoader(component, resource);
+        loadResource(fxmlLoader);
+    }
+
+    private static FXMLLoader createLoader(final Object component, final String resource) {
+        FXMLLoader fxmlLoader = new FXMLLoader(component.getClass().getResource(resource));
+        fxmlLoader.setRoot(component);
+        fxmlLoader.setController(component);
+        return fxmlLoader;
+    }
+
+    private static void loadResource(final FXMLLoader fxmlLoader) {
+        try {
+            fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

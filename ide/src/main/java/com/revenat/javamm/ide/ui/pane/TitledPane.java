@@ -15,17 +15,32 @@
  *
  */
 
-package com.revenat.javamm.ide.ui.pane.console;
+package com.revenat.javamm.ide.ui.pane;
 
-import com.revenat.javamm.ide.ui.pane.TitledPane;
+import javafx.fxml.FXML;
+import javafx.scene.control.Tab;
 import javafx.scene.layout.BorderPane;
+
+import static com.revenat.javamm.ide.util.ResourceUtils.loadFromFxmlResource;
+import static com.revenat.javamm.ide.util.UIUtils.closeTitledPane;
 
 /**
  * @author Vitaliy Dragun
  */
-public final class ConsolePane extends TitledPane {
+public abstract class TitledPane extends BorderPane {
 
-    public ConsolePane() {
-        super("/javafx/console-pane.fxml");
+    @FXML
+    private Tab tbTitle;
+
+    public TitledPane(final String fxmlResource) {
+        loadFromFxmlResource(this, fxmlResource);
+        setCloseWholePaneOnRequest();
+    }
+
+    private void setCloseWholePaneOnRequest() {
+        tbTitle.setOnCloseRequest(event -> {
+            event.consume();
+            closeTitledPane(this);
+        });
     }
 }

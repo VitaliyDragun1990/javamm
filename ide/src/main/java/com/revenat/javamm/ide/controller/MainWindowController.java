@@ -23,12 +23,13 @@ import com.revenat.javamm.ide.component.VirtualMachineRunner;
 import com.revenat.javamm.ide.component.VirtualMachineRunner.CompleteStatus;
 import com.revenat.javamm.ide.component.VirtualMachineRunner.VirtualMachineRunCompletedListener;
 import com.revenat.javamm.ide.ui.listener.ActionListener;
+import com.revenat.javamm.ide.ui.pane.PaneManager;
 import com.revenat.javamm.ide.ui.pane.action.ActionPane;
 import com.revenat.javamm.ide.ui.pane.code.CodeTabPane;
-import com.revenat.javamm.ide.ui.pane.console.ConsolePane;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.SplitPane;
 import javafx.stage.Stage;
 
 /**
@@ -44,7 +45,9 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
     private CodeTabPane codeTabPane;
 
     @FXML
-    private ConsolePane consolePane;
+    private SplitPane spWork;
+
+    private final PaneManager paneManager = new PaneManager();
 
     private VirtualMachineRunner virtualMachineRunner;
 
@@ -107,6 +110,7 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
 
     @Override
     public void onRunAction() {
+        paneManager.displayConsolePane(spWork);
         virtualMachineRunner = createVirtualMachineRunner();
         virtualMachineRunner.run(this);
     }

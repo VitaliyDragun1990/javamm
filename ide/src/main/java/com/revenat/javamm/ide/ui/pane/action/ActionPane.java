@@ -24,6 +24,7 @@ import com.revenat.javamm.ide.ui.listener.ActionListener;
 import com.revenat.javamm.ide.ui.listener.ActionStateManager;
 import com.revenat.javamm.ide.ui.pane.action.state.ActionPaneState;
 import com.revenat.javamm.ide.ui.pane.action.state.ActionState;
+import com.revenat.javamm.ide.util.ResourceUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,6 +35,7 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.Map;
 
+import static com.revenat.javamm.ide.util.ResourceUtils.loadFromFxmlResource;
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
@@ -97,11 +99,8 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
 
     private ActionState actionState;
 
-    public ActionPane() throws IOException {
-        final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/javafx/action-pane.fxml"));
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
-        fxmlLoader.load();
+    public ActionPane() {
+        loadFromFxmlResource(this, "/javafx/action-pane.fxml");
     }
 
     public void setActionListener(final ActionListener actionListener) {

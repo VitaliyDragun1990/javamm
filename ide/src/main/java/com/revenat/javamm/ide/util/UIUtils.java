@@ -17,19 +17,29 @@
 
 package com.revenat.javamm.ide.util;
 
+import com.revenat.javamm.ide.ui.pane.TitledPane;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.SplitPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public final class UIUtils {
 
     private UIUtils() {
     }
 
+    /**
+     * Centers specified {@code stage} on user's screen according to provided {@code withPercentage} and {@code heightPercentage}
+     *
+     * @param stage            state to center on user's screen
+     * @param withPercentage   how much percent from available screen width given {@code stage} should occupy
+     * @param heightPercentage how much percent from available screen height given {@code stage} should occupy
+     */
     public static void centerByScreen(final Stage stage, final double withPercentage, final double heightPercentage) {
         final Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         final double width = primaryScreenBounds.getWidth() * withPercentage;
@@ -37,7 +47,28 @@ public final class UIUtils {
 
         stage.setWidth(width);
         stage.setHeight(height);
+
         stage.setX((primaryScreenBounds.getWidth() - width) / 2);
         stage.setY((primaryScreenBounds.getHeight() - height) / 2);
+    }
+
+    /**
+     * Close titled pane defined by provided {@code pane} parameter
+     *
+     * @param pane pane to close
+     */
+    public static void closeTitledPane(final TitledPane pane) {
+        findSplitPaneParent(pane).getItems().remove(pane);
+    }
+
+    private static SplitPane findSplitPaneParent(final TitledPane node) {
+        Parent parent = node.getParent();
+        while (parent != null) {
+            if (parent instanceof SplitPane) {
+                return (SplitPane) parent;
+            }
+            parent = parent.getParent();
+        }
+        throw new IllegalStateException("SplitPane parent not found");
     }
 }

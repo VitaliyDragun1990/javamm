@@ -30,10 +30,8 @@
         <ActionPane fx:id="actionPane" BorderPane.alignment="CENTER" />
     </top>
     <center>
-        <SplitPane dividerPositions="0.8" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0"
-                   BorderPane.alignment="CENTER">
-            <CodeTabPane fx:id="codeTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="ALL_TABS" />
-            <ConsolePane fx:id="consolePane" prefHeight="200.0" prefWidth="600.0"/>
+        <SplitPane fx:id="spWork" orientation="VERTICAL"  BorderPane.alignment="CENTER">
+            <CodeTabPane fx:id="codeTabPane" />
         </SplitPane>
     </center>
 </BorderPane>

@@ -42,6 +42,7 @@ module javamm.ide {
     exports com.revenat.javamm.ide.ui.pane.action to javafx.fxml;
 
     opens com.revenat.javamm.ide.controller to javafx.fxml;
+    opens com.revenat.javamm.ide.ui.pane to javafx.fxml;
     opens com.revenat.javamm.ide.ui.pane.action to javafx.fxml;
     opens com.revenat.javamm.ide.ui.pane.code to javafx.fxml;
     opens com.revenat.javamm.ide.ui.pane.console to javafx.fxml;

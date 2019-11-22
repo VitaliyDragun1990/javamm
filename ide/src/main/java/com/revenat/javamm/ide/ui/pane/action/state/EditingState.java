@@ -90,6 +90,11 @@ class EditingState extends ActionPaneState {
     }
 
     @Override
+    public void onRunCompleted() {
+        // not available in this state
+    }
+
+    @Override
     public void onTerminate() {
         // not available in this state
     }

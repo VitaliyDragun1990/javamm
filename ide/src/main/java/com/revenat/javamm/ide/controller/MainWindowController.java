@@ -17,6 +17,7 @@
 
 package com.revenat.javamm.ide.controller;
 
+import com.revenat.javamm.code.component.Console;
 import com.revenat.javamm.ide.component.ComponentFactoryProvider;
 import com.revenat.javamm.ide.component.VirtualMachineRunner;
 import com.revenat.javamm.ide.component.VirtualMachineRunner.CompleteStatus;
@@ -122,6 +123,7 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
 
     private VirtualMachineRunner createVirtualMachineRunner() {
         return ComponentFactoryProvider.getComponentFactory().createVirtualMachineRunner(
+            Console.DEFAULT,
             codeTabPane.getAllSourceCode()
         );
     }

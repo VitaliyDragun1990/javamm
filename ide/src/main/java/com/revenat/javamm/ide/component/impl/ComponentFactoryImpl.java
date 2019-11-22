@@ -17,6 +17,7 @@
 
 package com.revenat.javamm.ide.component.impl;
 
+import com.revenat.javamm.code.component.Console;
 import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.ide.component.ComponentFactory;
 import com.revenat.javamm.ide.component.SyntaxHighlighter;
@@ -42,8 +43,10 @@ public class ComponentFactoryImpl implements ComponentFactory {
     }
 
     @Override
-    public VirtualMachineRunner createVirtualMachineRunner(final List<SourceCode> sourceCodes) {
-        final VirtualMachine virtualMachine = new VirtualMachineBuilder().build();
+    public VirtualMachineRunner createVirtualMachineRunner(final Console console, final List<SourceCode> sourceCodes) {
+        final VirtualMachine virtualMachine = new VirtualMachineBuilder()
+            .setConsole(console)
+            .build();
         return new VirtualMachineRunnerImpl(virtualMachine, sourceCodes);
     }
 

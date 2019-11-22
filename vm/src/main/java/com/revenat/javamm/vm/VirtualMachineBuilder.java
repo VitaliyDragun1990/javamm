@@ -17,6 +17,7 @@
 
 package com.revenat.javamm.vm;
 
+import com.revenat.javamm.code.component.Console;
 import com.revenat.javamm.code.fragment.ByteCode;
 import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.compiler.Compiler;
@@ -35,18 +36,25 @@ import static java.util.Objects.requireNonNull;
  */
 public class VirtualMachineBuilder {
 
+    private Console console = Console.DEFAULT;
+
+    public VirtualMachineBuilder setConsole(final Console console) {
+        this.console = requireNonNull(console);
+        return this;
+    }
+
     public VirtualMachine build() {
         return new VirtualMachineImpl(
                 buildCompilerConfiguration().getCompiler(),
                 buildInterpreterConfigurator().getInterpreter());
     }
 
-    protected CompilerConfigurator buildCompilerConfiguration() {
+    private CompilerConfigurator buildCompilerConfiguration() {
         return new CompilerConfigurator();
     }
 
-    protected InterpreterConfigurator buildInterpreterConfigurator() {
-        return new InterpreterConfigurator();
+    private InterpreterConfigurator buildInterpreterConfigurator() {
+        return new InterpreterConfigurator(console);
     }
 
     private static final class VirtualMachineImpl implements VirtualMachine {

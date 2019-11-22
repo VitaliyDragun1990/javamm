@@ -87,6 +87,12 @@ class RunningState extends ActionPaneState {
     }
 
     @Override
+    public void onRunCompleted() {
+        setCurrentStateByName(EDITING);
+        currentState.initialize();
+    }
+
+    @Override
     public void onTerminate() {
         actionListener.onTerminateAction();
 

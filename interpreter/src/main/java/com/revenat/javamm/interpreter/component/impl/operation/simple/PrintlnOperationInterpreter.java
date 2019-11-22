@@ -17,9 +17,12 @@
 
 package com.revenat.javamm.interpreter.component.impl.operation.simple;
 
+import com.revenat.javamm.code.component.Console;
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
 import com.revenat.javamm.interpreter.component.impl.operation.AbstractOperationInterpreter;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Default operation interpreter for {@code println} operation
@@ -29,8 +32,11 @@ import com.revenat.javamm.interpreter.component.impl.operation.AbstractOperation
  */
 public class PrintlnOperationInterpreter extends AbstractOperationInterpreter<PrintlnOperation> {
 
-    public PrintlnOperationInterpreter(final ExpressionContext expressionContext) {
+    private final Console console;
+
+    public PrintlnOperationInterpreter(final ExpressionContext expressionContext, final Console console) {
         super(expressionContext);
+        this.console = requireNonNull(console);
     }
 
     @Override
@@ -40,6 +46,6 @@ public class PrintlnOperationInterpreter extends AbstractOperationInterpreter<Pr
 
     @Override
     protected void interpretOperation(final PrintlnOperation operation) {
-        System.out.println(operation.getExpression().getValue(expressionContext));
+        console.outPrintln(operation.getExpression().getValue(expressionContext));
     }
 }

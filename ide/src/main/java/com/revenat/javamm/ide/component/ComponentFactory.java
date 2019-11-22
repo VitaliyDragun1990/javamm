@@ -17,6 +17,7 @@
 
 package com.revenat.javamm.ide.component;
 
+import com.revenat.javamm.code.component.Console;
 import com.revenat.javamm.code.fragment.SourceCode;
 import org.fxmisc.richtext.CodeArea;
 
@@ -41,8 +42,9 @@ public interface ComponentFactory extends Releasable {
     /**
      * Creates new instance of {@linkplain VirtualMachineRunner virtual machine runner}
      *
+     * @param console {@linkplain Console console} for virtual machine to send messages to
      * @param sourceCodes list of {@linkplain SourceCode source code} which should be executed by virtual machine
      * @return new instance of {@linkplain VirtualMachineRunner virtual machine runner}
      */
-    VirtualMachineRunner createVirtualMachineRunner(List<SourceCode> sourceCodes);
+    VirtualMachineRunner createVirtualMachineRunner(Console console, List<SourceCode> sourceCodes);
 }

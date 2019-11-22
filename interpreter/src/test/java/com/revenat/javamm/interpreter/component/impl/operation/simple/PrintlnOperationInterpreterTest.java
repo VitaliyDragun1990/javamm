@@ -20,6 +20,7 @@ package com.revenat.javamm.interpreter.component.impl.operation.simple;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import com.revenat.javamm.code.component.Console;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionContextDummy;
@@ -54,7 +55,7 @@ class PrintlnOperationInterpreterTest {
     @BeforeEach
     void setUp() {
         System.setOut(new PrintStream(memoryOutput));
-        interpreter = new PrintlnOperationInterpreter(new ExpressionContextDummy());
+        interpreter = new PrintlnOperationInterpreter(new ExpressionContextDummy(), Console.DEFAULT);
     }
 
     @AfterAll

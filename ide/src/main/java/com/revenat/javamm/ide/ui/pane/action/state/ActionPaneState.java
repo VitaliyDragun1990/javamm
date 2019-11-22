@@ -102,7 +102,7 @@ public class ActionPaneState implements ActionState {
 
     @Override
     public void onRunCompleted() {
-        // do nothing for now
+        currentState.onRunCompleted();
     }
 
     @Override

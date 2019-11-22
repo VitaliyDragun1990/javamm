@@ -15,7 +15,7 @@
  *
  */
 
-package com.revenat.javamm.ide.ui.pane;
+package com.revenat.javamm.ide.ui.pane.code;
 
 import com.revenat.javamm.ide.component.Releasable;
 import com.revenat.javamm.ide.component.SyntaxHighlighter;

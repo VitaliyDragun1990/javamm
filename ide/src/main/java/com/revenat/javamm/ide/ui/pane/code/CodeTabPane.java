@@ -15,7 +15,7 @@
  *
  */
 
-package com.revenat.javamm.ide.ui.pane;
+package com.revenat.javamm.ide.ui.pane.code;
 
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -38,11 +38,19 @@ public final class CodeTabPane extends TabPane {
     public void newCodeEditor() {
         final String tabTitle = generateNewTabName();
         final CodeEditorPane codeEditorPane = new CodeEditorPane();
-        final Tab tab = new CodeTab(tabTitle, codeEditorPane);
+        final Tab newCodeTab = new CodeTab(tabTitle, codeEditorPane);
 
-        getTabs().add(tab); // add new tab
-        getSelectionModel().select(tab); // select new tab
-        codeEditorPane.requestFocus(); // focus on new tab
+        addTab(newCodeTab);
+        selectSpecifiedTab(newCodeTab);
+        codeEditorPane.requestFocus(); // set focus on code editing area
+    }
+
+    private void selectSpecifiedTab(final Tab tab) {
+        getSelectionModel().select(tab);
+    }
+
+    private void addTab(final Tab tab) {
+        getTabs().add(tab);
     }
 
     private String generateNewTabName() {

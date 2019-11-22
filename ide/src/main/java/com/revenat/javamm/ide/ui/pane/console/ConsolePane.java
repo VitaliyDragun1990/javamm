@@ -15,27 +15,12 @@
  *
  */
 
-package com.revenat.javamm.ide.ui.pane;
+package com.revenat.javamm.ide.ui.pane.console;
 
-import javafx.scene.control.Tab;
-
-import static java.util.Objects.requireNonNull;
+import javafx.scene.layout.BorderPane;
 
 /**
- * Represents named tab with {@linkplain CodeEditorPane code editor pane}
- *
  * @author Vitaliy Dragun
  */
-public class CodeTab extends Tab {
-
-    private final String moduleName;
-
-    public CodeTab(final String moduleName, final CodeEditorPane content) {
-        super(requireNonNull(moduleName), requireNonNull(content));
-        this.moduleName = moduleName;
-    }
-
-    public String getModuleName() {
-        return moduleName;
-    }
+public final class ConsolePane extends BorderPane {
 }

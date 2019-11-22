@@ -15,10 +15,12 @@
  *
  */
 
-package com.revenat.javamm.ide.ui.pane;
+package com.revenat.javamm.ide.ui.pane.action;
 
 import com.revenat.javamm.ide.ui.listener.ActionListener;
 import com.revenat.javamm.ide.ui.listener.ActionStateManager;
+import com.revenat.javamm.ide.ui.pane.action.state.ActionPaneState;
+import com.revenat.javamm.ide.ui.pane.action.state.ActionState;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,14 +29,10 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toMap;
 
 /**
  * Manages state of the action pane control elements
@@ -94,9 +92,7 @@ public final class ActionPane extends VBox implements ActionStateManager {
     @FXML
     private Button tbTerminate;
 
-    private ActionListener actionListener;
-
-    private Map<MenuItem, Boolean> controlElementsState;
+    private ActionState actionState;
 
     public ActionPane() throws IOException {
         final FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/javafx/action-pane.fxml"));
@@ -106,7 +102,7 @@ public final class ActionPane extends VBox implements ActionStateManager {
     }
 
     public void setActionListener(final ActionListener actionListener) {
-        this.actionListener = requireNonNull(actionListener);
+        this.actionState = ActionPaneState.create(this, requireNonNull(actionListener));
     }
 
     /**
@@ -116,7 +112,6 @@ public final class ActionPane extends VBox implements ActionStateManager {
     @FXML
     private void initialize() {
         bindMenuItemsToCorrespondingToolbarButtons();
-        setInitialControlElementsState();
         customizeButtonsTooltipWithHotKeyCombination();
     }
 
@@ -135,18 +130,6 @@ public final class ActionPane extends VBox implements ActionStateManager {
 
         miRun.disableProperty().bindBidirectional(tbRun.disableProperty());
         miTerminate.disableProperty().bindBidirectional(tbTerminate.disableProperty());
-    }
-
-    /**
-     * Sets default state for main menu items and toolbars buttons
-     */
-    private void setInitialControlElementsState() {
-        disableSaveAction();
-        disableUndoAction();
-        disableRedoAction();
-        disableFormatAction();
-        disableRunAction();
-        disableTerminateAction();
     }
 
     /**
@@ -180,74 +163,57 @@ public final class ActionPane extends VBox implements ActionStateManager {
 
     @FXML
     private void onNewAction(final ActionEvent event) {
-        actionListener.onNewAction();
-        enableFormatAction();
-        enableRunAction();
+        actionState.onNew();
     }
 
     @FXML
     private void onOpenAction(final ActionEvent event) {
-        if (actionListener.onOpenAction()) {
-            enableFormatAction();
-            enableRunAction();
-        }
+        actionState.onOpen();
     }
 
     @FXML
     private void onSaveAction(final ActionEvent event) {
-        if (actionListener.onSaveAction()) {
-            disableSaveAction();
-        }
+        actionState.onSave();
     }
 
     @FXML
     private void onExitAction(final ActionEvent event) {
-        actionListener.onExitAction();
+        actionState.onExit();
     }
 
     @FXML
     private void onUndoAction(final ActionEvent event) {
-        actionListener.onUndoAction();
+        actionState.onUndo();
     }
 
     @FXML
     private void onRedoAction(final ActionEvent event) {
-        actionListener.onRedoAction();
+        actionState.onRedo();
     }
 
     @FXML
     private void onFormatAction(final ActionEvent event) {
-        actionListener.onFormatAction();
+        actionState.onFormat();
     }
 
     @FXML
     private void onRunAction(final ActionEvent event) {
-        preserveCurrentStateAndDisable(miNew, miOpen, miSave, miExit, miUndo, miRedo, miFormat, miRun);
-        enableTerminateAction();
-        actionListener.onRunAction();
+        actionState.onRun();
     }
 
     @FXML
     private void onTerminateAction(final ActionEvent event) {
-        actionListener.onTerminateAction();
-        restorePreservedState();
-        disableTerminateAction();
-    }
-
-    private void preserveCurrentStateAndDisable(final MenuItem... items) {
-        final List<MenuItem> menuItems = Arrays.asList(items);
-        controlElementsState = menuItems.stream().collect(toMap(identity(), MenuItem::isDisable));
-        menuItems.forEach(mi -> mi.setDisable(true));
-    }
-
-    private void restorePreservedState() {
-        controlElementsState.forEach(MenuItem::setDisable);
-        controlElementsState.clear();
+        actionState.onTerminate();
     }
 
     @Override
     public void enableNewAction() {
         miNew.setDisable(false);
+    }
+
+    @Override
+    public boolean isNewActionEnabled() {
+        return !miNew.isDisable();
     }
 
     @Override
@@ -261,6 +227,11 @@ public final class ActionPane extends VBox implements ActionStateManager {
     }
 
     @Override
+    public boolean isOpenActionEnabled() {
+        return !miOpen.isDisable();
+    }
+
+    @Override
     public void disableOpenAction() {
         miOpen.setDisable(true);
     }
@@ -268,6 +239,11 @@ public final class ActionPane extends VBox implements ActionStateManager {
     @Override
     public void enableSaveAction() {
         miSave.setDisable(false);
+    }
+
+    @Override
+    public boolean isSaveActionEnabled() {
+        return !miSave.isDisable();
     }
 
     @Override
@@ -281,6 +257,11 @@ public final class ActionPane extends VBox implements ActionStateManager {
     }
 
     @Override
+    public boolean isExitActionEnabled() {
+        return !miExit.isDisable();
+    }
+
+    @Override
     public void disableExitAction() {
         miExit.setDisable(true);
     }
@@ -288,6 +269,11 @@ public final class ActionPane extends VBox implements ActionStateManager {
     @Override
     public void enableUndoAction() {
         miUndo.setDisable(false);
+    }
+
+    @Override
+    public boolean isUndoActionEnabled() {
+        return !miUndo.isDisable();
     }
 
     @Override
@@ -301,6 +287,11 @@ public final class ActionPane extends VBox implements ActionStateManager {
     }
 
     @Override
+    public boolean isRedoActionEnabled() {
+        return !miRedo.isDisable();
+    }
+
+    @Override
     public void disableRedoAction() {
         miRedo.setDisable(true);
     }
@@ -308,6 +299,11 @@ public final class ActionPane extends VBox implements ActionStateManager {
     @Override
     public void enableFormatAction() {
         miFormat.setDisable(false);
+    }
+
+    @Override
+    public boolean isFormatActionEnabled() {
+        return !miFormat.isDisable();
     }
 
     @Override
@@ -321,6 +317,11 @@ public final class ActionPane extends VBox implements ActionStateManager {
     }
 
     @Override
+    public boolean isRunActionEnabled() {
+        return !miRun.isDisable();
+    }
+
+    @Override
     public void disableRunAction() {
         miRun.setDisable(true);
     }
@@ -328,6 +329,11 @@ public final class ActionPane extends VBox implements ActionStateManager {
     @Override
     public void enableTerminateAction() {
         miTerminate.setDisable(false);
+    }
+
+    @Override
+    public boolean isTerminatedActionEnabled() {
+        return !miTerminate.isDisable();
     }
 
     @Override

@@ -18,9 +18,9 @@
 package com.revenat.javamm.ide.controller;
 
 import com.revenat.javamm.ide.ui.listener.ActionListener;
-import com.revenat.javamm.ide.ui.pane.ActionPane;
-import com.revenat.javamm.ide.ui.pane.CodeTabPane;
-import com.revenat.javamm.ide.ui.pane.ConsolePane;
+import com.revenat.javamm.ide.ui.pane.action.ActionPane;
+import com.revenat.javamm.ide.ui.pane.code.CodeTabPane;
+import com.revenat.javamm.ide.ui.pane.console.ConsolePane;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;

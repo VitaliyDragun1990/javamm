@@ -23,17 +23,22 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.reactfx.Subscription;
+import org.reactfx.util.Try;
 
 import java.time.Duration;
 import java.util.Collection;
-import java.util.Optional;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.revenat.javamm.code.syntax.Keywords.ALL_KEYWORDS;
+import static java.lang.String.format;
+import static java.lang.String.join;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
+import static java.util.Map.entry;
+import static java.util.stream.Collectors.joining;
 
 
 /**
@@ -43,35 +48,26 @@ import static java.util.Collections.singleton;
  */
 public class JavammAsyncSyntaxHighlighter implements SyntaxHighlighter {
 
-    private static final String[] KEYWORDS = ALL_KEYWORDS.toArray(new String[0]);
-
-    private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
-
-    private static final String PAREN_PATTERN = "[()]";
-
-    private static final String BRACE_PATTERN = "[{}]";
-
-    private static final String BRACKET_PATTERN = "[\\[\\]]";
-
-    private static final String SEMICOLON_PATTERN = ";";
-
-    private static final String DOUBLE_QUOTED_STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
-
-    private static final String SINGLE_QUOTED_STRING_PATTERN = "'([^'\\\\]|\\\\.)*'";
-
-    private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
-
-    private static final Pattern PATTERN = Pattern.compile(
-        "(?<KEYWORD>" + KEYWORD_PATTERN + ")" +
-            "|(?<PAREN>" + PAREN_PATTERN + ")" +
-            "|(?<BRACE>" + BRACE_PATTERN + ")" +
-            "|(?<BRACKET>" + BRACKET_PATTERN + ")" +
-            "|(?<SEMICOLON>" + SEMICOLON_PATTERN + ")" +
-            "|(?<STRING>" + DOUBLE_QUOTED_STRING_PATTERN + "|" + SINGLE_QUOTED_STRING_PATTERN + ")" +
-            "|(?<COMMENT>" + COMMENT_PATTERN + ")"
+    private static final Map<String, String> GROUP_PATTERN_MAP = Map.ofEntries(
+        // Keywords set
+        entry("KEYWORD", format("\\b(%s)\\b", join("|", ALL_KEYWORDS))),
+        // String literals: "..." or "...\n or '...' or '...\n
+        entry("STRING", format("%s|%s", "\".*?[\"\\n]", "'.*?['\\n]")),
+        // Comments: //... \n or /* ... */ or /* ... end file
+        entry("COMMENT", format("%s|%s", "\\[^\n]*", "/\\*(.|\\R)*?(\\*/|\\z)"))
+    // () - parentheses set
+    //    entry("PAREN", "[()]"),
+    // {} -  curly braces set
+    //    entry("BRACE", "[{}]"),
+    // [] - square brackets set
+    //    entry("BRACKET", "[\\[\\]]")
     );
 
+    private static final Pattern PATTERN = mergeAllGroups();
+
     private static final String SAMPLE_CODE = buildSampleCode();
+
+    private static final int FIFTY_MILLIS = 50;
 
     private final CodeArea codeArea;
 
@@ -84,20 +80,21 @@ public class JavammAsyncSyntaxHighlighter implements SyntaxHighlighter {
         this.executorService = executorService;
     }
 
+    private static Pattern mergeAllGroups() {
+        return Pattern.compile(
+            GROUP_PATTERN_MAP.entrySet()
+                .stream().map(e -> format("(?<%s>%s)", e.getKey(), e.getValue()))
+                .collect(joining("|"))
+        );
+    }
+
     @Override
     public void enable() {
         cleanupWhenDone = codeArea.multiPlainChanges()
-            .successionEnds(Duration.ofMillis(500))
+            .successionEnds(Duration.ofMillis(FIFTY_MILLIS))
             .supplyTask(this::computeHighlightingAsync)
             .awaitLatest(codeArea.multiPlainChanges())
-            .filterMap(t -> {
-                if (t.isSuccess()) {
-                    return Optional.of(t.get());
-                } else {
-                    t.getFailure().printStackTrace();
-                    return Optional.empty();
-                }
-            })
+            .filterMap(Try::toOptional)
             .subscribe(this::applyHighlighting);
         // FIXME remove
         codeArea.replaceText(0, 0, SAMPLE_CODE);
@@ -144,45 +141,40 @@ public class JavammAsyncSyntaxHighlighter implements SyntaxHighlighter {
     }
 
     private String determineStyleClass(final Matcher matcher) {
-        return matchForGroup("KEYWORD", matcher)
-            .or(() -> matchForGroup("PAREN", matcher))
-            .or(() -> matchForGroup("BRACE", matcher))
-            .or(() -> matchForGroup("BRACKET", matcher))
-            .or(() -> matchForGroup("SEMICOLON", matcher))
-            .or(() -> matchForGroup("STRING", matcher))
-            .or(() -> matchForGroup("COMMENT", matcher))
-            .orElseThrow();
-    }
-
-    private Optional<String> matchForGroup(final String groupName, final Matcher matcher) {
-        return Optional.ofNullable(matcher.group(groupName) != null ? groupName.toLowerCase() : null);
+        for (final String group : GROUP_PATTERN_MAP.keySet()) {
+            if (matcher.group(group) != null) {
+                return group.toLowerCase();
+            }
+        }
+        throw new IllegalStateException("Impossible exception: at least one group should be found," +
+            " because matcher.find() returns true");
     }
 
     private static String buildSampleCode() {
-        return String.join("\n", "    /*",
-            "     * multi-line comment",
-            "     */",
-            "    function main() {",
-            "        var a = 1",
-            "        final b = a + 4",
-            "        a++",
-            "        final text = 'Hello world'",
-            "        // single-line comment",
-            "        for(var i = 0; /* // test comment */ i < b; /* test comment */ i ++) {",
-            "            if(i < 3) {",
-            "                println('i < 3 -> ' + text)",
-            "            }",
-            "            else {",
-            "                println(\"else -> \" + text)",
-            "            }",
-            "        }",
-            "",
-            "        println(a typeof void)",
-            "        println(sum(a, b))",
-            "    }",
-            "",
-            "   function sum(a, b) {",
-            "       return a + b",
-            "   }");
+        return
+            "/*\n" +
+                "* multi-line comment\n" +
+                "*/\n" +
+                "function main () {\n" +
+                "    var a = 1\n" +
+                "    final b = a + 4\n" +
+                "    a ++\n" +
+                "    final text = 'Hello world'\n" +
+                "    // single-line comment\n" +
+                "    for (var i = 0; /* // test comment */ i < b; /* test comment */ i ++) /* test comment */ {\n" +
+                "        if (i < 3) {\n" +
+                "            println ('i < 3 -> ' + text)\n" +
+                "        }\n" +
+                "        else {\n" +
+                "            println (\"else -> \" + text)\n" +
+                "        }\n" +
+                "    }\n" +
+                "    \n" +
+                "    println (a typeof void)\n" +
+                "}\n" +
+                "\n" +
+                "function sum (a, b) {\n" +
+                "    return a + b\n" +
+                "}";
     }
 }

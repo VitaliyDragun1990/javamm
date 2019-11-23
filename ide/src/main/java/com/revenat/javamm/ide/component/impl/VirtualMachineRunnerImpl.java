@@ -17,6 +17,7 @@
 
 package com.revenat.javamm.ide.component.impl;
 
+import com.revenat.javamm.code.component.Console;
 import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.compiler.error.JavammSyntaxError;
 import com.revenat.javamm.ide.component.VirtualMachineRunner;
@@ -28,6 +29,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 
+import static java.lang.String.format;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 
@@ -36,13 +38,18 @@ import static java.util.Objects.requireNonNull;
  */
 public class VirtualMachineRunnerImpl implements VirtualMachineRunner {
 
+    private final Console console;
+
     private final VirtualMachine virtualMachine;
 
     private final List<SourceCode> sourceCodes;
 
     private Thread runnerThread;
 
-    VirtualMachineRunnerImpl(final VirtualMachine virtualMachine, final List<SourceCode> sourceCodes) {
+    VirtualMachineRunnerImpl(final Console console,
+                             final VirtualMachine virtualMachine,
+                             final List<SourceCode> sourceCodes) {
+        this.console = console;
         this.virtualMachine = requireNonNull(virtualMachine);
         this.sourceCodes = unmodifiableList(sourceCodes);
     }
@@ -73,15 +80,15 @@ public class VirtualMachineRunnerImpl implements VirtualMachineRunner {
             virtualMachine.run(sourceCodes.toArray(new SourceCode[0]));
         } catch (final JavammSyntaxError e) {
             status = CompleteStatus.SYNTAX_ERROR;
-            System.err.println(e.getMessage());
+            console.errPrintln(e.getMessage());
         } catch (final JavammRuntimeError e) {
             status = CompleteStatus.RUNTIME_ERROR;
-            System.err.println(e.getMessage());
+            console.errPrintln(e.getMessage());
         } catch (final TerminateInterpreterException e) {
             status = CompleteStatus.TERMINATED;
         } catch (final RuntimeException e) {
             status = CompleteStatus.INTERNAL_ERROR;
-            System.err.println(String.format("Internal error: %s", stackTraceToString(e)));
+            console.errPrintln(format("Internal error: %s", stackTraceToString(e)));
         } finally {
             listener.onRunCompleted(status);
         }

@@ -17,7 +17,6 @@
 
 package com.revenat.javamm.ide.controller;
 
-import com.revenat.javamm.code.component.Console;
 import com.revenat.javamm.ide.component.ComponentFactoryProvider;
 import com.revenat.javamm.ide.component.VirtualMachineRunner;
 import com.revenat.javamm.ide.component.VirtualMachineRunner.CompleteStatus;
@@ -26,11 +25,15 @@ import com.revenat.javamm.ide.ui.listener.ActionListener;
 import com.revenat.javamm.ide.ui.pane.PaneManager;
 import com.revenat.javamm.ide.ui.pane.action.ActionPane;
 import com.revenat.javamm.ide.ui.pane.code.CodeTabPane;
+import com.revenat.javamm.ide.ui.pane.console.ConsolePane;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.SplitPane;
 import javafx.stage.Stage;
+
+import static com.revenat.javamm.ide.component.VirtualMachineRunner.CompleteStatus.SUCCESS;
+import static com.revenat.javamm.ide.component.VirtualMachineRunner.CompleteStatus.TERMINATED;
 
 /**
  * @author Vitaliy Dragun
@@ -110,14 +113,16 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
 
     @Override
     public void onRunAction() {
-        paneManager.displayConsolePane(spWork);
         virtualMachineRunner = createVirtualMachineRunner();
         virtualMachineRunner.run(this);
     }
 
     @Override
     public void onRunCompleted(final CompleteStatus status) {
-        Platform.runLater(() -> actionPane.onRunCompleted(status));
+        Platform.runLater(() -> {
+            actionPane.onRunCompleted(status);
+            getConsolePane().displayMessage(status);
+        });
     }
 
     @Override
@@ -127,8 +132,12 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
 
     private VirtualMachineRunner createVirtualMachineRunner() {
         return ComponentFactoryProvider.getComponentFactory().createVirtualMachineRunner(
-            Console.DEFAULT,
+            getConsolePane().getNewConsole(),
             codeTabPane.getAllSourceCode()
         );
+    }
+
+    private ConsolePane getConsolePane() {
+        return paneManager.provideConsolePane(spWork);
     }
 }

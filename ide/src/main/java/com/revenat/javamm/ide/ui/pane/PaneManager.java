@@ -32,7 +32,7 @@ public class PaneManager {
 
     private ConsolePane consolePane;
 
-    public ConsolePane displayConsolePane(final SplitPane splitPane) {
+    public ConsolePane provideConsolePane(final SplitPane splitPane) {
         return find(splitPane, ConsolePane.class)
             .orElseGet(() -> addPaneAndReturn(splitPane, getConsolePane(), CODE_TAB_VS_CONSOLE_DIVIDER_POSITION));
     }

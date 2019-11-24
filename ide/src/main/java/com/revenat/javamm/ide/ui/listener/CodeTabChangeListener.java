@@ -15,36 +15,16 @@
  *
  */
 
-package com.revenat.javamm.ide.ui.pane.action.state;
+package com.revenat.javamm.ide.ui.listener;
 
 /**
  * @author Vitaliy Dragun
  */
-public interface ActionState {
+public interface CodeTabChangeListener {
 
-    void onNew();
+    void allTabsClosed();
 
-    void onOpen();
+    void tabContentChanged();
 
-    void onSave();
-
-    void onExit();
-
-    void onUndo();
-
-    void onRedo();
-
-    void onFormat();
-
-    void onRun();
-
-    void onRunCompleted();
-
-    void onTerminate();
-
-    void onAllTabsClosed();
-
-    void onEditorContentChanged();
-
-    void onEditorContentUnchanged();
+    void tabContentUnchanged();
 }

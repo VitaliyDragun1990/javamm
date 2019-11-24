@@ -110,6 +110,21 @@ public class ActionPaneState implements ActionState {
         currentState.onTerminate();
     }
 
+    @Override
+    public void onEditorContentChanged() {
+        currentState.onEditorContentChanged();
+    }
+
+    @Override
+    public void onEditorContentUnchanged() {
+        currentState.onEditorContentUnchanged();
+    }
+
+    @Override
+    public void onAllTabsClosed() {
+        currentState.onAllTabsClosed();
+    }
+
     static void setCurrentStateByName(StateName stateName) {
         currentState = getStateByName(stateName);
     }
@@ -125,6 +140,7 @@ public class ActionPaneState implements ActionState {
     enum StateName {
         INITIAL,
         EDITING,
+        CHANGED,
         RUNNING;
     }
 }

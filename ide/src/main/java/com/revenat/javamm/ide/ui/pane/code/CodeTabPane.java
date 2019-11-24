@@ -18,13 +18,16 @@
 package com.revenat.javamm.ide.ui.pane.code;
 
 import com.revenat.javamm.code.fragment.SourceCode;
+import com.revenat.javamm.ide.ui.listener.CodeTabChangeListener;
+import com.revenat.javamm.ide.ui.listener.TabCloseConfirmationListener;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -36,14 +39,47 @@ public final class CodeTabPane extends TabPane {
 
     private int untitledCounter = 1;
 
+    private CodeTabChangeListener contentChangedListener;
+
+    private TabCloseConfirmationListener tabCloseConfirmationListener;
+
     public CodeTabPane() {
         setTabClosingPolicy(TabClosingPolicy.ALL_TABS);
+    }
+
+    public void setContentChangedListener(final CodeTabChangeListener contentChangedListener) {
+        this.contentChangedListener = requireNonNull(contentChangedListener);
+        setListenerForTabSelection(contentChangedListener);
+    }
+
+    public void setTabCloseConfirmationListener(final TabCloseConfirmationListener tabCloseConfirmationListener) {
+        this.tabCloseConfirmationListener = requireNonNull(tabCloseConfirmationListener);
+    }
+
+    private void setListenerForTabSelection(final CodeTabChangeListener contentChangedListener) {
+        getSelectionModel().selectedItemProperty().addListener(changeListenerWrapper(contentChangedListener));
+    }
+
+    private ChangeListener<Tab> changeListenerWrapper(CodeTabChangeListener codeTabChangeListener) {
+        return (observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                final CodeTab t = (CodeTab) newValue;
+                if (t.isChanged()) {
+                    codeTabChangeListener.tabContentChanged();
+                } else {
+                    codeTabChangeListener.tabContentUnchanged();
+                }
+            } else {
+                codeTabChangeListener.allTabsClosed();
+            }
+        };
     }
 
     public void newCodeEditor() {
         final String tabTitle = generateNewTabName();
         final CodeEditorPane codeEditorPane = new CodeEditorPane();
-        final Tab newCodeTab = new CodeTab(tabTitle, codeEditorPane);
+        final Tab newCodeTab =
+            new CodeTab(tabTitle, codeEditorPane, contentChangedListener, tabCloseConfirmationListener);
 
         addTab(newCodeTab);
         selectSpecifiedTab(newCodeTab);

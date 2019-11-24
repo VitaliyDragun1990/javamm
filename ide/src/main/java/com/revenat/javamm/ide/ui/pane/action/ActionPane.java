@@ -17,23 +17,18 @@
 
 package com.revenat.javamm.ide.ui.pane.action;
 
-import com.revenat.javamm.ide.component.VirtualMachineRunner;
 import com.revenat.javamm.ide.component.VirtualMachineRunner.CompleteStatus;
 import com.revenat.javamm.ide.component.VirtualMachineRunner.VirtualMachineRunCompletedListener;
 import com.revenat.javamm.ide.ui.listener.ActionListener;
 import com.revenat.javamm.ide.ui.listener.ActionStateManager;
+import com.revenat.javamm.ide.ui.listener.CodeTabChangeListener;
 import com.revenat.javamm.ide.ui.pane.action.state.ActionPaneState;
 import com.revenat.javamm.ide.ui.pane.action.state.ActionState;
-import com.revenat.javamm.ide.util.ResourceUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
-
-import java.io.IOException;
-import java.util.Map;
 
 import static com.revenat.javamm.ide.util.ResourceUtils.loadFromFxmlResource;
 import static java.lang.String.format;
@@ -44,7 +39,8 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Vitaliy Dragun
  */
-public final class ActionPane extends VBox implements ActionStateManager, VirtualMachineRunCompletedListener {
+public final class ActionPane extends VBox implements ActionStateManager, VirtualMachineRunCompletedListener,
+    CodeTabChangeListener {
 
     @FXML
     private MenuItem miNew;
@@ -214,6 +210,23 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
     }
 
     @Override
+    public void allTabsClosed() {
+        actionState.onAllTabsClosed();
+        // set initial state when run is disabled
+    }
+
+    @Override
+    public void tabContentChanged() {
+        actionState.onEditorContentChanged();
+//        enableSaveAction();
+    }
+
+    @Override
+    public void tabContentUnchanged() {
+        actionState.onEditorContentUnchanged();
+    }
+
+    @Override
     public void enableNewAction() {
         miNew.setDisable(false);
     }
@@ -346,9 +359,5 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
     @Override
     public void disableTerminateAction() {
         miTerminate.setDisable(true);
-    }
-
-    public boolean isExitActionDisabled() {
-        return miExit.isDisable();
     }
 }

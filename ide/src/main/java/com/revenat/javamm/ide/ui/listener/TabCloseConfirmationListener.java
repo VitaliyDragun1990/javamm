@@ -15,36 +15,14 @@
  *
  */
 
-package com.revenat.javamm.ide.ui.pane.action.state;
+package com.revenat.javamm.ide.ui.listener;
+
+import com.revenat.javamm.ide.ui.pane.code.CodeTab;
 
 /**
  * @author Vitaliy Dragun
  */
-public interface ActionState {
+public interface TabCloseConfirmationListener {
 
-    void onNew();
-
-    void onOpen();
-
-    void onSave();
-
-    void onExit();
-
-    void onUndo();
-
-    void onRedo();
-
-    void onFormat();
-
-    void onRun();
-
-    void onRunCompleted();
-
-    void onTerminate();
-
-    void onAllTabsClosed();
-
-    void onEditorContentChanged();
-
-    void onEditorContentUnchanged();
+    boolean isTabCloseEventCancelled(CodeTab codeTab);
 }

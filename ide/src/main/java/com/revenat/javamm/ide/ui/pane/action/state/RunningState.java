@@ -99,4 +99,19 @@ class RunningState extends ActionPaneState {
         setCurrentStateByName(EDITING);
         currentState.initialize();
     }
+
+    @Override
+    public void onAllTabsClosed() {
+        // not available in this state
+    }
+
+    @Override
+    public void onEditorContentChanged() {
+        System.out.println("changed during running");
+    }
+
+    @Override
+    public void onEditorContentUnchanged() {
+        System.out.println("change tab while running");
+    }
 }

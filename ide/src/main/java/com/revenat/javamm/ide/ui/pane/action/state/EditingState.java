@@ -21,6 +21,7 @@ import com.revenat.javamm.ide.ui.listener.ActionListener;
 import com.revenat.javamm.ide.ui.listener.ActionStateManager;
 
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionPaneState.StateName.EDITING;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionPaneState.StateName.INITIAL;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionPaneState.StateName.RUNNING;
 
 /**
@@ -58,7 +59,7 @@ class EditingState extends ActionPaneState {
 
     @Override
     public void onSave() {
-        // not available in this state
+        actionStateManager.disableSaveAction();
     }
 
     @Override
@@ -97,5 +98,21 @@ class EditingState extends ActionPaneState {
     @Override
     public void onTerminate() {
         // not available in this state
+    }
+
+    @Override
+    public void onAllTabsClosed() {
+        setCurrentStateByName(INITIAL);
+        currentState.initialize();
+    }
+
+    @Override
+    public void onEditorContentChanged() {
+        actionStateManager.enableSaveAction();
+    }
+
+    @Override
+    public void onEditorContentUnchanged() {
+        actionStateManager.disableSaveAction();
     }
 }

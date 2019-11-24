@@ -18,7 +18,10 @@
 package com.revenat.javamm.ide.ui.pane.code;
 
 import com.revenat.javamm.code.fragment.SourceCode;
+import com.revenat.javamm.ide.component.Releasable;
 import com.revenat.javamm.ide.model.StringSourceCode;
+import com.revenat.javamm.ide.ui.listener.CodeTabChangeListener;
+import com.revenat.javamm.ide.ui.listener.TabCloseConfirmationListener;
 import javafx.scene.control.Tab;
 
 import static java.util.Objects.requireNonNull;
@@ -28,21 +31,62 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Vitaliy Dragun
  */
-public class CodeTab extends Tab {
+public class CodeTab extends Tab implements Releasable {
 
     private final String moduleName;
 
-    public CodeTab(final String moduleName, final CodeEditorPane content) {
+    private final CodeTabChangeListener contentChangedListener;
+
+    private boolean changed;
+
+    CodeTab(final String moduleName,
+            final CodeEditorPane content,
+            final CodeTabChangeListener contentChangedListener,
+            final TabCloseConfirmationListener tabCloseConfirmationListener) {
         super(requireNonNull(moduleName), requireNonNull(content));
         this.moduleName = moduleName;
+        this.contentChangedListener = requireNonNull(contentChangedListener);
+
+        content.setChangeListener((observable, oldValue, newValue) -> setChanged());
+
+        setCloseRequestHandler(tabCloseConfirmationListener);
+    }
+
+    private void setCloseRequestHandler(final TabCloseConfirmationListener tabCloseConfirmationListener) {
+        setOnCloseRequest(event -> {
+            if (tabCloseConfirmationListener.isTabCloseEventCancelled(this)) {
+                event.consume();
+            } else {
+                release();
+            }
+        });
     }
 
     public String getModuleName() {
         return moduleName;
     }
 
-    public SourceCode getSourceCode() {
+    SourceCode getSourceCode() {
         return new StringSourceCode(moduleName, getCodeEditorPane().getCodeLines());
+    }
+
+    public boolean isChanged() {
+        return changed;
+    }
+
+    private void setChanged() {
+        changed = true;
+        if (!getText().startsWith("*")) {
+            setText("*" + moduleName);
+        }
+//        lastModifiedTime = Instant.now();
+//        actionStateManager.enableSaveAction();
+        contentChangedListener.tabContentChanged();
+    }
+
+    @Override
+    public void release() {
+        getCodeEditorPane().release();
     }
 
     private CodeEditorPane getCodeEditorPane() {

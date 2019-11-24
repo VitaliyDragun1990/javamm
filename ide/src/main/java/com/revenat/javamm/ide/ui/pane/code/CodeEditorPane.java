@@ -19,6 +19,7 @@ package com.revenat.javamm.ide.ui.pane.code;
 
 import com.revenat.javamm.ide.component.Releasable;
 import com.revenat.javamm.ide.component.SyntaxHighlighter;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.layout.StackPane;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
@@ -56,8 +57,12 @@ public final class CodeEditorPane extends StackPane implements Releasable {
         syntaxHighlighter.disable();
     }
 
-    public List<String> getCodeLines() {
+    List<String> getCodeLines() {
         return List.of(codeArea.getText().split("\n"));
+    }
+
+    void setChangeListener(final ChangeListener<String> changeListener) {
+        codeArea.textProperty().addListener(changeListener);
     }
 
     private void enableLineNumeration() {

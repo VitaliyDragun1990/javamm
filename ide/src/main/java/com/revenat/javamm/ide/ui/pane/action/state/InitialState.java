@@ -100,4 +100,19 @@ class InitialState extends ActionPaneState {
     public void onTerminate() {
         // not available in this state
     }
+
+    @Override
+    public void onAllTabsClosed() {
+        // not available in this state
+    }
+
+    @Override
+    public void onEditorContentChanged() {
+        // not available in this state
+    }
+
+    @Override
+    public void onEditorContentUnchanged() {
+        // not available in this state
+    }
 }

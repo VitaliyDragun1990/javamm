@@ -32,12 +32,14 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.stage.Stage;
 
 import java.util.List;
 
+import static com.revenat.javamm.ide.ui.dialog.DialogFactoryProvider.getSimpleDialogFactory;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -46,6 +48,8 @@ import static java.util.stream.Collectors.toList;
  */
 public class MainWindowController implements ActionListener, VirtualMachineRunCompletedListener,
     TabCloseConfirmationListener {
+
+    private static final String INFO_VM_IS_RUNNING = "Javamm VM is running.\nWait for VM to complete or terminate it! ";
 
     @FXML
     private ActionPane actionPane;
@@ -69,11 +73,6 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
         actionPane.setActionListener(this);
         codeTabPane.setTabChangeListener(actionPane);
         codeTabPane.setTabCloseConfirmationListener(this);
-    }
-
-    @FXML
-    public void onCloseAction(final ActionEvent actionEvent) {
-        System.exit(0);
     }
 
     @Override
@@ -128,7 +127,7 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
     @Override
     public boolean onExitAction() {
         if (isVirtualMachineRunning()) {
-            // TODO Show info message why close event cancelled
+            getSimpleDialogFactory().showInfoDialog(INFO_VM_IS_RUNNING);
             return false;
         }
 
@@ -158,12 +157,33 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
     @Override
     public boolean isTabCloseEventCancelled(final CodeTab codeTab) {
         if (isVirtualMachineRunning()) {
-            // TODO Show info message why close request cancelled
+            getSimpleDialogFactory().showInfoDialog(INFO_VM_IS_RUNNING);
             return true;
         } else if (codeTab.isChanged()) {
-            // TODO Display confirmation dialogue
+            return askUserToSaveChanges(codeTab);
+        }
+        return false;
+    }
+
+    private boolean askUserToSaveChanges(final CodeTab codeTab) {
+        final ButtonData result = getSimpleDialogFactory().showYesNoCancelDialog(
+            "Source code has unsaved changes",
+            "Save changes before close?"
+        );
+        return handleUserDecision(result, codeTab);
+    }
+
+    private boolean handleUserDecision(final ButtonData result, final CodeTab codeTab) {
+        if (result == ButtonData.YES) {
+            return !saveChanges(codeTab);
+        } else if (result == ButtonData.NO) {
+            return false;
+        } else {
             return true;
         }
+    }
+
+    private boolean saveChanges(final CodeTab codeTab) {
         return false;
     }
 

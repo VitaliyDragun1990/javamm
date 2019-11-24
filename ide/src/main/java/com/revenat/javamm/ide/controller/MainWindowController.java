@@ -29,11 +29,16 @@ import com.revenat.javamm.ide.ui.pane.code.CodeTab;
 import com.revenat.javamm.ide.ui.pane.code.CodeTabPane;
 import com.revenat.javamm.ide.ui.pane.console.ConsolePane;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.stage.Stage;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Vitaliy Dragun
@@ -62,7 +67,7 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
     @FXML
     private void initialize() {
         actionPane.setActionListener(this);
-        codeTabPane.setContentChangedListener(actionPane);
+        codeTabPane.setTabChangeListener(actionPane);
         codeTabPane.setTabCloseConfirmationListener(this);
     }
 
@@ -119,6 +124,7 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
     public void onTerminateAction() {
         virtualMachineRunner.terminate();
     }
+
     @Override
     public boolean onExitAction() {
         if (isVirtualMachineRunning()) {
@@ -126,18 +132,23 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
             return false;
         }
 
-        for (final Tab tab : codeTabPane.getTabs()) {
-            final CodeTab codeTab = (CodeTab) tab;
-            if (codeTab.isChanged()) {
-                codeTabPane.getSelectionModel().select(codeTab);
-                if (isTabCloseEventCancelled(codeTab)) {
-                    return false;
-                }
+        for (CodeTab changedTab : findChangedTabs(codeTabPane.getTabs())) {
+            selectTab(changedTab);
+            if (isTabCloseEventCancelled(changedTab)) {
+                return false;
             }
         }
 
         getStage().close();
         return true;
+    }
+
+    private void selectTab(final CodeTab changedTab) {
+        codeTabPane.getSelectionModel().select(changedTab);
+    }
+
+    private List<CodeTab> findChangedTabs(final ObservableList<Tab> tabs) {
+        return tabs.stream().map(tab -> (CodeTab) tab).filter(CodeTab::isChanged).collect(toList());
     }
 
     private Stage getStage() {

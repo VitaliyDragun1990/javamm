@@ -22,29 +22,21 @@ package com.revenat.javamm.ide.ui.pane.action.state;
  */
 public interface ActionState {
 
-    void onNew();
+    void onEvent(ActionEvent actionEvent);
 
-    void onOpen();
-
-    void onSave();
-
-    void onExit();
-
-    void onUndo();
-
-    void onRedo();
-
-    void onFormat();
-
-    void onRun();
-
-    void onRunCompleted();
-
-    void onTerminate();
-
-    void onAllTabsClosed();
-
-    void onEditorContentChanged();
-
-    void onEditorContentUnchanged();
+    enum ActionEvent {
+        NEW,
+        OPEN,
+        SAVE,
+        EXIT,
+        UNDO,
+        REDO,
+        FORMAT,
+        RUN,
+        RUN_COMPLETED,
+        TERMINATED,
+        ALL_TABS_CLOSED,
+        TAB_CONTENT_CHANGED,
+        TAB_CONTENT_UNCHANGED;
+    }
 }

@@ -68,7 +68,7 @@
         </module>
         <module name="NeedBraces">
             <property name="tokens" value="
-                     LITERAL_DO, LITERAL_ELSE, LITERAL_FOR, LITERAL_IF, LITERAL_WHILE, LITERAL_CASE
+                     LITERAL_DO, LITERAL_ELSE, LITERAL_FOR, LITERAL_IF, LITERAL_WHILE
             "/>
         </module>
         <module name="RightCurly"/>
@@ -114,7 +114,7 @@
         <module name="IllegalThrows"/>
         <module name="IllegalToken">
             <property name="tokens"
-                      value="LITERAL_NATIVE, LABELED_STAT, LITERAL_ASSERT, LITERAL_SWITCH, STRICTFP"/>
+                      value="LITERAL_NATIVE, LABELED_STAT, LITERAL_ASSERT, STRICTFP"/>
         </module>
         <module name="IllegalTokenText">
             <property name="tokens" value="NUM_INT,NUM_LONG"/>

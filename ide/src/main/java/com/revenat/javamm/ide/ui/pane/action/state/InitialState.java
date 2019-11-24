@@ -46,6 +46,20 @@ class InitialState extends ActionPaneState {
     }
 
     @Override
+    public void onEvent(final ActionEvent actionEvent) {
+        switch (actionEvent) {
+            case NEW:
+                onNew();
+                break;
+            case OPEN:
+                onOpen();
+                break;
+            case EXIT:
+                onExit();
+                break;
+        }
+    }
+
     public void onNew() {
         actionListener.onNewAction();
 
@@ -53,7 +67,6 @@ class InitialState extends ActionPaneState {
         currentState.initialize();
     }
 
-    @Override
     public void onOpen() {
         if (actionListener.onOpenAction()) {
             setCurrentStateByName(EDITING);
@@ -61,58 +74,7 @@ class InitialState extends ActionPaneState {
         }
     }
 
-    @Override
-    public void onSave() {
-        // not available in this state
-    }
-
-    @Override
     public void onExit() {
         actionListener.onExitAction();
-    }
-
-    @Override
-    public void onUndo() {
-        // not available in this state
-    }
-
-    @Override
-    public void onRedo() {
-        // not available in this state
-    }
-
-    @Override
-    public void onFormat() {
-        // not available in this state
-    }
-
-    @Override
-    public void onRun() {
-        // not available in this state
-    }
-
-    @Override
-    public void onRunCompleted() {
-        // not available in this state
-    }
-
-    @Override
-    public void onTerminate() {
-        // not available in this state
-    }
-
-    @Override
-    public void onAllTabsClosed() {
-        // not available in this state
-    }
-
-    @Override
-    public void onEditorContentChanged() {
-        // not available in this state
-    }
-
-    @Override
-    public void onEditorContentUnchanged() {
-        // not available in this state
     }
 }

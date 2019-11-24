@@ -18,7 +18,7 @@
 package com.revenat.javamm.ide.ui.pane.code;
 
 import com.revenat.javamm.code.fragment.SourceCode;
-import com.revenat.javamm.ide.ui.listener.CodeTabChangeListener;
+import com.revenat.javamm.ide.ui.listener.TabChangeListener;
 import com.revenat.javamm.ide.ui.listener.TabCloseConfirmationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Tab;
@@ -39,7 +39,7 @@ public final class CodeTabPane extends TabPane {
 
     private int untitledCounter = 1;
 
-    private CodeTabChangeListener contentChangedListener;
+    private TabChangeListener contentChangedListener;
 
     private TabCloseConfirmationListener tabCloseConfirmationListener;
 
@@ -47,30 +47,30 @@ public final class CodeTabPane extends TabPane {
         setTabClosingPolicy(TabClosingPolicy.ALL_TABS);
     }
 
-    public void setContentChangedListener(final CodeTabChangeListener contentChangedListener) {
-        this.contentChangedListener = requireNonNull(contentChangedListener);
-        setListenerForTabSelection(contentChangedListener);
+    public void setTabChangeListener(final TabChangeListener tabChangeListener) {
+        this.contentChangedListener = requireNonNull(tabChangeListener);
+        setListenerForTabSelection(tabChangeListener);
     }
 
     public void setTabCloseConfirmationListener(final TabCloseConfirmationListener tabCloseConfirmationListener) {
         this.tabCloseConfirmationListener = requireNonNull(tabCloseConfirmationListener);
     }
 
-    private void setListenerForTabSelection(final CodeTabChangeListener contentChangedListener) {
+    private void setListenerForTabSelection(final TabChangeListener contentChangedListener) {
         getSelectionModel().selectedItemProperty().addListener(changeListenerWrapper(contentChangedListener));
     }
 
-    private ChangeListener<Tab> changeListenerWrapper(CodeTabChangeListener codeTabChangeListener) {
+    private ChangeListener<Tab> changeListenerWrapper(TabChangeListener tabChangeListener) {
         return (observable, oldValue, newValue) -> {
             if (newValue != null) {
                 final CodeTab t = (CodeTab) newValue;
                 if (t.isChanged()) {
-                    codeTabChangeListener.tabContentChanged();
+                    tabChangeListener.tabContentChanged();
                 } else {
-                    codeTabChangeListener.tabContentUnchanged();
+                    tabChangeListener.tabContentUnchanged();
                 }
             } else {
-                codeTabChangeListener.allTabsClosed();
+                tabChangeListener.allTabsClosed();
             }
         };
     }

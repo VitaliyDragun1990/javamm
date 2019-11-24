@@ -61,86 +61,25 @@ public class ActionPaneState implements ActionState {
     }
 
     @Override
-    public void onNew() {
-        currentState.onNew();
-    }
-
-    @Override
-    public void onOpen() {
-        currentState.onOpen();
-    }
-
-    @Override
-    public void onSave() {
-        currentState.onSave();
-    }
-
-    @Override
-    public void onExit() {
-        currentState.onExit();
-    }
-
-    @Override
-    public void onUndo() {
-        currentState.onUndo();
-    }
-
-    @Override
-    public void onRedo() {
-        currentState.onRedo();
-    }
-
-    @Override
-    public void onFormat() {
-        currentState.onFormat();
-    }
-
-    @Override
-    public void onRun() {
-        currentState.onRun();
-    }
-
-    @Override
-    public void onRunCompleted() {
-        currentState.onRunCompleted();
-    }
-
-    @Override
-    public void onTerminate() {
-        currentState.onTerminate();
-    }
-
-    @Override
-    public void onEditorContentChanged() {
-        currentState.onEditorContentChanged();
-    }
-
-    @Override
-    public void onEditorContentUnchanged() {
-        currentState.onEditorContentUnchanged();
-    }
-
-    @Override
-    public void onAllTabsClosed() {
-        currentState.onAllTabsClosed();
-    }
-
-    static void setCurrentStateByName(StateName stateName) {
-        currentState = getStateByName(stateName);
-    }
-
-    private static ActionPaneState getStateByName(StateName stateName) {
-        return supportedStates.get(stateName);
+    public void onEvent(final ActionEvent actionEvent) {
+        currentState.onEvent(actionEvent);
     }
 
     protected void initialize() {
         // override in subclasses if certain initialization logic is required
     }
 
+    static void setCurrentStateByName(final StateName stateName) {
+        currentState = getStateByName(stateName);
+    }
+
+    private static ActionPaneState getStateByName(final StateName stateName) {
+        return supportedStates.get(stateName);
+    }
+
     enum StateName {
         INITIAL,
         EDITING,
-        CHANGED,
-        RUNNING;
+        RUNNING
     }
 }

@@ -20,7 +20,7 @@ package com.revenat.javamm.ide.ui.pane.code;
 import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.ide.component.Releasable;
 import com.revenat.javamm.ide.model.StringSourceCode;
-import com.revenat.javamm.ide.ui.listener.CodeTabChangeListener;
+import com.revenat.javamm.ide.ui.listener.TabChangeListener;
 import com.revenat.javamm.ide.ui.listener.TabCloseConfirmationListener;
 import javafx.scene.control.Tab;
 
@@ -35,17 +35,17 @@ public class CodeTab extends Tab implements Releasable {
 
     private final String moduleName;
 
-    private final CodeTabChangeListener contentChangedListener;
+    private final TabChangeListener tabChangeListener;
 
     private boolean changed;
 
     CodeTab(final String moduleName,
             final CodeEditorPane content,
-            final CodeTabChangeListener contentChangedListener,
+            final TabChangeListener tabChangeListener,
             final TabCloseConfirmationListener tabCloseConfirmationListener) {
         super(requireNonNull(moduleName), requireNonNull(content));
         this.moduleName = moduleName;
-        this.contentChangedListener = requireNonNull(contentChangedListener);
+        this.tabChangeListener = requireNonNull(tabChangeListener);
 
         content.setChangeListener((observable, oldValue, newValue) -> setChanged());
 
@@ -79,9 +79,8 @@ public class CodeTab extends Tab implements Releasable {
         if (!getText().startsWith("*")) {
             setText("*" + moduleName);
         }
-//        lastModifiedTime = Instant.now();
-//        actionStateManager.enableSaveAction();
-        contentChangedListener.tabContentChanged();
+        // lastModifiedTime = Instant.now();
+        tabChangeListener.tabContentChanged();
     }
 
     @Override

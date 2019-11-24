@@ -20,7 +20,6 @@ package com.revenat.javamm.ide.ui.pane.action.state;
 import com.revenat.javamm.ide.ui.listener.ActionListener;
 import com.revenat.javamm.ide.ui.listener.ActionStateManager;
 
-import static com.revenat.javamm.ide.ui.pane.action.state.ActionPaneState.StateName.EDITING;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionPaneState.StateName.INITIAL;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionPaneState.StateName.RUNNING;
 
@@ -48,71 +47,68 @@ class EditingState extends ActionPaneState {
     }
 
     @Override
-    public void onNew() {
+    public void onEvent(final ActionEvent actionEvent) {
+        switch (actionEvent) {
+            case NEW:
+                onNew();
+                break;
+            case OPEN:
+                onOpen();
+                break;
+            case EXIT:
+                onExit();
+                break;
+            case FORMAT:
+                onFormat();
+                break;
+            case RUN:
+                onRun();
+                break;
+            case ALL_TABS_CLOSED:
+                onAllTabsClosed();
+                break;
+            case TAB_CONTENT_CHANGED:
+                onTabContentChanged();
+                break;
+            case TAB_CONTENT_UNCHANGED:
+                onTabContentUnchanged();
+                break;
+        }
+    }
+
+    private void onNew() {
         actionListener.onNewAction();
     }
 
-    @Override
-    public void onOpen() {
+    private void onOpen() {
         actionListener.onOpenAction();
     }
 
-    @Override
-    public void onSave() {
-        actionStateManager.disableSaveAction();
-    }
-
-    @Override
-    public void onExit() {
+    private void onExit() {
         actionListener.onExitAction();
     }
 
-    @Override
-    public void onUndo() {
-        // not available in this state
-    }
-
-    @Override
-    public void onRedo() {
-        // not available in this state
-    }
-
-    @Override
-    public void onFormat() {
+    private void onFormat() {
         actionListener.onFormatAction();
     }
 
-    @Override
-    public void onRun() {
+    private void onRun() {
         setCurrentStateByName(RUNNING);
         currentState.initialize();
 
         actionListener.onRunAction();
     }
 
-    @Override
-    public void onRunCompleted() {
-        // not available in this state
-    }
-
-    @Override
-    public void onTerminate() {
-        // not available in this state
-    }
-
-    @Override
-    public void onAllTabsClosed() {
+    private void onAllTabsClosed() {
         setCurrentStateByName(INITIAL);
         currentState.initialize();
     }
 
-    @Override
-    public void onEditorContentChanged() {
+    private void onTabContentChanged() {
         actionStateManager.enableSaveAction();
     }
 
-    @Override
-    public void onEditorContentUnchanged() {
+    private void onTabContentUnchanged() {
         actionStateManager.disableSaveAction();
     }
 }

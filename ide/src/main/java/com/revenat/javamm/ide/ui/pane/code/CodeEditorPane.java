@@ -41,7 +41,7 @@ public final class CodeEditorPane extends StackPane implements Releasable {
 
     private final SyntaxHighlighter syntaxHighlighter = getComponentFactory().createSyntaxHighlighter(codeArea);
 
-    public CodeEditorPane() {
+    CodeEditorPane() {
         enableLineNumeration();
         enableScrollingFacility();
         enableSyntaxHighlighting();

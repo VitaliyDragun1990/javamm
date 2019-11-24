@@ -47,71 +47,26 @@ class RunningState extends ActionPaneState {
     }
 
     @Override
-    public void onNew() {
-        // not available in this state
+    public void onEvent(final ActionEvent actionEvent) {
+        switch (actionEvent) {
+            case RUN_COMPLETED:
+                onRunCompleted();
+                break;
+            case TERMINATED:
+                onTerminate();
+                break;
+        }
     }
 
-    @Override
-    public void onOpen() {
-        // not available in this state
-    }
-
-    @Override
-    public void onSave() {
-        // not available in this state
-    }
-
-    @Override
-    public void onExit() {
-        // not available in this state
-    }
-
-    @Override
-    public void onUndo() {
-        // not available in this state
-    }
-
-    @Override
-    public void onRedo() {
-        // not available in this state
-    }
-
-    @Override
-    public void onFormat() {
-        // not available in this state
-    }
-
-    @Override
-    public void onRun() {
-        // not available in this state
-    }
-
-    @Override
-    public void onRunCompleted() {
+    private void onRunCompleted() {
         setCurrentStateByName(EDITING);
         currentState.initialize();
     }
 
-    @Override
-    public void onTerminate() {
+    private void onTerminate() {
         actionListener.onTerminateAction();
 
         setCurrentStateByName(EDITING);
         currentState.initialize();
-    }
-
-    @Override
-    public void onAllTabsClosed() {
-        // not available in this state
-    }
-
-    @Override
-    public void onEditorContentChanged() {
-        System.out.println("changed during running");
-    }
-
-    @Override
-    public void onEditorContentUnchanged() {
-        System.out.println("change tab while running");
     }
 }

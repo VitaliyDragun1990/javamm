@@ -21,7 +21,7 @@ import com.revenat.javamm.ide.component.VirtualMachineRunner.CompleteStatus;
 import com.revenat.javamm.ide.component.VirtualMachineRunner.VirtualMachineRunCompletedListener;
 import com.revenat.javamm.ide.ui.listener.ActionListener;
 import com.revenat.javamm.ide.ui.listener.ActionStateManager;
-import com.revenat.javamm.ide.ui.listener.CodeTabChangeListener;
+import com.revenat.javamm.ide.ui.listener.TabChangeListener;
 import com.revenat.javamm.ide.ui.pane.action.state.ActionPaneState;
 import com.revenat.javamm.ide.ui.pane.action.state.ActionState;
 import javafx.event.ActionEvent;
@@ -30,6 +30,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
 
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.ALL_TABS_CLOSED;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.EXIT;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.FORMAT;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.NEW;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.OPEN;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.REDO;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.RUN;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.RUN_COMPLETED;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.SAVE;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.TAB_CONTENT_CHANGED;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.TAB_CONTENT_UNCHANGED;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.TERMINATED;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.UNDO;
 import static com.revenat.javamm.ide.util.ResourceUtils.loadFromFxmlResource;
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
@@ -40,7 +53,7 @@ import static java.util.Objects.requireNonNull;
  * @author Vitaliy Dragun
  */
 public final class ActionPane extends VBox implements ActionStateManager, VirtualMachineRunCompletedListener,
-    CodeTabChangeListener {
+    TabChangeListener {
 
     @FXML
     private MenuItem miNew;
@@ -161,69 +174,69 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
 
     @FXML
     private void onNewAction(final ActionEvent event) {
-        actionState.onNew();
+        actionState.onEvent(NEW);
     }
 
     @FXML
     private void onOpenAction(final ActionEvent event) {
-        actionState.onOpen();
+        actionState.onEvent(OPEN);
     }
 
     @FXML
     private void onSaveAction(final ActionEvent event) {
-        actionState.onSave();
+        actionState.onEvent(SAVE);
     }
 
     @FXML
     private void onExitAction(final ActionEvent event) {
-        actionState.onExit();
+        actionState.onEvent(EXIT);
     }
 
     @FXML
     private void onUndoAction(final ActionEvent event) {
-        actionState.onUndo();
+        actionState.onEvent(UNDO);
     }
 
     @FXML
     private void onRedoAction(final ActionEvent event) {
-        actionState.onRedo();
+        actionState.onEvent(REDO);
     }
 
     @FXML
     private void onFormatAction(final ActionEvent event) {
-        actionState.onFormat();
+        actionState.onEvent(FORMAT);
     }
 
     @FXML
     private void onRunAction(final ActionEvent event) {
-        actionState.onRun();
+        actionState.onEvent(RUN);
     }
 
     @FXML
     private void onTerminateAction(final ActionEvent event) {
-        actionState.onTerminate();
+        actionState.onEvent(TERMINATED);
     }
 
     @Override
     public void onRunCompleted(final CompleteStatus status) {
-        actionState.onRunCompleted();
+        actionState.onEvent(RUN_COMPLETED);
     }
 
     @Override
     public void allTabsClosed() {
-        actionState.onAllTabsClosed();
+        actionState.onEvent(ALL_TABS_CLOSED);
         // set initial state when run is disabled
     }
 
     @Override
     public void tabContentChanged() {
-        actionState.onEditorContentChanged();
+        actionState.onEvent(TAB_CONTENT_CHANGED);
 //        enableSaveAction();
     }
 
     @Override
     public void tabContentUnchanged() {
-        actionState.onEditorContentUnchanged();
+        actionState.onEvent(TAB_CONTENT_UNCHANGED);
     }
 
     @Override

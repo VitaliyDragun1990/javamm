@@ -20,7 +20,7 @@ package com.revenat.javamm.ide.ui.listener;
 /**
  * @author Vitaliy Dragun
  */
-public interface CodeTabChangeListener {
+public interface TabChangeListener {
 
     void allTabsClosed();
 

@@ -53,7 +53,7 @@ public class CodeTab extends Tab implements Releasable {
         this.moduleName = moduleName;
         this.tabChangeListener = requireNonNull(tabChangeListener);
 
-        content.setChangeListener((observable, oldValue, newValue) -> setChanged());
+        content.setCodeChangeListener((observable, oldValue, newValue) -> setChanged());
 
         setCloseRequestHandler(tabCloseConfirmationListener);
     }

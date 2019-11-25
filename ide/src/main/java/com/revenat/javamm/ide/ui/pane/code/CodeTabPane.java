@@ -51,28 +51,28 @@ public final class CodeTabPane extends TabPane {
 
     public void setTabChangeListener(final TabChangeListener tabChangeListener) {
         this.tabChangeListener = requireNonNull(tabChangeListener);
-        setListenerForTabSelection(tabChangeListener);
+        setTabChangeListenerForSelectedCodeTab(tabChangeListener);
     }
 
     public void setTabCloseConfirmationListener(final TabCloseConfirmationListener tabCloseConfirmationListener) {
         this.tabCloseConfirmationListener = requireNonNull(tabCloseConfirmationListener);
     }
 
-    private void setListenerForTabSelection(final TabChangeListener contentChangedListener) {
-        getSelectionModel().selectedItemProperty().addListener(changeListenerWrapper(contentChangedListener));
+    private void setTabChangeListenerForSelectedCodeTab(final TabChangeListener changeListener) {
+        getSelectionModel().selectedItemProperty().addListener(changeListenerWrapper(changeListener));
     }
 
-    private ChangeListener<Tab> changeListenerWrapper(final TabChangeListener tabChangeListener) {
+    private ChangeListener<Tab> changeListenerWrapper(final TabChangeListener changeListener) {
         return (observable, oldValue, newValue) -> {
             if (newValue != null) {
                 final CodeTab t = (CodeTab) newValue;
                 if (t.isChanged()) {
-                    tabChangeListener.tabContentChanged();
+                    changeListener.tabContentChanged();
                 } else {
-                    tabChangeListener.tabContentUnchanged();
+                    changeListener.tabContentUnchanged();
                 }
             } else {
-                tabChangeListener.allTabsClosed();
+                changeListener.allTabsClosed();
             }
         };
     }
@@ -84,22 +84,6 @@ public final class CodeTabPane extends TabPane {
 
     public List<SourceCode> getAllSourceCode() {
         return collectSourceCodeFromAllTabs();
-    }
-
-    private void selectSpecifiedTab(final Tab tab) {
-        getSelectionModel().select(tab);
-    }
-
-    private void addTab(final Tab tab) {
-        getTabs().add(tab);
-    }
-
-    private String generateNewTabName() {
-        return format("Untitled-%s.javamm", untitledCounter++);
-    }
-
-    private List<SourceCode> collectSourceCodeFromAllTabs() {
-        return getTabs().stream().map(t -> ((CodeTab) t).getSourceCode()).collect(toList());
     }
 
     /**
@@ -127,14 +111,13 @@ public final class CodeTabPane extends TabPane {
     }
 
     private boolean isFileAlreadyOpenedInTab(final File selectedFile) {
-        return getTabs().stream()
-            .map(t -> (CodeTab) t)
+        return getCodeTabs().stream()
             .anyMatch(t -> t.isBackedByFile(selectedFile));
     }
 
     private void selectTabWithFile(final File selectedFile) {
-        for (final Tab tab : getTabs()) {
-            if (((CodeTab) tab).isBackedByFile(selectedFile)) {
+        for (final CodeTab tab : getCodeTabs()) {
+            if (tab.isBackedByFile(selectedFile)) {
                 getSelectionModel().select(tab);
                 return;
             }
@@ -156,5 +139,27 @@ public final class CodeTabPane extends TabPane {
         selectSpecifiedTab(codeTab);
         tabChangeListener.newTabCreated();
         codeTab.requestFocus();
+    }
+
+    private void addTab(final Tab tab) {
+        getTabs().add(tab);
+    }
+
+    private void selectSpecifiedTab(final Tab tab) {
+        getSelectionModel().select(tab);
+    }
+
+    private String generateNewTabName() {
+        return format("Untitled-%s.javamm", untitledCounter++);
+    }
+
+    private List<SourceCode> collectSourceCodeFromAllTabs() {
+        return getCodeTabs().stream().map(CodeTab::getSourceCode).collect(toList());
+    }
+
+    private List<CodeTab> getCodeTabs() {
+        return getTabs().stream()
+            .map(t -> (CodeTab) t)
+            .collect(toList());
     }
 }

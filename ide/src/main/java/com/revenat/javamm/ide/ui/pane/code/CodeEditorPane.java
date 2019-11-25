@@ -33,6 +33,8 @@ import java.util.Optional;
 
 import static com.revenat.javamm.ide.component.ComponentFactoryProvider.getComponentFactory;
 import static com.revenat.javamm.ide.util.ResourceUtils.getClassPathResource;
+import static com.revenat.javamm.ide.util.TabReplaceUtils.initCodeAreaTabFixer;
+import static com.revenat.javamm.ide.util.TabReplaceUtils.replaceTabulations;
 
 /**
  * Pane with code area
@@ -50,6 +52,7 @@ public final class CodeEditorPane extends StackPane implements Releasable {
     CodeEditorPane() {
         enableLineNumeration();
         enableScrollingFacility();
+        applyCustomLengthTabFix();
         enableSyntaxHighlighting();
     }
 
@@ -71,13 +74,13 @@ public final class CodeEditorPane extends StackPane implements Releasable {
         return List.of(codeArea.getText().split("\n"));
     }
 
-    void setChangeListener(final ChangeListener<String> changeListener) {
+    void setCodeChangeListener(final ChangeListener<String> changeListener) {
         codeArea.textProperty().addListener(changeListener);
     }
 
     void loadContentFrom(final File file) throws IOException {
         this.sourceCodeFile = file;
-        codeArea.replaceText(Files.readString(file.toPath()));
+        codeArea.replaceText(replaceTabulations(Files.readString(file.toPath())));
     }
 
     void saveContentTo(final File file) throws IOException {
@@ -91,6 +94,10 @@ public final class CodeEditorPane extends StackPane implements Releasable {
 
     private void enableScrollingFacility() {
         getChildren().add(new VirtualizedScrollPane<>(codeArea));
+    }
+
+    private void applyCustomLengthTabFix() {
+        initCodeAreaTabFixer(codeArea);
     }
 
     private void enableSyntaxHighlighting() {

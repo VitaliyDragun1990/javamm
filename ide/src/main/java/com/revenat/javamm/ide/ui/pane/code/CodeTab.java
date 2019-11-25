@@ -22,7 +22,13 @@ import com.revenat.javamm.ide.component.Releasable;
 import com.revenat.javamm.ide.model.StringSourceCode;
 import com.revenat.javamm.ide.ui.listener.TabChangeListener;
 import com.revenat.javamm.ide.ui.listener.TabCloseConfirmationListener;
+import com.revenat.javamm.ide.ui.pane.code.exception.SaveFileException;
 import javafx.scene.control.Tab;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
 
@@ -33,7 +39,7 @@ import static java.util.Objects.requireNonNull;
  */
 public class CodeTab extends Tab implements Releasable {
 
-    private final String moduleName;
+    private String moduleName;
 
     private final TabChangeListener tabChangeListener;
 
@@ -52,6 +58,71 @@ public class CodeTab extends Tab implements Releasable {
         setCloseRequestHandler(tabCloseConfirmationListener);
     }
 
+    public String getModuleName() {
+        return moduleName;
+    }
+
+    void requestFocus() {
+        getCodeEditorPane().requestFocus();
+    }
+
+    /**
+     * Saves changes of the source code from {@code this} tab's {@linkplain CodeEditorPane code editor pane}.
+     * If such code tab backed by already opened file, then all changes will be saved to that file, otherwise
+     * provided {@code fileSupplier} will be used to obtain target file to save source code from this code editor
+     * pane.
+     *
+     * @param fileSupplier means to obtain target file to save changes to
+     * @return {@code true} if save operation succeeded, {@code false} otherwise
+     * @throws SaveFileException if any error occurs while trying to save changes to file
+     */
+    public boolean saveChanges(final Supplier<Optional<File>> fileSupplier) {
+        final Optional<File> fileToSaveOptional = getSourceCodeFile().or(fileSupplier);
+        if (fileToSaveOptional.isPresent()) {
+            final File fileToSave = fileToSaveOptional.get();
+            saveChangesTo(fileToSave);
+            tabChangeListener.tabContentSaved();
+            return true;
+        }
+        return false;
+    }
+
+    boolean isBackedByFile(File file) {
+        final Optional<File> optionalFile = getSourceCodeFile();
+        return optionalFile.isPresent() && optionalFile.get().equals(file);
+    }
+
+    @Override
+    public void release() {
+        getCodeEditorPane().release();
+    }
+
+    public boolean isChanged() {
+        return changed;
+    }
+
+    SourceCode getSourceCode() {
+        return new StringSourceCode(moduleName, getCodeEditorPane().getCodeLines());
+    }
+
+    void loadContentFrom(final File file) throws IOException {
+        getCodeEditorPane().loadContentFrom(file);
+        updateTabState(file);
+    }
+
+    private void saveChangesTo(final File fileToSave) {
+        try {
+            getCodeEditorPane().saveContentTo(fileToSave);
+            updateTabState(fileToSave);
+        } catch (final IOException e) {
+            throw new SaveFileException(e.getMessage(), fileToSave);
+        }
+    }
+
+    private Optional<File> getSourceCodeFile() {
+        return getCodeEditorPane().getSourceCodeFile();
+    }
+
     private void setCloseRequestHandler(final TabCloseConfirmationListener tabCloseConfirmationListener) {
         setOnCloseRequest(event -> {
             if (tabCloseConfirmationListener.isTabCloseEventCancelled(this)) {
@@ -60,18 +131,6 @@ public class CodeTab extends Tab implements Releasable {
                 release();
             }
         });
-    }
-
-    public String getModuleName() {
-        return moduleName;
-    }
-
-    SourceCode getSourceCode() {
-        return new StringSourceCode(moduleName, getCodeEditorPane().getCodeLines());
-    }
-
-    public boolean isChanged() {
-        return changed;
     }
 
     private void setChanged() {
@@ -83,9 +142,10 @@ public class CodeTab extends Tab implements Releasable {
         tabChangeListener.tabContentChanged();
     }
 
-    @Override
-    public void release() {
-        getCodeEditorPane().release();
+    private void updateTabState(final File file) {
+        changed = false;
+        setText(file.getName());
+        moduleName = file.getName();
     }
 
     private CodeEditorPane getCodeEditorPane() {

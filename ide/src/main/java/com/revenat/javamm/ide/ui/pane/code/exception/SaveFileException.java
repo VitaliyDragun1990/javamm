@@ -15,20 +15,22 @@
  *
  */
 
-package com.revenat.javamm.ide.ui.listener;
+package com.revenat.javamm.ide.ui.pane.code.exception;
+
+import java.io.File;
 
 /**
  * @author Vitaliy Dragun
  */
-public interface TabChangeListener {
+public class SaveFileException extends RuntimeException {
+    private final File file;
 
-    void allTabsClosed();
+    public SaveFileException(final String message, final File file) {
+        super(message);
+        this.file = file;
+    }
 
-    void tabContentChanged();
-
-    void tabContentUnchanged();
-
-    void newTabCreated();
-
-    void tabContentSaved();
+    public File getFile() {
+        return file;
+    }
 }

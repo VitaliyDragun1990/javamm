@@ -25,7 +25,11 @@ import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
+import java.util.Optional;
 
 import static com.revenat.javamm.ide.component.ComponentFactoryProvider.getComponentFactory;
 import static com.revenat.javamm.ide.util.ResourceUtils.getClassPathResource;
@@ -41,10 +45,16 @@ public final class CodeEditorPane extends StackPane implements Releasable {
 
     private final SyntaxHighlighter syntaxHighlighter = getComponentFactory().createSyntaxHighlighter(codeArea);
 
+    private File sourceCodeFile;
+
     CodeEditorPane() {
         enableLineNumeration();
         enableScrollingFacility();
         enableSyntaxHighlighting();
+    }
+
+    Optional<File> getSourceCodeFile() {
+        return Optional.ofNullable(sourceCodeFile);
     }
 
     @Override
@@ -63,6 +73,16 @@ public final class CodeEditorPane extends StackPane implements Releasable {
 
     void setChangeListener(final ChangeListener<String> changeListener) {
         codeArea.textProperty().addListener(changeListener);
+    }
+
+    void loadContentFrom(final File file) throws IOException {
+        this.sourceCodeFile = file;
+        codeArea.replaceText(Files.readString(file.toPath()));
+    }
+
+    void saveContentTo(final File file) throws IOException {
+        this.sourceCodeFile = file;
+        Files.writeString(file.toPath(), codeArea.getText());
     }
 
     private void enableLineNumeration() {

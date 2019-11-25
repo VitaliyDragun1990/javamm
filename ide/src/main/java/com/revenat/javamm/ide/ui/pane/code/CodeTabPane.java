@@ -24,6 +24,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -39,7 +41,7 @@ public final class CodeTabPane extends TabPane {
 
     private int untitledCounter = 1;
 
-    private TabChangeListener contentChangedListener;
+    private TabChangeListener tabChangeListener;
 
     private TabCloseConfirmationListener tabCloseConfirmationListener;
 
@@ -48,7 +50,7 @@ public final class CodeTabPane extends TabPane {
     }
 
     public void setTabChangeListener(final TabChangeListener tabChangeListener) {
-        this.contentChangedListener = requireNonNull(tabChangeListener);
+        this.tabChangeListener = requireNonNull(tabChangeListener);
         setListenerForTabSelection(tabChangeListener);
     }
 
@@ -60,7 +62,7 @@ public final class CodeTabPane extends TabPane {
         getSelectionModel().selectedItemProperty().addListener(changeListenerWrapper(contentChangedListener));
     }
 
-    private ChangeListener<Tab> changeListenerWrapper(TabChangeListener tabChangeListener) {
+    private ChangeListener<Tab> changeListenerWrapper(final TabChangeListener tabChangeListener) {
         return (observable, oldValue, newValue) -> {
             if (newValue != null) {
                 final CodeTab t = (CodeTab) newValue;
@@ -76,14 +78,8 @@ public final class CodeTabPane extends TabPane {
     }
 
     public void newCodeEditor() {
-        final String tabTitle = generateNewTabName();
-        final CodeEditorPane codeEditorPane = new CodeEditorPane();
-        final Tab newCodeTab =
-            new CodeTab(tabTitle, codeEditorPane, contentChangedListener, tabCloseConfirmationListener);
-
-        addTab(newCodeTab);
-        selectSpecifiedTab(newCodeTab);
-        codeEditorPane.requestFocus(); // set focus on code editing area
+        final CodeTab codeTab = createCodeTab(generateNewTabName());
+        showCodeTab(codeTab);
     }
 
     public List<SourceCode> getAllSourceCode() {
@@ -104,5 +100,61 @@ public final class CodeTabPane extends TabPane {
 
     private List<SourceCode> collectSourceCodeFromAllTabs() {
         return getTabs().stream().map(t -> ((CodeTab) t).getSourceCode()).collect(toList());
+    }
+
+    /**
+     * Presents tab, whether new one or already existed, populated with content of the specified {@code file}.
+     * If specified {@code file} is already opened in some of the existing tabs, such tab will be selected,
+     * otherwise new tab will be opened and populated with file content
+     *
+     * @param file {@linkplain File file} with which content tab should be populated
+     * @return {@code true} if new tab has been opened and populated with file content,
+     * {@code false} if there is already a tab with such file content
+     * @throws IOException if some error occurs while reading file content
+     */
+    public boolean presentTabWithFileContent(final File file) throws IOException {
+        if (isFileAlreadyOpenedInTab(file)) {
+            selectTabWithFile(file);
+            return false;
+        } else {
+            loadFileContentToNewTab(file);
+            return true;
+        }
+    }
+
+    public CodeTab getSelectedTab() {
+        return (CodeTab) getSelectionModel().getSelectedItem();
+    }
+
+    private boolean isFileAlreadyOpenedInTab(final File selectedFile) {
+        return getTabs().stream()
+            .map(t -> (CodeTab) t)
+            .anyMatch(t -> t.isBackedByFile(selectedFile));
+    }
+
+    private void selectTabWithFile(final File selectedFile) {
+        for (final Tab tab : getTabs()) {
+            if (((CodeTab) tab).isBackedByFile(selectedFile)) {
+                getSelectionModel().select(tab);
+                return;
+            }
+        }
+    }
+
+    private void loadFileContentToNewTab(final File file) throws IOException {
+        final CodeTab codeTab = createCodeTab(file.getName());
+        codeTab.loadContentFrom(file);
+        showCodeTab(codeTab);
+    }
+
+    private CodeTab createCodeTab(final String tabTitle) {
+        return new CodeTab(tabTitle, new CodeEditorPane(), tabChangeListener, tabCloseConfirmationListener);
+    }
+
+    private void showCodeTab(final CodeTab codeTab) {
+        addTab(codeTab);
+        selectSpecifiedTab(codeTab);
+        tabChangeListener.newTabCreated();
+        codeTab.requestFocus();
     }
 }

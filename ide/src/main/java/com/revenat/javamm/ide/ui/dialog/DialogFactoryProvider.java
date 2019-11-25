@@ -17,7 +17,10 @@
 
 package com.revenat.javamm.ide.ui.dialog;
 
+import com.revenat.javamm.ide.ui.dialog.impl.FileChooserFactoryImpl.BuilderImpl;
 import com.revenat.javamm.ide.ui.dialog.impl.SimpleDialogFactoryImpl;
+
+import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
 
@@ -28,6 +31,8 @@ public final class DialogFactoryProvider {
 
     private static SimpleDialogFactory simpleDialogFactory = new SimpleDialogFactoryImpl();
 
+    private static Supplier<FileChooserFactory.Builder> fileChooserFactoryBuilderSupplier = BuilderImpl::new;
+
     private DialogFactoryProvider() {
     }
 
@@ -35,7 +40,16 @@ public final class DialogFactoryProvider {
         return simpleDialogFactory;
     }
 
-    public static void setSimpleDialogFactory(SimpleDialogFactory simpleDialogFactory) {
+    public static void setSimpleDialogFactory(final SimpleDialogFactory simpleDialogFactory) {
         DialogFactoryProvider.simpleDialogFactory = requireNonNull(simpleDialogFactory);
+    }
+
+    public static void setFileChooserFactoryBuilderSupplier(
+        final Supplier<FileChooserFactory.Builder> fileChooserFactoryBuilderSupplier) {
+        DialogFactoryProvider.fileChooserFactoryBuilderSupplier = requireNonNull(fileChooserFactoryBuilderSupplier);
+    }
+
+    public static FileChooserFactory.Builder createFileChooserFactoryBuilder() {
+        return fileChooserFactoryBuilderSupplier.get();
     }
 }

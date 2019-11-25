@@ -34,12 +34,14 @@ import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEven
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.EXIT;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.FORMAT;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.NEW;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.NEW_TAB_CREATED;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.OPEN;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.REDO;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.RUN;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.RUN_COMPLETED;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.SAVE;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.TAB_CONTENT_CHANGED;
+import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.TAB_CONTENT_SAVED;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.TAB_CONTENT_UNCHANGED;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.TERMINATED;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.UNDO;
@@ -47,6 +49,7 @@ import static com.revenat.javamm.ide.util.ResourceUtils.loadFromFxmlResource;
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
+// TODO: ask whether to save changes before running VM
 /**
  * Manages state of the action pane control elements
  *
@@ -223,15 +226,23 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
     }
 
     @Override
+    public void newTabCreated() {
+        actionState.onEvent(NEW_TAB_CREATED);
+    }
+
+    @Override
+    public void tabContentSaved() {
+        actionState.onEvent(TAB_CONTENT_SAVED);
+    }
+
+    @Override
     public void allTabsClosed() {
         actionState.onEvent(ALL_TABS_CLOSED);
-        // set initial state when run is disabled
     }
 
     @Override
     public void tabContentChanged() {
         actionState.onEvent(TAB_CONTENT_CHANGED);
-//        enableSaveAction();
     }
 
     @Override

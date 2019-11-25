@@ -58,6 +58,9 @@ class EditingState extends ActionPaneState {
             case EXIT:
                 onExit();
                 break;
+            case SAVE:
+                onSave();
+                break;
             case FORMAT:
                 onFormat();
                 break;
@@ -73,6 +76,9 @@ class EditingState extends ActionPaneState {
             case TAB_CONTENT_UNCHANGED:
                 onTabContentUnchanged();
                 break;
+            case TAB_CONTENT_SAVED:
+                onTabContentSaved();
+                break;
         }
     }
 
@@ -86,6 +92,10 @@ class EditingState extends ActionPaneState {
 
     private void onExit() {
         actionListener.onExitAction();
+    }
+
+    private void onSave() {
+        actionListener.onSaveAction();
     }
 
     private void onFormat() {
@@ -109,6 +119,10 @@ class EditingState extends ActionPaneState {
     }
 
     private void onTabContentUnchanged() {
+        actionStateManager.disableSaveAction();
+    }
+
+    private void onTabContentSaved() {
         actionStateManager.disableSaveAction();
     }
 }

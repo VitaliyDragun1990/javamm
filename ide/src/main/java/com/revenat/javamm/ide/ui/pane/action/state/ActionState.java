@@ -37,6 +37,8 @@ public interface ActionState {
         TERMINATED,
         ALL_TABS_CLOSED,
         TAB_CONTENT_CHANGED,
-        TAB_CONTENT_UNCHANGED;
+        TAB_CONTENT_UNCHANGED,
+        NEW_TAB_CREATED,
+        TAB_CONTENT_SAVED;
     }
 }

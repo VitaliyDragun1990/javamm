@@ -21,25 +21,32 @@ import com.revenat.javamm.ide.component.ComponentFactoryProvider;
 import com.revenat.javamm.ide.component.VirtualMachineRunner;
 import com.revenat.javamm.ide.component.VirtualMachineRunner.CompleteStatus;
 import com.revenat.javamm.ide.component.VirtualMachineRunner.VirtualMachineRunCompletedListener;
+import com.revenat.javamm.ide.ui.dialog.DialogFactoryProvider;
+import com.revenat.javamm.ide.ui.dialog.FileChooserFactory;
 import com.revenat.javamm.ide.ui.listener.ActionListener;
 import com.revenat.javamm.ide.ui.listener.TabCloseConfirmationListener;
 import com.revenat.javamm.ide.ui.pane.PaneManager;
 import com.revenat.javamm.ide.ui.pane.action.ActionPane;
 import com.revenat.javamm.ide.ui.pane.code.CodeTab;
 import com.revenat.javamm.ide.ui.pane.code.CodeTabPane;
+import com.revenat.javamm.ide.ui.pane.code.exception.SaveFileException;
 import com.revenat.javamm.ide.ui.pane.console.ConsolePane;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import static com.revenat.javamm.ide.ui.dialog.DialogFactoryProvider.getSimpleDialogFactory;
+import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -64,6 +71,20 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
 
     private VirtualMachineRunner virtualMachineRunner;
 
+    private final FileChooserFactory fileChooserFactory = buildFileChooserFactory();
+
+    private FileChooserFactory buildFileChooserFactory() {
+        return DialogFactoryProvider.createFileChooserFactoryBuilder()
+            .setOpenFileDialogTitle("Open javamm source code file")
+            .setSaveFileDialogTitle("Save javamm source code file")
+            .setExtensionFilters(
+                new FileChooser.ExtensionFilter("Source code files (*.javamm)", "*.javamm"),
+                new FileChooser.ExtensionFilter("All files (*.*)", "*.*")
+            )
+            .setInitialDirectory(new File("E:\\idea-workspace\\javamm\\ide\\src\\main\\resources\\examples"))
+            .build();
+    }
+
     /**
      * Controller lifecycle method. Will be called by javafx framework
      * after this controller has been fully initialized
@@ -82,12 +103,22 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
 
     @Override
     public boolean onOpenAction() {
+        final Optional<File> selectedFileOptional = fileChooserFactory.showOpenDialog(getStage());
+        if (selectedFileOptional.isPresent()) {
+            final File selectedFile = selectedFileOptional.get();
+            try {
+                return codeTabPane.presentTabWithFileContent(selectedFile);
+            } catch (final IOException e) {
+                getSimpleDialogFactory().showErrorDialog(format("Can't load file: %s -> %s",
+                    selectedFile.getAbsolutePath(), e.getMessage()));
+            }
+        }
         return false;
     }
 
     @Override
     public boolean onSaveAction() {
-        return false;
+        return saveChanges(codeTabPane.getSelectedTab());
     }
 
     @Override
@@ -131,7 +162,7 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
             return false;
         }
 
-        for (CodeTab changedTab : findChangedTabs(codeTabPane.getTabs())) {
+        for (final CodeTab changedTab : findChangedTabs(codeTabPane.getTabs())) {
             selectTab(changedTab);
             if (isTabCloseEventCancelled(changedTab)) {
                 return false;
@@ -184,6 +215,12 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
     }
 
     private boolean saveChanges(final CodeTab codeTab) {
+        try {
+            return codeTab.saveChanges(() -> fileChooserFactory.showSaveDialog(getStage(), codeTab.getModuleName()));
+        } catch (final SaveFileException e) {
+            getSimpleDialogFactory().showErrorDialog(format("Can't save file: %s -> %s",
+                e.getFile().getAbsolutePath(), e.getMessage()));
+        }
         return false;
     }
 

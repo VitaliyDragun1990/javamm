@@ -122,13 +122,13 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
     }
 
     @Override
-    public void onUndoAction() {
-
+    public boolean onUndoAction() {
+        return codeTabPane.undoForSelectedTab();
     }
 
     @Override
-    public void onRedoAction() {
-
+    public boolean onRedoAction() {
+        return codeTabPane.redoForSelectedTab();
     }
 
     @Override

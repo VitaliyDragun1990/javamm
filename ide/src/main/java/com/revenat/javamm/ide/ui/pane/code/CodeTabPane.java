@@ -67,7 +67,7 @@ public final class CodeTabPane extends TabPane {
             if (newValue != null) {
                 final CodeTab t = (CodeTab) newValue;
                 if (t.isChanged()) {
-                    changeListener.tabContentChanged();
+                    changeListener.tabContentChanged(t.isUndoAvailable(), t.isRedoAvailable());
                 } else {
                     changeListener.tabContentUnchanged();
                 }
@@ -104,6 +104,14 @@ public final class CodeTabPane extends TabPane {
             loadFileContentToNewTab(file);
             return true;
         }
+    }
+
+    public boolean undoForSelectedTab() {
+        return getSelectedTab().undoLastChange();
+    }
+
+    public boolean redoForSelectedTab() {
+        return getSelectedTab().redoLastChange();
     }
 
     public CodeTab getSelectedTab() {

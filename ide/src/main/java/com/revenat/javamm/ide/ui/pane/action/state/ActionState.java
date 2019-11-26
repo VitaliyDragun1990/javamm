@@ -36,9 +36,24 @@ public interface ActionState {
         RUN_COMPLETED,
         TERMINATED,
         ALL_TABS_CLOSED,
-        TAB_CONTENT_CHANGED,
+        TAB_CONTENT_CHANGED_WITH_ONLY_UNDO_AVAILABLE,
+        TAB_CONTENT_CHANGED_WITH_ONLY_REDO_AVAILABLE,
+        TAB_CONTENT_CHANGED_WITH_UNDO_REDO_AVAILABLE,
         TAB_CONTENT_UNCHANGED,
         NEW_TAB_CREATED,
         TAB_CONTENT_SAVED;
+
+        public static ActionEvent tabContentChangedEvent(final boolean undoAvailable,
+                                                         final boolean redoAvailable) {
+            if (undoAvailable && redoAvailable) {
+                return TAB_CONTENT_CHANGED_WITH_UNDO_REDO_AVAILABLE;
+            } else if (undoAvailable) {
+                return TAB_CONTENT_CHANGED_WITH_ONLY_UNDO_AVAILABLE;
+            } else if (redoAvailable) {
+                return TAB_CONTENT_CHANGED_WITH_ONLY_REDO_AVAILABLE;
+            } else {
+                throw new IllegalStateException("Either undo or redo should be available on tabContentChanged event");
+            }
+        }
     }
 }

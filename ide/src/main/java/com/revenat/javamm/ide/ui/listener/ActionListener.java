@@ -50,13 +50,17 @@ public interface ActionListener {
 
     /**
      * Undoing last performing actions
+     *
+     * @return {@code true} if next undo is possible, {@code false} otherwise
      */
-    void onUndoAction();
+    boolean onUndoAction();
 
     /**
      * Redoing last performing actions
+     *
+     * @return {@code true} if next redo is possible, {@code false} otherwise
      */
-    void onRedoAction();
+    boolean onRedoAction();
 
     /**
      * Formats javamm source code in the currently active tab

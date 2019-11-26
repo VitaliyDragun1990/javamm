@@ -24,6 +24,9 @@ import javafx.scene.layout.StackPane;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
+import org.fxmisc.richtext.util.UndoUtils;
+import org.fxmisc.undo.UndoManager;
+import org.fxmisc.undo.UndoManagerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +38,7 @@ import static com.revenat.javamm.ide.component.ComponentFactoryProvider.getCompo
 import static com.revenat.javamm.ide.util.ResourceUtils.getClassPathResource;
 import static com.revenat.javamm.ide.util.TabReplaceUtils.initCodeAreaTabFixer;
 import static com.revenat.javamm.ide.util.TabReplaceUtils.replaceTabulations;
+import static org.fxmisc.undo.UndoManagerFactory.fixedSizeHistoryFactory;
 
 /**
  * Pane with code area
@@ -43,6 +47,8 @@ import static com.revenat.javamm.ide.util.TabReplaceUtils.replaceTabulations;
  */
 public final class CodeEditorPane extends StackPane implements Releasable {
 
+    private static final int UNDO_HISTORY_SIZE = 100;
+
     private final CodeArea codeArea = new CodeArea();
 
     private final SyntaxHighlighter syntaxHighlighter = getComponentFactory().createSyntaxHighlighter(codeArea);
@@ -50,6 +56,7 @@ public final class CodeEditorPane extends StackPane implements Releasable {
     private File sourceCodeFile;
 
     CodeEditorPane() {
+        setUndoHistorySize();
         enableLineNumeration();
         enableScrollingFacility();
         applyCustomLengthTabFix();
@@ -80,12 +87,38 @@ public final class CodeEditorPane extends StackPane implements Releasable {
 
     void loadContentFrom(final File file) throws IOException {
         this.sourceCodeFile = file;
-        codeArea.replaceText(replaceTabulations(Files.readString(file.toPath())));
+        final String content = replaceTabulations(Files.readString(file.toPath()));
+        codeArea.replaceText(content);
+        codeArea.getUndoManager().forgetHistory();
     }
 
     void saveContentTo(final File file) throws IOException {
         this.sourceCodeFile = file;
         Files.writeString(file.toPath(), codeArea.getText());
+    }
+
+    boolean undo() {
+        final UndoManager undoManager = codeArea.getUndoManager();
+        undoManager.undo();
+        return undoManager.isUndoAvailable();
+    }
+
+    boolean redo() {
+        final UndoManager undoManager = codeArea.getUndoManager();
+        undoManager.redo();
+        return undoManager.isRedoAvailable();
+    }
+
+    boolean isRedoAvailable() {
+        return codeArea.isRedoAvailable();
+    }
+
+    boolean isUndoAvailable() {
+        return codeArea.isUndoAvailable();
+    }
+
+    private void setUndoHistorySize() {
+        codeArea.setUndoManager(UndoUtils.plainTextUndoManager(codeArea, fixedSizeHistoryFactory(UNDO_HISTORY_SIZE)));
     }
 
     private void enableLineNumeration() {

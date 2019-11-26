@@ -40,7 +40,6 @@ import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEven
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.RUN;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.RUN_COMPLETED;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.SAVE;
-import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.TAB_CONTENT_CHANGED;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.TAB_CONTENT_SAVED;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.TAB_CONTENT_UNCHANGED;
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionState.ActionEvent.TERMINATED;
@@ -241,8 +240,10 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
     }
 
     @Override
-    public void tabContentChanged() {
-        actionState.onEvent(TAB_CONTENT_CHANGED);
+    public void tabContentChanged(final boolean undoAvailable, final boolean redoAvailable) {
+        actionState.onEvent(
+            ActionState.ActionEvent.tabContentChangedEvent(undoAvailable, redoAvailable)
+        );
     }
 
     @Override

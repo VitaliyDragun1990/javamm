@@ -70,14 +70,26 @@ class EditingState extends ActionPaneState {
             case ALL_TABS_CLOSED:
                 onAllTabsClosed();
                 break;
-            case TAB_CONTENT_CHANGED:
-                onTabContentChanged();
+            case TAB_CONTENT_CHANGED_WITH_ONLY_UNDO_AVAILABLE:
+                onTabContentChangedWithUndoAvailable();
+                break;
+            case TAB_CONTENT_CHANGED_WITH_ONLY_REDO_AVAILABLE:
+                onTabContentChangedWithOnlyRedoAvailable();
+                break;
+            case TAB_CONTENT_CHANGED_WITH_UNDO_REDO_AVAILABLE:
+                onTabContentChangedWithUndoRedoAvailable();
                 break;
             case TAB_CONTENT_UNCHANGED:
                 onTabContentUnchanged();
                 break;
             case TAB_CONTENT_SAVED:
                 onTabContentSaved();
+                break;
+            case UNDO:
+                onUndo();
+                break;
+            case REDO:
+                onRedo();
                 break;
         }
     }
@@ -114,15 +126,45 @@ class EditingState extends ActionPaneState {
         currentState.initialize();
     }
 
-    private void onTabContentChanged() {
+    private void onTabContentChangedWithUndoAvailable() {
         actionStateManager.enableSaveAction();
+        actionStateManager.enableUndoAction();
+        actionStateManager.disableRedoAction();
+    }
+
+    private void onTabContentChangedWithOnlyRedoAvailable() {
+        actionStateManager.enableSaveAction();
+        actionStateManager.disableUndoAction();
+        actionStateManager.enableRedoAction();
+    }
+
+    private void onTabContentChangedWithUndoRedoAvailable() {
+        actionStateManager.enableSaveAction();
+        actionStateManager.enableUndoAction();
+        actionStateManager.enableRedoAction();
     }
 
     private void onTabContentUnchanged() {
         actionStateManager.disableSaveAction();
+        actionStateManager.disableUndoAction();
+        actionStateManager.disableRedoAction();
     }
 
     private void onTabContentSaved() {
         actionStateManager.disableSaveAction();
+    }
+
+    private void onUndo() {
+        if (!actionListener.onUndoAction()) {
+            actionStateManager.disableUndoAction();
+        }
+        actionStateManager.enableRedoAction();
+    }
+
+    private void onRedo() {
+        if (!actionListener.onRedoAction()) {
+            actionStateManager.disableRedoAction();
+        }
+        actionStateManager.enableUndoAction();
     }
 }

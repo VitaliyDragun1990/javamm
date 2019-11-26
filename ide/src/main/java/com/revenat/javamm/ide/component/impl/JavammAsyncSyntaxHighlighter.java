@@ -98,6 +98,7 @@ public class JavammAsyncSyntaxHighlighter implements SyntaxHighlighter {
             .subscribe(this::applyHighlighting);
         // FIXME remove
         codeArea.replaceText(0, 0, SAMPLE_CODE);
+        codeArea.getUndoManager().forgetHistory();
     }
 
     @Override

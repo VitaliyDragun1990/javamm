@@ -37,6 +37,7 @@ module javamm.ide {
     requires flowless;
     requires reactfx;
     requires wellbehavedfx;
+    requires undofx;
 
     exports com.revenat.javamm.ide to javafx.graphics;
     exports com.revenat.javamm.ide.controller to javafx.fxml;

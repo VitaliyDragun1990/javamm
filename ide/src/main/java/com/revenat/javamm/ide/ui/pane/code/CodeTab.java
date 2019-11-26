@@ -110,6 +110,22 @@ public class CodeTab extends Tab implements Releasable {
         updateTabState(file);
     }
 
+    boolean undoLastChange() {
+        return getCodeEditorPane().undo();
+    }
+
+    boolean redoLastChange() {
+        return getCodeEditorPane().redo();
+    }
+
+    boolean isRedoAvailable() {
+        return getCodeEditorPane().isRedoAvailable();
+    }
+
+    boolean isUndoAvailable() {
+        return getCodeEditorPane().isUndoAvailable();
+    }
+
     private void saveChangesTo(final File fileToSave) {
         try {
             getCodeEditorPane().saveContentTo(fileToSave);
@@ -139,7 +155,7 @@ public class CodeTab extends Tab implements Releasable {
             setText("*" + moduleName);
         }
         // lastModifiedTime = Instant.now();
-        tabChangeListener.tabContentChanged();
+        tabChangeListener.tabContentChanged(true, getCodeEditorPane().isRedoAvailable());
     }
 
     private void updateTabState(final File file) {

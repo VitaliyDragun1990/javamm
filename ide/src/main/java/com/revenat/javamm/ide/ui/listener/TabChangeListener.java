@@ -24,7 +24,7 @@ public interface TabChangeListener {
 
     void allTabsClosed();
 
-    void tabContentChanged();
+    void tabContentChanged(final boolean undoAvailable, final boolean redoAvailable);
 
     void tabContentUnchanged();
 

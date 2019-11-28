@@ -87,7 +87,7 @@ public class CodeTab extends Tab implements Releasable {
         return false;
     }
 
-    boolean isBackedByFile(File file) {
+    boolean isBackedByFile(final File file) {
         final Optional<File> optionalFile = getSourceCodeFile();
         return optionalFile.isPresent() && optionalFile.get().equals(file);
     }

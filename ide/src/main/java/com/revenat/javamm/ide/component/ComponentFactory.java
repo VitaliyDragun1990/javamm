@@ -47,4 +47,9 @@ public interface ComponentFactory extends Releasable {
      * @return new instance of {@linkplain VirtualMachineRunner virtual machine runner}
      */
     VirtualMachineRunner createVirtualMachineRunner(Console console, List<SourceCode> sourceCodes);
+
+    /**
+     * Returns {@linkplain CodeTemplateHelper code template helper}
+     */
+    CodeTemplateHelper getCodeTemplateHelper();
 }

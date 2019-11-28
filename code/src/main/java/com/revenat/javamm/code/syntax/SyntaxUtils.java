@@ -71,7 +71,7 @@ public final class SyntaxUtils {
                 .allMatch(ch -> isLatinChar(ch) || isDigit(ch) || ch == '.');
     }
 
-    private static boolean isLatinChar(final char ch) {
+    public static boolean isLatinChar(final char ch) {
         return LATIN_CHARS_ONLY.contains(ch);
     }
 

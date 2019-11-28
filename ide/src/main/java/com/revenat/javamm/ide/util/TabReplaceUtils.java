@@ -38,7 +38,7 @@ public final class TabReplaceUtils {
 
     private static final String TAB_REGEXP_PATTERN = Pattern.quote(TABULATION);
 
-    private static final int TAB_LENGTH = TAB_REGEXP_PATTERN.length();
+    private static final int TAB_LENGTH = TABULATION.length();
 
     private TabReplaceUtils() {
     }
@@ -64,7 +64,9 @@ public final class TabReplaceUtils {
     }
 
     public static int getTabCount(final String line) {
-        return (line.length() - line.replaceAll(TAB_REGEXP_PATTERN, "").length()) / TAB_LENGTH;
+        final int lineLength = line.length();
+        final String strippedLine = line.replaceAll(TAB_REGEXP_PATTERN, "");
+        return (lineLength - strippedLine.length()) / TAB_LENGTH;
     }
 
     public static String getLineWithTabs(final String trimmedLine, final int tabCount) {

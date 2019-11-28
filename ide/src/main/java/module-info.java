@@ -33,6 +33,7 @@ module javamm.ide {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.ikonli.devicons;
     requires org.kordamp.ikonli.typicons;
+
     requires richtextfx;
     requires flowless;
     requires reactfx;

@@ -17,16 +17,17 @@
 
 package com.revenat.javamm.ide.ui.pane.code;
 
+import com.revenat.javamm.ide.component.CodeTemplateHelper;
 import com.revenat.javamm.ide.component.Releasable;
 import com.revenat.javamm.ide.component.SyntaxHighlighter;
 import javafx.beans.value.ChangeListener;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.util.UndoUtils;
 import org.fxmisc.undo.UndoManager;
-import org.fxmisc.undo.UndoManagerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -51,6 +52,8 @@ public final class CodeEditorPane extends StackPane implements Releasable {
 
     private final CodeArea codeArea = new CodeArea();
 
+    private final CodeTemplateHelper codeTemplateHelper = getComponentFactory().getCodeTemplateHelper();
+
     private final SyntaxHighlighter syntaxHighlighter = getComponentFactory().createSyntaxHighlighter(codeArea);
 
     private File sourceCodeFile;
@@ -60,6 +63,7 @@ public final class CodeEditorPane extends StackPane implements Releasable {
         enableLineNumeration();
         enableScrollingFacility();
         applyCustomLengthTabFix();
+        enableCodeAutocompletion();
         enableSyntaxHighlighting();
     }
 
@@ -131,6 +135,14 @@ public final class CodeEditorPane extends StackPane implements Releasable {
 
     private void applyCustomLengthTabFix() {
         initCodeAreaTabFixer(codeArea);
+    }
+
+    private void enableCodeAutocompletion() {
+        codeArea.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                codeTemplateHelper.insertCodeTemplateAtCaretPosition(codeArea);
+            }
+        });
     }
 
     private void enableSyntaxHighlighting() {

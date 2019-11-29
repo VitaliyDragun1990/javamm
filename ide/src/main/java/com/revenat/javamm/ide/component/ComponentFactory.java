@@ -52,4 +52,9 @@ public interface ComponentFactory extends Releasable {
      * Returns {@linkplain CodeTemplateHelper code template helper}
      */
     CodeTemplateHelper getCodeTemplateHelper();
+
+    /**
+     * Returns instance of the {@linkplain NewLineHelper new line helper}
+     */
+    NewLineHelper getNewLineHelper();
 }

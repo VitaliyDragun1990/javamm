@@ -44,6 +44,10 @@ public final class Delimiters {
 
     public static final Set<Character> IGNORED_DELIMITERS = Set.of(' ', '\u00A0', '\n', '\t', '\r');
 
+    public static final String DOUBLE_QUOTATION = "\"";
+
+    public static final String SINGLE_QUOTATION = "'";
+
     public static final Set<Character> STRING_DELIMITERS = Set.of('\'', '"');
 
     public static final String OPENING_CURLY_BRACE = "{";

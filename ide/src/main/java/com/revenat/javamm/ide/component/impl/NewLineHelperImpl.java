@@ -18,10 +18,12 @@
 package com.revenat.javamm.ide.component.impl;
 
 import com.revenat.javamm.ide.component.NewLineHelper;
+import com.revenat.javamm.ide.model.CodeTemplate;
 import org.fxmisc.richtext.CodeArea;
 
 import static com.revenat.javamm.code.syntax.Delimiters.OPENING_CURLY_BRACE;
 import static com.revenat.javamm.code.syntax.Delimiters.STRING_DELIMITERS;
+import static com.revenat.javamm.ide.model.CodeTemplate.CURSOR;
 import static com.revenat.javamm.ide.util.TabReplaceUtils.getLineWithTabs;
 import static com.revenat.javamm.ide.util.TabReplaceUtils.getTabCount;
 
@@ -30,18 +32,31 @@ import static com.revenat.javamm.ide.util.TabReplaceUtils.getTabCount;
  */
 public class NewLineHelperImpl implements NewLineHelper {
 
+    private final CodeTemplate BLOCK_CODE_TEMPLATE = new CodeTemplate("\t" + CURSOR, "");
+
     @Override
     public void insertNewLine(final CodeArea codeArea) {
         final String previousLine = codeArea.getText(codeArea.getCurrentParagraph() - 1);
         final int caretPosition = codeArea.getCaretPosition();
 
         final int previousLineTabCount = getTabCount(previousLine);
-        int newLineTabCount = previousLineTabCount;
         if (openBlockLine(previousLine)) {
-            newLineTabCount = previousLineTabCount + 1;
+            insertFirstNewLineInBlock(previousLineTabCount, caretPosition, codeArea);
+        } else {
+            insertNewLine(previousLineTabCount, caretPosition, codeArea);
         }
-        final String content = "\n" + getLineWithTabs("", newLineTabCount);
-        codeArea.replaceText(caretPosition - 1, caretPosition, content);
+    }
+
+    private void insertFirstNewLineInBlock(final int previousLineTabCount, final int caretPosition, final CodeArea codeArea) {
+        String newLineContent = "\n" + BLOCK_CODE_TEMPLATE.getFormattedCode(previousLineTabCount);
+        int cursorIndex = newLineContent.indexOf(CURSOR);
+        codeArea.replaceText(caretPosition - 1, caretPosition, newLineContent.replaceAll(CURSOR, ""));
+        codeArea.moveTo(caretPosition - 1 + cursorIndex);
+    }
+
+    private void insertNewLine(final int previousLineTabCount, final int caretPosition, final CodeArea codeArea) {
+        String newLineContent = "\n" + getLineWithTabs("", previousLineTabCount);
+        codeArea.replaceText(caretPosition - 1, caretPosition, newLineContent);
     }
 
     private boolean openBlockLine(final String line) {

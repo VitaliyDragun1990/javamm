@@ -64,7 +64,7 @@ class NewLineHelperImplTest {
 
         newLineHelper.insertNewLine(codeArea);
 
-        verify(codeArea).replaceText(0, 1, "\n" + TAB);
+        verify(codeArea).replaceText(0, 1, "\n" + TAB + "\n");
     }
 
     @Test

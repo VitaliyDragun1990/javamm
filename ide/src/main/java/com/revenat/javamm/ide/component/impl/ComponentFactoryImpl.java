@@ -23,6 +23,7 @@ import com.revenat.javamm.ide.component.CodeTemplateHelper;
 import com.revenat.javamm.ide.component.CodeTemplateStorage;
 import com.revenat.javamm.ide.component.ComponentFactory;
 import com.revenat.javamm.ide.component.NewLineHelper;
+import com.revenat.javamm.ide.component.PairedTokensHelper;
 import com.revenat.javamm.ide.component.SyntaxHighlighter;
 import com.revenat.javamm.ide.component.VirtualMachineRunner;
 import com.revenat.javamm.ide.model.CodeTemplate;
@@ -50,6 +51,8 @@ public class ComponentFactoryImpl implements ComponentFactory {
 
     private final NewLineHelper newLineHelper = new NewLineHelperImpl();
 
+    private final PairedTokensHelper pairedTokensHelper = new PairedTokensHelperImpl();
+
     @Override
     public SyntaxHighlighter createSyntaxHighlighter(final CodeArea codeArea) {
         return new JavammAsyncSyntaxHighlighter(codeArea, executorService);
@@ -71,6 +74,11 @@ public class ComponentFactoryImpl implements ComponentFactory {
     @Override
     public NewLineHelper getNewLineHelper() {
         return newLineHelper;
+    }
+
+    @Override
+    public PairedTokensHelper getPairedTokensHelper() {
+        return pairedTokensHelper;
     }
 
     @Override

@@ -19,6 +19,7 @@ package com.revenat.javamm.ide.ui.pane.code;
 
 import com.revenat.javamm.ide.component.CodeTemplateHelper;
 import com.revenat.javamm.ide.component.NewLineHelper;
+import com.revenat.javamm.ide.component.PairedTokensHelper;
 import com.revenat.javamm.ide.component.Releasable;
 import com.revenat.javamm.ide.component.SyntaxHighlighter;
 import javafx.beans.value.ChangeListener;
@@ -59,6 +60,8 @@ public final class CodeEditorPane extends StackPane implements Releasable {
 
     private final SyntaxHighlighter syntaxHighlighter = getComponentFactory().createSyntaxHighlighter(codeArea);
 
+    private final PairedTokensHelper pairedTokensHelper = getComponentFactory().getPairedTokensHelper();
+
     private File sourceCodeFile;
 
     CodeEditorPane() {
@@ -67,6 +70,7 @@ public final class CodeEditorPane extends StackPane implements Releasable {
         enableScrollingFacility();
         applyCustomLengthTabFix();
         enableCodeAutocompletionAndNewLineIndentation();
+        enablePairedTokensAutoInsertion();
         enableSyntaxHighlighting();
     }
 
@@ -146,6 +150,10 @@ public final class CodeEditorPane extends StackPane implements Releasable {
                 newLineHelper.insertNewLine(codeArea);
             }
         });
+    }
+
+    private void enablePairedTokensAutoInsertion() {
+        codeArea.setOnKeyTyped(event -> pairedTokensHelper.insertPairedTokenIfAny(codeArea, event.getCharacter()));
     }
 
     private void enableSyntaxHighlighting() {

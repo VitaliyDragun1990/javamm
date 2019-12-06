@@ -17,6 +17,7 @@
 
 package com.revenat.javamm.ide.ui.pane.code;
 
+import com.revenat.javamm.ide.component.CodeFormatter;
 import com.revenat.javamm.ide.component.CodeTemplateHelper;
 import com.revenat.javamm.ide.component.NewLineHelper;
 import com.revenat.javamm.ide.component.PairedTokensHelper;
@@ -61,6 +62,8 @@ public final class CodeEditorPane extends StackPane implements Releasable {
     private final SyntaxHighlighter syntaxHighlighter = getComponentFactory().createSyntaxHighlighter(codeArea);
 
     private final PairedTokensHelper pairedTokensHelper = getComponentFactory().getPairedTokensHelper();
+
+    private final CodeFormatter codeFormatter = getComponentFactory().getCodeFormatter();
 
     private File sourceCodeFile;
 
@@ -126,6 +129,11 @@ public final class CodeEditorPane extends StackPane implements Releasable {
 
     boolean isUndoAvailable() {
         return codeArea.isUndoAvailable();
+    }
+
+    void format() {
+        codeArea.replaceText(String.join("\n", codeFormatter.format(getCodeLines())));
+        syntaxHighlighter.enable();
     }
 
     private void setUndoHistorySize() {

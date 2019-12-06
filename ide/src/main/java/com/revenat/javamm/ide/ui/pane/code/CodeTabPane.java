@@ -118,6 +118,10 @@ public final class CodeTabPane extends TabPane {
         return (CodeTab) getSelectionModel().getSelectedItem();
     }
 
+    public void formatSelectedTab() {
+        getSelectedTab().format();
+    }
+
     private boolean isFileAlreadyOpenedInTab(final File selectedFile) {
         return getCodeTabs().stream()
             .anyMatch(t -> t.isBackedByFile(selectedFile));

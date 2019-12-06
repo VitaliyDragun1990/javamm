@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a paired token helper")
 @ExtendWith(MockitoExtension.class)
-class PairedTokensHelperImplTest {
+class PairedTokensHelperTest {
 
     private final PairedTokensHelper pairedTokensHelper = new PairedTokensHelperImpl();
 

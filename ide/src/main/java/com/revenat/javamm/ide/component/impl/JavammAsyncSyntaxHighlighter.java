@@ -54,7 +54,7 @@ public class JavammAsyncSyntaxHighlighter implements SyntaxHighlighter {
         // String literals: "..." or "...\n or '...' or '...\n
         entry("STRING", format("%s|%s", "\".*?[\"\\n]", "'.*?['\\n]")),
         // Comments: //... \n or /* ... */ or /* ... end file
-        entry("COMMENT", format("%s|%s", "\\[^\n]*", "/\\*(.|\\R)*?(\\*/|\\z)"))
+        entry("COMMENT", format("%s|%s", "//[^\n]*", "/\\*(.|\\R)*?(\\*/|\\z)"))
     // () - parentheses set
     //    entry("PAREN", "[()]"),
     // {} -  curly braces set
@@ -97,8 +97,8 @@ public class JavammAsyncSyntaxHighlighter implements SyntaxHighlighter {
             .filterMap(Try::toOptional)
             .subscribe(this::applyHighlighting);
         // FIXME remove
-        codeArea.replaceText(0, 0, SAMPLE_CODE);
-        codeArea.getUndoManager().forgetHistory();
+//        codeArea.replaceText(0, 0, SAMPLE_CODE);
+//        codeArea.getUndoManager().forgetHistory();
     }
 
     @Override

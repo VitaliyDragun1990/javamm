@@ -25,6 +25,8 @@ import com.revenat.javamm.compiler.model.TokenParserResult;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.revenat.javamm.code.syntax.SyntaxUtils.trimAllWhitespaceCharacters;
+
 /**
  * @author Vitaliy Dragun
  *
@@ -74,10 +76,6 @@ public class TokenParserImpl implements TokenParser {
 
     private List<String> splitByDelimiters(final String line) {
         return byDelimiterSplitter.splitByDelimiters(line);
-    }
-
-    private String trimAllWhitespaceCharacters(final String sourceCodeLine) {
-        return sourceCodeLine.replaceAll("(^\\h*)|(\\h*$)", "").trim();
     }
 
     private TokenParserResult emptyResult(final boolean isMultiLineCommentStartedBefore) {

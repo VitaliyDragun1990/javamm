@@ -22,6 +22,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import static com.revenat.javamm.code.syntax.SyntaxUtils.trimAllWhitespaceCharacters;
+
 /**
  * @author devonline
  * @link http://devonline.academy/javamm

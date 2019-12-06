@@ -77,7 +77,7 @@ class CommentDiscarder {
                 }
             }
         }
-        return new CommentFreeSourceLine(commentFreeContent.toString(), isWithinMultiLineComment());
+        return new CommentFreeSourceLine(commentFreeContent.toString().trim(), isWithinMultiLineComment());
     }
 
     private void discardSingleLineCommentContent() {
@@ -112,6 +112,7 @@ class CommentDiscarder {
     private void endMultiLineComment() {
         multiLineCommentStarted = false;
         commentedOutContent.delete(0, commentedOutContent.length());
+        commentFreeContent.append(' '); // to separate possible tokens which were separated before by multiline comment
     }
 
     private boolean isWithinMultiLineComment() {

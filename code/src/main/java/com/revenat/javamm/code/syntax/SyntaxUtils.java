@@ -20,6 +20,7 @@ package com.revenat.javamm.code.syntax;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static com.revenat.javamm.code.syntax.Delimiters.IGNORED_DELIMITERS;
 import static com.revenat.javamm.code.syntax.Delimiters.SIGNIFICANT_TOKEN_DELIMITERS;
 import static com.revenat.javamm.code.syntax.Delimiters.STRING_DELIMITERS;
 
@@ -63,6 +64,28 @@ public final class SyntaxUtils {
 
     public static boolean isSignificantDelimiter(final String token) {
         return SIGNIFICANT_TOKEN_DELIMITERS.contains(token);
+    }
+
+    public static String trimAllWhitespaceCharacters(final String line) {
+        String result = line;
+        while (containsLeadingIgnoredDelimiter(result) || containsTrailingIgnoredDelimiter(result)) {
+            result = trimIgnoredDelimiters(result);
+        }
+        return result;
+    }
+
+    private static boolean containsLeadingIgnoredDelimiter(final String line) {
+        return !line.isEmpty() && IGNORED_DELIMITERS.contains(line.charAt(0));
+    }
+
+    private static boolean containsTrailingIgnoredDelimiter(final String line) {
+        return !line.isEmpty() && IGNORED_DELIMITERS.contains(line.charAt(line.length() - 1));
+    }
+
+    private static String trimIgnoredDelimiters(String line) {
+        return line
+            .trim()
+            .replaceAll("(^\\h*)|(\\h*$)", "");
     }
 
     private static boolean verifyOnlyContainsAllowedSymbols(final String token) {

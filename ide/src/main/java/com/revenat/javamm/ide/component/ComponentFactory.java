@@ -59,7 +59,12 @@ public interface ComponentFactory extends Releasable {
     NewLineHelper getNewLineHelper();
 
     /**
-     * Returns Instacen of the {@linkplain PairedTokensHelper paired tokens helper}
+     * Returns instance of the {@linkplain PairedTokensHelper paired tokens helper}
      */
     PairedTokensHelper getPairedTokensHelper();
+
+    /**
+     * Returns instance of the {@linkplain CodeFormatter code formatter}
+     */
+    CodeFormatter getCodeFormatter();
 }

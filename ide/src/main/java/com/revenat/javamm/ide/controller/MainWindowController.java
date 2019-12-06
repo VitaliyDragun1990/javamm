@@ -133,7 +133,7 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
 
     @Override
     public void onFormatAction() {
-
+        codeTabPane.formatSelectedTab();
     }
 
     @Override

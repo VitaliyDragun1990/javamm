@@ -39,7 +39,7 @@ import static org.mockito.Mockito.when;
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a new line helper")
 @ExtendWith(MockitoExtension.class)
-class NewLineHelperImplTest {
+class NewLineHelperTest {
 
     private static final String TAB = replaceTabulations("\t");
 

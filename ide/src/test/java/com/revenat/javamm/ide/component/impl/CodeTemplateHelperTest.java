@@ -50,7 +50,7 @@ import static org.mockito.Mockito.when;
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a code template helper")
 @ExtendWith(MockitoExtension.class)
-class CodeTemplateHelperImplTest {
+class CodeTemplateHelperTest {
 
     private static final int CURRENT_PARAGRAPH = 1;
 

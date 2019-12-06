@@ -126,6 +126,11 @@ public class CodeTab extends Tab implements Releasable {
         return getCodeEditorPane().isUndoAvailable();
     }
 
+    void format() {
+        getCodeEditorPane().format();
+        setChanged();
+    }
+
     private void saveChangesTo(final File fileToSave) {
         try {
             getCodeEditorPane().saveContentTo(fileToSave);

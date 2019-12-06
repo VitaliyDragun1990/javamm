@@ -43,7 +43,9 @@ public final class StringIterator {
     }
 
     public String tail() {
-        return string.substring(index);
+        final String tail = string.substring(index);
+        index = string.length();
+        return tail;
     }
 
     public char previous() {

@@ -34,7 +34,7 @@ import static javafx.scene.input.KeyCombination.SHORTCUT_DOWN;
  */
 public final class TabReplaceUtils {
 
-    private static final String TABULATION = " ".repeat(4);
+    public static final String TABULATION = " ".repeat(4);
 
     private static final String TAB_REGEXP_PATTERN = Pattern.quote(TABULATION);
 

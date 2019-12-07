@@ -24,6 +24,7 @@ import java.util.Optional;
 
 import static com.revenat.javamm.code.syntax.Delimiters.CLOSING_CURLY_BRACE;
 import static com.revenat.javamm.code.syntax.Delimiters.OPENING_CURLY_BRACE;
+import static com.revenat.javamm.ide.component.impl.formatter.Token.Type.COMMENT;
 import static com.revenat.javamm.ide.component.impl.formatter.Token.Type.NORMAL;
 import static com.revenat.javamm.ide.component.impl.formatter.Token.Type.STRING_LITERAL;
 import static java.util.Objects.requireNonNull;
@@ -52,11 +53,30 @@ final class Line {
         this.significantContent = "";
     }
 
-    void addToken(String content, Token.Type tokenType, String delimiterBefore) {
-        final Token newToken = new Token(content, tokenType, delimiterBefore);
+    void addSignificantToken(final String content, final String delimiterBefore) {
+        addToken(NORMAL, content, delimiterBefore);
+    }
+
+    void addSignificantTokens(List<String> content, final String firstDelimiter) {
+        addSignificantToken(content.get(0), firstDelimiter);
+        for (int i = 1; i < content.size(); i++) {
+            addSignificantToken(content.get(i), "");
+        }
+    }
+
+    void addCommentToken(final String content, final String delimiterBefore) {
+        addToken(COMMENT, content, delimiterBefore);
+    }
+
+    void addStringLiteralToken(final String content, final String delimiterBefore) {
+        addToken(STRING_LITERAL, content, delimiterBefore);
+    }
+
+    private void addToken(final Token.Type type, final String content, final String delimiterBefore) {
+        final Token newToken = new Token(content, type, delimiterBefore);
         final Optional<Token> optionalLast = getLastToken();
         if (optionalLast.isPresent()) {
-            Token lastToken = optionalLast.get();
+            final Token lastToken = optionalLast.get();
             lastToken.setNext(newToken);
             newToken.setPrevious(lastToken);
         }
@@ -75,7 +95,7 @@ final class Line {
         this.indentation = indentation;
     }
 
-    void setSignificantContent(String significantContent) {
+    void setSignificantContent(final String significantContent) {
         this.significantContent = requireNonNull(significantContent);
     }
 
@@ -92,11 +112,11 @@ final class Line {
     }
 
     boolean isOpenBlockLine() {
-        return !isEmpty() && isLastSignificantTokenContains(OPENING_CURLY_BRACE);
+        return !isEmpty() && lastSignificantTokenIsOpeningCurlyBrace();
     }
 
     boolean isClosingBlockLine() {
-        return !isEmpty() && isOnlyOneSignificantTokenWithContent(CLOSING_CURLY_BRACE);
+        return !isEmpty() && containsOnlyClosingCurlyBraceToken();
     }
 
     @Override
@@ -119,34 +139,34 @@ final class Line {
 
     @Override
     public String toString() {
-        StringBuilder string = new StringBuilder(indentation);
-        for (Token token : tokens) {
+        final StringBuilder string = new StringBuilder(indentation);
+        for (final Token token : tokens) {
             string.append(token.toString());
         }
         return string.toString();
     }
 
-    private boolean isLastSignificantTokenContains(String content) {
+    private boolean lastSignificantTokenIsOpeningCurlyBrace() {
         final List<Token> significantTokens = tokens.stream()
-            .filter(t -> t.isType(NORMAL) || t.isType(STRING_LITERAL))
+            .filter(t -> t.isSignificant() || t.isStringLiteral())
             .collect(toList());
 
         if (significantTokens.isEmpty()) {
             return false;
         } else {
-            Token last = significantTokens.get(significantTokens.size() - 1);
-            return last.isType(NORMAL) && last.hasContentEquals(List.of(content));
+            final Token last = significantTokens.get(significantTokens.size() - 1);
+            return last.isSignificant() && last.equalsTo(OPENING_CURLY_BRACE);
         }
     }
 
-    boolean isOnlyOneSignificantTokenWithContent(final String content) {
+    boolean containsOnlyClosingCurlyBraceToken() {
         final List<Token> significantTokens = tokens.stream()
-            .filter(t -> t.isType(NORMAL) || t.isType(STRING_LITERAL))
+            .filter(t -> t.isSignificant() || t.isStringLiteral())
             .collect(toList());
 
         if (significantTokens.size() == 1) {
-            Token single = significantTokens.get(0);
-            return single.isType(NORMAL) && single.hasContentEquals(List.of(content));
+            final Token single = significantTokens.get(0);
+            return single.isSignificant() && single.equalsTo(CLOSING_CURLY_BRACE);
         }
         return false;
     }

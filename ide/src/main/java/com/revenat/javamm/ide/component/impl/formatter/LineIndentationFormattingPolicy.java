@@ -32,10 +32,10 @@ final class LineIndentationFormattingPolicy implements FormattingPolicy {
 
     @Override
     public void apply(final Lines lines) {
-        LinesImpl linesImpl = (LinesImpl) lines;
+        final LinesImpl linesImpl = (LinesImpl) lines;
 
         int indentationLevel = 0;
-        for (Line line : linesImpl.getLines()) {
+        for (final Line line : linesImpl.getLines()) {
             if (line.isOpenBlockLine()) {
                 line.setIndentation(indentation.repeat(indentationLevel));
                 indentationLevel++;

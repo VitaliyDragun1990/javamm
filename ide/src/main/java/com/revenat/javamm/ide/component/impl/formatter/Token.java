@@ -40,46 +40,38 @@ final class Token {
 
     private String delimiterBefore;
 
-    Token(final String content, final Type type, String delimiterBefore) {
+    Token(final String content, final Type type, final String delimiterBefore) {
         this.content = requireNonNull(content);
         this.type = requireNonNull(type);
         this.delimiterBefore = requireNonNull(delimiterBefore);
     }
 
-    void setPrevious(Token token) {
+    void setPrevious(final Token token) {
         previous = token;
     }
 
-    void setNext(Token token) {
+    void setNext(final Token token) {
         next = token;
-    }
-
-    boolean isType(Type type) {
-        return this.type == type;
     }
 
     void setDelimiterBefore(final String delimiterBefore) {
         this.delimiterBefore = delimiterBefore;
     }
 
-    boolean hasContentEquals(final Collection<String> contents) {
-        return contents.contains(content);
-    }
-
     void deleteDelimiterBefore() {
         delimiterBefore = NO_DELIMITER;
-    }
-
-    public boolean previousTokenHasContentEquals(final Collection<String> contents) {
-        return previous != null && contents.contains(previous.content);
     }
 
     Optional<Token> getNext() {
         return Optional.ofNullable(next);
     }
 
-    boolean previousTokenHasType(final Type type) {
-        return previous != null && previous.type == type;
+    boolean equalsAny(final Collection<String> tokenContent) {
+        return tokenContent.contains(content);
+    }
+
+    boolean equalsTo(final String tokenContent) {
+        return content.equals(tokenContent);
     }
 
     @Override
@@ -91,10 +83,29 @@ final class Token {
         return previous == null;
     }
 
+    boolean isComment() {
+        return type == Type.COMMENT;
+    }
+
+    boolean previousOneIsComment() {
+        return previous != null && previous.type == Type.COMMENT;
+    }
+
+    public boolean previousOneEqualsAny(final Collection<String> tokenContent) {
+        return previous != null && tokenContent.contains(previous.content);
+    }
+
+    boolean isStringLiteral() {
+        return type == Type.STRING_LITERAL;
+    }
+
+    boolean isSignificant() {
+        return type == Type.NORMAL;
+    }
+
     enum Type {
         NORMAL,
-        LINE_COMMENT,
-        MULTI_LINE_COMMENT,
+        COMMENT,
         STRING_LITERAL
     }
 }

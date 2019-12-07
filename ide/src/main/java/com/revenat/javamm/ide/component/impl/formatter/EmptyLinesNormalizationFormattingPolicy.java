@@ -35,8 +35,7 @@ final class EmptyLinesNormalizationFormattingPolicy implements FormattingPolicy 
         final ListIterator<Line> iter = linesImpl.getLines().listIterator();
         while (iter.hasNext()) {
             final Line current = iter.next();
-            if (isEmptyLineAfterAnotherEmptyLine(current, iter) ||
-                isLastLineAndEmpty(current, iter)) {
+            if (isEmptyLineAfterAnotherEmptyLine(current, iter) || isLastLineAndEmpty(current, iter)) {
                 linesToRemove.add(current);
             }
         }
@@ -54,14 +53,18 @@ final class EmptyLinesNormalizationFormattingPolicy implements FormattingPolicy 
     }
 
     private Optional<Line> getPreviousLineIfAny(final ListIterator<Line> lines) {
-        lines.previous(); // position before current one
+        // position iterator pointer before current line
+        lines.previous();
         if (lines.hasPrevious()) {
             final Line previous = lines.previous();
+            // position iterator pointer before current line
             lines.next();
-            lines.next(); // position after current
+            // position iterator pointer after current line
+            lines.next();
             return Optional.of(previous);
         }
-        lines.next(); // position after current
+        // position iterator pointer after current line
+        lines.next();
         return Optional.empty();
     }
 

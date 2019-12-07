@@ -20,9 +20,6 @@ package com.revenat.javamm.ide.component.impl.formatter;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.revenat.javamm.ide.component.impl.formatter.Token.Type.LINE_COMMENT;
-import static com.revenat.javamm.ide.component.impl.formatter.Token.Type.MULTI_LINE_COMMENT;
-import static com.revenat.javamm.ide.component.impl.formatter.Token.Type.NORMAL;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -63,14 +60,14 @@ final class TokenSeparationFormattingPolicy implements FormattingPolicy {
 
             if (token.isFirst()) {
                 token.deleteDelimiterBefore();
-            } else if (token.isType(LINE_COMMENT) || token.isType(MULTI_LINE_COMMENT)) {
+            } else if (token.isComment()) {
                 // preserve user specific before delimiter
-            } else if (token.previousTokenHasType(LINE_COMMENT) || token.previousTokenHasType(MULTI_LINE_COMMENT)) {
+            } else if (token.previousOneIsComment()) {
                 // preserve user specific delimiter
-            } else if (token.hasContentEquals(MANDATORY_NO_DELIMITER_BEFORE)) {
+            } else if (token.equalsAny(MANDATORY_NO_DELIMITER_BEFORE)) {
                 token.deleteDelimiterBefore();
-            } else if (token.hasContentEquals(PREFERABLY_NO_DELIMITER_BEFORE)) {
-                if (token.previousTokenHasContentEquals(MANDATORY_DELIMITER_AFTER)) {
+            } else if (token.equalsAny(PREFERABLY_NO_DELIMITER_BEFORE)) {
+                if (token.previousOneEqualsAny(MANDATORY_DELIMITER_AFTER)) {
                     token.setDelimiterBefore(delimiter);
                 } else {
                     token.deleteDelimiterBefore();
@@ -79,37 +76,10 @@ final class TokenSeparationFormattingPolicy implements FormattingPolicy {
                 token.setDelimiterBefore(delimiter);
             }
 
-            if (token.previousTokenHasContentEquals(MANDATORY_NO_DELIMITER_AFTER) &&
-                !(token.isType(LINE_COMMENT) || token.isType(MULTI_LINE_COMMENT))) {
+            if (token.previousOneEqualsAny(MANDATORY_NO_DELIMITER_AFTER) && !token.isComment()) {
                 token.deleteDelimiterBefore();
             }
             optionalToken = token.getNext();
         }
-    }
-
-    public static void main(final String[] args) {
-        final Line line = new Line(1, "for(var i=1;i<10;i++){");
-        line.addToken("for", NORMAL, "");
-        line.addToken("(", NORMAL, "");
-        line.addToken("var", NORMAL, "");
-        line.addToken("i", NORMAL, " ");
-        line.addToken("=", NORMAL, "");
-        line.addToken("1", NORMAL, "");
-        line.addToken(";", NORMAL, "");
-        line.addToken("/* test */", MULTI_LINE_COMMENT, "");
-        line.addToken("i", NORMAL, "");
-        line.addToken("<", NORMAL, "");
-        line.addToken("10", NORMAL, "");
-        line.addToken(";", NORMAL, "");
-        line.addToken("++", NORMAL, "");
-        line.addToken("i", NORMAL, "");
-        line.addToken(")", NORMAL, "");
-        line.addToken("{", NORMAL, "");
-        line.addToken("// test", LINE_COMMENT, "   ");
-        System.out.println(line);
-
-        new TokenSeparationFormattingPolicy(" ").apply(line);
-
-        System.out.println(line);
     }
 }

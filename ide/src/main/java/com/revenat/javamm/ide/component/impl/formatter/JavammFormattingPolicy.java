@@ -33,7 +33,7 @@ final class JavammFormattingPolicy implements FormattingPolicy {
         new EmptyLinesNormalizationFormattingPolicy();
 
     private final LineParsingFormattingPolicy lineParsingFormattingPolicy =
-        new LineParsingFormattingPolicy(new TokenSplitter(SIGNIFICANT_TOKEN_DELIMITERS));
+        new LineParsingFormattingPolicy(new LineParser(new TokenSplitter(SIGNIFICANT_TOKEN_DELIMITERS)));
 
     private final TokenSeparationFormattingPolicy tokenSeparationFormattingPolicy =
         new TokenSeparationFormattingPolicy(WHITESPACE);

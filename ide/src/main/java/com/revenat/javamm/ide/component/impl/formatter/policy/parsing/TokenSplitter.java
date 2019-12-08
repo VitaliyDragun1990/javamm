@@ -15,7 +15,9 @@
  *
  */
 
-package com.revenat.javamm.ide.component.impl.formatter;
+package com.revenat.javamm.ide.component.impl.formatter.policy.parsing;
+
+import com.revenat.javamm.ide.component.impl.formatter.model.Token;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,9 +30,13 @@ import static java.util.Comparator.comparing;
  *
  * @author Vitaliy Dragun
  */
-final class TokenSplitter {
+public final class TokenSplitter {
 
     private final List<String> delimiters;
+
+    public TokenSplitter(final Collection<String> delimiters) {
+        this.delimiters = sortByLengthReversed(delimiters);
+    }
 
     private static List<String> sortByLengthReversed(final Collection<String> delimiters) {
         final List<String> result = new ArrayList<>(delimiters);
@@ -38,18 +44,22 @@ final class TokenSplitter {
         return result;
     }
 
-    TokenSplitter(Collection<String> delimiters) {
-        this.delimiters = sortByLengthReversed(delimiters);
-    }
-
     /**
      * Tries to splits specified {@code token} into several tokens using provided delimiters
      *
-     * @param token string token to split further
+     * @param token token to split further
      * @return {@linkplain List list of tokens} if specified {@code token} was successfully split by delimiters,
      * or if specified {@code token} could't be split further, {@linkplain List list} with single original token in it
      */
-    List<String> splitByDelimiters(final String token) {
+    public List<Token> splitByDelimiters(final Token token) {
+        final List<String> contents = splitByDelimiters(token.getContent());
+        if (contents.size() > 1) {
+            return createTokensFrom(contents, token.getDelimiter());
+        }
+        return List.of(token);
+    }
+
+    private List<String> splitByDelimiters(final String token) {
         final List<String> tokens = new ArrayList<>();
 
         for (final String delimiter : delimiters) {
@@ -76,6 +86,15 @@ final class TokenSplitter {
         }
 
         tokens.add(token);
+        return tokens;
+    }
+
+    private List<Token> createTokensFrom(final List<String> content, final String originalDelimiter) {
+        final List<Token> tokens = new ArrayList<>(content.size());
+        tokens.add(new Token(content.get(0), Token.Type.NORMAL, originalDelimiter));
+        for (int i = 1; i < content.size(); i++) {
+            tokens.add(new Token(content.get(i), Token.Type.NORMAL, Token.NO_DELIMITER));
+        }
         return tokens;
     }
 }

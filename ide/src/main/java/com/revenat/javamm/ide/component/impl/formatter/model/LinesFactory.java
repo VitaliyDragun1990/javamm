@@ -15,20 +15,19 @@
  *
  */
 
-package com.revenat.javamm.ide.component.impl.formatter;
+package com.revenat.javamm.ide.component.impl.formatter.model;
 
-import static com.revenat.javamm.code.syntax.SyntaxUtils.trimAllWhitespaceCharacters;
+import java.util.List;
 
 /**
  * @author Vitaliy Dragun
  */
-final class LineTrimmingFormattingPolicy implements FormattingPolicy {
+public final class LinesFactory {
 
-    @Override
-    public void apply(final Lines lines) {
-        final LinesImpl linesImpl = (LinesImpl) lines;
-        for (final Line line : linesImpl.getLines()) {
-            line.setSignificantContent(trimAllWhitespaceCharacters(line.getOriginalContent()));
-        }
+    private LinesFactory() {
+    }
+
+    public static Lines buildFrom(List<String> sourceCode) {
+        return new LinesImpl(sourceCode);
     }
 }

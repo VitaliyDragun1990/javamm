@@ -17,6 +17,8 @@
 
 package com.revenat.javamm.ide.component.impl.formatter;
 
+import com.revenat.javamm.ide.component.impl.formatter.model.Lines;
+
 /**
  * @author Vitaliy Dragun
  */

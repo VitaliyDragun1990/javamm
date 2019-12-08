@@ -15,7 +15,9 @@
  *
  */
 
-package com.revenat.javamm.ide.component.impl.formatter;
+package com.revenat.javamm.ide.component.impl.formatter.model;
+
+import com.revenat.javamm.code.util.StringIterator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,16 +26,13 @@ import java.util.Optional;
 
 import static com.revenat.javamm.code.syntax.Delimiters.CLOSING_CURLY_BRACE;
 import static com.revenat.javamm.code.syntax.Delimiters.OPENING_CURLY_BRACE;
-import static com.revenat.javamm.ide.component.impl.formatter.Token.Type.COMMENT;
-import static com.revenat.javamm.ide.component.impl.formatter.Token.Type.NORMAL;
-import static com.revenat.javamm.ide.component.impl.formatter.Token.Type.STRING_LITERAL;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 /**
  * @author Vitaliy Dragun
  */
-final class Line {
+public final class Line {
 
     private final int number;
 
@@ -53,37 +52,21 @@ final class Line {
         this.significantContent = "";
     }
 
-    void addSignificantToken(final String content, final String delimiterBefore) {
-        addToken(NORMAL, content, delimiterBefore);
+    public void addTokens(final List<Token> newTokens) {
+        newTokens.forEach(this::addToken);
     }
 
-    void addSignificantTokens(List<String> content, final String firstDelimiter) {
-        addSignificantToken(content.get(0), firstDelimiter);
-        for (int i = 1; i < content.size(); i++) {
-            addSignificantToken(content.get(i), "");
-        }
-    }
-
-    void addCommentToken(final String content, final String delimiterBefore) {
-        addToken(COMMENT, content, delimiterBefore);
-    }
-
-    void addStringLiteralToken(final String content, final String delimiterBefore) {
-        addToken(STRING_LITERAL, content, delimiterBefore);
-    }
-
-    private void addToken(final Token.Type type, final String content, final String delimiterBefore) {
-        final Token newToken = new Token(content, type, delimiterBefore);
+    public void addToken(final Token token) {
         final Optional<Token> optionalLast = getLastToken();
         if (optionalLast.isPresent()) {
             final Token lastToken = optionalLast.get();
-            lastToken.setNext(newToken);
-            newToken.setPrevious(lastToken);
+            lastToken.setNext(token);
+            token.setPrevious(lastToken);
         }
-        this.tokens.add(newToken);
+        this.tokens.add(token);
     }
 
-    Optional<Token> getFirstToken() {
+    public Optional<Token> getFirstToken() {
         return tokens.isEmpty() ? Optional.empty() : Optional.of(tokens.get(0));
     }
 
@@ -91,31 +74,31 @@ final class Line {
         return tokens.isEmpty() ? Optional.empty() : Optional.of(tokens.get(tokens.size() - 1));
     }
 
-    void setIndentation(final String indentation) {
-        this.indentation = indentation;
+    public void setIndentation(final String indentation) {
+        this.indentation = requireNonNull(indentation);
     }
 
-    void setSignificantContent(final String significantContent) {
+    public void setSignificantContent(final String significantContent) {
         this.significantContent = requireNonNull(significantContent);
     }
 
-    String getSignificantContent() {
-        return significantContent;
+    public StringIterator getSignificantContent() {
+        return new StringIterator(significantContent);
     }
 
-    String getOriginalContent() {
+    public String getOriginalContent() {
         return originalContent;
     }
 
-    boolean isEmpty() {
+    public boolean isEmpty() {
         return significantContent.isEmpty();
     }
 
-    boolean isOpenBlockLine() {
+    public boolean isOpenBlockLine() {
         return !isEmpty() && lastSignificantTokenIsOpeningCurlyBrace();
     }
 
-    boolean isClosingBlockLine() {
+    public boolean isClosingBlockLine() {
         return !isEmpty() && containsOnlyClosingCurlyBraceToken();
     }
 
@@ -159,7 +142,7 @@ final class Line {
         }
     }
 
-    boolean containsOnlyClosingCurlyBraceToken() {
+    private boolean containsOnlyClosingCurlyBraceToken() {
         final List<Token> significantTokens = tokens.stream()
             .filter(t -> t.isSignificant() || t.isStringLiteral())
             .collect(toList());
@@ -170,4 +153,5 @@ final class Line {
         }
         return false;
     }
+
 }

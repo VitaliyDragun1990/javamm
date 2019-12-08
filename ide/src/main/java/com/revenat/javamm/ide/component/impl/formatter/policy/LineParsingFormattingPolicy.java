@@ -15,7 +15,14 @@
  *
  */
 
-package com.revenat.javamm.ide.component.impl.formatter;
+package com.revenat.javamm.ide.component.impl.formatter.policy;
+
+import com.revenat.javamm.ide.component.impl.formatter.FormattingPolicy;
+import com.revenat.javamm.ide.component.impl.formatter.model.Line;
+import com.revenat.javamm.ide.component.impl.formatter.model.Lines;
+import com.revenat.javamm.ide.component.impl.formatter.model.LinesImpl;
+import com.revenat.javamm.ide.component.impl.formatter.policy.parsing.LineParser;
+import com.revenat.javamm.ide.component.impl.formatter.policy.parsing.TokenBuilder;
 
 import static java.util.Objects.requireNonNull;
 
@@ -26,16 +33,17 @@ final class LineParsingFormattingPolicy implements FormattingPolicy {
 
     private final LineParser lineParser;
 
-    LineParsingFormattingPolicy(final LineParser lineParse) {
+    private final TokenBuilder tokenBuilder;
+
+    LineParsingFormattingPolicy(final LineParser lineParse, final TokenBuilder tokenBuilder) {
         this.lineParser = requireNonNull(lineParse);
+        this.tokenBuilder = requireNonNull(tokenBuilder);
     }
 
     @Override
     public void apply(final Lines lines) {
-        boolean multilineStarted = false;
-
         for (final Line line : ((LinesImpl) lines).getLines()) {
-            multilineStarted = lineParser.parseLine(line, multilineStarted);
+            lineParser.parseLine(line, tokenBuilder);
         }
     }
 }

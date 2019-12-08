@@ -15,7 +15,13 @@
  *
  */
 
-package com.revenat.javamm.ide.component.impl.formatter;
+package com.revenat.javamm.ide.component.impl.formatter.policy;
+
+import com.revenat.javamm.ide.component.impl.formatter.FormattingPolicy;
+import com.revenat.javamm.ide.component.impl.formatter.model.Lines;
+import com.revenat.javamm.ide.component.impl.formatter.policy.parsing.LineParser;
+import com.revenat.javamm.ide.component.impl.formatter.policy.parsing.TokenBuilder;
+import com.revenat.javamm.ide.component.impl.formatter.policy.parsing.TokenSplitter;
 
 import static com.revenat.javamm.code.syntax.Delimiters.SIGNIFICANT_TOKEN_DELIMITERS;
 import static com.revenat.javamm.ide.util.TabReplaceUtils.TABULATION;
@@ -33,7 +39,9 @@ final class JavammFormattingPolicy implements FormattingPolicy {
         new EmptyLinesNormalizationFormattingPolicy();
 
     private final LineParsingFormattingPolicy lineParsingFormattingPolicy =
-        new LineParsingFormattingPolicy(new LineParser(new TokenSplitter(SIGNIFICANT_TOKEN_DELIMITERS)));
+        new LineParsingFormattingPolicy(
+            new LineParser(new TokenSplitter(SIGNIFICANT_TOKEN_DELIMITERS)),
+            new TokenBuilder());
 
     private final TokenSeparationFormattingPolicy tokenSeparationFormattingPolicy =
         new TokenSeparationFormattingPolicy(WHITESPACE);

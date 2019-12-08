@@ -18,9 +18,9 @@
 package com.revenat.javamm.ide.component.impl;
 
 import com.revenat.javamm.ide.component.CodeFormatter;
-import com.revenat.javamm.ide.component.impl.formatter.FormattingPolicyProvider;
-import com.revenat.javamm.ide.component.impl.formatter.Lines;
-import com.revenat.javamm.ide.component.impl.formatter.LinesFactory;
+import com.revenat.javamm.ide.component.impl.formatter.model.Lines;
+import com.revenat.javamm.ide.component.impl.formatter.model.LinesFactory;
+import com.revenat.javamm.ide.component.impl.formatter.policy.FormattingPolicyProvider;
 
 import java.util.Collections;
 import java.util.List;

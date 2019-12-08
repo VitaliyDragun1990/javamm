@@ -15,7 +15,13 @@
  *
  */
 
-package com.revenat.javamm.ide.component.impl.formatter;
+package com.revenat.javamm.ide.component.impl.formatter.policy;
+
+import com.revenat.javamm.ide.component.impl.formatter.FormattingPolicy;
+import com.revenat.javamm.ide.component.impl.formatter.model.Line;
+import com.revenat.javamm.ide.component.impl.formatter.model.Lines;
+import com.revenat.javamm.ide.component.impl.formatter.model.LinesImpl;
+import com.revenat.javamm.ide.component.impl.formatter.model.Token;
 
 import java.util.Optional;
 import java.util.Set;

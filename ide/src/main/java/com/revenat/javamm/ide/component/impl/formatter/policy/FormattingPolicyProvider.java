@@ -15,7 +15,9 @@
  *
  */
 
-package com.revenat.javamm.ide.component.impl.formatter;
+package com.revenat.javamm.ide.component.impl.formatter.policy;
+
+import com.revenat.javamm.ide.component.impl.formatter.FormattingPolicy;
 
 import static java.util.Objects.requireNonNull;
 

@@ -15,36 +15,25 @@
  *
  */
 
-package com.revenat.javamm.ide.component.impl.formatter;
+package com.revenat.javamm.ide.component.impl.formatter.policy;
 
-import static java.util.Objects.requireNonNull;
+import com.revenat.javamm.ide.component.impl.formatter.FormattingPolicy;
+import com.revenat.javamm.ide.component.impl.formatter.model.Line;
+import com.revenat.javamm.ide.component.impl.formatter.model.Lines;
+import com.revenat.javamm.ide.component.impl.formatter.model.LinesImpl;
+
+import static com.revenat.javamm.code.syntax.SyntaxUtils.trimAllWhitespaceCharacters;
 
 /**
  * @author Vitaliy Dragun
  */
-final class LineIndentationFormattingPolicy implements FormattingPolicy {
-
-    private final String indentation;
-
-    LineIndentationFormattingPolicy(final String indentation) {
-        this.indentation = requireNonNull(indentation);
-    }
+final class LineTrimmingFormattingPolicy implements FormattingPolicy {
 
     @Override
     public void apply(final Lines lines) {
         final LinesImpl linesImpl = (LinesImpl) lines;
-
-        int indentationLevel = 0;
         for (final Line line : linesImpl.getLines()) {
-            if (line.isOpenBlockLine()) {
-                line.setIndentation(indentation.repeat(indentationLevel));
-                indentationLevel++;
-            } else if (line.isClosingBlockLine()) {
-                indentationLevel = Math.max(0, indentationLevel - 1);
-                line.setIndentation(indentation.repeat(indentationLevel));
-            } else {
-                line.setIndentation(indentation.repeat(indentationLevel));
-            }
+            line.setSignificantContent(trimAllWhitespaceCharacters(line.getOriginalContent()));
         }
     }
 }

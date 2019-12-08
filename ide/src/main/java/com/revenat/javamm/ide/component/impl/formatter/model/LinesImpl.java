@@ -15,7 +15,9 @@
  *
  */
 
-package com.revenat.javamm.ide.component.impl.formatter;
+package com.revenat.javamm.ide.component.impl.formatter.model;
+
+import com.revenat.javamm.ide.component.impl.formatter.FormattingPolicy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author Vitaliy Dragun
  */
-final class LinesImpl implements Lines {
+public final class LinesImpl implements Lines {
 
     private final List<Line> lines;
 
@@ -37,18 +39,18 @@ final class LinesImpl implements Lines {
         }
     }
 
-    List<Line> getLines() {
+    public List<Line> getLines() {
         return List.copyOf(lines);
     }
 
-    Optional<Line> getLastLine() {
+    public Optional<Line> getLastLine() {
         if (lines.isEmpty()) {
             return Optional.empty();
         }
         return Optional.of(lines.get(lines.size() - 1));
     }
 
-    void remove(final Line line) {
+    public void remove(final Line line) {
         lines.remove(line);
     }
 

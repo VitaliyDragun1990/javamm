@@ -15,7 +15,7 @@
  *
  */
 
-package com.revenat.javamm.ide.component.impl.formatter;
+package com.revenat.javamm.ide.component.impl.formatter.model;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -26,9 +26,9 @@ import static java.util.Objects.requireNonNull;
 /**
  * @author Vitaliy Dragun
  */
-final class Token {
+public final class Token {
 
-    private static final String NO_DELIMITER = "";
+    public static final String NO_DELIMITER = "";
 
     private Token previous;
 
@@ -40,10 +40,59 @@ final class Token {
 
     private String delimiterBefore;
 
-    Token(final String content, final Type type, final String delimiterBefore) {
+    public Token(final String content, final Type type, final String delimiterBefore) {
         this.content = requireNonNull(content);
         this.type = requireNonNull(type);
         this.delimiterBefore = requireNonNull(delimiterBefore);
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setDelimiterBefore(final String delimiterBefore) {
+        this.delimiterBefore = requireNonNull(delimiterBefore);
+    }
+
+    public String getDelimiter() {
+        return delimiterBefore;
+    }
+
+    public void deleteDelimiterBefore() {
+        delimiterBefore = NO_DELIMITER;
+    }
+
+    public Optional<Token> getNext() {
+        return Optional.ofNullable(next);
+    }
+
+    public boolean equalsAny(final Collection<String> tokenContent) {
+        return tokenContent.contains(content);
+    }
+
+    @Override
+    public String toString() {
+        return format("%s%s", delimiterBefore, content);
+    }
+
+    public boolean isFirst() {
+        return previous == null;
+    }
+
+    public boolean isComment() {
+        return type == Type.COMMENT;
+    }
+
+    public boolean previousOneIsComment() {
+        return previous != null && previous.type == Type.COMMENT;
+    }
+
+    public boolean previousOneEqualsAny(final Collection<String> tokenContent) {
+        return previous != null && tokenContent.contains(previous.content);
+    }
+
+    public boolean isSignificant() {
+        return type == Type.NORMAL;
     }
 
     void setPrevious(final Token token) {
@@ -54,56 +103,15 @@ final class Token {
         next = token;
     }
 
-    void setDelimiterBefore(final String delimiterBefore) {
-        this.delimiterBefore = delimiterBefore;
-    }
-
-    void deleteDelimiterBefore() {
-        delimiterBefore = NO_DELIMITER;
-    }
-
-    Optional<Token> getNext() {
-        return Optional.ofNullable(next);
-    }
-
-    boolean equalsAny(final Collection<String> tokenContent) {
-        return tokenContent.contains(content);
-    }
-
     boolean equalsTo(final String tokenContent) {
         return content.equals(tokenContent);
-    }
-
-    @Override
-    public String toString() {
-        return format("%s%s", delimiterBefore, content);
-    }
-
-    boolean isFirst() {
-        return previous == null;
-    }
-
-    boolean isComment() {
-        return type == Type.COMMENT;
-    }
-
-    boolean previousOneIsComment() {
-        return previous != null && previous.type == Type.COMMENT;
-    }
-
-    public boolean previousOneEqualsAny(final Collection<String> tokenContent) {
-        return previous != null && tokenContent.contains(previous.content);
     }
 
     boolean isStringLiteral() {
         return type == Type.STRING_LITERAL;
     }
 
-    boolean isSignificant() {
-        return type == Type.NORMAL;
-    }
-
-    enum Type {
+    public enum Type {
         NORMAL,
         COMMENT,
         STRING_LITERAL

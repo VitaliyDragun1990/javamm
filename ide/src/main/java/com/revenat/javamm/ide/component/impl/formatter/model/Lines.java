@@ -15,7 +15,9 @@
  *
  */
 
-package com.revenat.javamm.ide.component.impl.formatter;
+package com.revenat.javamm.ide.component.impl.formatter.model;
+
+import com.revenat.javamm.ide.component.impl.formatter.FormattingPolicy;
 
 import java.util.List;
 

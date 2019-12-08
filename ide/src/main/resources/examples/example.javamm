@@ -1,0 +1,24 @@
+/*
+* multi-line comment
+*/
+function main () {
+    var a = 1
+    final b = a + 4
+    a ++
+    final text = 'Hello javamm'
+    // single-line comment
+    for (var i = 0; /* // test comment */ i < b; /* test comment */ i ++) /* test comment */ {
+        if (i < 3) {
+            println ('i < 3 -> ' + text)
+        }
+        else {
+            println ("else -> " + text)
+        }
+    }
+    
+    println (a typeof void)
+}
+
+function sum (a, b) {
+    return a + b
+}

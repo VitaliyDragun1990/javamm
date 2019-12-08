@@ -34,6 +34,10 @@ public class ActionPaneState implements ActionState {
 
     static ActionPaneState currentState;
 
+    private static boolean undoActionEnabled = false;
+
+    private static boolean redoActionEnabled = false;
+
     private static Map<StateName, ActionPaneState> supportedStates;
 
     final ActionStateManager actionStateManager;
@@ -50,6 +54,30 @@ public class ActionPaneState implements ActionState {
         currentState = getStateByName(INITIAL);
         currentState.initialize();
         return new ActionPaneState(actionStateManager, actionListener);
+    }
+
+    static synchronized void undoActionEnabled() {
+        undoActionEnabled = true;
+    }
+
+    static synchronized void undoActionDisabled() {
+        undoActionEnabled = false;
+    }
+
+    static synchronized boolean isUndoActionEnabled() {
+        return undoActionEnabled;
+    }
+
+    static synchronized void redoActionEnabled() {
+        redoActionEnabled = true;
+    }
+
+    static synchronized void redoActionDisabled() {
+        redoActionEnabled = false;
+    }
+
+    static synchronized boolean isRedoActionEnabled() {
+        return redoActionEnabled;
     }
 
     private static Map<StateName, ActionPaneState> registerAllSupportedStates(final ActionStateManager stateManager,

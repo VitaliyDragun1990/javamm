@@ -35,15 +35,28 @@ class EditingState extends ActionPaneState {
     @Override
     protected void initialize() {
         actionStateManager.disableSaveAction();
-        actionStateManager.disableUndoAction();
-        actionStateManager.disableRedoAction();
         actionStateManager.disableTerminateAction();
+        initializeUndoRedo();
+
 
         actionStateManager.enableNewAction();
         actionStateManager.enableOpenAction();
         actionStateManager.enableExitAction();
         actionStateManager.enableFormatAction();
         actionStateManager.enableRunAction();
+    }
+
+    private void initializeUndoRedo() {
+        if (isUndoActionEnabled()) {
+            actionStateManager.enableUndoAction();
+        } else {
+            actionStateManager.disableUndoAction();
+        }
+        if (isRedoActionEnabled()) {
+            actionStateManager.enableRedoAction();
+        } else {
+            actionStateManager.disableRedoAction();
+        }
     }
 
     @Override
@@ -129,25 +142,33 @@ class EditingState extends ActionPaneState {
     private void onTabContentChangedWithUndoAvailable() {
         actionStateManager.enableSaveAction();
         actionStateManager.enableUndoAction();
+        undoActionEnabled();
         actionStateManager.disableRedoAction();
+        redoActionDisabled();
     }
 
     private void onTabContentChangedWithOnlyRedoAvailable() {
         actionStateManager.enableSaveAction();
         actionStateManager.disableUndoAction();
+        undoActionDisabled();
         actionStateManager.enableRedoAction();
+        redoActionEnabled();
     }
 
     private void onTabContentChangedWithUndoRedoAvailable() {
         actionStateManager.enableSaveAction();
         actionStateManager.enableUndoAction();
+        undoActionEnabled();
         actionStateManager.enableRedoAction();
+        redoActionEnabled();
     }
 
     private void onTabContentUnchanged() {
         actionStateManager.disableSaveAction();
         actionStateManager.disableUndoAction();
+        undoActionDisabled();
         actionStateManager.disableRedoAction();
+        redoActionDisabled();
     }
 
     private void onTabContentSaved() {
@@ -157,14 +178,18 @@ class EditingState extends ActionPaneState {
     private void onUndo() {
         if (!actionListener.onUndoAction()) {
             actionStateManager.disableUndoAction();
+            undoActionDisabled();
         }
         actionStateManager.enableRedoAction();
+        redoActionEnabled();
     }
 
     private void onRedo() {
         if (!actionListener.onRedoAction()) {
             actionStateManager.disableRedoAction();
+            redoActionDisabled();
         }
         actionStateManager.enableUndoAction();
+        undoActionEnabled();
     }
 }

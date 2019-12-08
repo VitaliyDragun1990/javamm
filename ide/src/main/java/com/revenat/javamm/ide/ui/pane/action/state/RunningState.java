@@ -58,14 +58,14 @@ class RunningState extends ActionPaneState {
         }
     }
 
-    private void onRunCompleted() {
+    private void onTerminate() {
+        actionListener.onTerminateAction();
+
         setCurrentStateByName(EDITING);
         currentState.initialize();
     }
 
-    private void onTerminate() {
-        actionListener.onTerminateAction();
-
+    private void onRunCompleted() {
         setCurrentStateByName(EDITING);
         currentState.initialize();
     }

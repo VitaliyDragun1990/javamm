@@ -40,7 +40,6 @@
 		<module>interpreter</module>
 		<module>library</module>
 		<module>release</module>
-		<module>temp</module>
 		<module>vm</module>
 	</modules>
 

@@ -17,6 +17,7 @@
 
 package com.revenat.javamm.cmd;
 
+import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.compiler.error.JavammSyntaxError;
 import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 import com.revenat.javamm.vm.VirtualMachine;
@@ -33,13 +34,21 @@ public final class JmmVmLauncher {
     private JmmVmLauncher() {
     }
 
-    public static void main(final String[] args) throws IOException {
+    public static void main(final String... args) throws IOException {
         final VirtualMachine vm = new VirtualMachineBuilder().build();
 
         try {
-            vm.run(new FileSourceCode("src/main/resources/test.javamm"));
+            vm.run(sourceCodeFrom(args));
         } catch (final JavammSyntaxError | JavammRuntimeError e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    private static SourceCode[] sourceCodeFrom(final String[] args) throws IOException {
+        final SourceCode[] sourceCode = new SourceCode[args.length];
+        for (int i = 0; i < args.length; i++) {
+            sourceCode[i] = new FileSourceCode(args[i]);
+        }
+        return sourceCode;
     }
 }

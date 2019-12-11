@@ -74,7 +74,7 @@ import static java.util.Map.ofEntries;
  *
  */
 public class OperatorPrecedenceResolverImpl implements OperatorPrecedenceResolver {
-    private static final int MAX_PRECEDENCE = 20;
+    public static final int MAX_PRECEDENCE = 20;
 
     private static final Map<Operator, Integer> OPERATOR_PRECEDENCE_REGISTRY = ofEntries(
             entry(INCREMENT, MAX_PRECEDENCE - 1),

@@ -67,7 +67,7 @@ public class DefaultEntryReader implements SwitchBodyEntryReader<SwitchDefaultEn
     private Block getBody(final SourceLine sourceLine,
                           final ListIterator<SourceLine> sourceCode,
                           final BlockOperationReader blockOperationReader) {
-        return blockOperationReader.readWithExpectedClosingCurlyBrace(sourceLine, sourceCode);
+        return blockOperationReader.read(sourceLine, sourceCode);
     }
 
     private void validateSemicolonAfterDefaultToken(final SourceLine sourceLine) {

@@ -31,6 +31,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -66,7 +67,29 @@ class ConstantExpressionTest {
 
         assertValue(expression, literal);
     }
-    
+
+    @Test
+    @Order(4)
+    void shouldBeEqualToAnotherConstantExpressionWithEqualValue() {
+        assertEquals(ConstantExpression.valueOf(true), ConstantExpression.valueOf(true));
+        assertEquals(ConstantExpression.valueOf(10), ConstantExpression.valueOf(10));
+        assertEquals(ConstantExpression.valueOf(10.5), ConstantExpression.valueOf(10.5));
+        assertEquals(ConstantExpression.valueOf("test"), ConstantExpression.valueOf("test"));
+    }
+
+    @Test
+    @Order(5)
+    void shouldNotBeEqualToAnotherConstantExpressionWithDifferentValue() {
+        assertNotEquals(ConstantExpression.valueOf(true), ConstantExpression.valueOf(false));
+        assertNotEquals(ConstantExpression.valueOf(10), ConstantExpression.valueOf(10.0));
+        assertNotEquals(ConstantExpression.valueOf(true), ConstantExpression.valueOf(0));
+        assertNotEquals(ConstantExpression.valueOf(false), ConstantExpression.valueOf(-1));
+        assertNotEquals(ConstantExpression.valueOf(10.5), ConstantExpression.valueOf("10.5"));
+        assertNotEquals(ConstantExpression.valueOf("true"), ConstantExpression.valueOf(true));
+        assertNotEquals(ConstantExpression.valueOf("true"), null);
+        assertNotEquals(ConstantExpression.valueOf("true"), new Object());
+    }
+
     private static Stream<Arguments> supportedLiterals() {
         return Stream.of(
                 Arguments.arguments("test"),

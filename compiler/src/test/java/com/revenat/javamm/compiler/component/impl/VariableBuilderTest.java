@@ -17,8 +17,11 @@
 
 package com.revenat.javamm.compiler.component.impl;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.revenat.javamm.code.fragment.SourceLine;
@@ -31,10 +34,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.revenat.javamm.compiler.test.doubles.VariableDummy;
 import com.revenat.juinit.addons.ReplaceCamelCase;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -86,4 +91,55 @@ class VariableBuilderTest {
     void shouldFailToBuildVariableWithInvalidName(final String name) {
         assertThrows(JavammSyntaxError.class, () -> variableBuilder.build(name, DUMMY_SOURCE_LINE));
     }
+
+    @Test
+    @Order(5)
+    void shouldBuildEqualVariablesForEqualNames() {
+        String name = "test";
+
+        final Variable varA = variableBuilder.build(name, DUMMY_SOURCE_LINE);
+        final Variable varB = variableBuilder.build(name, DUMMY_SOURCE_LINE);
+
+        assertEquals(varA, varB);
+        assertEquals(varA, varA);
+        assertEquals(varB, varB);
+        assertEquals(varA.hashCode(), varB.hashCode());
+    }
+
+    @Test
+    @Order(6)
+    void shouldBuildDifferentVariablesForDifferentNames() {
+        final Variable varA = variableBuilder.build("testA", DUMMY_SOURCE_LINE);
+        final Variable varB = variableBuilder.build("testB", DUMMY_SOURCE_LINE);
+
+        assertNotEquals(varA, varB);
+        assertNotEquals(varA.hashCode(), varB.hashCode());
+    }
+
+    @Test
+    @Order(7)
+    void builtVariableNotEqualToVariableNotBuiltByAnotherMeans() {
+        Variable varNull = null;
+        Variable varBuiltByOtherMeans = new VariableDummy();
+        Variable variable = variableBuilder.build("test", DUMMY_SOURCE_LINE);
+
+        assertNotEquals(variable, varNull);
+        assertNotEquals(variable, varBuiltByOtherMeans);
+    }
+
+    @Test
+    @Order((8))
+    void shouldBuildVariableWhichCanBeComparedByTheirNames() {
+        String nameA = "nameA";
+        String nameB = "nameB";
+
+        Variable varA = variableBuilder.build(nameA, DUMMY_SOURCE_LINE);
+        Variable varB = variableBuilder.build(nameB, DUMMY_SOURCE_LINE);
+        Variable varC = variableBuilder.build(nameA, DUMMY_SOURCE_LINE);
+
+        assertThat(varA.compareTo(varC), is(equalTo(0)));
+        assertThat(varA.compareTo(varB), is(lessThan(0)));
+        assertThat(varB.compareTo(varC), is(greaterThan(0)));
+    }
+
 }

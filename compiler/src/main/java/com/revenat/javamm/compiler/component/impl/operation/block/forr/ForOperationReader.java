@@ -66,7 +66,7 @@ public class ForOperationReader extends AbstractBlockOperationReader<ForOperatio
     }
 
     private Block getBody(final SourceLine sourceLine, final ListIterator<SourceLine> sourceCode) {
-        return getBlockOperationReader().readWithExpectedClosingCurlyBrace(sourceLine, sourceCode);
+        return getBlockOperationReader().read(sourceLine, sourceCode);
     }
 
     private void validateThatOpeningParenthesisRightAfterForToken(final SourceLine sourceLine) {

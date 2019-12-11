@@ -60,35 +60,27 @@ public class BlockOperationReaderImpl implements BlockOperationReader {
     }
 
     @Override
-    public Block read(final SourceLine startingLine, final ListIterator<SourceLine> sourceCode) {
-        return readBlock(startingLine, sourceCode, false);
-    }
-
-    @Override
-    public Block readWithExpectedClosingCurlyBrace(final SourceLine blockStartingLine,
-                                                   final ListIterator<SourceLine> compiledCodeIterator) {
-        return readBlock(blockStartingLine, compiledCodeIterator, true);
+    public Block read(final SourceLine blockStartingLine,
+                      final ListIterator<SourceLine> compiledCodeIterator) {
+        return readBlock(blockStartingLine, compiledCodeIterator);
     }
 
     private Block readBlock(final SourceLine startingLine,
-                            final ListIterator<SourceLine> compiledCodeIterator,
-                            final boolean closingBraceExpected) {
+                            final ListIterator<SourceLine> compiledCodeIterator) {
         final String moduleName = startingLine.getModuleName();
-        return new Block(readOperations(compiledCodeIterator, moduleName, closingBraceExpected), startingLine);
+        return new Block(readOperations(compiledCodeIterator, moduleName), startingLine);
     }
 
     private List<Operation> readOperations(final ListIterator<SourceLine> iterator,
-                                           final String moduleName,
-                                           final boolean closingBraceExpected) {
+                                           final String moduleName) {
         final List<Operation> operations = new ArrayList<>();
-        populateWithOperations(operations, iterator, moduleName, closingBraceExpected);
+        populateWithOperations(operations, iterator, moduleName);
         return operations;
     }
 
     private void populateWithOperations(final List<Operation> operations,
                                         final ListIterator<SourceLine> sourceCode,
-                                        final String moduleName,
-                                        final boolean blockShouldEndWithClosingBrace) {
+                                        final String moduleName) {
         while (sourceCode.hasNext()) {
             final SourceLine sourceLine = sourceCode.next();
 
@@ -99,7 +91,7 @@ public class BlockOperationReaderImpl implements BlockOperationReader {
             }
         }
 
-        failIfBlockEndNotFound(moduleName, blockShouldEndWithClosingBrace);
+        throw new JavammStructSyntaxError("'}' expected to close block statement at the end of file", moduleName);
     }
 
     private boolean isBlockFinished(final SourceLine sourceLine) {
@@ -108,13 +100,6 @@ public class BlockOperationReaderImpl implements BlockOperationReader {
             return true;
         } else {
             return false;
-        }
-    }
-
-    private void failIfBlockEndNotFound(final String moduleName,
-                                        final boolean blockShouldEndWithClosingBrace) {
-        if (blockShouldEndWithClosingBrace) {
-            throw new JavammStructSyntaxError("'}' expected to close block statement at the end of file", moduleName);
         }
     }
 

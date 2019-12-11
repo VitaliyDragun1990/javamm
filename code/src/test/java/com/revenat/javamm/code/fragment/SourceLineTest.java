@@ -19,6 +19,7 @@ package com.revenat.javamm.code.fragment;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
@@ -114,10 +115,45 @@ class SourceLineTest {
 
     @Test
     @Order(11)
-    void shouldConsiderEqualToAnotherSourceLineWithSameModuleNameAndLineNumber() {
+    void shouldConsideredEqualToAnotherSourceLineWithSameModuleNameAndLineNumber() {
         final SourceLine another = new SourceLine(MODULE_NAME, 1, List.of());
 
         assertThat(sourceLine, equalTo(another));
+        assertThat(sourceLine.hashCode(), equalTo(another.hashCode()));
+    }
+
+    @Test
+    @Order(11)
+    void shouldConsideredNotEqualToSourceLineWithSameModuleNameAndLineNumberButAnotherClass() {
+        final SourceLine another = new TestSourceLine(MODULE_NAME, 1, List.of());
+
+        assertThat(sourceLine, not(equalTo(another)));
+    }
+
+
+    @Test
+    @Order(11)
+    void shouldConsideredNotEqualToSourceLineWithSameModuleNameAndButDifferentLineNumber() {
+        final SourceLine another = new SourceLine(MODULE_NAME, 2, List.of());
+
+        assertThat(sourceLine, not(equalTo(another)));
+        assertThat(sourceLine.hashCode(), not(equalTo(another.hashCode())));
+    }
+
+    @Test
+    @Order(11)
+    void shouldConsideredNotEqualToSourceLineDifferentSameModuleNameAndButSameLineNumber() {
+        final SourceLine another = new SourceLine("some different value", 1, List.of());
+
+        assertThat(sourceLine, not(equalTo(another)));
+        assertThat(sourceLine.hashCode(), not(equalTo(another.hashCode())));
+    }
+
+
+    @Test
+    @Order(11)
+    void shouldConsideredNotEqualToNull() {
+        assertThat(sourceLine, not(equalTo(null)));
     }
 
     @Test
@@ -136,6 +172,7 @@ class SourceLineTest {
         assertLessThan(sourceLine, another);
     }
 
+
     @Test
     @Order(14)
     void shouldAllowToGetAdequateStringRepresentation() {
@@ -150,4 +187,10 @@ class SourceLineTest {
         assertThat(first.compareTo(second), lessThan(0));
     }
 
+    private static class TestSourceLine extends SourceLine {
+
+        TestSourceLine(final String moduleName, final int lineNumber, final List<String> tokens) {
+            super(moduleName, lineNumber, tokens);
+        }
+    }
 }

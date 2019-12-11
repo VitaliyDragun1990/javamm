@@ -81,7 +81,7 @@ public class FunctionReaderImpl implements FunctionReader {
     }
 
     private Block getFunctionBody(final ListIterator<SourceLine> sourceCode, final SourceLine functionDefinitionLine) {
-        return blockOperationReader.readWithExpectedClosingCurlyBrace(functionDefinitionLine, sourceCode);
+        return blockOperationReader.read(functionDefinitionLine, sourceCode);
     }
 
     private DeveloperFunction buildFunction(final FunctionName name,

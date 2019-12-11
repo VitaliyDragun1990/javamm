@@ -78,7 +78,7 @@ public class CaseEntryReader implements SwitchBodyEntryReader<SwitchCaseEntry> {
     private Block getBody(final SourceLine sourceLine,
                           final ListIterator<SourceLine> sourceCode,
                           final BlockOperationReader blockOperationReader) {
-        return blockOperationReader.readWithExpectedClosingCurlyBrace(sourceLine, sourceCode);
+        return blockOperationReader.read(sourceLine, sourceCode);
     }
 
     private CaseValueExpression getExpression(final SourceLine sourceLine) {

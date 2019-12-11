@@ -42,13 +42,4 @@ public final class StringIterator {
         return string.charAt(index++);
     }
 
-    public String tail() {
-        final String tail = string.substring(index);
-        index = string.length();
-        return tail;
-    }
-
-    public char previous() {
-        return string.charAt(--index);
-    }
 }

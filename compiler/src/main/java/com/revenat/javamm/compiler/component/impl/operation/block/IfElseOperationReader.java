@@ -82,7 +82,7 @@ public class IfElseOperationReader extends AbstractBlockOperationReader<IfElseOp
     }
 
     private Block getNextBlock(final SourceLine sourceLine, final ListIterator<SourceLine> codeIterator) {
-        return getBlockOperationReader().readWithExpectedClosingCurlyBrace(sourceLine, codeIterator);
+        return getBlockOperationReader().read(sourceLine, codeIterator);
     }
 
     private Optional<Block> findElseOptionalBlock(final ListIterator<SourceLine> codeIterator) {

@@ -76,7 +76,7 @@ public class WhileOperationReader extends AbstractBlockOperationReader<WhileOper
     }
 
     private Block getBody(final SourceLine sourceLine, final ListIterator<SourceLine> codeIterator) {
-        return getBlockOperationReader().readWithExpectedClosingCurlyBrace(sourceLine, codeIterator);
+        return getBlockOperationReader().read(sourceLine, codeIterator);
     }
 
     private void validateThatOpeningParenthesisRightAfterWhileToken(final SourceLine sourceLine) {

@@ -75,7 +75,7 @@ public class DoWhileOperationReader extends AbstractBlockOperationReader<DoWhile
     }
 
     private Block getBody(final SourceLine sourceLine, final ListIterator<SourceLine> codeIterator) {
-        return getBlockOperationReader().readWithExpectedClosingCurlyBrace(sourceLine, codeIterator);
+        return getBlockOperationReader().read(sourceLine, codeIterator);
     }
 
     private SourceLine getWhileSourceLine(final ListIterator<SourceLine> codeIterator, final String moduleName) {

@@ -48,6 +48,6 @@ public class SimpleBlockOperationReader extends AbstractBlockOperationReader<Blo
     }
 
     private Block readBlockBody(final SourceLine sourceLine, final ListIterator<SourceLine> codeIterator) {
-        return getBlockOperationReader().readWithExpectedClosingCurlyBrace(sourceLine, codeIterator);
+        return getBlockOperationReader().read(sourceLine, codeIterator);
     }
 }

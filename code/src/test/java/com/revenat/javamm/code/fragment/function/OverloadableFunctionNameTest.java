@@ -84,6 +84,15 @@ class OverloadableFunctionNameTest {
     }
 
     @Test
+    @Order(4)
+    void shouldNotBeEqualToNoFunctionName() {
+        final OverloadableFunctionName functionName = createOverloadableName("f", 1);
+
+        assertThat(functionName, is(not(equalTo(null))));
+        assertThat(functionName, is(not(equalTo(new Object()))));
+    }
+
+    @Test
     @Order(5)
     void shouldBeEqualToNonOverloadableFunctionNameWithSameNameRegardlessOfArgumentCount() {
         final OverloadableFunctionName overloadableWithoutArgs = createOverloadableName("f", 0);

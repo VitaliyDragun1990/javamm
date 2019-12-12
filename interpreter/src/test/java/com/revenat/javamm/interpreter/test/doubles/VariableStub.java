@@ -27,11 +27,6 @@ public class VariableStub implements Variable {
     }
 
     @Override
-    public int compareTo(final Variable o) {
-        return name.compareTo(o.getName());
-    }
-
-    @Override
     public String getName() {
         return name;
     }

@@ -29,7 +29,6 @@ import static com.revenat.javamm.code.syntax.Delimiters.OPENING_CURLY_BRACE;
 import static com.revenat.javamm.code.syntax.Delimiters.OPENING_PARENTHESIS;
 import static com.revenat.javamm.code.syntax.Keywords.ALL_KEYWORDS;
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
-
 import static java.lang.Character.isLetter;
 
 /**
@@ -50,15 +49,11 @@ public final class SyntaxValidationUtils {
     }
 
     public static void validateThatLineContainsClosingCurlyBraceOnly(final SourceLine sourceLine) {
-        if (!assertContainsOnly(sourceLine, Delimiters.CLOSING_CURLY_BRACE)) {
-            throw new JavammLineSyntaxError(sourceLine, "'%s' expected only", Delimiters.CLOSING_CURLY_BRACE);
-        }
+        assertContainsOnly(sourceLine, Delimiters.CLOSING_CURLY_BRACE);
     }
 
     public static void validateThatLineContainsOpeningCurlyBraceOnly(final SourceLine sourceLine) {
-        if (!assertContainsOnly(sourceLine, OPENING_CURLY_BRACE)) {
-            throw new JavammLineSyntaxError(sourceLine, "'%s' expected only", OPENING_CURLY_BRACE);
-        }
+        assertContainsOnly(sourceLine, OPENING_CURLY_BRACE);
     }
 
     public static void validateOpeningParenthesisAfterTokenInPosition(final SourceLine sourceLine,
@@ -133,8 +128,10 @@ public final class SyntaxValidationUtils {
         }
     }
 
-    private static boolean assertContainsOnly(final SourceLine sourceLine, final String expectedToken) {
-        return sourceLine.getTokenCount() == 1 && expectedToken.equals(sourceLine.getFirst());
+    private static void assertContainsOnly(final SourceLine sourceLine, final String expectedToken) {
+        if (sourceLine.getTokenCount() != 1 || !expectedToken.equals(sourceLine.getFirst())) {
+            throw new JavammLineSyntaxError(sourceLine, "'%s' expected only", expectedToken);
+        }
     }
 
     public enum LanguageFeature {

@@ -25,8 +25,10 @@ import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.ComplexExpression;
+import com.revenat.javamm.compiler.CompilerConfigurator;
 import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
+import com.revenat.javamm.compiler.component.OperatorPrecedenceResolver;
 import com.revenat.javamm.compiler.component.UnaryAssignmentExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.test.doubles.ComplexExpressionBuilderStub;
@@ -63,6 +65,7 @@ class ExpressionResolverImplTest {
     private LexemeBuilderStub lexemeBuilder;
     private ComplexLexemeValidator lexemeValidator;
     private UnaryAssignmentExpressionResolver unaryAssignmentExpressionResolver;
+    private OperatorPrecedenceResolver operatorPrecedenceResolver;
 
     private ExpressionResolver expressionResolver;
 
@@ -73,12 +76,14 @@ class ExpressionResolverImplTest {
         lexemeBuilder = new LexemeBuilderStub();
         lexemeValidator = new ComplexLexemeValidatorDummy();
         unaryAssignmentExpressionResolver = new UnaryAssignmentExpressionResolverStub();
+        operatorPrecedenceResolver = new OperatorPrecedenceResolverImpl(CompilerConfigurator.OPERATOR_PRECEDENCE_REGISTRY);
 
         expressionResolver = new ExpressionResolverImpl(Set.of(expressionBuilder),
                                                         complexExpressionBuilder,
                                                         lexemeBuilder,
                                                         lexemeValidator,
-                                                        unaryAssignmentExpressionResolver);
+                                                        unaryAssignmentExpressionResolver,
+                                                        operatorPrecedenceResolver);
     }
 
     private Expression resolve(final List<String> tokens) {
@@ -92,27 +97,32 @@ class ExpressionResolverImplTest {
                                                                                   complexExpressionBuilder,
                                                                                   lexemeBuilder,
                                                                                   lexemeValidator,
-                                                                                  unaryAssignmentExpressionResolver));
+                                                                                  unaryAssignmentExpressionResolver,
+                                                                                  operatorPrecedenceResolver));
         assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder),
                                                                                   null,
                                                                                   lexemeBuilder,
                                                                                   lexemeValidator,
-                                                                                  unaryAssignmentExpressionResolver));
+                                                                                  unaryAssignmentExpressionResolver,
+                                                                                  operatorPrecedenceResolver));
         assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder),
                                                                                   complexExpressionBuilder,
                                                                                   null,
                                                                                   lexemeValidator,
-                                                                                  unaryAssignmentExpressionResolver));
+                                                                                  unaryAssignmentExpressionResolver,
+                                                                                  operatorPrecedenceResolver));
         assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder),
                                                                                   complexExpressionBuilder,
                                                                                   lexemeBuilder,
                                                                                   null,
-                                                                                  unaryAssignmentExpressionResolver));
+                                                                                  unaryAssignmentExpressionResolver,
+                                                                                  operatorPrecedenceResolver));
         assertThrows(NullPointerException.class, () -> new ExpressionResolverImpl(Set.of(expressionBuilder),
                                                                                   complexExpressionBuilder,
                                                                                   lexemeBuilder,
                                                                                   lexemeValidator,
-                                                                                  null));
+                                                                                  null,
+                                                                                  operatorPrecedenceResolver));
     }
 
     @Test

@@ -30,11 +30,6 @@ import com.revenat.javamm.compiler.error.JavammSyntaxError;
 public interface VariableBuilder {
 
     /**
-     * Checks whether provided {@code name} is a valid variable name
-     */
-    boolean isValid(String name);
-
-    /**
      * Builds new variable instance
      *
      * @param name       variable name

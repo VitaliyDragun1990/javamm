@@ -17,6 +17,7 @@
 
 package com.revenat.javamm.compiler.test.builder;
 
+import com.revenat.javamm.compiler.CompilerConfigurator;
 import com.revenat.javamm.compiler.component.ComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
 import com.revenat.javamm.compiler.component.ExpressionBuilder;
@@ -50,7 +51,8 @@ import java.util.Set;
 public final class ComponentBuilder {
     private final VariableBuilder variableBuilder = new VariableBuilderImpl();
 
-    private final OperatorPrecedenceResolver operatorPrecedenceResolver = new OperatorPrecedenceResolverImpl();
+    private final OperatorPrecedenceResolver operatorPrecedenceResolver =
+        new OperatorPrecedenceResolverImpl(CompilerConfigurator.OPERATOR_PRECEDENCE_REGISTRY);
 
     private final ComplexExpressionBuilder complexExpressionBuilder =
             new PostfixNotationComplexExpressionBuilder(operatorPrecedenceResolver);
@@ -80,7 +82,8 @@ public final class ComponentBuilder {
             complexExpressionBuilder,
             lexemeBuilder,
             lexemeValidator,
-            unaryAssignmentExpressionResolver
+            unaryAssignmentExpressionResolver,
+            operatorPrecedenceResolver
     );
 
     public ExpressionResolver buildExpressionResolver() {

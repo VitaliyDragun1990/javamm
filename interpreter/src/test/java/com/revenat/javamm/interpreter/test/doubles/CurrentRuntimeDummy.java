@@ -29,11 +29,6 @@ import java.util.List;
 public class CurrentRuntimeDummy implements CurrentRuntime {
 
     @Override
-    public String getCurrentModuleName() {
-        return null;
-    }
-
-    @Override
     public SourceLine getCurrentSourceLine() {
         return null;
     }

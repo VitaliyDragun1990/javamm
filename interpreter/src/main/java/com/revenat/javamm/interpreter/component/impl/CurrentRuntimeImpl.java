@@ -58,11 +58,6 @@ public class CurrentRuntimeImpl implements CurrentRuntime {
     }
 
     @Override
-    public String getCurrentModuleName() {
-        return currentSourceLine.getModuleName();
-    }
-
-    @Override
     public SourceLine getCurrentSourceLine() {
         return requireNonNull(currentSourceLine, "currentSourceLine is not set");
     }
@@ -117,10 +112,13 @@ public class CurrentRuntimeImpl implements CurrentRuntime {
     @Override
     public List<StackTraceItem> getCurrentStackTrace() {
         final List<StackTraceItem> stackTrace = new ArrayList<>();
-        if (currentFunction != null) {
-            stackTrace.add(new StackTraceItemImpl(currentFunction, currentSourceLine));
-        }
+        stackTrace.add(new StackTraceItemImpl(getCurrentFunction(), currentSourceLine));
         stackTrace.addAll(currentStackTrace);
         return unmodifiableList(stackTrace);
+    }
+
+    private DeveloperFunction getCurrentFunction() {
+        return requireNonNull(currentFunction, "currentFunction is not set. " +
+            "It is necessary to invoke enterToFunction() before getCurrentFunction");
     }
 }

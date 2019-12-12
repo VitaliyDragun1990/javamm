@@ -22,7 +22,6 @@ import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.compiler.component.OperationReader;
 
 import java.util.ListIterator;
-import java.util.Optional;
 
 /**
  * Contains common behavior for all operation readers
@@ -31,20 +30,6 @@ import java.util.Optional;
  *
  */
 public abstract class AbstractOperationReader<T extends Operation> implements OperationReader {
-
-    @Override
-    public boolean canRead(final SourceLine sourceLine) {
-        final Optional<String> operationKeyword = getOperationDefiningKeyword();
-        return operationKeyword.isPresent() && operationKeyword.get().equals(sourceLine.getFirst());
-    }
-
-    /**
-     * Returns operation-specific keyword that explicitly define operation this
-     * operation reader can process
-     */
-    protected Optional<String> getOperationDefiningKeyword() {
-        return Optional.empty();
-    }
 
     @Override
     public T read(final SourceLine sourceLine, final ListIterator<SourceLine> sourceCode) {

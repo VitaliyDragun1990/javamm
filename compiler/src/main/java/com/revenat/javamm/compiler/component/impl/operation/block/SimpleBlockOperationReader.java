@@ -38,8 +38,8 @@ public class SimpleBlockOperationReader extends AbstractBlockOperationReader<Blo
     }
 
     @Override
-    protected Optional<String> getOperationDefiningKeyword() {
-        return Optional.of(OPENING_CURLY_BRACE);
+    public boolean canRead(final SourceLine sourceLine) {
+        return OPENING_CURLY_BRACE.equals(sourceLine.getFirst());
     }
 
     @Override

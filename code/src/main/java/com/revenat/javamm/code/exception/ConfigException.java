@@ -32,8 +32,4 @@ public class ConfigException extends RuntimeException {
         super(requireNonNull(message));
     }
 
-    public ConfigException(final String message, final Throwable cause) {
-        super(requireNonNull(message), requireNonNull(cause));
-    }
-
 }

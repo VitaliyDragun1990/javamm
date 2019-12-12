@@ -18,12 +18,16 @@
 package com.revenat.javamm.cmd;
 
 import com.revenat.javamm.code.fragment.SourceCode;
+import com.revenat.javamm.code.util.ExceptionUtils;
 import com.revenat.javamm.compiler.error.JavammSyntaxError;
 import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 import com.revenat.javamm.vm.VirtualMachine;
 import com.revenat.javamm.vm.VirtualMachineBuilder;
 
 import java.io.IOException;
+import java.util.Arrays;
+
+import static com.revenat.javamm.code.util.ExceptionUtils.wrapCheckedException;
 
 /**
  * @author Vitaliy Dragun
@@ -44,11 +48,9 @@ public final class JmmVmLauncher {
         }
     }
 
-    private static SourceCode[] sourceCodeFrom(final String[] args) throws IOException {
-        final SourceCode[] sourceCode = new SourceCode[args.length];
-        for (int i = 0; i < args.length; i++) {
-            sourceCode[i] = new FileSourceCode(args[i]);
-        }
-        return sourceCode;
+    private static SourceCode[] sourceCodeFrom(final String[] args) {
+        return Arrays.stream(args)
+            .map(arg -> wrapCheckedException(() -> new FileSourceCode(arg)))
+            .toArray(SourceCode[]::new);
     }
 }

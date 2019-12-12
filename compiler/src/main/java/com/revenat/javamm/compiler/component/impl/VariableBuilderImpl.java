@@ -35,16 +35,6 @@ import static java.util.Objects.requireNonNull;
 public class VariableBuilderImpl implements VariableBuilder {
 
     @Override
-    public boolean isValid(final String name) {
-        try {
-            validateVariableName(name, SourceLine.EMPTY_SOURCE_LINE);
-            return true;
-        } catch (final JavammLineSyntaxError e) {
-            return false;
-        }
-    }
-
-    @Override
     public Variable build(final String name, final SourceLine sourceLine) {
         validateVariableName(name, sourceLine);
         return new VariableImpl(name);
@@ -65,11 +55,6 @@ public class VariableBuilderImpl implements VariableBuilder {
         @Override
         public String getName() {
             return name;
-        }
-
-        @Override
-        public int compareTo(final Variable o) {
-            return name.compareTo(o.getName());
         }
 
         @Override

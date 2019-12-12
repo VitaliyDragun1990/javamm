@@ -83,11 +83,6 @@ public final class TestCurrentRuntimeManager {
         }
 
         @Override
-        public String getCurrentModuleName() {
-            return sourceLine.getModuleName();
-        }
-
-        @Override
         public SourceLine getCurrentSourceLine() {
             return sourceLine;
         }

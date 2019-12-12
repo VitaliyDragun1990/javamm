@@ -57,8 +57,8 @@ public class SwitchOperationReader extends AbstractBlockOperationReader<SwitchOp
     }
 
     @Override
-    protected Optional<String> getOperationDefiningKeyword() {
-        return Optional.of(SWITCH);
+    public boolean canRead(final SourceLine sourceLine) {
+        return SWITCH.equals(sourceLine.getFirst());
     }
 
     @Override

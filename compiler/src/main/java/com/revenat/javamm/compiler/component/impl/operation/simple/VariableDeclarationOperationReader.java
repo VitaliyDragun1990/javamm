@@ -60,8 +60,8 @@ public class VariableDeclarationOperationReader extends AbstractOperationReader<
     }
 
     @Override
-    protected Optional<String> getOperationDefiningKeyword() {
-        return Optional.of(VAR);
+    public boolean canRead(final SourceLine sourceLine) {
+        return VAR.equals(sourceLine.getFirst());
     }
 
     /**

@@ -23,7 +23,7 @@ package com.revenat.javamm.code.fragment;
  * @author Vitaliy Dragun
  *
  */
-public interface Variable extends Comparable<Variable>, CompiledCodeFragment {
+public interface Variable extends CompiledCodeFragment {
 
     String getName();
 }

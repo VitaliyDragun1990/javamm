@@ -47,23 +47,28 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("'println' operation reader")
 class PrintlnOperationReaderTest {
+
     private static final String MESSAGE_TO_PRINT = "hello world";
 
-    private static final SourceLine CORRECT_PRINTLN_LINE = new SourceLine("test", 1, List.of("println", "(", MESSAGE_TO_PRINT, ")"));
-    private static final SourceLine PRINTLN_WITHOUT_OPEN_BRACKET = new SourceLine("test", 1, List.of("println", MESSAGE_TO_PRINT, ")"));
-    private static final SourceLine PRINTLN_WITHOUT_CLOSE_BRACKET = new SourceLine("test", 1, List.of("println", "(", MESSAGE_TO_PRINT));
+    private static final SourceLine CORRECT_PRINTLN_LINE =
+        new SourceLine("test", 1, List.of("println", "(", MESSAGE_TO_PRINT, ")"));
+
+    private static final SourceLine PRINTLN_WITHOUT_OPEN_BRACKET =
+        new SourceLine("test", 1, List.of("println", MESSAGE_TO_PRINT, ")"));
+
+    private static final SourceLine PRINTLN_WITHOUT_CLOSE_BRACKET =
+        new SourceLine("test", 1, List.of("println", "(", MESSAGE_TO_PRINT));
 
     private static final ListIterator<SourceLine> DUMMY_ITERATOR = List.<SourceLine>of().listIterator();
 
     private static final Expression DUMMY_EXPRESSION = new ExpressionDummy();
 
-    private ExpressionResolver expressionResolver;
     private PrintlnOperationReader operationReader;
 
 
     @BeforeEach
     void setUp() {
-        expressionResolver = new ExpressionResolverStub(DUMMY_EXPRESSION);
+        final ExpressionResolver expressionResolver = new ExpressionResolverStub(DUMMY_EXPRESSION);
         operationReader = new PrintlnOperationReader(expressionResolver);
     }
 
@@ -79,7 +84,7 @@ class PrintlnOperationReaderTest {
         final JavammLineSyntaxError expected =
                 assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(PRINTLN_WITHOUT_OPEN_BRACKET, DUMMY_ITERATOR));
 
-        assertThat(expected.getMessage(), containsString(("Expected ( after 'println'")));
+        assertThat(expected.getMessage(), containsString(("'(' expected after 'println'")));
     }
 
     @Test
@@ -88,7 +93,7 @@ class PrintlnOperationReaderTest {
         final JavammLineSyntaxError expected =
                 assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(PRINTLN_WITHOUT_CLOSE_BRACKET, DUMMY_ITERATOR));
 
-        assertThat(expected.getMessage(), containsString(("Expected ) at the end of the line")));
+        assertThat(expected.getMessage(), containsString(("')' expected at the end of the line")));
     }
 
     @Test
@@ -96,7 +101,8 @@ class PrintlnOperationReaderTest {
     void shouldProducePrintlnOperationWithCorrectData() {
         final PrintlnOperation operation = operationReader.read(CORRECT_PRINTLN_LINE, DUMMY_ITERATOR);
 
-        assertThat(operation.getExpression(), equalTo(DUMMY_EXPRESSION));
+        assertTrue(operation.getExpression().isPresent());
+        assertThat(operation.getExpression().get(), equalTo(DUMMY_EXPRESSION));
         assertThat(operation.getSourceLine(), equalTo(CORRECT_PRINTLN_LINE));
     }
 

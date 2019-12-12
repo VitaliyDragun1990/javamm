@@ -46,8 +46,8 @@ public class ForOperationReader extends AbstractBlockOperationReader<ForOperatio
     }
 
     @Override
-    protected Optional<String> getOperationDefiningKeyword() {
-        return Optional.of(FOR);
+    public boolean canRead(final SourceLine sourceLine) {
+        return FOR.equals(sourceLine.getFirst());
     }
 
     @Override

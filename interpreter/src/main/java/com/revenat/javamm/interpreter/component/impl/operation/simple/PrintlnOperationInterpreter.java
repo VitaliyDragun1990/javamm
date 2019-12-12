@@ -46,6 +46,8 @@ public class PrintlnOperationInterpreter extends AbstractOperationInterpreter<Pr
 
     @Override
     protected void interpretOperation(final PrintlnOperation operation) {
-        console.outPrintln(operation.getExpression().getValue(expressionContext));
+        console.outPrintln(operation.getExpression()
+            .map(expression -> expression.getValue(expressionContext))
+            .orElse(""));
     }
 }

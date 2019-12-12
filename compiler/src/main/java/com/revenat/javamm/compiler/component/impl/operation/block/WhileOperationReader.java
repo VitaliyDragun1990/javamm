@@ -51,8 +51,8 @@ public class WhileOperationReader extends AbstractBlockOperationReader<WhileOper
     }
 
     @Override
-    protected Optional<String> getOperationDefiningKeyword() {
-        return Optional.of(WHILE);
+    public boolean canRead(final SourceLine sourceLine) {
+        return WHILE.equals(sourceLine.getFirst());
     }
 
     @Override

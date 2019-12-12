@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.ComplexExpression;
+import com.revenat.javamm.compiler.CompilerConfigurator;
 import com.revenat.javamm.compiler.component.ComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
@@ -66,7 +67,8 @@ class PostfixNotationComplexExpressionBuilderIntegrationTest {
         lexemeBuilder = new LexemeBuilderImpl(new SingleTokenExpressionBuilderImpl(new VariableBuilderImpl()),
                                               new FunctionNameBuilderImpl(),
                                               new LexemeAmbiguityResolverImpl());
-        complexExpressionBuilder = new PostfixNotationComplexExpressionBuilder(new OperatorPrecedenceResolverImpl());
+        complexExpressionBuilder = new PostfixNotationComplexExpressionBuilder(
+            new OperatorPrecedenceResolverImpl(CompilerConfigurator.OPERATOR_PRECEDENCE_REGISTRY));
     }
 
     private ComplexExpression build(final String tokenString) {

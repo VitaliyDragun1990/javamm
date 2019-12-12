@@ -17,6 +17,9 @@
 
 package com.revenat.javamm.compiler;
 
+import com.revenat.javamm.code.fragment.Operator;
+import com.revenat.javamm.code.fragment.operator.TernaryConditionalOperator;
+import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.BlockOperationReader;
 import com.revenat.javamm.compiler.component.ComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
@@ -82,7 +85,48 @@ import com.revenat.javamm.compiler.component.impl.operation.simple.VariableDecla
 import com.revenat.javamm.compiler.component.impl.parser.custom.TokenParserImpl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_DIVISION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_MODULUS;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_MULTIPLICATION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_SUBTRACTION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_ADDITION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_AND;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_OR;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_SHIFT_LEFT;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_SHIFT_RIGHT;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_SHIFT_RIGHT_ZERO_FILL;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_XOR;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_DIVISION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_MODULUS;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_MULTIPLICATION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_SUBTRACTION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_AND;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_OR;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_SHIFT_LEFT;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_SHIFT_RIGHT;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_SHIFT_RIGHT_ZERO_FILL;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_XOR;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.LOGICAL_AND;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.LOGICAL_OR;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.PREDICATE_EQUALS;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.PREDICATE_GREATER_THAN;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.PREDICATE_GREATER_THAN_OR_EQUALS;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.PREDICATE_LESS_THAN;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.PREDICATE_LESS_THAN_OR_EQUALS;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.PREDICATE_NOT_EQUALS;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.PREDICATE_TYPEOF;
+import static com.revenat.javamm.code.fragment.operator.UnaryOperator.ARITHMETICAL_UNARY_MINUS;
+import static com.revenat.javamm.code.fragment.operator.UnaryOperator.ARITHMETICAL_UNARY_PLUS;
+import static com.revenat.javamm.code.fragment.operator.UnaryOperator.BITWISE_INVERSE;
+import static com.revenat.javamm.code.fragment.operator.UnaryOperator.DECREMENT;
+import static com.revenat.javamm.code.fragment.operator.UnaryOperator.INCREMENT;
+import static com.revenat.javamm.code.fragment.operator.UnaryOperator.LOGICAL_NOT;
+import static java.util.Map.entry;
+import static java.util.Map.ofEntries;
 
 /**
  * Responsible for creating fully configured and ready to work with
@@ -92,13 +136,71 @@ import java.util.Set;
  *
  */
 public class CompilerConfigurator {
+    public static final int MAX_PRECEDENCE = 20;
+
+    public static final Map<Operator, Integer> OPERATOR_PRECEDENCE_REGISTRY = ofEntries(
+        entry(INCREMENT, MAX_PRECEDENCE - 1),
+        entry(DECREMENT, MAX_PRECEDENCE - 1),
+        entry(ARITHMETICAL_UNARY_PLUS, MAX_PRECEDENCE - 1),
+        entry(ARITHMETICAL_UNARY_MINUS, MAX_PRECEDENCE - 1),
+        entry(BITWISE_INVERSE, MAX_PRECEDENCE - 1),
+        entry(LOGICAL_NOT, MAX_PRECEDENCE - 1),
+        //
+        entry(ARITHMETIC_MULTIPLICATION, MAX_PRECEDENCE - 2),
+        entry(ARITHMETIC_DIVISION, MAX_PRECEDENCE - 2),
+        entry(ARITHMETIC_MODULUS, MAX_PRECEDENCE - 2),
+        //
+        entry(ARITHMETIC_ADDITION, MAX_PRECEDENCE - 3),
+        entry(ARITHMETIC_SUBTRACTION, MAX_PRECEDENCE - 3),
+        //
+        entry(BITWISE_SHIFT_LEFT, MAX_PRECEDENCE - 4),
+        entry(BITWISE_SHIFT_RIGHT, MAX_PRECEDENCE - 4),
+        entry(BITWISE_SHIFT_RIGHT_ZERO_FILL, MAX_PRECEDENCE - 4),
+        //
+        entry(PREDICATE_GREATER_THAN, MAX_PRECEDENCE - 5),
+        entry(PREDICATE_GREATER_THAN_OR_EQUALS, MAX_PRECEDENCE - 5),
+        entry(PREDICATE_LESS_THAN, MAX_PRECEDENCE - 5),
+        entry(PREDICATE_LESS_THAN_OR_EQUALS, MAX_PRECEDENCE - 5),
+        entry(PREDICATE_TYPEOF, MAX_PRECEDENCE - 5),
+        //
+        entry(PREDICATE_NOT_EQUALS, MAX_PRECEDENCE - 6),
+        entry(PREDICATE_EQUALS, MAX_PRECEDENCE - 6),
+        //
+        entry(BITWISE_AND, MAX_PRECEDENCE - 7),
+        //
+        entry(BITWISE_XOR, MAX_PRECEDENCE - 8),
+        //
+        entry(BITWISE_OR, MAX_PRECEDENCE - 9),
+        //
+        entry(LOGICAL_AND, MAX_PRECEDENCE - 10),
+        //
+        entry(LOGICAL_OR, MAX_PRECEDENCE - 11),
+        //
+        entry(TernaryConditionalOperator.OPERATOR, MAX_PRECEDENCE - 12),
+        //
+        entry(ASSIGNMENT_MULTIPLICATION, MAX_PRECEDENCE - 13),
+        entry(ASSIGNMENT_DIVISION, MAX_PRECEDENCE - 13),
+        entry(ASSIGNMENT_MODULUS, MAX_PRECEDENCE - 13),
+        entry(ASSIGNMENT_ADDITION, MAX_PRECEDENCE - 13),
+        entry(ASSIGNMENT_SUBTRACTION, MAX_PRECEDENCE - 13),
+        entry(ASSIGNMENT_BITWISE_SHIFT_LEFT, MAX_PRECEDENCE - 13),
+        entry(ASSIGNMENT_BITWISE_SHIFT_RIGHT, MAX_PRECEDENCE - 13),
+        entry(ASSIGNMENT_BITWISE_SHIFT_RIGHT_ZERO_FILL, MAX_PRECEDENCE - 13),
+        entry(ASSIGNMENT_BITWISE_AND, MAX_PRECEDENCE - 13),
+        entry(ASSIGNMENT_BITWISE_XOR, MAX_PRECEDENCE - 13),
+        entry(ASSIGNMENT_BITWISE_OR, MAX_PRECEDENCE - 13),
+
+        entry(UnaryOperator.HASH_CODE, 0)
+    );
+
     private final TokenParser tokenParser = new TokenParserImpl();
 
     private final SourceLineReader sourceLineReader = new SourceLineReaderImpl(tokenParser);
 
     private final VariableBuilder variableBuilder = new VariableBuilderImpl();
 
-    private final OperatorPrecedenceResolver operatorPrecedenceResolver = new OperatorPrecedenceResolverImpl();
+    private final OperatorPrecedenceResolver operatorPrecedenceResolver =
+        new OperatorPrecedenceResolverImpl(OPERATOR_PRECEDENCE_REGISTRY);
 
     private final ComplexExpressionBuilder complexExpressionBuilder =
             new PostfixNotationComplexExpressionBuilder(operatorPrecedenceResolver);
@@ -128,7 +230,8 @@ public class CompilerConfigurator {
             complexExpressionBuilder,
             lexemeBuilder,
             lexemeValidator,
-            unaryAssignmentExpressionResolver
+            unaryAssignmentExpressionResolver,
+            operatorPrecedenceResolver
     );
 
     private final PrintlnOperationReader printlnOperationReader = new PrintlnOperationReader(expressionResolver);

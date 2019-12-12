@@ -20,6 +20,8 @@ package com.revenat.javamm.code.fragment.operation;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
 
+import java.util.Optional;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -37,7 +39,12 @@ public class PrintlnOperation extends AbstractOperation
         this.expression = requireNonNull(expression);
     }
 
-    public Expression getExpression() {
-        return expression;
+    public PrintlnOperation(final SourceLine sourceLine) {
+        super(sourceLine);
+        this.expression = null;
+    }
+
+    public Optional<Expression> getExpression() {
+        return Optional.ofNullable(expression);
     }
 }

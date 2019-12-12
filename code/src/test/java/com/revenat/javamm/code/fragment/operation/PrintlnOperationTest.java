@@ -40,7 +40,8 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @DisplayName("a 'println' operation")
 class PrintlnOperationTest {
     private static final Expression DUMMY_EXPRESSION = new Expression() {};
-    private static final SourceLine OPERATION_SOURCE_LINE = new SourceLine("test", 1, List.of("println", "(", "hello world", ")"));
+    private static final SourceLine OPERATION_SOURCE_LINE =
+        new SourceLine("test", 1, List.of("println", "(", "hello world", ")"));
 
     @Test
     @Order(1)
@@ -50,15 +51,23 @@ class PrintlnOperationTest {
 
     @Test
     @Order(2)
-    void canNotBeCreatedWithoutExpression() {
+    void canNotBeCreatedWithNullExpression() {
         assertThrows(NullPointerException.class, () -> new PrintlnOperation(OPERATION_SOURCE_LINE, null));
     }
 
     @Test
-    void shouldReturnExpressionToEvaluate() {
+    @Order(3)
+    void shouldReturnExpressionItWasCreatedWith() {
         final PrintlnOperation operation = new PrintlnOperation(OPERATION_SOURCE_LINE, DUMMY_EXPRESSION);
 
-        assertThat(operation.getExpression(), equalTo(DUMMY_EXPRESSION));
+        assertThat(operation.getExpression().get(), equalTo(DUMMY_EXPRESSION));
     }
 
+    @Test
+    @Order(4)
+    void shouldReturnEmptyOptionalIfWasCreatedWithoutExpression() {
+        PrintlnOperation operation = new PrintlnOperation(OPERATION_SOURCE_LINE);
+
+        assertTrue(operation.getExpression().isEmpty());
+    }
 }

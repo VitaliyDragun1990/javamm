@@ -73,13 +73,14 @@ public class ExpressionResolverImpl implements ExpressionResolver {
                                   final ComplexExpressionBuilder complexExpressionBuilder,
                                   final LexemeBuilder lexemeBuilder,
                                   final ComplexLexemeValidator lexemeValidator,
-                                  final UnaryAssignmentExpressionResolver unaryAssignmentExpressionResolver) {
+                                  final UnaryAssignmentExpressionResolver unaryAssignmentExpressionResolver,
+                                  final OperatorPrecedenceResolver operatorPrecedenceResolver) {
         this.expressionBuilders = List.copyOf(expressionBuilders);
         this.complexExpressionBuilder = requireNonNull(complexExpressionBuilder);
         this.lexemeBuilder = requireNonNull(lexemeBuilder);
         this.lexemeValidator = requireNonNull(lexemeValidator);
         this.unaryAssignmentExpressionResolver = requireNonNull(unaryAssignmentExpressionResolver);
-        this.operatorPrecedenceResolver = new OperatorPrecedenceResolverImpl();
+        this.operatorPrecedenceResolver = requireNonNull(operatorPrecedenceResolver);
 
         this.lexemeBuilder.setExpressionResolver(this);
     }

@@ -26,6 +26,7 @@ import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.VariableExpression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
+import com.revenat.javamm.compiler.CompilerConfigurator;
 import com.revenat.javamm.compiler.component.ComplexLexemeValidator;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.test.doubles.ExpressionDummy;
@@ -79,7 +80,7 @@ class ComplexLexemeValidatorImplTest {
 
     @BeforeEach
     void setUp() {
-        lexemeValidator = new ComplexLexemeValidatorImpl(new OperatorPrecedenceResolverImpl());
+        lexemeValidator = new ComplexLexemeValidatorImpl(new OperatorPrecedenceResolverImpl(CompilerConfigurator.OPERATOR_PRECEDENCE_REGISTRY));
     }
 
     private void validate(final Lexeme... lexemes) {

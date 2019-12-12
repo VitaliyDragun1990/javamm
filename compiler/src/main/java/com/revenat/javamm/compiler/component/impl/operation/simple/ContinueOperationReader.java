@@ -34,8 +34,8 @@ import static com.revenat.javamm.code.syntax.Keywords.CONTINUE;
 public class ContinueOperationReader extends AbstractOperationReader<ContinueOperation> {
 
     @Override
-    protected Optional<String> getOperationDefiningKeyword() {
-        return Optional.of(CONTINUE);
+    public boolean canRead(final SourceLine sourceLine) {
+        return CONTINUE.equals(sourceLine.getFirst());
     }
 
     @Override

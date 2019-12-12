@@ -46,9 +46,7 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @DisplayName("a current runtime")
 @ExtendWith(MockitoExtension.class)
 class CurrentRuntimeTest {
-    /**
-     *
-     */
+
     private static final int ANY_MAX_STACK_SIZE = 10;
     private static final SourceLine CURRENT_SOURCE_LINE = SourceLine.EMPTY_SOURCE_LINE;
     private static final LocalContext DUMMY_LOCAL_CONTEXT = new LocalContextDummy();
@@ -59,16 +57,9 @@ class CurrentRuntimeTest {
 
     private CurrentRuntime runtime;
 
-
     @BeforeEach
     void setUp() {
         runtime = new CurrentRuntimeImpl(functionInvoker, ANY_MAX_STACK_SIZE);
-    }
-
-    @Test
-    @Order(1)
-    void shouldFailToReturnCurrentModuleNameIfNotDefined() {
-        assertThrows(NullPointerException.class, () -> runtime.getCurrentModuleName());
     }
 
     @Test
@@ -89,14 +80,6 @@ class CurrentRuntimeTest {
         runtime.setCurrentSourceLine(CURRENT_SOURCE_LINE);
 
         assertThat(runtime.getCurrentSourceLine(), sameInstance(CURRENT_SOURCE_LINE));
-    }
-
-    @Test
-    @Order(5)
-    void shouldReturnCurrentModuleNameIfDefined() {
-        runtime.setCurrentSourceLine(CURRENT_SOURCE_LINE);
-
-        assertThat(runtime.getCurrentModuleName(), sameInstance(CURRENT_SOURCE_LINE.getModuleName()));
     }
 
     @Test

@@ -20,8 +20,8 @@ package com.revenat.javamm.compiler.component.impl;
 import com.revenat.javamm.code.exception.ConfigException;
 import com.revenat.javamm.code.fragment.Operator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
+import com.revenat.javamm.compiler.CompilerConfigurator;
 import com.revenat.javamm.compiler.component.OperatorPrecedenceResolver;
-import com.revenat.javamm.compiler.test.helper.CustomAsserts;
 import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -32,9 +32,15 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -43,7 +49,20 @@ import static org.mockito.Mockito.mock;
 @DisplayName("an operator precedence resolver")
 class OperatorPrecedenceResolverImplTest {
 
-    private OperatorPrecedenceResolver operatorPrecedenceResolver = new OperatorPrecedenceResolverImpl();
+    private OperatorPrecedenceResolver operatorPrecedenceResolver =
+        new OperatorPrecedenceResolverImpl(CompilerConfigurator.OPERATOR_PRECEDENCE_REGISTRY);
+
+    @Test
+    @Order(1)
+    void shouldFailToCreateIfSomeOperatorDoesNotHaveDefinedPrecedence() {
+        Map<Operator, Integer> precedenceRegistry = new HashMap<>(CompilerConfigurator.OPERATOR_PRECEDENCE_REGISTRY);
+        Operator missingOperator = UnaryOperator.ARITHMETICAL_UNARY_PLUS;
+        precedenceRegistry.remove(missingOperator);
+
+        final ConfigException e = assertThrows(ConfigException.class, () -> new OperatorPrecedenceResolverImpl(precedenceRegistry));
+
+        assertErrorMessageContains(e, "Precedence not defined for " + missingOperator);
+    }
 
     @Test
     @Order(1)
@@ -53,13 +72,13 @@ class OperatorPrecedenceResolverImplTest {
         ConfigException e =
             assertThrows(ConfigException.class, () -> operatorPrecedenceResolver.getPrecedence(unknownOperator));
 
-        CustomAsserts.assertErrorMessageContains(e, "Precedence not defined for %s", unknownOperator);
+        assertErrorMessageContains(e, "Precedence not defined for %s", unknownOperator);
     }
 
     @Test
     @Order(2)
     void shouldProvidePrecedenceForOperator() {
-        int expectedPrecedence = OperatorPrecedenceResolverImpl.MAX_PRECEDENCE - 1;
+        int expectedPrecedence = CompilerConfigurator.MAX_PRECEDENCE - 1;
 
         assertThat(operatorPrecedenceResolver.getPrecedence(UnaryOperator.INCREMENT), equalTo(expectedPrecedence));
     }

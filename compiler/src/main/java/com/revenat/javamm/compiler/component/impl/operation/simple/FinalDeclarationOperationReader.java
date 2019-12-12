@@ -17,6 +17,7 @@
 
 package com.revenat.javamm.compiler.component.impl.operation.simple;
 
+import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.VariableBuilder;
 
@@ -38,8 +39,8 @@ public class FinalDeclarationOperationReader extends VariableDeclarationOperatio
     }
 
     @Override
-    protected Optional<String> getOperationDefiningKeyword() {
-        return Optional.of(FINAL);
+    public boolean canRead(final SourceLine sourceLine) {
+        return FINAL.equals(sourceLine.getFirst());
     }
 
     @Override

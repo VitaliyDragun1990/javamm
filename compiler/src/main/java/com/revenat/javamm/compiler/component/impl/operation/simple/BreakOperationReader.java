@@ -34,8 +34,8 @@ import static com.revenat.javamm.code.syntax.Keywords.BREAK;
 public class BreakOperationReader extends AbstractOperationReader<BreakOperation> {
 
     @Override
-    protected Optional<String> getOperationDefiningKeyword() {
-        return Optional.of(BREAK);
+    public boolean canRead(final SourceLine sourceLine) {
+        return BREAK.equals(sourceLine.getFirst());
     }
 
     @Override

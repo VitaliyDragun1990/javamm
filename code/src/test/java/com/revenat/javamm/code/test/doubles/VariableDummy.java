@@ -22,11 +22,6 @@ import com.revenat.javamm.code.fragment.Variable;
 public class VariableDummy implements Variable {
 
     @Override
-    public int compareTo(final Variable o) {
-        return 0;
-    }
-
-    @Override
     public String getName() {
         return "";
     }

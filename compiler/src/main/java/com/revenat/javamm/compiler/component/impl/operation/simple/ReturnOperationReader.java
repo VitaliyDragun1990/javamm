@@ -43,8 +43,8 @@ public class ReturnOperationReader extends AbstractOperationReader<ReturnOperati
     }
 
     @Override
-    protected Optional<String> getOperationDefiningKeyword() {
-        return Optional.of(RETURN);
+    public boolean canRead(final SourceLine sourceLine) {
+        return RETURN.equals(sourceLine.getFirst());
     }
 
     @Override

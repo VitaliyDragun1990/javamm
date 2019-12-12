@@ -17,11 +17,15 @@
 
 package com.revenat.javamm.code.syntax;
 
+import com.revenat.javamm.code.util.ExceptionUtils;
+
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import static com.revenat.javamm.code.util.ExceptionUtils.wrapCheckedException;
 
 /**
  * Contains Javamm reserved keywords
@@ -88,11 +92,7 @@ public final class Keywords {
         final Set<String> set = new LinkedHashSet<>();
         for (final Field field : Keywords.class.getDeclaredFields()) {
             if (field.getType() == String.class) {
-                try {
-                    set.add(String.valueOf(field.get(Keywords.class)));
-                } catch (final IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
+                set.add(String.valueOf(wrapCheckedException(() -> field.get(Keywords.class))));
             }
         }
         return List.copyOf(set);

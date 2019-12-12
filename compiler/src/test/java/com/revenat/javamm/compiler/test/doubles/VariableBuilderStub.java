@@ -29,11 +29,6 @@ public class VariableBuilderStub implements VariableBuilder {
     }
 
     @Override
-    public boolean isValid(final String name) {
-        return true;
-    }
-
-    @Override
     public Variable build(final String name, final SourceLine sourceLine) {
         return variableToBuild;
     }

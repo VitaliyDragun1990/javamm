@@ -34,14 +34,6 @@ import java.util.List;
 public interface CurrentRuntime {
 
     /**
-     * Returns name of the module byte code from which interpreter process at the
-     * moment.
-     *
-     * @throws NullPointerException if current module name has not been defined yet
-     */
-    String getCurrentModuleName();
-
-    /**
      * Returns source line which interpreter process at the moment
      *
      * @throws NullPointerException if current source line has not been defined yet

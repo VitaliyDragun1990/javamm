@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
 
+import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateOpeningParenthesisAfterTokenInPosition;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -47,27 +48,37 @@ public class PrintlnOperationReader extends AbstractOperationReader<PrintlnOpera
     }
 
     @Override
+    public boolean canRead(final SourceLine sourceLine) {
+        return "println".equals(sourceLine.getFirst());
+    }
+
+    @Override
     protected void validate(final SourceLine sourceLine) {
-        if (!"(".equals(sourceLine.getToken(1))) {
-            throw new JavammLineSyntaxError("Expected ( after 'println'", sourceLine);
-        }
-        if (!")".equals(sourceLine.getLast())) {
-            throw new JavammLineSyntaxError("Expected ) at the end of the line", sourceLine);
-        }
+        validateOpeningParenthesisAfterTokenInPosition(sourceLine, "println", 0);
+        validateLineEndsWithClosingParenthesis(sourceLine);
     }
 
     @Override
     protected PrintlnOperation get(final SourceLine sourceLine, final ListIterator<SourceLine> compiledCodeIterator) {
-        final Expression expression = expressionResolver.resolve(extractExpressionTokens(sourceLine), sourceLine);
-        return new PrintlnOperation(sourceLine, expression);
+        return getExpression(sourceLine)
+            .map(expression -> new PrintlnOperation(sourceLine, expression))
+            .orElseGet(() -> new PrintlnOperation(sourceLine));
     }
 
-    @Override
-    protected Optional<String> getOperationDefiningKeyword() {
-        return Optional.of("println");
+    private Optional<Expression> getExpression(final SourceLine sourceLine) {
+        if (sourceLine.getTokenCount() == 3) {
+            return Optional.empty();
+        }
+        return Optional.of(expressionResolver.resolve(extractExpressionTokens(sourceLine), sourceLine));
     }
 
     private List<String> extractExpressionTokens(final SourceLine sourceLine) {
         return sourceLine.subList(2, sourceLine.getTokenCount() - 1);
+    }
+
+    private void validateLineEndsWithClosingParenthesis(final SourceLine sourceLine) {
+        if (!")".equals(sourceLine.getLast())) {
+            throw new JavammLineSyntaxError("')' expected at the end of the line", sourceLine);
+        }
     }
 }

@@ -56,13 +56,13 @@ public class DoWhileOperationReader extends AbstractBlockOperationReader<DoWhile
     }
 
     @Override
-    protected void validate(final SourceLine sourceLine) {
-        validateDoClause(sourceLine);
+    public boolean canRead(final SourceLine sourceLine) {
+        return DO.equals(sourceLine.getFirst());
     }
 
     @Override
-    protected Optional<String> getOperationDefiningKeyword() {
-        return Optional.of(DO);
+    protected void validate(final SourceLine sourceLine) {
+        validateDoClause(sourceLine);
     }
 
     @Override

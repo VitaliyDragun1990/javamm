@@ -17,18 +17,12 @@
 
 package com.revenat.javamm.compiler.component.impl;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.lessThan;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.Variable;
 import com.revenat.javamm.compiler.component.VariableBuilder;
 import com.revenat.javamm.compiler.error.JavammSyntaxError;
-
+import com.revenat.javamm.compiler.test.doubles.VariableDummy;
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -39,8 +33,11 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.revenat.javamm.compiler.test.doubles.VariableDummy;
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -53,28 +50,6 @@ class VariableBuilderTest {
     @BeforeEach
     void setUp() {
         variableBuilder = new VariableBuilderImpl();
-    }
-
-    private void assertValidName(final String name) {
-        assertTrue(variableBuilder.isValid(name));
-    }
-
-    private void assertInvalidName(final String name) {
-        assertFalse(variableBuilder.isValid(name));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"test", "a123", "a"})
-    @Order(1)
-    void shouldDetermineIfVariableNameIsValid(final String name) {
-        assertValidName(name);
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"_test", "1a", "null", "integer"})
-    @Order(2)
-    void shouldDetermineIfVariableNameIsInvalid(final String name) {
-        assertInvalidName(name);
     }
 
     @ParameterizedTest
@@ -125,21 +100,6 @@ class VariableBuilderTest {
 
         assertNotEquals(variable, varNull);
         assertNotEquals(variable, varBuiltByOtherMeans);
-    }
-
-    @Test
-    @Order((8))
-    void shouldBuildVariableWhichCanBeComparedByTheirNames() {
-        String nameA = "nameA";
-        String nameB = "nameB";
-
-        Variable varA = variableBuilder.build(nameA, DUMMY_SOURCE_LINE);
-        Variable varB = variableBuilder.build(nameB, DUMMY_SOURCE_LINE);
-        Variable varC = variableBuilder.build(nameA, DUMMY_SOURCE_LINE);
-
-        assertThat(varA.compareTo(varC), is(equalTo(0)));
-        assertThat(varA.compareTo(varB), is(lessThan(0)));
-        assertThat(varB.compareTo(varC), is(greaterThan(0)));
     }
 
 }

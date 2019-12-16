@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * @author Vitaliy Dragun
  */
-public class CodeFormatterImpl implements CodeFormatter {
+class CodeFormatterImpl implements CodeFormatter {
 
     @Override
     public List<String> format(final List<String> sourceCode) {

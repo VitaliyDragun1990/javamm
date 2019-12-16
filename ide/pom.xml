@@ -14,6 +14,7 @@
     <properties>
         <javafx.version>11.0.2</javafx.version>
         <ikonli.icons.version>2.4.0</ikonli.icons.version>
+        <apache.commons.lang3.version>3.9</apache.commons.lang3.version>
     </properties>
 
     <dependencies>
@@ -96,6 +97,12 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${apache.commons.lang3.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -106,6 +113,7 @@
                     <argLine>
                         @{argLine}
                         --add-opens javamm.ide/com.revenat.javamm.ide.component.impl=ALL-UNNAMED
+                        --add-opens javamm.ide/com.revenat.javamm.ide.model=ALL-UNNAMED
 
                         --add-exports javafx.base/com.sun.javafx.beans=ALL-UNNAMED
                     </argLine>

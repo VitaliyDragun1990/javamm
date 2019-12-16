@@ -17,12 +17,10 @@
 
 package com.revenat.javamm.ide.component.impl;
 
-import com.revenat.javamm.code.syntax.Delimiters;
 import com.revenat.javamm.ide.component.PairedTokensHelper;
 import org.fxmisc.richtext.CodeArea;
 
 import java.util.Map;
-import java.util.Set;
 
 import static com.revenat.javamm.code.syntax.Delimiters.CLOSING_CURLY_BRACE;
 import static com.revenat.javamm.code.syntax.Delimiters.CLOSING_PARENTHESIS;
@@ -37,7 +35,7 @@ import static java.util.Map.entry;
 /**
  * @author Vitaliy Dragun
  */
-public class PairedTokensHelperImpl implements PairedTokensHelper {
+class PairedTokensHelperImpl implements PairedTokensHelper {
 
     private static final Map<String, String> PAIRED_TOKENS = Map.ofEntries(
         entry(OPENING_PARENTHESIS, CLOSING_PARENTHESIS),

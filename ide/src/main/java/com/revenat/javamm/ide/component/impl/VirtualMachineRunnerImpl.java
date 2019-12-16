@@ -36,7 +36,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * @author Vitaliy Dragun
  */
-public class VirtualMachineRunnerImpl implements VirtualMachineRunner {
+class VirtualMachineRunnerImpl implements VirtualMachineRunner {
 
     private final Console console;
 
@@ -44,50 +44,48 @@ public class VirtualMachineRunnerImpl implements VirtualMachineRunner {
 
     private final List<SourceCode> sourceCodes;
 
-    private Thread runnerThread;
+    private ThreadRunner threadRunner;
 
     VirtualMachineRunnerImpl(final Console console,
                              final VirtualMachine virtualMachine,
-                             final List<SourceCode> sourceCodes) {
-        this.console = console;
+                             final List<SourceCode> sourceCodes,
+                             final ThreadRunner threadRunner) {
+        this.console = requireNonNull(console);
         this.virtualMachine = requireNonNull(virtualMachine);
         this.sourceCodes = unmodifiableList(sourceCodes);
+        this.threadRunner = requireNonNull(threadRunner);
     }
 
     @Override
     public void run(final VirtualMachineRunCompletedListener listener) {
-        checkCondition(runnerThread == null, "Runner thread already exists");
-
         requireNonNull(listener);
-        runnerThread = new Thread(() -> invokeVm(listener), "JavammVM-Run-Thread");
-        runnerThread.start();
+        threadRunner.run(() -> invokeVm(listener), "JavammVM-Run-Thread");
     }
 
     @Override
     public boolean isRunning() {
-        return runnerThread != null && runnerThread.isAlive();
+        return threadRunner.isRunning();
     }
 
     @Override
     public void terminate() {
-        checkCondition(runnerThread != null, "Runner thread not found");
-        runnerThread.interrupt();
+        threadRunner.terminate();
     }
 
     private void invokeVm(final VirtualMachineRunCompletedListener listener) {
-        CompleteStatus status = CompleteStatus.SUCCESS;
+        CompletionStatus status = CompletionStatus.SUCCESS;
         try {
             virtualMachine.run(sourceCodes.toArray(new SourceCode[0]));
         } catch (final JavammSyntaxError e) {
-            status = CompleteStatus.SYNTAX_ERROR;
+            status = CompletionStatus.SYNTAX_ERROR;
             console.errPrintln(e.getMessage());
         } catch (final JavammRuntimeError e) {
-            status = CompleteStatus.RUNTIME_ERROR;
+            status = CompletionStatus.RUNTIME_ERROR;
             console.errPrintln(e.getMessage());
         } catch (final TerminateInterpreterException e) {
-            status = CompleteStatus.TERMINATED;
+            status = CompletionStatus.TERMINATED;
         } catch (final RuntimeException e) {
-            status = CompleteStatus.INTERNAL_ERROR;
+            status = CompletionStatus.INTERNAL_ERROR;
             console.errPrintln(format("Internal error: %s", stackTraceToString(e)));
         } finally {
             listener.onRunCompleted(status);
@@ -95,14 +93,8 @@ public class VirtualMachineRunnerImpl implements VirtualMachineRunner {
     }
 
     private String stackTraceToString(final Throwable th) {
-        StringWriter sw = new StringWriter();
+        final StringWriter sw = new StringWriter();
         th.printStackTrace(new PrintWriter(sw));
         return sw.toString();
-    }
-
-    private void checkCondition(final boolean conditionResult, final String failureMsg) {
-        if (!conditionResult) {
-            throw new IllegalStateException(failureMsg);
-        }
     }
 }

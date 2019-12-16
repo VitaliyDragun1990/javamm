@@ -57,10 +57,10 @@ public interface VirtualMachineRunner {
          * @param status indicates in what way {@linkplain com.revenat.javamm.vm.VirtualMachine virtual machine}
          *               completes its execution
          */
-        void onRunCompleted(CompleteStatus status);
+        void onRunCompleted(CompletionStatus status);
     }
 
-    enum CompleteStatus {
+    enum CompletionStatus {
 
         SUCCESS,
 

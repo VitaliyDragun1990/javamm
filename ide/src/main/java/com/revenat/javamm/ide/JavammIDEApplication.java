@@ -17,7 +17,7 @@
 
 package com.revenat.javamm.ide;
 
-import com.revenat.javamm.ide.component.ComponentFactoryProvider;
+import com.revenat.javamm.ide.component.impl.ComponentFactoryProvider;
 import com.revenat.javamm.ide.ui.listener.ActionListener;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

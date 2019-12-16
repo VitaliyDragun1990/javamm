@@ -17,7 +17,7 @@
 
 package com.revenat.javamm.ide.ui.pane.action;
 
-import com.revenat.javamm.ide.component.VirtualMachineRunner.CompleteStatus;
+import com.revenat.javamm.ide.component.VirtualMachineRunner.CompletionStatus;
 import com.revenat.javamm.ide.component.VirtualMachineRunner.VirtualMachineRunCompletedListener;
 import com.revenat.javamm.ide.ui.listener.ActionListener;
 import com.revenat.javamm.ide.ui.listener.ActionStateManager;
@@ -220,7 +220,7 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
     }
 
     @Override
-    public void onRunCompleted(final CompleteStatus status) {
+    public void onRunCompleted(final CompletionStatus status) {
         actionState.onEvent(RUN_COMPLETED);
     }
 

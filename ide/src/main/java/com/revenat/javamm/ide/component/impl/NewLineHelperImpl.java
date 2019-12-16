@@ -30,7 +30,7 @@ import static com.revenat.javamm.ide.util.TabReplaceUtils.getTabCount;
 /**
  * @author Vitaliy Dragun
  */
-public class NewLineHelperImpl implements NewLineHelper {
+class NewLineHelperImpl implements NewLineHelper {
 
     private final CodeTemplate BLOCK_CODE_TEMPLATE = new CodeTemplate("\t" + CURSOR, "");
 
@@ -48,14 +48,14 @@ public class NewLineHelperImpl implements NewLineHelper {
     }
 
     private void insertFirstNewLineInBlock(final int previousLineTabCount, final int caretPosition, final CodeArea codeArea) {
-        String newLineContent = "\n" + BLOCK_CODE_TEMPLATE.getFormattedCode(previousLineTabCount);
-        int cursorIndex = newLineContent.indexOf(CURSOR);
+        final String newLineContent = "\n" + BLOCK_CODE_TEMPLATE.getFormattedCode(previousLineTabCount);
+        final int cursorIndex = newLineContent.indexOf(CURSOR);
         codeArea.replaceText(caretPosition - 1, caretPosition, newLineContent.replaceAll(CURSOR, ""));
         codeArea.moveTo(caretPosition - 1 + cursorIndex);
     }
 
     private void insertNewLine(final int previousLineTabCount, final int caretPosition, final CodeArea codeArea) {
-        String newLineContent = "\n" + getLineWithTabs("", previousLineTabCount);
+        final String newLineContent = "\n" + getLineWithTabs("", previousLineTabCount);
         codeArea.replaceText(caretPosition - 1, caretPosition, newLineContent);
     }
 

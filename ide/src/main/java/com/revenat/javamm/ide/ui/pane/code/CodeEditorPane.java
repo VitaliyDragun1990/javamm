@@ -38,7 +38,7 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
-import static com.revenat.javamm.ide.component.ComponentFactoryProvider.getComponentFactory;
+import static com.revenat.javamm.ide.component.impl.ComponentFactoryProvider.getComponentFactory;
 import static com.revenat.javamm.ide.util.ResourceUtils.getClassPathResource;
 import static com.revenat.javamm.ide.util.TabReplaceUtils.initCodeAreaTabFixer;
 import static com.revenat.javamm.ide.util.TabReplaceUtils.replaceTabulations;

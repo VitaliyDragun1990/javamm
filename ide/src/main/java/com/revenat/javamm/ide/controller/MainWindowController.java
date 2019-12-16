@@ -17,10 +17,10 @@
 
 package com.revenat.javamm.ide.controller;
 
-import com.revenat.javamm.ide.component.ComponentFactoryProvider;
 import com.revenat.javamm.ide.component.VirtualMachineRunner;
-import com.revenat.javamm.ide.component.VirtualMachineRunner.CompleteStatus;
+import com.revenat.javamm.ide.component.VirtualMachineRunner.CompletionStatus;
 import com.revenat.javamm.ide.component.VirtualMachineRunner.VirtualMachineRunCompletedListener;
+import com.revenat.javamm.ide.component.impl.ComponentFactoryProvider;
 import com.revenat.javamm.ide.ui.dialog.DialogFactoryProvider;
 import com.revenat.javamm.ide.ui.dialog.FileChooserFactory;
 import com.revenat.javamm.ide.ui.listener.ActionListener;
@@ -143,7 +143,7 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
     }
 
     @Override
-    public void onRunCompleted(final CompleteStatus status) {
+    public void onRunCompleted(final CompletionStatus status) {
         Platform.runLater(() -> {
             actionPane.onRunCompleted(status);
             getConsolePane().displayMessage(status);

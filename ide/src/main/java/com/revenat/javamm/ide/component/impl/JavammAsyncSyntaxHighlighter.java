@@ -46,7 +46,7 @@ import static java.util.stream.Collectors.joining;
  *
  * @author Vitaliy Dragun
  */
-public class JavammAsyncSyntaxHighlighter implements SyntaxHighlighter {
+class JavammAsyncSyntaxHighlighter implements SyntaxHighlighter {
 
     private static final Map<String, String> GROUP_PATTERN_MAP = Map.ofEntries(
         // Keywords set
@@ -64,8 +64,6 @@ public class JavammAsyncSyntaxHighlighter implements SyntaxHighlighter {
     );
 
     private static final Pattern PATTERN = mergeAllGroups();
-
-    private static final String SAMPLE_CODE = buildSampleCode();
 
     private static final int FIFTY_MILLIS = 50;
 
@@ -96,9 +94,6 @@ public class JavammAsyncSyntaxHighlighter implements SyntaxHighlighter {
             .awaitLatest(codeArea.multiPlainChanges())
             .filterMap(Try::toOptional)
             .subscribe(this::applyHighlighting);
-        // FIXME remove
-//        codeArea.replaceText(0, 0, SAMPLE_CODE);
-//        codeArea.getUndoManager().forgetHistory();
     }
 
     @Override
@@ -149,33 +144,5 @@ public class JavammAsyncSyntaxHighlighter implements SyntaxHighlighter {
         }
         throw new IllegalStateException("Impossible exception: at least one group should be found," +
             " because matcher.find() returns true");
-    }
-
-    private static String buildSampleCode() {
-        return
-            "/*\n" +
-                "* multi-line comment\n" +
-                "*/\n" +
-                "function main () {\n" +
-                "    var a = 1\n" +
-                "    final b = a + 4\n" +
-                "    a ++\n" +
-                "    final text = 'Hello world'\n" +
-                "    // single-line comment\n" +
-                "    for (var i = 0; /* // test comment */ i < b; /* test comment */ i ++) /* test comment */ {\n" +
-                "        if (i < 3) {\n" +
-                "            println ('i < 3 -> ' + text)\n" +
-                "        }\n" +
-                "        else {\n" +
-                "            println (\"else -> \" + text)\n" +
-                "        }\n" +
-                "    }\n" +
-                "    \n" +
-                "    println (a typeof void)\n" +
-                "}\n" +
-                "\n" +
-                "function sum (a, b) {\n" +
-                "    return a + b\n" +
-                "}";
     }
 }

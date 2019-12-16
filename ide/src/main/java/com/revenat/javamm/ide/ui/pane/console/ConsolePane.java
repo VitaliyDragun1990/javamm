@@ -18,7 +18,7 @@
 package com.revenat.javamm.ide.ui.pane.console;
 
 import com.revenat.javamm.code.component.Console;
-import com.revenat.javamm.ide.component.VirtualMachineRunner.CompleteStatus;
+import com.revenat.javamm.ide.component.VirtualMachineRunner.CompletionStatus;
 import com.revenat.javamm.ide.ui.pane.TitledPane;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -29,8 +29,8 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
 import java.util.Collection;
 import java.util.List;
 
-import static com.revenat.javamm.ide.component.VirtualMachineRunner.CompleteStatus.SUCCESS;
-import static com.revenat.javamm.ide.component.VirtualMachineRunner.CompleteStatus.TERMINATED;
+import static com.revenat.javamm.ide.component.VirtualMachineRunner.CompletionStatus.SUCCESS;
+import static com.revenat.javamm.ide.component.VirtualMachineRunner.CompletionStatus.TERMINATED;
 import static com.revenat.javamm.ide.util.ResourceUtils.getClassPathResource;
 
 /**
@@ -66,7 +66,7 @@ public final class ConsolePane extends TitledPane {
         return console;
     }
 
-    public void displayMessage(final CompleteStatus status) {
+    public void displayMessage(final CompletionStatus status) {
         if (status == SUCCESS) {
             displayMessage("\nProcess finished successfully", STYLE_COMPLETED);
         } else if (status == TERMINATED) {

@@ -48,8 +48,8 @@ final class CodeTemplateStorageImpl implements CodeTemplateStorage {
         private final Map<String, CodeTemplate> templateMap = new HashMap<>();
 
         Builder addTemplate(final String template, final String... keys) {
+            final CodeTemplate codeTemplate = new CodeTemplate(template);
             for (final String key : keys) {
-                final CodeTemplate codeTemplate = new CodeTemplate(template);
                 templateMap.merge(key, codeTemplate, (codeTemplate1, codeTemplate2) -> {
                     throw new ConfigException(format("Duplicate found: key=%s, value1=%s, value2=%s",
                         key, codeTemplate1, codeTemplate2));

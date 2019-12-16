@@ -15,25 +15,16 @@
  *
  */
 
-package com.revenat.javamm.ide.component;
-
-import com.revenat.javamm.ide.component.impl.ComponentFactoryImpl;
+package com.revenat.javamm.ide.component.impl;
 
 /**
  * @author Vitaliy Dragun
  */
-public final class ComponentFactoryProvider {
+public interface ThreadRunner {
 
-    private static ComponentFactory componentFactory = new ComponentFactoryImpl();
+    boolean isRunning();
 
-    private ComponentFactoryProvider() {
-    }
+    void terminate();
 
-    public static ComponentFactory getComponentFactory() {
-        return componentFactory;
-    }
-
-    public static void setComponentFactory(ComponentFactory componentFactory) {
-        ComponentFactoryProvider.componentFactory = componentFactory;
-    }
+    void run(Runnable job, String jobThreadName);
 }

@@ -12,4 +12,4 @@ target
 
 # Netbeans configurations
 nb*.xml
-/temp/
+temp

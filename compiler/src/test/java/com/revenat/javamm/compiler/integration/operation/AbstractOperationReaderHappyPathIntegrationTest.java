@@ -17,29 +17,26 @@
 
 package com.revenat.javamm.compiler.integration.operation;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
-
 import com.revenat.javamm.code.fragment.ByteCode;
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.compiler.integration.AbstractIntegrationTest;
-
-import java.util.List;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
-
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.provider.Arguments;
 
+import java.util.List;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+
 /**
  * @author Vitaliy Dragun
- *
  */
 public abstract class AbstractOperationReaderHappyPathIntegrationTest extends AbstractIntegrationTest {
 
@@ -48,8 +45,8 @@ public abstract class AbstractOperationReaderHappyPathIntegrationTest extends Ab
     @SuppressWarnings("unchecked")
     protected Stream<DynamicTest> shouldCompileTheCodeSuccessfully() {
         return validSourceLineProvider().map(args -> {
-           final List<String> lines = (List<String>) args.get()[0];
-           return createDynamicTest(lines);
+            final List<String> lines = (List<String>) args.get()[0];
+            return createDynamicTest(lines);
         });
     }
 
@@ -73,8 +70,8 @@ public abstract class AbstractOperationReaderHappyPathIntegrationTest extends Ab
 
     private List<Class<? extends Operation>> getCompiledOperations(final ByteCode byteCode) {
         return byteCode.getMainFunction().orElseThrow().getBody().getOperations().stream()
-                .map(Operation::getClass)
-                .collect(toList());
+            .map(Operation::getClass)
+            .collect(toList());
     }
 
     protected abstract Class<? extends Operation> getExpectedOperationClass();

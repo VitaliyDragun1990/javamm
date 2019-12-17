@@ -17,16 +17,18 @@
 
 package com.revenat.javamm.interpreter.component.impl.calculator;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.expression.TypeExpression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.TypeOfBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 import com.revenat.javamm.interpreter.test.helper.CustomAsserts;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
@@ -35,16 +37,30 @@ import static com.revenat.javamm.code.fragment.expression.TypeExpression.DOUBLE;
 import static com.revenat.javamm.code.fragment.expression.TypeExpression.INTEGER;
 import static com.revenat.javamm.code.fragment.expression.TypeExpression.STRING;
 import static com.revenat.javamm.code.util.TypeUtils.getType;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("typeof binary expression calculator")
 class TypeOfBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
+
+    static Stream<Arguments> incorrectOrderProvider() {
+        return Stream.of(
+            Arguments.arguments(STRING, "test"),
+            Arguments.arguments(INTEGER, 10),
+            Arguments.arguments(BOOLEAN, false),
+            Arguments.arguments(DOUBLE, 10.5)
+        );
+    }
+
+    static Stream<Arguments> wrongOperandsProvider() {
+        return Stream.of(
+            Arguments.arguments(false, true),
+            Arguments.arguments(3, true),
+            Arguments.arguments("test", "string"),
+            Arguments.arguments("10", "integer")
+        );
+    }
 
     @Test
     @Order(1)
@@ -97,7 +113,7 @@ class TypeOfBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalcu
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(typeExpression, value));
 
         CustomAsserts.assertErrorMessageContains(e, "Operator 'typeof' is not supported for types: %s and %s",
-                getType(typeExpression), getType(value));
+            getType(typeExpression), getType(value));
     }
 
     @ParameterizedTest
@@ -107,25 +123,7 @@ class TypeOfBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalcu
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(value, notTypeExpression));
 
         CustomAsserts.assertErrorMessageContains(e, "Operator 'typeof' is not supported for types: %s and %s",
-                getType(value), getType(notTypeExpression));
-    }
-
-    static Stream<Arguments> incorrectOrderProvider() {
-        return Stream.of(
-                Arguments.arguments(STRING, "test"),
-                Arguments.arguments(INTEGER, 10),
-                Arguments.arguments(BOOLEAN, false),
-                Arguments.arguments(DOUBLE, 10.5)
-                );
-    }
-
-    static Stream<Arguments> wrongOperandsProvider() {
-        return Stream.of(
-                Arguments.arguments(false, true),
-                Arguments.arguments(3, true),
-                Arguments.arguments("test", "string"),
-                Arguments.arguments("10", "integer")
-                );
+            getType(value), getType(notTypeExpression));
     }
 
     @Override

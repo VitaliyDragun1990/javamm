@@ -45,6 +45,19 @@ public interface VirtualMachineRunner {
      */
     void terminate();
 
+    enum CompletionStatus {
+
+        SUCCESS,
+
+        SYNTAX_ERROR,
+
+        RUNTIME_ERROR,
+
+        INTERNAL_ERROR,
+
+        TERMINATED
+    }
+
     /**
      * {@linkplain com.revenat.javamm.vm.VirtualMachine virtual machine} lifecycle listener
      */
@@ -58,18 +71,5 @@ public interface VirtualMachineRunner {
          *               completes its execution
          */
         void onRunCompleted(CompletionStatus status);
-    }
-
-    enum CompletionStatus {
-
-        SUCCESS,
-
-        SYNTAX_ERROR,
-
-        RUNTIME_ERROR,
-
-        INTERNAL_ERROR,
-
-        TERMINATED;
     }
 }

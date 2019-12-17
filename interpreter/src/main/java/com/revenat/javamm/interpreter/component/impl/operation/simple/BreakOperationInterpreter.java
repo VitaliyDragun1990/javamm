@@ -24,7 +24,6 @@ import com.revenat.javamm.interpreter.component.impl.operation.exception.BreakOp
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class BreakOperationInterpreter extends AbstractOperationInterpreter<BreakOperation> {
 

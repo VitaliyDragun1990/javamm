@@ -24,7 +24,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class CustomAsserts {
 

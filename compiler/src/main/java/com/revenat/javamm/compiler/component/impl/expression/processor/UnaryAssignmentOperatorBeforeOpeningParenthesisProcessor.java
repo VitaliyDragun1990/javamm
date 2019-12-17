@@ -54,7 +54,6 @@ class UnaryAssignmentOperatorBeforeOpeningParenthesisProcessor extends UnaryAssi
         return (UnaryOperator) current;
     }
 
-    @Override
     protected void processEntry() {
         Lexeme next = getParenthesis();
 
@@ -76,8 +75,8 @@ class UnaryAssignmentOperatorBeforeOpeningParenthesisProcessor extends UnaryAssi
             final Lexeme assumedParenthesis = source.next();
             if (isExpressionBeforeClosingParenthesis(operatorArgument, assumedParenthesis)) {
                 final VariableExpression operand = requireVariableExpression(operatorArgument,
-                                                                             getOperator(),
-                                                                             sourceLine);
+                    getOperator(),
+                    sourceLine);
                 result.add(new UnaryPrefixAssignmentExpression(operand, getOperator()));
                 source.previous();
                 return;

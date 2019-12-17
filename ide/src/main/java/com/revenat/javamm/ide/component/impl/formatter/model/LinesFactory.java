@@ -27,7 +27,7 @@ public final class LinesFactory {
     private LinesFactory() {
     }
 
-    public static Lines buildFrom(List<String> sourceCode) {
+    public static Lines buildFrom(final List<String> sourceCode) {
         return new LinesImpl(sourceCode);
     }
 }

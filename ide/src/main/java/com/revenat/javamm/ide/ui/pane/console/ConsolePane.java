@@ -36,6 +36,7 @@ import static com.revenat.javamm.ide.util.ResourceUtils.getClassPathResource;
 /**
  * @author Vitaliy Dragun
  */
+@SuppressWarnings("unused")
 public final class ConsolePane extends TitledPane {
 
     private static final String STYLE_OUT = "out";

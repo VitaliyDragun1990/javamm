@@ -21,7 +21,6 @@ package com.revenat.javamm.interpreter.error;
  * Signals that interpreter process has been terminate before it can finish its job.
  *
  * @author Vitaliy Dragun
- *
  */
 public class TerminateInterpreterException extends RuntimeException {
     private static final long serialVersionUID = 5278969121981082917L;

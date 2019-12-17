@@ -23,7 +23,6 @@ import static java.util.Objects.requireNonNull;
  * Represents Javamm virtual machine implementation-related system error.
  *
  * @author Vitaliy Dragun
- *
  */
 public class ConfigException extends RuntimeException {
     private static final long serialVersionUID = 935842025597999348L;

@@ -20,17 +20,14 @@ package com.revenat.javamm.compiler.component.impl;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.Variable;
 import com.revenat.javamm.compiler.component.VariableBuilder;
-import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.LanguageFeature.VARIABLE;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatFirstCharacterIsLetter;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatNameIsNotKeyword;
-
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class VariableBuilderImpl implements VariableBuilder {
 

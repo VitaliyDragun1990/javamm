@@ -37,7 +37,6 @@ import java.util.List;
  * assignment expression} accordingly.
  *
  * @author Vitaliy Dragun
- *
  */
 public interface UnaryAssignmentExpressionResolver {
 

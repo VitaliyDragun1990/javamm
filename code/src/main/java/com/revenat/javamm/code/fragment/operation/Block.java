@@ -29,7 +29,6 @@ import static java.util.stream.Collectors.joining;
  * Represents block of compiled code which can compose several operations.
  *
  * @author Vitaliy Dragun
- *
  */
 public final class Block extends AbstractOperation implements Operation {
     private final List<Operation> operations;
@@ -48,7 +47,7 @@ public final class Block extends AbstractOperation implements Operation {
     /**
      * Creates new byte code block which contains specified operation
      *
-     * @param operation operation this block contains
+     * @param operation  operation this block contains
      * @param sourceLine source line where this block starts
      */
     public Block(final Operation operation, final SourceLine sourceLine) {
@@ -65,7 +64,7 @@ public final class Block extends AbstractOperation implements Operation {
     @Override
     public String toString() {
         return operations.stream()
-                .map(Object::toString)
-                .collect(joining(lineSeparator()));
+            .map(Object::toString)
+            .collect(joining(lineSeparator()));
     }
 }

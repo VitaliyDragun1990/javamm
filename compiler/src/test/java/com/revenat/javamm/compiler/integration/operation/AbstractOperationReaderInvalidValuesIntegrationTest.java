@@ -17,12 +17,13 @@
 
 package com.revenat.javamm.compiler.integration.operation;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import com.revenat.javamm.compiler.error.JavammSyntaxError;
 import com.revenat.javamm.compiler.integration.AbstractIntegrationTest;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,21 +34,17 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
-
 import static java.lang.String.format;
-
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.TestFactory;
-import org.junit.jupiter.api.function.Executable;
-import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.DynamicTest.dynamicTest;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public abstract class AbstractOperationReaderInvalidValuesIntegrationTest extends AbstractIntegrationTest {
     private final int[] nameIndex = new int[1];
+
     private final Set<String> uniqueNames = new HashSet<>();
 
     @TestFactory
@@ -57,11 +54,11 @@ public abstract class AbstractOperationReaderInvalidValuesIntegrationTest extend
         return invalidSourceLineProvider().map(args -> {
             final List<String> lines = (List<String>) args.get()[0];
             final String expectedMessage = (String) args.get()[1];
-            final String subName = getSubName(uniqueNames, args);
+            final String subName = getSubName(args);
 
             return dynamicTest(
-                    buildTestName(subName, lines, expectedMessage),
-                    buildTestBody(lines, expectedMessage));
+                buildTestName(subName, lines, expectedMessage),
+                buildTestBody(lines, expectedMessage));
         });
 
     }
@@ -72,12 +69,12 @@ public abstract class AbstractOperationReaderInvalidValuesIntegrationTest extend
 
     private Executable buildTestBody(final List<String> lines, final String expectedMessage) {
         return () -> {
-            final JavammSyntaxError e = assertThrows(JavammSyntaxError.class, () ->  wrapInsideMainFunctionAndCompile(lines, false));
+            final JavammSyntaxError e = assertThrows(JavammSyntaxError.class, () -> wrapInsideMainFunctionAndCompile(lines, false));
             assertErrorMessageContains(e, expectedMessage);
         };
     }
 
-    private String getSubName(final Set<String> names, final Arguments args) {
+    private String getSubName(final Arguments args) {
         final Optional<String> name = findName(args);
         dropIndexIfNewName(name);
         return name.isPresent() ? format(" [%s-%s]", name.get(), getNameIndex()) : "";
@@ -107,7 +104,7 @@ public abstract class AbstractOperationReaderInvalidValuesIntegrationTest extend
 
     private Arguments addNameToExistingArguments(final String name, final Arguments arguments) {
         final List<Object> args = new ArrayList<>(Arrays.asList(arguments.get()));
-           args.add(name.toUpperCase());
-           return arguments(args.toArray());
+        args.add(name.toUpperCase());
+        return arguments(args.toArray());
     }
 }

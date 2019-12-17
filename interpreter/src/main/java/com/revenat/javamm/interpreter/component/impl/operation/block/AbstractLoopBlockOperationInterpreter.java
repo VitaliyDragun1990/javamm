@@ -24,12 +24,10 @@ import com.revenat.javamm.interpreter.component.impl.operation.exception.BreakOp
 import com.revenat.javamm.interpreter.component.impl.operation.exception.ContinueOperationException;
 
 import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCurrentRuntime;
-
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 abstract class AbstractLoopBlockOperationInterpreter<T extends AbstractLoopOperation>
     extends AbstractBlockOperationInterpreter<T> {

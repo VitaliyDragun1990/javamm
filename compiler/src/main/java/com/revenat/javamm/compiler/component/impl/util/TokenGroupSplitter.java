@@ -26,14 +26,12 @@ import java.util.ListIterator;
 
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.isMatchingBrackets;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.isOpeningBracket;
-
 import static java.util.Collections.unmodifiableList;
 
 /**
  * Splits tokens into groups using specified delimiter
  *
  * @author Vitaliy Dragun
- *
  */
 class TokenGroupSplitter {
 

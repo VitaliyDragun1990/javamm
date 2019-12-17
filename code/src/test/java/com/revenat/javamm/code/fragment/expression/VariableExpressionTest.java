@@ -17,14 +17,10 @@
 
 package com.revenat.javamm.code.fragment.expression;
 
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.Variable;
 import com.revenat.javamm.code.test.doubles.ExpressionContextSpy;
 import com.revenat.javamm.code.test.doubles.VariableDummy;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -33,16 +29,20 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a variable expression")
 class VariableExpressionTest {
     private static final Variable DUMMY_VARIABLE = new VariableDummy();
+
     private static final Object UPDATED_DATA = new Object();
 
     private ExpressionContextSpy expressionContextSpy;
+
     private VariableExpression variableExpression;
 
 

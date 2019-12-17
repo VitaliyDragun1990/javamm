@@ -27,7 +27,6 @@ import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeErro
  * implementation for 'predicate not equals' ({@code !=}) operator
  *
  * @author Vitaliy Dragun
- *
  */
 public class IsNotEqualsBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
     private final IsEqualsBinaryExpressionCalculator oppositeCalculator;

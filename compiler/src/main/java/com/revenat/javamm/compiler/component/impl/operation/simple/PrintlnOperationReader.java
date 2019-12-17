@@ -37,7 +37,6 @@ import static java.util.Objects.requireNonNull;
  * Responsible for reading {@code println} operation
  *
  * @author Vitaliy Dragun
- *
  */
 public class PrintlnOperationReader extends AbstractOperationReader<PrintlnOperation>
     implements ForInitOperationReader, ForUpdateOperationReader {

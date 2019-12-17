@@ -27,19 +27,16 @@ import com.revenat.javamm.compiler.component.error.JavammStructSyntaxError;
 
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Optional;
 
 import static com.revenat.javamm.code.syntax.Keywords.DO;
 import static com.revenat.javamm.code.syntax.Keywords.WHILE;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.getTokensBetweenBrackets;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateOpeningParenthesisAfterTokenInPosition;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatLineEndsWithOpeningCurlyBrace;
-
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class DoWhileOperationReader extends AbstractBlockOperationReader<DoWhileOperation> {
 
@@ -92,7 +89,7 @@ public class DoWhileOperationReader extends AbstractBlockOperationReader<DoWhile
 
     private Expression getCondition(final SourceLine sourceLine) {
         final List<String> tokens =
-                getTokensBetweenBrackets(OPENING_PARENTHESIS, CLOSING_PARENTHESIS, sourceLine, false);
+            getTokensBetweenBrackets(OPENING_PARENTHESIS, CLOSING_PARENTHESIS, sourceLine, false);
         return expressionResolver.resolve(tokens, sourceLine);
     }
 

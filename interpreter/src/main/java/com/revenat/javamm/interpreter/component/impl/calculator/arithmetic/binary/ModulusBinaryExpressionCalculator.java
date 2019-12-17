@@ -29,7 +29,6 @@ import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMEN
  * implementation for binary modulus operator
  *
  * @author Vitaliy Dragun
- *
  */
 public final class ModulusBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
 

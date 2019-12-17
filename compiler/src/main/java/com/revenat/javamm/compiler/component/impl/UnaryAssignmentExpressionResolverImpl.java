@@ -26,6 +26,7 @@ import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+
 import static com.revenat.javamm.code.util.LexemeUtils.isClosingParenthesis;
 import static com.revenat.javamm.code.util.LexemeUtils.isExpression;
 import static com.revenat.javamm.code.util.LexemeUtils.isOpeningParenthesis;
@@ -38,7 +39,6 @@ import static com.revenat.javamm.compiler.component.impl.expression.processor.Un
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class UnaryAssignmentExpressionResolverImpl implements UnaryAssignmentExpressionResolver {
 
@@ -53,7 +53,7 @@ public class UnaryAssignmentExpressionResolverImpl implements UnaryAssignmentExp
 
     private boolean containsUnaryAssignmentOperator(final List<Lexeme> lexemes) {
         return lexemes.stream()
-                .anyMatch(LexemeUtils::isUnaryAssignmentOperator);
+            .anyMatch(LexemeUtils::isUnaryAssignmentOperator);
     }
 
     private List<Lexeme> resolveFrom(final List<Lexeme> lexemes, final SourceLine sourceLine) {
@@ -92,20 +92,20 @@ public class UnaryAssignmentExpressionResolverImpl implements UnaryAssignmentExp
 
         } else if (isUnaryAssignmentOperatorBeforeOpeningParenthesis(current, next)) {
             processOperatorBeforeOpeningParenthesis(current,
-                                                    next,
-                                                    lexemes,
-                                                    result,
-                                                    sourceLine);
+                next,
+                lexemes,
+                result,
+                sourceLine);
 
         } else if (isVariableExpressionBeforeUnaryAssignmentOperator(current, next)) {
             processExpressionBeforeOperator(current, next, result, sourceLine);
 
         } else if (isExpressionBeforeClosingParenthesis(current, next)) {
             processPossibleOperatorAfterClosingParenthesis(current,
-                                                           next,
-                                                           lexemes,
-                                                           result,
-                                                           sourceLine);
+                next,
+                lexemes,
+                result,
+                sourceLine);
 
         } else if (isUnaryAssignmentOperator(current)) {
             throw syntaxError(sourceLine, "A variable expression is expected for unary operator: '%s'", current);

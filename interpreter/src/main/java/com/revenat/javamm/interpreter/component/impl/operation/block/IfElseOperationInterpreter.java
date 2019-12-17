@@ -23,7 +23,6 @@ import com.revenat.javamm.interpreter.component.CalculatorFacade;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class IfElseOperationInterpreter extends AbstractBlockOperationInterpreter<IfElseOperation> {
 

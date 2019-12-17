@@ -17,10 +17,6 @@
 
 package com.revenat.javamm.compiler.integration.expression;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.ComplexExpression;
@@ -36,10 +32,7 @@ import com.revenat.javamm.compiler.component.impl.VariableBuilderImpl;
 import com.revenat.javamm.compiler.component.impl.expression.builder.PostfixNotationComplexExpressionBuilder;
 import com.revenat.javamm.compiler.component.impl.expression.builder.SingleTokenExpressionBuilderImpl;
 import com.revenat.javamm.compiler.test.helper.CustomAsserts;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -50,7 +43,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -65,8 +63,8 @@ class PostfixNotationComplexExpressionBuilderIntegrationTest {
     @BeforeEach
     void setUp() {
         lexemeBuilder = new LexemeBuilderImpl(new SingleTokenExpressionBuilderImpl(new VariableBuilderImpl()),
-                                              new FunctionNameBuilderImpl(),
-                                              new LexemeAmbiguityResolverImpl());
+            new FunctionNameBuilderImpl(),
+            new LexemeAmbiguityResolverImpl());
         complexExpressionBuilder = new PostfixNotationComplexExpressionBuilder(
             new OperatorPrecedenceResolverImpl(CompilerConfigurator.OPERATOR_PRECEDENCE_REGISTRY));
     }
@@ -79,12 +77,12 @@ class PostfixNotationComplexExpressionBuilderIntegrationTest {
 
     private String expressionAsString(final ComplexExpression expression) {
         return expression.getLexemes().stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(" "));
+            .map(Object::toString)
+            .collect(Collectors.joining(" "));
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "3 + 4,                 3 4 +",
         "7 - 2 * 3,             7 2 3 * -",
         "5 * 2 + 10,            5 2 * 10 +",
@@ -98,7 +96,7 @@ class PostfixNotationComplexExpressionBuilderIntegrationTest {
         "( 8 + 2 * 5 ) / ( 1 + 3 * 2 - 4 ),         8 2 5 * + 1 3 2 * + 4 - /",
         "( 6 + 10 - 4 ) / ( 1 + 1 * 2 ) + 1,        6 10 + 4 - 1 1 2 * + / 1 +",
         " ( ( ( ( 1 + 2 ) - ( 3 * 4 ) ) / ( 5 % 6 ) ^ 7 ) | 2 ) ^ ( 9 >> 2 | 4 << 2 | ~ 1 ), "
-        + "1 2 + 3 4 * - 5 6 % / 7 ^ 2 | 9 2 >> 4 2 << | 1 ~ | ^"
+            + "1 2 + 3 4 * - 5 6 % / 7 ^ 2 | 9 2 >> 4 2 << | 1 ~ | ^"
     })
     @Order(1)
     void shouldBuildValidComplexExpressionInPostfixNotation(final String expressionTokens, final String expectedResult) {
@@ -109,22 +107,22 @@ class PostfixNotationComplexExpressionBuilderIntegrationTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            ")",
-            "2 )",
-            "3 + 5 )",
-            "5 + 8 - 6 * 7 )",
-            "5 + ( 8 + 4 ) + 6 )",
-            "( 5 + 8 ) + 4 + 6 )",
-            "( ( 5 + 8 ) * 6 ) + 4 + 6 )",
-            "( ( ( 5 + 8 ) * 6 ) - 6 * 7 ) + 4 + 6 )",
-            ") + 7",
-            "2 ) + 7",
-            "3 + 5 ) + 7",
-            "5 + 8 - 6 * 7 ) + 7",
-            "5 + ( 8 + 4 ) + 6 ) + 7",
-            "( 5 + 8 ) + 4 + 6 ) + 7",
-            "( ( 5 + 8 ) * 6 ) + 4 + 6 ) + 7",
-            "( ( ( 5 + 8 ) * 6 ) - 6 * 7 ) + 4 + 6 ) + 7"
+        ")",
+        "2 )",
+        "3 + 5 )",
+        "5 + 8 - 6 * 7 )",
+        "5 + ( 8 + 4 ) + 6 )",
+        "( 5 + 8 ) + 4 + 6 )",
+        "( ( 5 + 8 ) * 6 ) + 4 + 6 )",
+        "( ( ( 5 + 8 ) * 6 ) - 6 * 7 ) + 4 + 6 )",
+        ") + 7",
+        "2 ) + 7",
+        "3 + 5 ) + 7",
+        "5 + 8 - 6 * 7 ) + 7",
+        "5 + ( 8 + 4 ) + 6 ) + 7",
+        "( 5 + 8 ) + 4 + 6 ) + 7",
+        "( ( 5 + 8 ) * 6 ) + 4 + 6 ) + 7",
+        "( ( ( 5 + 8 ) * 6 ) - 6 * 7 ) + 4 + 6 ) + 7"
     })
     @Order(2)
     void shouldFailToBuildIfOpenParenthesisIsMissing(final String expressionTokens) {
@@ -135,23 +133,23 @@ class PostfixNotationComplexExpressionBuilderIntegrationTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "(",
-            "( 2",
-            "( 3 + 5",
-            "( 5 + 8 - 6 * 7",
-            "( 5 + ( 8 + 4 ) + 6",
-            "( ( 5 + 8 ) + 4 + 6",
-            "( ( ( 5 + 8 ) * 6 ) + 4 + 6",
-            "( ( ( ( 5 + 8 ) * 6 ) - 6 * 7 ) + 4 + 6",
-            "3 * (",
-            "3 * ( 2",
-            "3 * ( 3 + 5",
-            "3 * ( 5 + 8 - 6 * 7",
-            "3 * ( 5 + ( 8 + 4 ) + 6",
-            "3 * ( ( 5 + 8 ) + 4 + 6",
-            "3 * ( ( ( 5 + 8 ) * 6 ) + 4 + 6",
-            "3 * ( ( ( ( 5 + 8 ) * 6 ) - 6 * 7 ) + 4 + 6"
-        })
+        "(",
+        "( 2",
+        "( 3 + 5",
+        "( 5 + 8 - 6 * 7",
+        "( 5 + ( 8 + 4 ) + 6",
+        "( ( 5 + 8 ) + 4 + 6",
+        "( ( ( 5 + 8 ) * 6 ) + 4 + 6",
+        "( ( ( ( 5 + 8 ) * 6 ) - 6 * 7 ) + 4 + 6",
+        "3 * (",
+        "3 * ( 2",
+        "3 * ( 3 + 5",
+        "3 * ( 5 + 8 - 6 * 7",
+        "3 * ( 5 + ( 8 + 4 ) + 6",
+        "3 * ( ( 5 + 8 ) + 4 + 6",
+        "3 * ( ( ( 5 + 8 ) * 6 ) + 4 + 6",
+        "3 * ( ( ( ( 5 + 8 ) * 6 ) - 6 * 7 ) + 4 + 6"
+    })
     @Order(3)
     void shouldFailToBuildIfClosingParenthesisIsMissing(final String expressionTokens) {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class, () -> build(expressionTokens));

@@ -17,16 +17,12 @@
 
 package com.revenat.javamm.code.fragment.operation;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.Variable;
 import com.revenat.javamm.code.test.doubles.ExpressionDummy;
 import com.revenat.javamm.code.test.doubles.VariableDummy;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -34,14 +30,19 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a variable declaration operation")
 class VariableDeclarationOperationTest {
     private static final SourceLine DUMMY_SOURCE_LINE = SourceLine.EMPTY_SOURCE_LINE;
+
     private static final Variable DUMMY_VARIABLE = new VariableDummy();
+
     private static final Expression DUMMY_EXPRESSION = new ExpressionDummy();
 
     private VariableDeclarationOperation variableDeclarationOperation;

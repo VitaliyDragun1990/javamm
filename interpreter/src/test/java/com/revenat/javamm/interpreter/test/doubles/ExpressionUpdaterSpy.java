@@ -22,6 +22,7 @@ import com.revenat.javamm.interpreter.component.ExpressionUpdater;
 
 public class ExpressionUpdaterSpy implements ExpressionUpdater<UpdatableExpressionDummy> {
     private UpdatableExpression lastUpdatedExpression = null;
+
     private Object lastUpdatedValue = null;
 
     @Override

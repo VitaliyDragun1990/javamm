@@ -28,7 +28,6 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
  * implementation for 'predicate less than or equals' ({@code <=}) operator
  *
  * @author Vitaliy Dragun
- *
  */
 public class IsLessThanOrEqualsBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 

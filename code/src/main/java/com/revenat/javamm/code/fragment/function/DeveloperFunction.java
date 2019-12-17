@@ -29,7 +29,6 @@ import static java.util.stream.Collectors.joining;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public final class DeveloperFunction extends AbstractFunction {
 
@@ -64,8 +63,8 @@ public final class DeveloperFunction extends AbstractFunction {
     @Override
     public String toString() {
         return String.format("%s(%s)",
-               functionName(),
-               parameterList()
+            functionName(),
+            parameterList()
         );
     }
 
@@ -75,8 +74,8 @@ public final class DeveloperFunction extends AbstractFunction {
 
     private String parameterList() {
         return parameters.stream()
-                .map(Object::toString)
-                .collect(joining(","));
+            .map(Object::toString)
+            .collect(joining(","));
     }
 
     public static final class Builder {
@@ -111,10 +110,10 @@ public final class DeveloperFunction extends AbstractFunction {
 
         public DeveloperFunction build() {
             return new DeveloperFunction(
-                    name,
-                    parameters == null ? List.of() : parameters,
-                    body,
-                    declarationSourceLine == null ? body.getSourceLine() : declarationSourceLine);
+                name,
+                parameters == null ? List.of() : parameters,
+                body,
+                declarationSourceLine == null ? body.getSourceLine() : declarationSourceLine);
         }
     }
 }

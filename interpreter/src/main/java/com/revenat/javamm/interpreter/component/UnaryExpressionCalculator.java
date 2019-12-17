@@ -25,11 +25,9 @@ import com.revenat.javamm.code.fragment.operator.UnaryOperator;
  * Calculates expressions with {@linkplain UnaryOperator unary operator}
  *
  * @author Vitaliy Dragun
- *
  */
 public interface UnaryExpressionCalculator extends ExpressionCalculator {
 
-    @Override
     UnaryOperator getOperator();
 
     Object calculate(ExpressionContext expressionContext, Expression expression);

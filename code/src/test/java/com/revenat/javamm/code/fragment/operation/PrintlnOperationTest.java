@@ -17,15 +17,9 @@
 
 package com.revenat.javamm.code.fragment.operation;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
-
-import java.util.List;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -33,13 +27,20 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a 'println' operation")
 class PrintlnOperationTest {
-    private static final Expression DUMMY_EXPRESSION = new Expression() {};
+    private static final Expression DUMMY_EXPRESSION = new Expression() {
+    };
+
     private static final SourceLine OPERATION_SOURCE_LINE =
         new SourceLine("test", 1, List.of("println", "(", "hello world", ")"));
 

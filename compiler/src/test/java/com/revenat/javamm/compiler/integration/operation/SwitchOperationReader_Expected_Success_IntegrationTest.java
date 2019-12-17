@@ -17,23 +17,20 @@
 
 package com.revenat.javamm.compiler.integration.operation;
 
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.operation.SwitchOperation;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
 import static java.util.List.of;
-
-import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class SwitchOperationReader_Expected_Success_IntegrationTest
-        extends AbstractOperationReaderHappyPathIntegrationTest {
+    extends AbstractOperationReaderHappyPathIntegrationTest {
 
     @Override
     protected Class<? extends Operation> getExpectedOperationClass() {
@@ -43,114 +40,114 @@ public class SwitchOperationReader_Expected_Success_IntegrationTest
     @Override
     protected Stream<Arguments> validSourceLineProvider() {
         return Stream.of(
-                arguments(of(
-                        "switch ( a ) {",
+            arguments(of(
+                "switch ( a ) {",
 
-                        "}"
-                )),
-                arguments(of(
-                        "switch ( a + 3 ) {",
+                "}"
+            )),
+            arguments(of(
+                "switch ( a + 3 ) {",
 
-                        "}"
-                )),
-                arguments(of(
-                        "switch ( ( a + 4 ) * ( b - 8 ) + 4 / ( ( 4 - c ) * 3 - d ) ) {",
+                "}"
+            )),
+            arguments(of(
+                "switch ( ( a + 4 ) * ( b - 8 ) + 4 / ( ( 4 - c ) * 3 - d ) ) {",
 
-                        "}"
-                )),
-                arguments(of(
-                        "switch ( a ) {",
-                        "   case 1 : {",
+                "}"
+            )),
+            arguments(of(
+                "switch ( a ) {",
+                "   case 1 : {",
 
-                        "   }",
-                        "}"
-                )),
-                arguments(of(
-                        "switch ( a ) {",
-                        "   case 1.1 : {",
+                "   }",
+                "}"
+            )),
+            arguments(of(
+                "switch ( a ) {",
+                "   case 1.1 : {",
 
-                        "   }",
-                        "}"
-                )),
-                arguments(of(
-                        "switch ( a ) {",
-                        "   case true : {",
+                "   }",
+                "}"
+            )),
+            arguments(of(
+                "switch ( a ) {",
+                "   case true : {",
 
-                        "   }",
-                        "}"
-                )),
-                arguments(of(
-                        "switch ( a ) {",
-                        "   case null : {",
+                "   }",
+                "}"
+            )),
+            arguments(of(
+                "switch ( a ) {",
+                "   case null : {",
 
-                        "   }",
-                        "}"
-                )),
-                arguments(of(
-                        "switch ( a ) {",
-                        "   case 'hello' : {",
+                "   }",
+                "}"
+            )),
+            arguments(of(
+                "switch ( a ) {",
+                "   case 'hello' : {",
 
-                        "   }",
-                        "}"
-                )),
-                arguments(of(
-                        "switch ( a ) {",
-                        "   case integer : {",
+                "   }",
+                "}"
+            )),
+            arguments(of(
+                "switch ( a ) {",
+                "   case integer : {",
 
-                        "   }",
-                        "}"
-                )),
-                arguments(of(
-                        "switch ( a ) {",
-                        "   default : {",
+                "   }",
+                "}"
+            )),
+            arguments(of(
+                "switch ( a ) {",
+                "   default : {",
 
-                        "   }",
-                        "}"
-                )),
-                arguments(of(
-                        "switch ( a ) {",
-                        "   case 1 : {",
-                        "       break",
-                        "   }",
-                        "   case 2 : {",
+                "   }",
+                "}"
+            )),
+            arguments(of(
+                "switch ( a ) {",
+                "   case 1 : {",
+                "       break",
+                "   }",
+                "   case 2 : {",
 
-                        "   }",
-                        "}"
-                )),
-                arguments(of(
-                        "switch ( a ) {",
-                        "   case 1 : {",
+                "   }",
+                "}"
+            )),
+            arguments(of(
+                "switch ( a ) {",
+                "   case 1 : {",
 
-                        "   }",
-                        "   case 2 : {",
+                "   }",
+                "   case 2 : {",
 
-                        "   }",
-                        "   default : {",
+                "   }",
+                "   default : {",
 
-                        "   }",
-                        "}"
-                )),
-                arguments(of(
-                        "switch ( a ) {",
-                        "   case 1 : {",
-                        "       switch ( a ) {",
+                "   }",
+                "}"
+            )),
+            arguments(of(
+                "switch ( a ) {",
+                "   case 1 : {",
+                "       switch ( a ) {",
 
-                        "       }",
-                        "   }",
-                        "   default : {",
-                        "       switch ( a ) {",
-                        "           case 1 : {",
-                        "               switch ( a ) {",
+                "       }",
+                "   }",
+                "   default : {",
+                "       switch ( a ) {",
+                "           case 1 : {",
+                "               switch ( a ) {",
 
-                        "               }",
-                        "           }",
-                        "           default : {",
+                "               }",
+                "           }",
+                "           default : {",
 
-                        "           }",
-                        "       }",
-                        "   }",
-                        "}"
-               ))
+                "           }",
+                "       }",
+                "   }",
+                "}"
+            ))
         );
     }
 

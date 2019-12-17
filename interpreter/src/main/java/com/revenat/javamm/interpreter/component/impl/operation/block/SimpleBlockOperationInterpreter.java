@@ -22,7 +22,6 @@ import com.revenat.javamm.code.fragment.operation.Block;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class SimpleBlockOperationInterpreter extends AbstractBlockOperationInterpreter<Block> {
 

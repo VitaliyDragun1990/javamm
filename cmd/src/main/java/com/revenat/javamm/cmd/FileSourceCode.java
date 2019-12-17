@@ -28,7 +28,6 @@ import java.util.List;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 final class FileSourceCode implements SourceCode {
     private final Path path;

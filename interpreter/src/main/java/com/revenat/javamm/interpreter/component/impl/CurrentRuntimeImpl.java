@@ -36,7 +36,6 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class CurrentRuntimeImpl implements CurrentRuntime {
 

@@ -21,7 +21,6 @@ import com.revenat.javamm.code.fragment.expression.CaseValueExpression;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface SwitchCaseEntry extends SwitchBodyEntry {
 

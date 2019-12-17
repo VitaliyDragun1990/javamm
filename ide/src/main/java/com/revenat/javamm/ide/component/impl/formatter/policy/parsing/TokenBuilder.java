@@ -41,13 +41,13 @@ public class TokenBuilder {
 
     static final String MULTILINE_COMMENT_SUFFIX = "*/";
 
-    private boolean insideMultilineComment;
-
-    private String stringLiteralType;
-
     private final StringBuilder tokenBuffer;
 
     private final StringBuilder delimiterBuffer;
+
+    private boolean insideMultilineComment;
+
+    private String stringLiteralType;
 
     private TokenBuilderState builderState;
 

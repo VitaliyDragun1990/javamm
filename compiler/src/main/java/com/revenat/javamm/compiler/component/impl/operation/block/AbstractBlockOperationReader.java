@@ -26,19 +26,18 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public abstract class AbstractBlockOperationReader<T extends Operation> extends AbstractOperationReader<T>
     implements BlockOperationReaderAware {
 
     private BlockOperationReader blockOperationReader;
 
+    protected BlockOperationReader getBlockOperationReader() {
+        return requireNonNull(blockOperationReader, "blockOperationReader is not set");
+    }
+
     @Override
     public void setBlockOperationReader(final BlockOperationReader blockOperationReader) {
         this.blockOperationReader = requireNonNull(blockOperationReader);
-    }
-
-    protected BlockOperationReader getBlockOperationReader() {
-        return requireNonNull(blockOperationReader, "blockOperationReader is not set");
     }
 }

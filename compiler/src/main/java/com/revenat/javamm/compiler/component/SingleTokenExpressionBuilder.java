@@ -21,7 +21,6 @@ package com.revenat.javamm.compiler.component;
  * Responsible for building expressions that consist of one token only.
  *
  * @author Vitaliy Dragun
- *
  */
 public interface SingleTokenExpressionBuilder extends ExpressionBuilder {
 

@@ -17,19 +17,9 @@
 
 package com.revenat.javamm.vm.integration.operation;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 import com.revenat.javamm.vm.integration.AbstractIntegrationTest;
-
-import java.util.List;
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.vm.helper.CustomAsserts.assertErrorMessageContains;
-
-import static java.util.List.of;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -42,7 +32,14 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.vm.helper.CustomAsserts.assertErrorMessageContains;
+import static java.util.List.of;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -64,7 +61,7 @@ public class BreakOperationInterpreterIntegrationTest extends AbstractIntegratio
     @Order(2)
     void shouldFailIfBreakOperationOutsideLoopBody() {
         final List<String> breakOutsideLoopBody = of(
-                "break"
+            "break"
         );
 
         final JavammRuntimeError e = assertThrows(JavammRuntimeError.class, () -> runBlock(breakOutsideLoopBody));
@@ -75,71 +72,71 @@ public class BreakOperationInterpreterIntegrationTest extends AbstractIntegratio
     static final class BreakOperationProvider implements ArgumentsProvider {
 
         @Override
-        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
+        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) {
             return Stream.of(
-                    arguments(of(
-                            "var i = 0",
-                            "while ( i ++ < 5 ) {",
-                            "   if ( i > 2 ) {",
-                            "       break",
-                            "   }",
-                            "   println (i)",
-                            "}",
-                            "println ('after while')"
-                    ), of(1, 2, "after while")),
-                    arguments(of(
-                            "var i = 0",
-                            "do {",
-                            "   if ( i > 2 ) {",
-                            "       break",
-                            "   }",
-                            "   println (i)",
-                            "}",
-                            "while ( i ++ < 5 )",
-                            "println ('after do while')"
-                    ), of(0, 1, 2, "after do while")),
-                    arguments(of(
-                            "var i = 0",
-                            "for ( ; i < 5 ; i ++ ) {",
-                            "   if ( i > 2 ) {",
-                            "       break",
-                            "   }",
-                            "   println (i)",
-                            "}",
-                            "println ('after for')"
-                    ), of(0, 1, 2, "after for")),
-                    // ------------ Interrupts infinite loop
-                    arguments(of(
-                            "var i = 0",
-                            "while ( true ) {",
-                            "   if ( i > 2 ) {",
-                            "       break",
-                            "   }",
-                            "   println (i ++)",
-                            "}",
-                            "println ('after while')"
-                    ), of(0, 1, 2, "after while")),
-                    arguments(of(
-                            "var i = 0",
-                            "do {",
-                            "   if ( i > 2 ) {",
-                            "       break",
-                            "   }",
-                            "   println (i ++)",
-                            "}",
-                            "while ( true )",
-                            "println ('after do while')"
-                    ), of(0, 1, 2, "after do while")),
-                    arguments(of(
-                            "var i = 0",
-                            "for ( ; ; i++ ) {",
-                            "   if ( i > 2 ) {",
-                            "       break",
-                            "   }",
-                            "   println (i)",
-                            "}",
-                            "println ('after for')"
-                 ), of(0, 1, 2, "after for"))
+                arguments(of(
+                    "var i = 0",
+                    "while ( i ++ < 5 ) {",
+                    "   if ( i > 2 ) {",
+                    "       break",
+                    "   }",
+                    "   println (i)",
+                    "}",
+                    "println ('after while')"
+                ), of(1, 2, "after while")),
+                arguments(of(
+                    "var i = 0",
+                    "do {",
+                    "   if ( i > 2 ) {",
+                    "       break",
+                    "   }",
+                    "   println (i)",
+                    "}",
+                    "while ( i ++ < 5 )",
+                    "println ('after do while')"
+                ), of(0, 1, 2, "after do while")),
+                arguments(of(
+                    "var i = 0",
+                    "for ( ; i < 5 ; i ++ ) {",
+                    "   if ( i > 2 ) {",
+                    "       break",
+                    "   }",
+                    "   println (i)",
+                    "}",
+                    "println ('after for')"
+                ), of(0, 1, 2, "after for")),
+                // ------------ Interrupts infinite loop
+                arguments(of(
+                    "var i = 0",
+                    "while ( true ) {",
+                    "   if ( i > 2 ) {",
+                    "       break",
+                    "   }",
+                    "   println (i ++)",
+                    "}",
+                    "println ('after while')"
+                ), of(0, 1, 2, "after while")),
+                arguments(of(
+                    "var i = 0",
+                    "do {",
+                    "   if ( i > 2 ) {",
+                    "       break",
+                    "   }",
+                    "   println (i ++)",
+                    "}",
+                    "while ( true )",
+                    "println ('after do while')"
+                ), of(0, 1, 2, "after do while")),
+                arguments(of(
+                    "var i = 0",
+                    "for ( ; ; i++ ) {",
+                    "   if ( i > 2 ) {",
+                    "       break",
+                    "   }",
+                    "   println (i)",
+                    "}",
+                    "println ('after for')"
+                ), of(0, 1, 2, "after for"))
             );
         }
     }

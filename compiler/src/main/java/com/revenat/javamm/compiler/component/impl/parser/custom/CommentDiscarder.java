@@ -29,7 +29,6 @@ import static com.revenat.javamm.code.syntax.Delimiters.START_SINGLE_LINE_COMMEN
  * Discards all comments from source line
  *
  * @author Vitaliy Dragun
- *
  */
 class CommentDiscarder {
 
@@ -112,7 +111,7 @@ class CommentDiscarder {
     private void endMultiLineComment() {
         multiLineCommentStarted = false;
         commentedOutContent.delete(0, commentedOutContent.length());
-        commentFreeContent.append(' '); // to separate possible tokens which were separated before by multiline comment
+        commentFreeContent.append(' ');
     }
 
     private boolean isWithinMultiLineComment() {

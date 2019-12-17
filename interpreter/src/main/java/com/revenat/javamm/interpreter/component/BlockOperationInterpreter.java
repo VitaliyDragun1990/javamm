@@ -24,7 +24,6 @@ import com.revenat.javamm.code.fragment.operation.Block;
  * Interprets byte code block of operations
  *
  * @author Vitaliy Dragun
- *
  */
 public interface BlockOperationInterpreter {
 

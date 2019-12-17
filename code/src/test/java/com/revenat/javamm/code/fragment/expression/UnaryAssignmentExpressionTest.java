@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import static com.revenat.javamm.code.fragment.operator.UnaryOperator.ARITHMETICAL_UNARY_PLUS;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("an unary assignment expression")

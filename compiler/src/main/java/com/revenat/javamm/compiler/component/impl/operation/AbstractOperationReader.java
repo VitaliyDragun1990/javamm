@@ -27,7 +27,6 @@ import java.util.ListIterator;
  * Contains common behavior for all operation readers
  *
  * @author Vitaliy Dragun
- *
  */
 public abstract class AbstractOperationReader<T extends Operation> implements OperationReader {
 

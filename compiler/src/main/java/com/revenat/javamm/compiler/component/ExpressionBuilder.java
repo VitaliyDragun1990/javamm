@@ -27,7 +27,6 @@ import java.util.List;
  * Responsible for building particular kind of expression
  *
  * @author Vitaliy Dragun
- *
  */
 public interface ExpressionBuilder {
 
@@ -37,8 +36,8 @@ public interface ExpressionBuilder {
      *
      * @param tokens list of tokens used for building an expression
      * @return {@code true} if {@code this} expression builder is capable of
-     *         building an expression from specified tokens, {@code false} if it
-     *         doesn't
+     * building an expression from specified tokens, {@code false} if it
+     * doesn't
      */
     boolean canBuild(List<String> tokens);
 

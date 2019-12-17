@@ -27,7 +27,6 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
  * implementation for 'logical or' ({@code ||}) operator
  *
  * @author Vitaliy Dragun
- *
  */
 public class LogicalOrBinaryExpressionCalculator extends AbstractLogicalBinaryExpressionCalculator {
 

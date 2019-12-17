@@ -23,7 +23,6 @@ import com.revenat.javamm.interpreter.component.impl.operation.AbstractOperation
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class VariableAssignmentOperationInterpreter extends AbstractOperationInterpreter<VariableAssignmentOperation> {
 

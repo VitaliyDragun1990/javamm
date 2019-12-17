@@ -25,17 +25,15 @@ import com.revenat.javamm.compiler.component.impl.operation.ForOperationHeaderRe
 import com.revenat.javamm.compiler.component.impl.operation.block.AbstractBlockOperationReader;
 
 import java.util.ListIterator;
-import java.util.Optional;
+
 import static com.revenat.javamm.code.syntax.Keywords.FOR;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateClosingParenthesisBeforeOpeningCurlyBrace;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateOpeningParenthesisAfterTokenInPosition;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatLineEndsWithOpeningCurlyBrace;
-
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ForOperationReader extends AbstractBlockOperationReader<ForOperation> {
 

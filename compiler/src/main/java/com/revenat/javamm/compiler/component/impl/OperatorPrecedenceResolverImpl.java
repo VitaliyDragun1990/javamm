@@ -29,7 +29,6 @@ import java.util.stream.Stream;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class OperatorPrecedenceResolverImpl implements OperatorPrecedenceResolver {
     private final Map<Operator, Integer> operatorPrecedenceRegistry;
@@ -37,6 +36,16 @@ public class OperatorPrecedenceResolverImpl implements OperatorPrecedenceResolve
     public OperatorPrecedenceResolverImpl(final Map<Operator, Integer> operatorPrecedenceRegistry) {
         validateAllOperatorsSupport(operatorPrecedenceRegistry);
         this.operatorPrecedenceRegistry = Map.copyOf(operatorPrecedenceRegistry);
+    }
+
+    private static void validateAllOperatorsSupport(final Map<Operator, Integer> registry) {
+        Stream.of(UnaryOperator.values(), BinaryOperator.values())
+            .flatMap(Arrays::stream)
+            .forEach(operator -> {
+                if (!registry.containsKey(operator)) {
+                    throw new ConfigException("Precedence not defined for " + operator);
+                }
+            });
     }
 
     @Override
@@ -52,15 +61,5 @@ public class OperatorPrecedenceResolverImpl implements OperatorPrecedenceResolve
     @Override
     public boolean hasLowerPrecedence(final Operator first, final Operator second) {
         return getPrecedence(first) < getPrecedence(second);
-    }
-
-    private static void validateAllOperatorsSupport(final Map<Operator, Integer> registry) {
-        Stream.of(UnaryOperator.values(), BinaryOperator.values())
-            .flatMap(Arrays::stream)
-            .forEach(operator -> {
-                if (!registry.containsKey(operator)) {
-                    throw new ConfigException("Precedence not defined for " + operator);
-                }
-            });
     }
 }

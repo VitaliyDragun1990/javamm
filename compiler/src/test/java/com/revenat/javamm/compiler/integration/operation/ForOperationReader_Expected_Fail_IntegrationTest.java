@@ -17,123 +17,121 @@
 
 package com.revenat.javamm.compiler.integration.operation;
 
-import static org.junit.jupiter.params.provider.Arguments.arguments;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.util.List.of;
-
-import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ForOperationReader_Expected_Fail_IntegrationTest
-        extends AbstractOperationReaderInvalidValuesIntegrationTest {
+    extends AbstractOperationReaderInvalidValuesIntegrationTest {
 
     @Override
     protected Stream<Arguments> invalidSourceLineProvider() {
         return Stream.of(
-              blockValidation(),
-              expressionValidation(),
-              forValidation(),
-              semicolonValidation()
+            blockValidation(),
+            expressionValidation(),
+            forValidation(),
+            semicolonValidation()
         ).flatMap(Function.identity());
     }
 
     private Stream<Arguments> blockValidation() {
         return named(Stream.of(
-                arguments(
-                        of(
-                         "for"
-                        ), "Syntax error in 'module1' [Line: 2]: '{' expected at the end of the line"),
-                arguments(
-                        of(
-                                "for ( var i = 0; i < 10 ; i++ )"
-                         ), "Syntax error in 'module1' [Line: 2]: '{' expected at the end of the line"),
-                arguments(
-                        of(
-                                "for ( var i = 0; i < 10 ; i++ ) {"
-                         ), "Syntax error in 'module1': '}' expected to close block statement at the end of file"),
-                arguments(
-                        of(
-                                "for ( var i = 0; i < 10 ; i++ ) {",
+            arguments(
+                of(
+                    "for"
+                ), "Syntax error in 'module1' [Line: 2]: '{' expected at the end of the line"),
+            arguments(
+                of(
+                    "for ( var i = 0; i < 10 ; i++ )"
+                ), "Syntax error in 'module1' [Line: 2]: '{' expected at the end of the line"),
+            arguments(
+                of(
+                    "for ( var i = 0; i < 10 ; i++ ) {"
+                ), "Syntax error in 'module1': '}' expected to close block statement at the end of file"),
+            arguments(
+                of(
+                    "for ( var i = 0; i < 10 ; i++ ) {",
 
-                                "} var a = 5"
-                         ), "Syntax error in 'module1' [Line: 3]: '}' expected only")
+                    "} var a = 5"
+                ), "Syntax error in 'module1' [Line: 3]: '}' expected only")
         ), "block");
     }
 
     private Stream<Arguments> expressionValidation() {
         return named(Stream.of(
-                arguments(
-                        of(
-                                "for ( ) {"
-                         ), "Syntax error in 'module1' [Line: 2]: An expression is expected between '(' and ')'")
-                ), "expression");
+            arguments(
+                of(
+                    "for ( ) {"
+                ), "Syntax error in 'module1' [Line: 2]: An expression is expected between '(' and ')'")
+        ), "expression");
     }
 
     private Stream<Arguments> forValidation() {
         return named(Stream.of(
-                arguments(
-                        of(
-                                "for {"
-                        ), "Syntax error in 'module1' [Line: 2]: '(' expected after 'for'"),
-                arguments(
-                        of(
-                                "for var i = 0 ; i < 10 ; i ++ {"
-                        ), "Syntax error in 'module1' [Line: 2]: '(' expected after 'for'"),
-                arguments(
-                        of(
-                                "for var i = 0 ; i < 10 ; i ++ ) {"
-                        ), "Syntax error in 'module1' [Line: 2]: '(' expected after 'for'"),
-                arguments(
-                        of(
-                                "for ( var i = 0 ; i < 10 ; i ++ {"
-                        ), "Syntax error in 'module1' [Line: 2]: ')' expected before '{'"),
-                arguments(
-                        of(
-                                "for ) var i = 0 ; i < 10 ; i ++ ( {"
-                        ), "Syntax error in 'module1' [Line: 2]: '(' expected after 'for'"),
-                arguments(
-                        of(
-                                "for a ( var i = 0 ; i < 10 ; i ++ ) {"
-                         ), "Syntax error in 'module1' [Line: 2]: '(' expected after 'for'"),
-                arguments(
-                        of(
-                                "for this true ( var i = 0 ; i < 10 ; i ++ ) {"
-                        ), "Syntax error in 'module1' [Line: 2]: '(' expected after 'for'"),
-                arguments(
-                        of(
-                                "for ( var i = 0 ; i < 10 ; i ++ ) then {"
-                        ), "Syntax error in 'module1' [Line: 2]: ')' expected before '{'"),
-                arguments(
-                        of(
-                                "for ( var i = 0 ; i < 10 ; i ++ ) then should be {"
-                                ), "Syntax error in 'module1' [Line: 2]: ')' expected before '{'")
-                ), "for");
+            arguments(
+                of(
+                    "for {"
+                ), "Syntax error in 'module1' [Line: 2]: '(' expected after 'for'"),
+            arguments(
+                of(
+                    "for var i = 0 ; i < 10 ; i ++ {"
+                ), "Syntax error in 'module1' [Line: 2]: '(' expected after 'for'"),
+            arguments(
+                of(
+                    "for var i = 0 ; i < 10 ; i ++ ) {"
+                ), "Syntax error in 'module1' [Line: 2]: '(' expected after 'for'"),
+            arguments(
+                of(
+                    "for ( var i = 0 ; i < 10 ; i ++ {"
+                ), "Syntax error in 'module1' [Line: 2]: ')' expected before '{'"),
+            arguments(
+                of(
+                    "for ) var i = 0 ; i < 10 ; i ++ ( {"
+                ), "Syntax error in 'module1' [Line: 2]: '(' expected after 'for'"),
+            arguments(
+                of(
+                    "for a ( var i = 0 ; i < 10 ; i ++ ) {"
+                ), "Syntax error in 'module1' [Line: 2]: '(' expected after 'for'"),
+            arguments(
+                of(
+                    "for this true ( var i = 0 ; i < 10 ; i ++ ) {"
+                ), "Syntax error in 'module1' [Line: 2]: '(' expected after 'for'"),
+            arguments(
+                of(
+                    "for ( var i = 0 ; i < 10 ; i ++ ) then {"
+                ), "Syntax error in 'module1' [Line: 2]: ')' expected before '{'"),
+            arguments(
+                of(
+                    "for ( var i = 0 ; i < 10 ; i ++ ) then should be {"
+                ), "Syntax error in 'module1' [Line: 2]: ')' expected before '{'")
+        ), "for");
     }
 
     private Stream<Arguments> semicolonValidation() {
         return named(Stream.of(
-                arguments(
-                        of(
-                                "for ( var i = 0 , i < 10 , i ++ ) {"
-                        ), "Syntax error in 'module1' [Line: 2]: Missing ';'"),
-                arguments(
-                        of(
-                                "for ( var i = 0 , i < 10 ; i ++ ) {"
-                        ), "Syntax error in 'module1' [Line: 2]: Missing ';'"),
-                arguments(
-                        of(
-                                "for ( var i = 0 ; i < 10 , i ++ ) {"
-                        ), "Syntax error in 'module1' [Line: 2]: Missing ';'"),
-                arguments(
-                        of(
-                                "for ( var i = 0 ; i < 10 ; i ++ ; ) {"
-                        ), "Syntax error in 'module1' [Line: 2]: Redundant ';'")
-                ), "semicolon");
+            arguments(
+                of(
+                    "for ( var i = 0 , i < 10 , i ++ ) {"
+                ), "Syntax error in 'module1' [Line: 2]: Missing ';'"),
+            arguments(
+                of(
+                    "for ( var i = 0 , i < 10 ; i ++ ) {"
+                ), "Syntax error in 'module1' [Line: 2]: Missing ';'"),
+            arguments(
+                of(
+                    "for ( var i = 0 ; i < 10 , i ++ ) {"
+                ), "Syntax error in 'module1' [Line: 2]: Missing ';'"),
+            arguments(
+                of(
+                    "for ( var i = 0 ; i < 10 ; i ++ ; ) {"
+                ), "Syntax error in 'module1' [Line: 2]: Redundant ';'")
+        ), "semicolon");
     }
 }

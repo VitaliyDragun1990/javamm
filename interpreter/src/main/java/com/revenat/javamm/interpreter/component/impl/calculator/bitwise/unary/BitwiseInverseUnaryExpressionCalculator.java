@@ -28,7 +28,6 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
  * implementation for 'bitwise unary inverse' ({@code ~}) operator
  *
  * @author Vitaliy Dragun
- *
  */
 public class BitwiseInverseUnaryExpressionCalculator extends AbstractUnaryExpressionCalculator {
 

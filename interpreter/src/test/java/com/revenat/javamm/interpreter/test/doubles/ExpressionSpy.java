@@ -31,8 +31,8 @@ public class ExpressionSpy extends ExpressionStub {
     }
 
     @Override
-        public Object getValue(final ExpressionContext expressionContext) {
-            getValueCount++;
-            return super.getValue(expressionContext);
-        }
+    public Object getValue(final ExpressionContext expressionContext) {
+        getValueCount++;
+        return super.getValue(expressionContext);
+    }
 }

@@ -29,7 +29,6 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
  *
  * @author Vitaliy Dragun
  * @link https://en.wikipedia.org/wiki/Reverse_Polish_notation
- *
  */
 public class PostfixNotationComplexExpression extends ComplexExpression {
     private final String originalExpression;

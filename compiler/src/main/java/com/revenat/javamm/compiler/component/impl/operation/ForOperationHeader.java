@@ -23,7 +23,6 @@ import com.revenat.javamm.code.fragment.operation.ForOperation;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface ForOperationHeader {
 

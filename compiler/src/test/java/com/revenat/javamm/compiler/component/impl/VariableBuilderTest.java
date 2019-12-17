@@ -94,11 +94,10 @@ class VariableBuilderTest {
     @Test
     @Order(7)
     void builtVariableNotEqualToVariableNotBuiltByAnotherMeans() {
-        Variable varNull = null;
         Variable varBuiltByOtherMeans = new VariableDummy();
         Variable variable = variableBuilder.build("test", DUMMY_SOURCE_LINE);
 
-        assertNotEquals(variable, varNull);
+        assertNotEquals(variable, null);
         assertNotEquals(variable, varBuiltByOtherMeans);
     }
 

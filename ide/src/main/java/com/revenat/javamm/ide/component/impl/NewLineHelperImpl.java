@@ -30,9 +30,10 @@ import static com.revenat.javamm.ide.util.TabReplaceUtils.getTabCount;
 /**
  * @author Vitaliy Dragun
  */
+@SuppressWarnings("checkstyle:AbbreviationAsWordInName")
 class NewLineHelperImpl implements NewLineHelper {
 
-    private final CodeTemplate BLOCK_CODE_TEMPLATE = new CodeTemplate("\t" + CURSOR, "");
+    private static final CodeTemplate BLOCK_TEMPLATE = new CodeTemplate("\t" + CURSOR, "");
 
     @Override
     public void insertNewLine(final CodeArea codeArea) {
@@ -47,16 +48,18 @@ class NewLineHelperImpl implements NewLineHelper {
         }
     }
 
-    private void insertFirstNewLineInBlock(final int previousLineTabCount, final int caretPosition, final CodeArea codeArea) {
-        final String newLineContent = "\n" + BLOCK_CODE_TEMPLATE.getFormattedCode(previousLineTabCount);
-        final int cursorIndex = newLineContent.indexOf(CURSOR);
-        codeArea.replaceText(caretPosition - 1, caretPosition, newLineContent.replaceAll(CURSOR, ""));
-        codeArea.moveTo(caretPosition - 1 + cursorIndex);
-    }
-
     private void insertNewLine(final int previousLineTabCount, final int caretPosition, final CodeArea codeArea) {
         final String newLineContent = "\n" + getLineWithTabs("", previousLineTabCount);
         codeArea.replaceText(caretPosition - 1, caretPosition, newLineContent);
+    }
+
+    private void insertFirstNewLineInBlock(final int previousLineTabCount,
+                                           final int caretPosition,
+                                           final CodeArea codeArea) {
+        final String newLineContent = "\n" + BLOCK_TEMPLATE.getFormattedCode(previousLineTabCount);
+        final int cursorIndex = newLineContent.indexOf(CURSOR);
+        codeArea.replaceText(caretPosition - 1, caretPosition, newLineContent.replaceAll(CURSOR, ""));
+        codeArea.moveTo(caretPosition - 1 + cursorIndex);
     }
 
     private boolean openBlockLine(final String line) {
@@ -69,9 +72,9 @@ class NewLineHelperImpl implements NewLineHelper {
         for (int i = 0; i < line.length(); i++) {
             final Character ch = line.charAt(i);
             if (STRING_DELIMITERS.contains(ch)) {
-                if (ch.equals(stringDelimiter)) { // string literal ends
+                if (ch.equals(stringDelimiter)) {
                     stringDelimiter = null;
-                } else if (stringDelimiter == null) { // new string literal begins
+                } else if (stringDelimiter == null) {
                     stringDelimiter = ch;
                 }
             }

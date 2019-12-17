@@ -35,14 +35,12 @@ import java.util.List;
 import java.util.Set;
 
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.getTokensBetweenBrackets;
-
 import static java.util.Collections.emptyListIterator;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ForOperationHeaderResolverImpl implements ForOperationHeaderResolver {
 
@@ -95,7 +93,7 @@ public class ForOperationHeaderResolverImpl implements ForOperationHeaderResolve
                                              final SourceLine line) {
         if (headerTokens.isUpdateTokensPresent()) {
             header.setUpdateOperation(
-                    resolveUpdateOperation(headerTokens.getUpdateTokens(), line.getModuleName(), line.getLineNumber())
+                resolveUpdateOperation(headerTokens.getUpdateTokens(), line.getModuleName(), line.getLineNumber())
             );
         }
     }
@@ -113,7 +111,7 @@ public class ForOperationHeaderResolverImpl implements ForOperationHeaderResolve
                                            final SourceLine line) {
         if (headerTokens.isInitTokensPresent()) {
             header.setInitOperation(
-                    resolveInitOperation(headerTokens.getInitTokens(), line.getModuleName(), line.getLineNumber())
+                resolveInitOperation(headerTokens.getInitTokens(), line.getModuleName(), line.getLineNumber())
             );
         }
     }
@@ -123,10 +121,10 @@ public class ForOperationHeaderResolverImpl implements ForOperationHeaderResolve
                                                       final int lineNumber) {
         final SourceLine sourceLine = new SourceLine(moduleName, lineNumber, tokens);
         return updateOperationReaders.stream()
-                .filter(reader -> reader.canRead(sourceLine))
-                .findFirst()
-                .map(reader -> reader.read(sourceLine, emptyListIterator()))
-                .orElseGet(() -> readAsExpressionOperation(tokens, sourceLine));
+            .filter(reader -> reader.canRead(sourceLine))
+            .findFirst()
+            .map(reader -> reader.read(sourceLine, emptyListIterator()))
+            .orElseGet(() -> readAsExpressionOperation(tokens, sourceLine));
     }
 
     private ForInitOperation resolveInitOperation(final List<String> tokens,
@@ -134,10 +132,10 @@ public class ForOperationHeaderResolverImpl implements ForOperationHeaderResolve
                                                   final int lineNumber) {
         final SourceLine sourceLine = new SourceLine(moduleName, lineNumber, tokens);
         return initOperationReaders.stream()
-                .filter(reader -> reader.canRead(sourceLine))
-                .findFirst()
-                .map(reader -> reader.read(sourceLine, emptyListIterator()))
-                .orElseGet(() -> readAsExpressionOperation(tokens, sourceLine));
+            .filter(reader -> reader.canRead(sourceLine))
+            .findFirst()
+            .map(reader -> reader.read(sourceLine, emptyListIterator()))
+            .orElseGet(() -> readAsExpressionOperation(tokens, sourceLine));
     }
 
     private ExpressionOperation readAsExpressionOperation(final List<String> tokens, final SourceLine sourceLine) {
@@ -151,18 +149,18 @@ public class ForOperationHeaderResolverImpl implements ForOperationHeaderResolve
         final int lastSemicolonIndex = expressionTokens.lastIndexOf(SEMICOLON);
 
         return new ForOperationHeaderTokens(expressionTokens.subList(0, firstSemicolonIndex),
-                                            expressionTokens.subList(firstSemicolonIndex + 1, lastSemicolonIndex),
-                                            expressionTokens.subList(lastSemicolonIndex + 1, expressionTokens.size()));
+            expressionTokens.subList(firstSemicolonIndex + 1, lastSemicolonIndex),
+            expressionTokens.subList(lastSemicolonIndex + 1, expressionTokens.size()));
     }
 
     private List<String> getExpressionTokens(final SourceLine sourceLine) {
         final List<String> expressionTokens =
-                getTokensBetweenBrackets(OPENING_PARENTHESIS, CLOSING_PARENTHESIS, sourceLine, false);
+            getTokensBetweenBrackets(OPENING_PARENTHESIS, CLOSING_PARENTHESIS, sourceLine, false);
         return requireCorrectNumberOfSemicolonsWithinExpression(expressionTokens, sourceLine);
     }
 
     private List<String> requireCorrectNumberOfSemicolonsWithinExpression(final List<String> expressionTokens,
-                                                                        final SourceLine sourceLine) {
+                                                                          final SourceLine sourceLine) {
         final int numberOfDelimiters = calculateNumberOfSemicolonsAmong(expressionTokens);
         validateNumberOfSemicolons(sourceLine, numberOfDelimiters);
         return expressionTokens;

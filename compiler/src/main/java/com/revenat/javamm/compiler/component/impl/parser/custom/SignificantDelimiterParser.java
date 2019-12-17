@@ -27,7 +27,6 @@ import static com.revenat.javamm.code.syntax.SyntaxUtils.isSignificantDelimiter;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 class SignificantDelimiterParser {
 
@@ -43,12 +42,12 @@ class SignificantDelimiterParser {
         final int to = findDelimiterEndIndex(line, from);
         final String delimiterPart = line.substring(from, to);
         return Stream
-                .of(Stream.of(line.substring(0, from)),
-                    parse(delimiterPart).stream(),
-                    parseIfPresent(line.substring(to)).stream())
-                .flatMap(Function.identity())
-                .filter(t -> !t.isEmpty())
-                .collect(Collectors.toList());
+            .of(Stream.of(line.substring(0, from)),
+                parse(delimiterPart).stream(),
+                parseIfPresent(line.substring(to)).stream())
+            .flatMap(Function.identity())
+            .filter(t -> !t.isEmpty())
+            .collect(Collectors.toList());
     }
 
     private List<String> parse(final String delimiters) {

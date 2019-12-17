@@ -17,21 +17,9 @@
 
 package com.revenat.javamm.vm.integration.operation;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 import com.revenat.javamm.vm.integration.AbstractIntegrationTest;
-
-import java.util.List;
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.vm.helper.CustomAsserts.assertErrorMessageContains;
-
-import static java.util.List.of;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -44,7 +32,16 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.vm.helper.CustomAsserts.assertErrorMessageContains;
+import static java.util.List.of;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -62,9 +59,9 @@ class IfElseOperationInterpreterIntegrationTest extends AbstractIntegrationTest 
     @Order(2)
     void shouldFailWhenIfElseOperationConditionEvaluatesToNonBooleanResult() {
         final List<String> ifElseWithInvalidCondition = of(
-                "if ( 8 + 10 ) {",
+            "if ( 8 + 10 ) {",
 
-                "}"
+            "}"
         );
 
         final JavammRuntimeError e = assertThrows(JavammRuntimeError.class, () -> runBlock(ifElseWithInvalidCondition));
@@ -82,30 +79,30 @@ class IfElseOperationInterpreterIntegrationTest extends AbstractIntegrationTest 
     static class IfElseOperationProvider implements ArgumentsProvider {
 
         @Override
-        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
+        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) {
             return Stream.of(
-                    // 1 condition is true -> evaluates true block
-                    arguments(of(
-                            "if ( 1 < 100 ) {",
-                            "   println ('case 1: Inside if')",
-                            "}"
-                            ), of("case 1: Inside if")),
-                    // 2 condition is false -> no false block -> empty output
-                    arguments(of(
-                            "if ( 2 < -100 ) {",
-                            "   println ('cate 2: Inside if')",
-                            "}"
-                            ), of()),
-                    // 3 condition is false -> false block present -> evaluates false block
-                    arguments(of(
-                            "if ( 2 < -100 ) {",
-                            "   println ('cate 3: Inside if')",
-                            "}",
-                            "else {",
-                            "   println ('case 3: Inside else')",
-                            "}"
-                            ), of("case 3: Inside else"))
-                  );
+                // 1 condition is true -> evaluates true block
+                arguments(of(
+                    "if ( 1 < 100 ) {",
+                    "   println ('case 1: Inside if')",
+                    "}"
+                ), of("case 1: Inside if")),
+                // 2 condition is false -> no false block -> empty output
+                arguments(of(
+                    "if ( 2 < -100 ) {",
+                    "   println ('cate 2: Inside if')",
+                    "}"
+                ), of()),
+                // 3 condition is false -> false block present -> evaluates false block
+                arguments(of(
+                    "if ( 2 < -100 ) {",
+                    "   println ('cate 3: Inside if')",
+                    "}",
+                    "else {",
+                    "   println ('case 3: Inside else')",
+                    "}"
+                ), of("case 3: Inside else"))
+            );
         }
     }
 }

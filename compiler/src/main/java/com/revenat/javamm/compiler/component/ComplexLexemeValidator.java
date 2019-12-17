@@ -26,7 +26,6 @@ import java.util.List;
  * Validates lexemes are in correct sequence and have compatible type
  *
  * @author Vitaliy Dragun
- *
  */
 public interface ComplexLexemeValidator {
 

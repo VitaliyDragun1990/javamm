@@ -32,16 +32,11 @@ import java.util.List;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public final class TestCurrentRuntimeManager {
-    private static FakeCurrentRuntime currentRuntime;
     private static final LocalContextSpy localContext = new LocalContextSpy();
 
-    public static void setFakeCurrentRuntime(final SourceLine sourceLine) {
-        currentRuntime = new FakeCurrentRuntime(localContext, sourceLine);
-        CurrentRuntimeProvider.setCurrentRuntime(currentRuntime);
-    }
+    private static FakeCurrentRuntime currentRuntime;
 
     public static void releaseFakeCurrentRuntime() {
         CurrentRuntimeProvider.releaseCurrentRuntime();
@@ -64,9 +59,16 @@ public final class TestCurrentRuntimeManager {
         return currentRuntime;
     }
 
+    public static void setFakeCurrentRuntime(final SourceLine sourceLine) {
+        currentRuntime = new FakeCurrentRuntime(localContext, sourceLine);
+        CurrentRuntimeProvider.setCurrentRuntime(currentRuntime);
+    }
+
     public static class FakeCurrentRuntime implements CurrentRuntime {
         private final List<Operation> processedOperations = new ArrayList<>();
+
         private LocalContext localContext;
+
         private SourceLine sourceLine;
 
         private FakeCurrentRuntime(final LocalContext localContext, final SourceLine sourceLine) {

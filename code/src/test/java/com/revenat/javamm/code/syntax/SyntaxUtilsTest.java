@@ -17,12 +17,7 @@
 
 package com.revenat.javamm.code.syntax;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.code.syntax.Delimiters.SIGNIFICANT_TOKEN_DELIMITERS;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -32,12 +27,20 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.code.syntax.Delimiters.SIGNIFICANT_TOKEN_DELIMITERS;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("syntax utils")
 class SyntaxUtilsTest {
+
+    static Stream<String> significantTokenProvider() {
+        return SIGNIFICANT_TOKEN_DELIMITERS.stream();
+    }
 
     private void assertValid(final String token) {
         assertTrue(SyntaxUtils.isValidSyntaxToken(token));
@@ -85,6 +88,7 @@ class SyntaxUtilsTest {
     @Test
     @Order(6)
     void shouldDefineValidIfTokenContainsDigitsAndLatinSymbolsAndDots() {
+        //noinspection SpellCheckingInspection
         assertValid("125Hfyri..");
     }
 
@@ -92,10 +96,6 @@ class SyntaxUtilsTest {
     @Order(7)
     void shouldDefineInvalidIfTokenContainsNotLatinSymbol() {
         assertInvalid("пР587");
-    }
-
-    static Stream<String> significantTokenProvider() {
-        return SIGNIFICANT_TOKEN_DELIMITERS.stream();
     }
 
 }

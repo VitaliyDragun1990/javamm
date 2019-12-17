@@ -33,14 +33,13 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ExpressionOperationBuilderImpl implements ExpressionOperationBuilder {
 
     private static final Set<Class<? extends Expression>> UNARY_ASSIGNMENT_EXPRESSIONS = Set.of(
-            UnaryPrefixAssignmentExpression.class,
-            UnaryPostfixAssignmentExpression.class,
-            FunctionInvocationExpression.class
+        UnaryPrefixAssignmentExpression.class,
+        UnaryPostfixAssignmentExpression.class,
+        FunctionInvocationExpression.class
     );
 
     @Override

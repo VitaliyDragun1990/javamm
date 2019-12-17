@@ -28,7 +28,6 @@ import static com.revenat.javamm.ide.util.UIUtils.centerByScreen;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class JavammIDEApplication extends Application {
 
@@ -64,7 +63,7 @@ public class JavammIDEApplication extends Application {
     }
 
     @Override
-    public void stop() throws Exception {
+    public void stop() {
         ComponentFactoryProvider.getComponentFactory().release();
     }
 }

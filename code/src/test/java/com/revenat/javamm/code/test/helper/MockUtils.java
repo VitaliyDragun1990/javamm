@@ -17,19 +17,19 @@
 
 package com.revenat.javamm.code.test.helper;
 
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.mock;
-
 import com.revenat.javamm.code.fragment.Variable;
 import com.revenat.javamm.code.fragment.expression.VariableExpression;
 
+import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
+
 /**
  * @author Vitaliy Dragun
- *
  */
 public final class MockUtils {
 
-    private MockUtils() {}
+    private MockUtils() {
+    }
 
     public static VariableExpression variable(final String name) {
         final Variable variable = mock(Variable.class);

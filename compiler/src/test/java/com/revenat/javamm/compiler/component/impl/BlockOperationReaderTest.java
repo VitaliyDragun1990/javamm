@@ -17,11 +17,6 @@
 
 package com.revenat.javamm.compiler.component.impl;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
-
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceLine;
@@ -33,11 +28,8 @@ import com.revenat.javamm.compiler.component.OperationReader;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.component.error.JavammStructSyntaxError;
 import com.revenat.javamm.compiler.test.doubles.OperationDummy;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
-
+import com.revenat.javamm.compiler.test.helper.CustomAsserts;
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -52,8 +44,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import com.revenat.javamm.compiler.test.helper.CustomAsserts;
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -61,9 +59,11 @@ import com.revenat.juinit.addons.ReplaceCamelCase;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class BlockOperationReaderTest {
-    private final static SourceLine STARTING_LINE = new SourceLine("Test", 1, Arrays.asList("start"));
-    private final static SourceLine VALID_LINE = new SourceLine("Test", 2, Arrays.asList("}"));
-    private final static SourceLine INVALID_LINE = new SourceLine("Test", 2, Arrays.asList("invalid"));
+    private final static SourceLine STARTING_LINE = new SourceLine("Test", 1, Collections.singletonList("start"));
+
+    private final static SourceLine VALID_LINE = new SourceLine("Test", 2, Collections.singletonList("}"));
+
+    private final static SourceLine INVALID_LINE = new SourceLine("Test", 2, Collections.singletonList("invalid"));
 
     private OperationReaderStub operationReaderStub;
 

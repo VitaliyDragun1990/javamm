@@ -27,7 +27,6 @@ import java.util.Optional;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ReturnOperationInterpreter extends AbstractOperationInterpreter<ReturnOperation> {
 
@@ -48,7 +47,7 @@ public class ReturnOperationInterpreter extends AbstractOperationInterpreter<Ret
 
     private Object getReturnValue(final Optional<Expression> optionalExpression) {
         return optionalExpression
-                .map(e -> e.getValue(expressionContext))
-                .orElse(com.revenat.javamm.code.fragment.Void.INSTANCE);
+            .map(e -> e.getValue(expressionContext))
+            .orElse(com.revenat.javamm.code.fragment.Void.INSTANCE);
     }
 }

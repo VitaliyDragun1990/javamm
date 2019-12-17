@@ -17,12 +17,6 @@
 
 package com.revenat.javamm.compiler.component.impl;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
@@ -34,12 +28,7 @@ import com.revenat.javamm.compiler.component.LexemeBuilder;
 import com.revenat.javamm.compiler.component.UnaryAssignmentExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.test.builder.ComponentBuilder;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -49,7 +38,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import com.revenat.juinit.addons.ReplaceCamelCase;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -110,7 +108,7 @@ class UnaryAssignmentExpressionResolverImplTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "++ a + 1,            3, 0",
         "a + ++ a,            3, 2",
         "10 * ( ++ a ),       5, 3",
@@ -128,7 +126,7 @@ class UnaryAssignmentExpressionResolverImplTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "a ++ + 1,            3, 0",
         "a + a ++,            3, 2",
         "10 * ( a ++ ),       5, 3",
@@ -146,7 +144,7 @@ class UnaryAssignmentExpressionResolverImplTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "++ a - -- b * ( ++ c ),         7, 0, 2, 5",
         "10 * -- a + ++ b / ( -- c ),    9, 2, 4, 7",
     })
@@ -160,15 +158,15 @@ class UnaryAssignmentExpressionResolverImplTest {
 
         assertResolvedLexemeCount(resolvedLexemes, expectedLexemeCount);
         assertResolvedExpressionInPositions(resolvedLexemes,
-                                            UnaryPrefixAssignmentExpression.class,
-                                            firstResolvedExpressionPosition,
-                                            secondResolvedExpressionPosition,
-                                            thirdResolvedExpressionPosition);
+            UnaryPrefixAssignmentExpression.class,
+            firstResolvedExpressionPosition,
+            secondResolvedExpressionPosition,
+            thirdResolvedExpressionPosition);
 
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "a ++ - b -- * ( c ++ ),         7, 0, 2, 5",
         "10 * a -- + b ++ / ( c -- ),    9, 2, 4, 7",
     })
@@ -182,14 +180,14 @@ class UnaryAssignmentExpressionResolverImplTest {
 
         assertResolvedLexemeCount(resolvedLexemes, expectedLexemeCount);
         assertResolvedExpressionInPositions(resolvedLexemes,
-                                            UnaryPostfixAssignmentExpression.class,
-                                            firstResolvedExpressionPosition,
-                                            secondResolvedExpressionPosition,
-                                            thirdResolvedExpressionPosition);
+            UnaryPostfixAssignmentExpression.class,
+            firstResolvedExpressionPosition,
+            secondResolvedExpressionPosition,
+            thirdResolvedExpressionPosition);
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "++ ( a ),              3, 1",
         "( a ) --,              3, 1",
         "-- ( ( a ) ),          5, 2",
@@ -208,9 +206,9 @@ class UnaryAssignmentExpressionResolverImplTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
-            "++ ( a * 2 ),      ++",
-            "( ( 2 + a ) ) --,  --"
+    @CsvSource( {
+        "++ ( a * 2 ),      ++",
+        "( ( 2 + a ) ) --,  --"
     })
     @Order(8)
     void shouldFailIfArgumentForUnaryAssignmentOperatorIsNotASingleExpression(final String expression, final String operatorCode) {
@@ -220,7 +218,7 @@ class UnaryAssignmentExpressionResolverImplTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "++ 10,          ++",
         "25 --,          --",
         "( ( 10 ) ) ++,  ++",
@@ -234,7 +232,7 @@ class UnaryAssignmentExpressionResolverImplTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "++ a --,       --",
         "++ ( a ) ++,   ++",
     })
@@ -246,7 +244,7 @@ class UnaryAssignmentExpressionResolverImplTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "( a + b )",
         "( ( ( a + b ) ) )",
         "a * ( 1 + b ) / ( 2 + 4 ) % 6",
@@ -261,7 +259,7 @@ class UnaryAssignmentExpressionResolverImplTest {
 
     private Object getExpressionFrom(final List<Lexeme> lexemes) {
         return lexemes.stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(" "));
+            .map(Object::toString)
+            .collect(Collectors.joining(" "));
     }
 }

@@ -22,7 +22,6 @@ package com.revenat.javamm.code.fragment;
  * a part of the byte code.
  *
  * @author Vitaliy Dragun
- *
  */
 public interface CompiledCodeFragment {
 }

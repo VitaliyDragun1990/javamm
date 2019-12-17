@@ -17,12 +17,11 @@
 
 package com.revenat.javamm.vm.integration;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.vm.VirtualMachine;
 import com.revenat.javamm.vm.VirtualMachineBuilder;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -31,9 +30,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static java.lang.System.lineSeparator;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public abstract class AbstractIntegrationTest {
@@ -45,6 +43,16 @@ public abstract class AbstractIntegrationTest {
     private final SpyPrintStream testOutputStream = new SpyPrintStream();
 
     private final VirtualMachine virtualMachine = new VirtualMachineBuilder().build();
+
+    public static String buildErrorMsg(final String msg, final int lineNumber) {
+        return String.format("Runtime error: %s%s    at main() [%s:%s]",
+            msg, lineSeparator(), MODULE_NAME, lineNumber);
+    }
+
+    public static String buildErrorMsg(final String msg, final String fullStackTrace) {
+        return String.format("Runtime error: %s%s%s",
+            msg, lineSeparator(), fullStackTrace);
+    }
 
     @BeforeEach
     public void setupSpyOutput() {
@@ -74,16 +82,6 @@ public abstract class AbstractIntegrationTest {
         assertThat(getOutput(), equalTo(expectedOutput));
     }
 
-    public static String buildErrorMsg(final String msg, final int lineNumber) {
-        return String.format("Runtime error: %s%s    at main() [%s:%s]",
-                msg, lineSeparator(), MODULE_NAME, lineNumber);
-    }
-
-    public static String buildErrorMsg(final String msg, final String fullStackTrace) {
-        return String.format("Runtime error: %s%s%s",
-                msg, lineSeparator(), fullStackTrace);
-    }
-
     private List<String> putInsideMainFunction(final List<String> lines) {
         final List<String> validOperations = new ArrayList<>();
         validOperations.add("function main() {");
@@ -104,11 +102,6 @@ public abstract class AbstractIntegrationTest {
 
         public TestSourceCode(final List<String> lines, final String moduleName) {
             this.lines = Collections.unmodifiableList(lines);
-            this.moduleName = moduleName;
-        }
-
-        public TestSourceCode(final String line, final String moduleName) {
-            this.lines = List.of(line);
             this.moduleName = moduleName;
         }
 

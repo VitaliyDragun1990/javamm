@@ -22,9 +22,8 @@ import com.revenat.javamm.code.fragment.UpdatableExpression;
 /**
  * Responsible for updating dynamic updatable expressions
  *
- * @author Vitaliy Dragun
- *
  * @param <T> type of expression to update
+ * @author Vitaliy Dragun
  */
 public interface ExpressionUpdater<T extends UpdatableExpression> {
 

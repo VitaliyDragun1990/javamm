@@ -23,7 +23,6 @@ package com.revenat.javamm.code.fragment;
  * {@linkplain Expression expression} or {@linkplain Parenthesis parenthesis}
  *
  * @author Vitaliy Dragun
- *
  */
 public interface Lexeme extends CompiledCodeFragment {
 

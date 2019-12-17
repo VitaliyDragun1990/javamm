@@ -28,7 +28,6 @@ import java.util.ListIterator;
  * block
  *
  * @author Vitaliy Dragun
- *
  */
 public interface BlockOperationReader {
 
@@ -37,11 +36,11 @@ public interface BlockOperationReader {
      * byte code block. Expects that block to be read must end with {@code '}' }
      * closing curly brace which designates block end.
      *
-     * @param blockStartingLine    source line where particular byte code block
-     *                             starts
-     * @param sourceCode iterator that points to a specified place in the
-     *                             source code just after source line where
-     *                             particular byte code block starts
+     * @param blockStartingLine source line where particular byte code block
+     *                          starts
+     * @param sourceCode        iterator that points to a specified place in the
+     *                          source code just after source line where
+     *                          particular byte code block starts
      * @return byte code {@link Block}
      * @throws JavammLineSyntaxError if some source line can not be read due to
      *                               syntax error

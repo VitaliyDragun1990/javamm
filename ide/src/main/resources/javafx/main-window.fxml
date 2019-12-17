@@ -20,18 +20,16 @@
 
 <?import com.revenat.javamm.ide.ui.pane.action.ActionPane?>
 <?import com.revenat.javamm.ide.ui.pane.code.CodeTabPane?>
-<?import com.revenat.javamm.ide.ui.pane.console.ConsolePane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.BorderPane?>
-
-<BorderPane prefHeight="600.0" prefWidth="800.00" xmlns="http://javafx.com/javafx/10.0.2-internal"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.revenat.javamm.ide.controller.MainWindowController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="600.0" prefWidth="800.00"
+            xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="com.revenat.javamm.ide.controller.MainWindowController">
     <top>
-        <ActionPane fx:id="actionPane" BorderPane.alignment="CENTER" />
+        <ActionPane fx:id="actionPane" BorderPane.alignment="CENTER"/>
     </top>
     <center>
-        <SplitPane fx:id="spWork" orientation="VERTICAL"  BorderPane.alignment="CENTER">
-            <CodeTabPane fx:id="codeTabPane" />
+        <SplitPane fx:id="spWork" orientation="VERTICAL" BorderPane.alignment="CENTER">
+            <CodeTabPane fx:id="codeTabPane"/>
         </SplitPane>
     </center>
 </BorderPane>

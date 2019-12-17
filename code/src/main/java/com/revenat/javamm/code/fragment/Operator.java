@@ -21,7 +21,6 @@ package com.revenat.javamm.code.fragment;
  * Special type of {@linkplain Lexeme lexeme}. Represents any supported operator
  *
  * @author Vitaliy Dragun
- *
  */
 public interface Operator extends Lexeme {
 

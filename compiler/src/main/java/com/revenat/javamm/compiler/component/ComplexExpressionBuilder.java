@@ -27,7 +27,6 @@ import java.util.List;
  * Responsible for building {@linkplain ComplexExpression complex expressions}
  *
  * @author Vitaliy Dragun
- *
  */
 public interface ComplexExpressionBuilder {
 

@@ -27,13 +27,13 @@ import com.revenat.javamm.compiler.Compiler;
 import com.revenat.javamm.compiler.component.FunctionDefinitionsReader;
 import com.revenat.javamm.compiler.component.FunctionNameBuilder;
 import com.revenat.javamm.compiler.component.SourceLineReader;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.revenat.javamm.code.fragment.SourceLine.EMPTY_SOURCE_LINE;
-
 import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;
@@ -42,7 +42,6 @@ import static java.util.stream.Collectors.toList;
  * Default implementation that supports only single source code module
  *
  * @author Vitaliy Dragun
- *
  */
 public class CompilerImpl implements Compiler {
 
@@ -71,14 +70,14 @@ public class CompilerImpl implements Compiler {
 
     private List<SourceLine> getAggregateSourceLines(final SourceCode... sourceCodes) {
         return Arrays.stream(sourceCodes)
-                .map(sourceLineReader::read)
-                .flatMap(List<SourceLine>::stream)
-                .collect(toList());
+            .map(sourceLineReader::read)
+            .flatMap(List<SourceLine>::stream)
+            .collect(toList());
     }
 
     private Map<FunctionName, DeveloperFunction> asMap(final List<DeveloperFunction> definedFunctions) {
         return definedFunctions.stream()
-                .collect(Collectors.toMap(DeveloperFunction::getName, identity()));
+            .collect(Collectors.toMap(DeveloperFunction::getName, identity()));
     }
 
     private static final class ByteCodeImpl extends AbstractFunctionStorage<DeveloperFunction> implements ByteCode {

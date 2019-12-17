@@ -17,21 +17,9 @@
 
 package com.revenat.javamm.interpreter.component.impl.calculator;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.bitwise.binary.BitwiseShiftLeftBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
-
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_SHIFT_LEFT;
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_SHIFT_LEFT;
-import static com.revenat.javamm.code.util.TypeUtils.getType;
-import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -39,8 +27,34 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_SHIFT_LEFT;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_SHIFT_LEFT;
+import static com.revenat.javamm.code.util.TypeUtils.getType;
+import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @DisplayName("a bitwise shift left '<<' binary expression calculator")
 class BitwiseShiftLeftBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
+
+    static Stream<Arguments> unsupportedPairsProvider() {
+        return Stream.of(
+            Arguments.arguments(1.2, 1),
+            Arguments.arguments(1.2, 5.2),
+            Arguments.arguments(null, 1),
+            Arguments.arguments(null, false),
+            Arguments.arguments(false, 10),
+            Arguments.arguments(" hello", " world"),
+            Arguments.arguments(" hello", 10),
+            Arguments.arguments(true, false),
+            Arguments.arguments(10, false),
+            Arguments.arguments(false, 10),
+            Arguments.arguments(false, " hello")
+        );
+    }
 
     @Test
     @Order(1)
@@ -64,23 +78,7 @@ class BitwiseShiftLeftBinaryExpressionCalculatorTest extends AbstractBinaryExpre
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(value1, value2));
 
         assertErrorMessageContains(e, "Operator '<<' is not supported for types: %s and %s",
-                getType(value1), getType(value2));
-    }
-
-    static Stream<Arguments> unsupportedPairsProvider() {
-        return Stream.of(
-                Arguments.arguments(1.2, 1),
-                Arguments.arguments(1.2, 5.2),
-                Arguments.arguments(null, 1),
-                Arguments.arguments(null, false),
-                Arguments.arguments(false, 10),
-                Arguments.arguments(" hello", " world"),
-                Arguments.arguments(" hello", 10),
-                Arguments.arguments(true, false),
-                Arguments.arguments(10, false),
-                Arguments.arguments(false, 10),
-                Arguments.arguments(false, " hello")
-                );
+            getType(value1), getType(value2));
     }
 
     @Override

@@ -25,7 +25,6 @@ import java.util.Optional;
  * Represents compiled suite of operations that can be executed by the interpreter.
  *
  * @author Vitaliy Dragun
- *
  */
 public interface ByteCode extends FunctionStorage<DeveloperFunction> {
 

@@ -17,15 +17,6 @@
 
 package com.revenat.javamm.compiler.component.impl;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.quality.Strictness.LENIENT;
-
 import com.revenat.javamm.code.fragment.FunctionName;
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceLine;
@@ -34,12 +25,7 @@ import com.revenat.javamm.code.fragment.operation.Block;
 import com.revenat.javamm.compiler.component.FunctionDefinitionsReader;
 import com.revenat.javamm.compiler.component.FunctionReader;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
-
-import java.util.List;
-import java.util.ListIterator;
-
-import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -53,7 +39,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.stubbing.Answer;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+import java.util.ListIterator;
+
+import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.quality.Strictness.LENIENT;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -74,7 +71,7 @@ class FunctionDefinitionsReaderTest {
         functionDefinitionsReader = new FunctionDefinitionsReaderImpl(functionReader);
     }
 
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings( {"unchecked"})
     @Test
     @Order(1)
     void shouldReadAllDefinedFunctions(@Mock final SourceLine lineA, @Mock final SourceLine lineB) {
@@ -109,9 +106,9 @@ class FunctionDefinitionsReaderTest {
 
     private Answer<?> withFunction(final DeveloperFunction function) {
         return (invocation) -> {
-                final ListIterator<?> arg = invocation.getArgument(0);
-                arg.next();
-                return function;
+            final ListIterator<?> arg = invocation.getArgument(0);
+            arg.next();
+            return function;
         };
     }
 
@@ -120,9 +117,9 @@ class FunctionDefinitionsReaderTest {
         when(functionName.getName()).thenReturn(name);
         final Block functionBody = new Block(mock(Operation.class), ANY_SOURCE_LINE);
         return new DeveloperFunction.Builder()
-                .setBody(functionBody)
-                .setName(functionName)
-                .setDeclarationSourceLine(ANY_SOURCE_LINE)
-                .build();
+            .setBody(functionBody)
+            .setName(functionName)
+            .setDeclarationSourceLine(ANY_SOURCE_LINE)
+            .build();
     }
 }

@@ -18,8 +18,8 @@
 package com.revenat.javamm.ide.component.impl.formatter.policy;
 
 import com.revenat.javamm.ide.component.impl.formatter.FormattingPolicy;
-import com.revenat.javamm.ide.component.impl.formatter.model.Lines;
 import com.revenat.javamm.ide.component.impl.formatter.model.Line;
+import com.revenat.javamm.ide.component.impl.formatter.model.Lines;
 import com.revenat.javamm.ide.component.impl.formatter.model.LinesImpl;
 
 import static java.util.Objects.requireNonNull;

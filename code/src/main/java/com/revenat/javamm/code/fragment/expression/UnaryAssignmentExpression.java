@@ -27,7 +27,6 @@ import static java.util.Objects.requireNonNull;
  * Represents expression with assignment unary operator.
  *
  * @author Vitaliy Dragun
- *
  */
 public abstract class UnaryAssignmentExpression implements Expression {
 

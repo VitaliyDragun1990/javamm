@@ -1,57 +1,69 @@
+<!--suppress ALL -->
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 </head>
 <body>
-	<div class="article-asset--article-content--1MwHd">
-		<figure>
-			<img src="images/2019-03-10_14-07-13-3389141e5a891cce97e6847a053b7071.png" align="middle">
-		</figure>
-		<p>Структурно компилятор будет состоять из следующих компонентов:</p>
-		<ol>
-			<li><p>
-					<strong>SourceLineReader</strong> - считыватель исходного кода программы. Данный компонент должен поддерживать обработку многострочных
-					комментариев, пропускать пустые строки, сохраняя корректные значения номеров строк и делегировать преобразование строки в список значимых токенов
-					компоненту <strong>TokenParser</strong>;
-				</p></li>
-			<li><p>
-					<strong>TokenParser</strong> - парсер строки кода. Данный компонент должен пропускать незначимые строки кода, корректно разбивать строку на
-					токены, поддерживать однострочные и многострочные комментарии;
-				</p></li>
-			<li><p>
-					<strong>BlockOperationReader</strong> - считыватель блока операций. Данный компонент должен принимать набор только значимых токенов и пытаться
-					найти объект <strong>OperationReader,</strong> который бы смог преобразовать текущий набор токенов в операцию байт-кода. Если такой объект не
-					удается найти, то данный компонент должен сообщить о синтаксической ошибке в текущей строке;
-				</p></li>
-			<li><p>
-					<strong>Set&lt;OperationReader&gt;</strong> - множество всех доступных считывателей операций. Данное множество будет пополняться в будущем для
-					поддержки всех операций языка<strong> Java−−</strong>;
-				</p></li>
-			<li><p>
-					<strong>OperationReader</strong> - текущий объект считывателя конкретной операций, способный преобразовать текущий набор токенов в операцию
-					байт-кода;
-				</p></li>
-		</ol>
-		<p>Таким образом компилятор должен принимать список строк исходного кода в виде текстового файла.</p>
-		<p>Результатом работы компилятора должен быть набор операций байт-кода или синтаксическая ошибка.</p>
-		<p>
-			FYI: Каждый объект <strong>OperationReader</strong> может также генерировать синтаксическую ошибку для операции, которую он должен считать,
-			например:
-		</p>
-		<div class="ud-component--base-components--code-block" ng-non-bindable="">
-			<div>
+<div class="article-asset--article-content--1MwHd">
+    <figure>
+        <img align="middle" src="images/2019-03-10_14-07-13-3389141e5a891cce97e6847a053b7071.png">
+    </figure>
+    <p>Структурно компилятор будет состоять из следующих компонентов:</p>
+    <ol>
+        <li><p>
+            <strong>SourceLineReader</strong> - считыватель исходного кода программы. Данный компонент должен
+            поддерживать обработку многострочных
+            комментариев, пропускать пустые строки, сохраняя корректные значения номеров строк и делегировать
+            преобразование строки в список значимых токенов
+            компоненту <strong>TokenParser</strong>;
+        </p></li>
+        <li><p>
+            <strong>TokenParser</strong> - парсер строки кода. Данный компонент должен пропускать незначимые строки
+            кода, корректно разбивать строку на
+            токены, поддерживать однострочные и многострочные комментарии;
+        </p></li>
+        <li><p>
+            <strong>BlockOperationReader</strong> - считыватель блока операций. Данный компонент должен принимать набор
+            только значимых токенов и пытаться
+            найти объект <strong>OperationReader,</strong> который бы смог преобразовать текущий набор токенов в
+            операцию байт-кода. Если такой объект не
+            удается найти, то данный компонент должен сообщить о синтаксической ошибке в текущей строке;
+        </p></li>
+        <li><p>
+            <strong>Set&lt;OperationReader&gt;</strong> - множество всех доступных считывателей операций. Данное
+            множество будет пополняться в будущем для
+            поддержки всех операций языка<strong> Java−−</strong>;
+        </p></li>
+        <li><p>
+            <strong>OperationReader</strong> - текущий объект считывателя конкретной операций, способный преобразовать
+            текущий набор токенов в операцию
+            байт-кода;
+        </p></li>
+    </ol>
+    <p>Таким образом компилятор должен принимать список строк исходного кода в виде текстового файла.</p>
+    <p>Результатом работы компилятора должен быть набор операций байт-кода или синтаксическая ошибка.</p>
+    <p>
+        FYI: Каждый объект <strong>OperationReader</strong> может также генерировать синтаксическую ошибку для операции,
+        которую он должен считать,
+        например:
+    </p>
+    <div class="ud-component--base-components--code-block">
+        <div>
 				<pre class="prettyprint linenums prettyprint linenums prettyprinted" role="presentation" style="">
 					<ol class="linenums">
-						<li class="L0"><span class="pln">println hello </span><span class="com">// Пропущена (</span></li>
-						<li class="L1"><span class="pln">println </span><span class="pun">(</span><span class="pln"> hello </span><span class="com">// Пропущена )</span></li>
-						<li class="L2"><span class="pln">println hello</span><span class="pun">)</span><span class="pln">  </span><span class="com">// Пропущена (</span></li>
+						<li class="L0"><span class="pln">println hello </span><span
+                                class="com">// Пропущена (</span></li>
+						<li class="L1"><span class="pln">println </span><span class="pun">(</span><span class="pln"> hello </span><span
+                                class="com">// Пропущена )</span></li>
+						<li class="L2"><span class="pln">println hello</span><span class="pun">)</span><span
+                                class="pln">  </span><span class="com">// Пропущена (</span></li>
 					</ol>
 				</pre>
-			</div>
-		</div>
-		<p>
-			<br>
-		</p>
-	</div>
+        </div>
+    </div>
+    <p>
+        <br>
+    </p>
+</div>
 </body>
 </html>

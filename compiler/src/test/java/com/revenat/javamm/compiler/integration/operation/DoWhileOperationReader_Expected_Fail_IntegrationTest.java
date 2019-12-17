@@ -17,153 +17,151 @@
 
 package com.revenat.javamm.compiler.integration.operation;
 
-import static org.junit.jupiter.params.provider.Arguments.arguments;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
 import static java.util.List.of;
 import static java.util.function.Function.identity;
-
-import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class DoWhileOperationReader_Expected_Fail_IntegrationTest
-        extends AbstractOperationReaderInvalidValuesIntegrationTest {
+    extends AbstractOperationReaderInvalidValuesIntegrationTest {
 
     @Override
     protected Stream<Arguments> invalidSourceLineProvider() {
         return Stream.of(
-                blockValidation(),
-                expressionValidation(),
-                doValidation(),
-                whileValidation()
+            blockValidation(),
+            expressionValidation(),
+            doValidation(),
+            whileValidation()
         ).flatMap(identity());
     }
 
     private Stream<Arguments> blockValidation() {
         return named(Stream.of(
-                arguments(
-                        of(
-                                "do"
-                        ), "Syntax error in 'module1' [Line: 2]: '{' expected at the end of the line"),
-                arguments(
-                        of(
-                                "do {"
-                        ), "Syntax error in 'module1': '}' expected to close block statement at the end of file"),
-                arguments(
-                        of(
-                                "do {",
+            arguments(
+                of(
+                    "do"
+                ), "Syntax error in 'module1' [Line: 2]: '{' expected at the end of the line"),
+            arguments(
+                of(
+                    "do {"
+                ), "Syntax error in 'module1': '}' expected to close block statement at the end of file"),
+            arguments(
+                of(
+                    "do {",
 
-                                "} while ( i < 10 )"
-                         ), "Syntax error in 'module1' [Line: 3]: '}' expected only")
+                    "} while ( i < 10 )"
+                ), "Syntax error in 'module1' [Line: 3]: '}' expected only")
         ), "block");
     }
 
     private Stream<Arguments> expressionValidation() {
         return named(Stream.of(
-                arguments(
-                        of(
-                                "do {",
+            arguments(
+                of(
+                    "do {",
 
-                                "}",
-                                "while ( )"
-                        ), "Syntax error in 'module1' [Line: 4]: An expression is expected between '(' and ')'")
+                    "}",
+                    "while ( )"
+                ), "Syntax error in 'module1' [Line: 4]: An expression is expected between '(' and ')'")
 
-                ), "expression");
+        ), "expression");
     }
 
     private Stream<Arguments> doValidation() {
         return named(Stream.of(
-                arguments(
-                        of(
-                                "do it {"
-                        ), "Syntax error in 'module1' [Line: 2]: '{' expected after 'do'"),
-                arguments(
-                        of(
-                                "do {",
+            arguments(
+                of(
+                    "do it {"
+                ), "Syntax error in 'module1' [Line: 2]: '{' expected after 'do'"),
+            arguments(
+                of(
+                    "do {",
 
-                                "}",
-                                "var a = 0"
-                        ), "Syntax error in 'module1' [Line: 4]: 'while' expected"),
-                arguments(
-                        of(
-                                "do {",
+                    "}",
+                    "var a = 0"
+                ), "Syntax error in 'module1' [Line: 4]: 'while' expected"),
+            arguments(
+                of(
+                    "do {",
 
-                                "}"
-                        ), "Syntax error in 'module1': 'while' expected at the end of file")
+                    "}"
+                ), "Syntax error in 'module1': 'while' expected at the end of file")
 
-                ), "do");
+        ), "do");
     }
 
     private Stream<Arguments> whileValidation() {
         return named(Stream.of(
-                arguments(
-                        of(
-                                "do {",
+            arguments(
+                of(
+                    "do {",
 
-                                "}",
-                                "while {"
-                        ), "Syntax error in 'module1' [Line: 4]: '(' expected after 'while'"),
-                arguments(
-                        of(
-                                "do {",
+                    "}",
+                    "while {"
+                ), "Syntax error in 'module1' [Line: 4]: '(' expected after 'while'"),
+            arguments(
+                of(
+                    "do {",
 
-                                "}",
-                                "while i < 10 {"
-                        ), "Syntax error in 'module1' [Line: 4]: '(' expected after 'while'"),
-                arguments(
-                        of(
-                                "do {",
+                    "}",
+                    "while i < 10 {"
+                ), "Syntax error in 'module1' [Line: 4]: '(' expected after 'while'"),
+            arguments(
+                of(
+                    "do {",
 
-                                "}",
-                                "while i < 10 ) {"
-                        ), "Syntax error in 'module1' [Line: 4]: '(' expected after 'while'"),
-                arguments(
-                        of(
-                                "do {",
+                    "}",
+                    "while i < 10 ) {"
+                ), "Syntax error in 'module1' [Line: 4]: '(' expected after 'while'"),
+            arguments(
+                of(
+                    "do {",
 
-                                "}",
-                                "while ( i < 10 {"
-                        ), "Syntax error in 'module1' [Line: 4]: ')' expected at the end of the line"),
-                arguments(
-                        of(
-                                "do {",
+                    "}",
+                    "while ( i < 10 {"
+                ), "Syntax error in 'module1' [Line: 4]: ')' expected at the end of the line"),
+            arguments(
+                of(
+                    "do {",
 
-                                "}",
-                                "while ) i < 10 ("
-                        ), "Syntax error in 'module1' [Line: 4]: '(' expected after 'while'"),
-                arguments(
-                        of(
-                                "do {",
+                    "}",
+                    "while ) i < 10 ("
+                ), "Syntax error in 'module1' [Line: 4]: '(' expected after 'while'"),
+            arguments(
+                of(
+                    "do {",
 
-                                "}",
-                                "while a ( i < 10 )"
-                        ), "Syntax error in 'module1' [Line: 4]: '(' expected after 'while'"),
-                arguments(
-                        of(
-                                "do {",
+                    "}",
+                    "while a ( i < 10 )"
+                ), "Syntax error in 'module1' [Line: 4]: '(' expected after 'while'"),
+            arguments(
+                of(
+                    "do {",
 
-                                "}",
-                                "while this true ( i < 10 )"
-                        ), "Syntax error in 'module1' [Line: 4]: '(' expected after 'while'"),
-                arguments(
-                        of(
-                                "do {",
+                    "}",
+                    "while this true ( i < 10 )"
+                ), "Syntax error in 'module1' [Line: 4]: '(' expected after 'while'"),
+            arguments(
+                of(
+                    "do {",
 
-                                "}",
-                                "while ( i < 10 ) {"
-                        ), "Syntax error in 'module1' [Line: 4]: ')' expected at the end of the line"),
-                arguments(
-                        of(
-                                "do {",
+                    "}",
+                    "while ( i < 10 ) {"
+                ), "Syntax error in 'module1' [Line: 4]: ')' expected at the end of the line"),
+            arguments(
+                of(
+                    "do {",
 
-                                "}",
-                                "while ( i < 10 ) then should be {"
-                        ), "Syntax error in 'module1' [Line: 4]: ')' expected at the end of the line")
+                    "}",
+                    "while ( i < 10 ) then should be {"
+                ), "Syntax error in 'module1' [Line: 4]: ')' expected at the end of the line")
 
-                ), "while");
+        ), "while");
     }
 }

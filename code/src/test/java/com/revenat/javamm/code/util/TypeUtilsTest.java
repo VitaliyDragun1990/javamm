@@ -27,7 +27,8 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -45,7 +46,7 @@ class TypeUtilsTest {
     @Test
     @Order(2)
     void shouldReturnTheNameOfTheGivenObjectType() {
-        String expectedName = new TestClass().getClass().getSimpleName().toLowerCase();
+        String expectedName = TestClass.class.getSimpleName().toLowerCase();
 
         assertThat(TypeUtils.getType(new TestClass()), equalTo(expectedName));
     }
@@ -56,7 +57,7 @@ class TypeUtilsTest {
         String expectedName = "null";
 
         assertThat(TypeUtils.getType(null), equalTo(expectedName));
-        assertThat(TypeUtils.getType((TestClass)null), equalTo(expectedName));
+        assertThat(TypeUtils.getType((TestClass) null), equalTo(expectedName));
     }
 
     @Test

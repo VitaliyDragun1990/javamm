@@ -28,7 +28,6 @@ import static java.util.Objects.requireNonNull;
  * Default operation interpreter for {@code println} operation
  *
  * @author Vitaliy Dragun
- *
  */
 public class PrintlnOperationInterpreter extends AbstractOperationInterpreter<PrintlnOperation> {
 

@@ -27,18 +27,12 @@ import static com.revenat.javamm.code.util.TypeUtils.getType;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public abstract class AbstractUnaryExpressionCalculator implements UnaryExpressionCalculator {
     private final UnaryOperator operator;
 
     protected AbstractUnaryExpressionCalculator(final UnaryOperator operator) {
         this.operator = operator;
-    }
-
-    @Override
-    public UnaryOperator getOperator() {
-        return operator;
     }
 
     @Override
@@ -49,9 +43,14 @@ public abstract class AbstractUnaryExpressionCalculator implements UnaryExpressi
 
     protected abstract Object calculate(Object value);
 
+    @Override
+    public UnaryOperator getOperator() {
+        return operator;
+    }
+
     protected final JavammLineRuntimeError createNotSupportedTypesError(final Object value) {
         return new JavammLineRuntimeError("Operator '%s' is not supported for type: %s",
-                operator.getCode(),
-                getType(value));
+            operator.getCode(),
+            getType(value));
     }
 }

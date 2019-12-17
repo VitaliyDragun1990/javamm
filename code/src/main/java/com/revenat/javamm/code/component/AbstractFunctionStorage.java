@@ -29,7 +29,6 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public abstract class AbstractFunctionStorage<T extends Function> implements FunctionStorage<T> {
 

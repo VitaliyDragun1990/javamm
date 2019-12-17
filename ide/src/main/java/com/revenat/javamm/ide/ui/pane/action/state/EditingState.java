@@ -59,6 +59,7 @@ class EditingState extends ActionPaneState {
         }
     }
 
+    @SuppressWarnings("checkstyle:MethodLength")
     @Override
     public void onEvent(final ActionEvent actionEvent) {
         switch (actionEvent) {

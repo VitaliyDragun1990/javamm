@@ -133,7 +133,6 @@ import static java.util.Map.ofEntries;
  * {@link Compiler} component
  *
  * @author Vitaliy Dragun
- *
  */
 public class CompilerConfigurator {
     public static final int MAX_PRECEDENCE = 20;
@@ -203,13 +202,13 @@ public class CompilerConfigurator {
         new OperatorPrecedenceResolverImpl(OPERATOR_PRECEDENCE_REGISTRY);
 
     private final ComplexExpressionBuilder complexExpressionBuilder =
-            new PostfixNotationComplexExpressionBuilder(operatorPrecedenceResolver);
+        new PostfixNotationComplexExpressionBuilder(operatorPrecedenceResolver);
 
     private final SingleTokenExpressionBuilder singleTokenExpressionBuilder =
-            new SingleTokenExpressionBuilderImpl(variableBuilder);
+        new SingleTokenExpressionBuilderImpl(variableBuilder);
 
     private final Set<ExpressionBuilder> expressionBuilders = Set.of(
-            singleTokenExpressionBuilder
+        singleTokenExpressionBuilder
     );
 
     private final LexemeAmbiguityResolver lexemeAmbiguityResolver = new LexemeAmbiguityResolverImpl();
@@ -217,95 +216,95 @@ public class CompilerConfigurator {
     private final FunctionNameBuilder functionNameBuilder = new FunctionNameBuilderImpl();
 
     private final LexemeBuilder lexemeBuilder = new LexemeBuilderImpl(singleTokenExpressionBuilder,
-                                                                      functionNameBuilder,
-                                                                      lexemeAmbiguityResolver);
+        functionNameBuilder,
+        lexemeAmbiguityResolver);
 
     private final ComplexLexemeValidator lexemeValidator = new ComplexLexemeValidatorImpl(operatorPrecedenceResolver);
 
     private final UnaryAssignmentExpressionResolver unaryAssignmentExpressionResolver =
-            new UnaryAssignmentExpressionResolverImpl();
+        new UnaryAssignmentExpressionResolverImpl();
 
     private final ExpressionResolver expressionResolver = new ExpressionResolverImpl(
-            expressionBuilders,
-            complexExpressionBuilder,
-            lexemeBuilder,
-            lexemeValidator,
-            unaryAssignmentExpressionResolver,
-            operatorPrecedenceResolver
+        expressionBuilders,
+        complexExpressionBuilder,
+        lexemeBuilder,
+        lexemeValidator,
+        unaryAssignmentExpressionResolver,
+        operatorPrecedenceResolver
     );
 
     private final PrintlnOperationReader printlnOperationReader = new PrintlnOperationReader(expressionResolver);
 
     private final VariableDeclarationOperationReader variableDeclarationOperationReader =
-                new VariableDeclarationOperationReader(variableBuilder, expressionResolver);
+        new VariableDeclarationOperationReader(variableBuilder, expressionResolver);
 
     private final FinalDeclarationOperationReader finalDeclarationOperationReader =
-                new FinalDeclarationOperationReader(variableBuilder, expressionResolver);
+        new FinalDeclarationOperationReader(variableBuilder, expressionResolver);
 
     private final VariableAssignmentOperationReader variableAssignmentOperationReader =
-               new VariableAssignmentOperationReader(expressionResolver);
+        new VariableAssignmentOperationReader(expressionResolver);
 
     private final Set<ForInitOperationReader> initOperationReaders = Set.of(
-            printlnOperationReader,
-            variableDeclarationOperationReader,
-            finalDeclarationOperationReader,
-            variableAssignmentOperationReader
+        printlnOperationReader,
+        variableDeclarationOperationReader,
+        finalDeclarationOperationReader,
+        variableAssignmentOperationReader
     );
 
     private final Set<ForUpdateOperationReader> updateOperationReaders = Set.of(
-            printlnOperationReader,
-            variableAssignmentOperationReader
+        printlnOperationReader,
+        variableAssignmentOperationReader
     );
 
     private final ExpressionOperationBuilder expressionOperationBuilder = new ExpressionOperationBuilderImpl();
 
     private final ForOperationHeaderResolver forOperationHeaderResolver =
-                new ForOperationHeaderResolverImpl(initOperationReaders, expressionResolver, updateOperationReaders,
-                        expressionOperationBuilder);
+        new ForOperationHeaderResolverImpl(initOperationReaders, expressionResolver, updateOperationReaders,
+            expressionOperationBuilder);
 
     private final CaseValueExpressionResolver caseLabelExpressionResolver =
-            new CaseValueExpressionResolverImpl(expressionResolver);
+        new CaseValueExpressionResolverImpl(expressionResolver);
 
     private final SwitchBodyEntryValidator switchEntryValidator = new SwitchBodyEntryValidatorImpl();
 
     private final List<SwitchBodyEntryReader<?>> switchBodyEntryReaders = List.of(
-            new CaseEntryReader(caseLabelExpressionResolver),
-            new DefaultEntryReader()
+        new CaseEntryReader(caseLabelExpressionResolver),
+        new DefaultEntryReader()
     );
 
     private final SwitchBodyReader switchBodyReader =
-            new SwitchBodyReaderImpl(switchBodyEntryReaders, switchEntryValidator);
+        new SwitchBodyReaderImpl(switchBodyEntryReaders, switchEntryValidator);
 
     private final Set<OperationReader> operationReaders = Set.of(
-            printlnOperationReader,
-            variableDeclarationOperationReader,
-            finalDeclarationOperationReader,
-            variableAssignmentOperationReader,
-            new IfElseOperationReader(expressionResolver),
-            new WhileOperationReader(expressionResolver),
-            new DoWhileOperationReader(expressionResolver),
-            new ForOperationReader(forOperationHeaderResolver),
-            new SimpleBlockOperationReader(),
-            new ContinueOperationReader(),
-            new BreakOperationReader(),
-            new SwitchOperationReader(switchBodyReader, expressionResolver),
-            new ReturnOperationReader(expressionResolver)
+        printlnOperationReader,
+        variableDeclarationOperationReader,
+        finalDeclarationOperationReader,
+        variableAssignmentOperationReader,
+        new IfElseOperationReader(expressionResolver),
+        new WhileOperationReader(expressionResolver),
+        new DoWhileOperationReader(expressionResolver),
+        new ForOperationReader(forOperationHeaderResolver),
+        new SimpleBlockOperationReader(),
+        new ContinueOperationReader(),
+        new BreakOperationReader(),
+        new SwitchOperationReader(switchBodyReader, expressionResolver),
+        new ReturnOperationReader(expressionResolver)
     );
 
     private final BlockOperationReader blockOperationReader =
-            new BlockOperationReaderImpl(operationReaders, expressionOperationBuilder, expressionResolver);
+        new BlockOperationReaderImpl(operationReaders, expressionOperationBuilder, expressionResolver);
 
     private final FunctionParametersBuilder functionParametersBuilder =
-            new FunctionParametersBuilderImpl(variableBuilder);
+        new FunctionParametersBuilderImpl(variableBuilder);
 
     private final FunctionReader functionReader =
-            new FunctionReaderImpl(functionNameBuilder, functionParametersBuilder, blockOperationReader);
+        new FunctionReaderImpl(functionNameBuilder, functionParametersBuilder, blockOperationReader);
 
     private final FunctionDefinitionsReader functionDefinitionsReader =
-            new FunctionDefinitionsReaderImpl(functionReader);
+        new FunctionDefinitionsReaderImpl(functionReader);
 
     private final Compiler compiler =
-            new CompilerImpl(sourceLineReader, functionNameBuilder, functionDefinitionsReader);
+        new CompilerImpl(sourceLineReader, functionNameBuilder, functionDefinitionsReader);
 
     public Compiler getCompiler() {
         return compiler;

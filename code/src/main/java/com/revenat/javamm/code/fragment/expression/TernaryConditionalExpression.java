@@ -27,7 +27,6 @@ import static java.util.Objects.requireNonNull;
  * false case
  *
  * @author Vitaliy Dragun
- *
  */
 public class TernaryConditionalExpression implements Expression {
 

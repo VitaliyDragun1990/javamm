@@ -17,7 +17,6 @@
 
 /**
  * @author Vitaliy Dragun
- *
  */
 module javamm.cmd {
     requires javamm.code;

@@ -31,7 +31,6 @@ import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUt
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class FunctionParametersBuilderImpl implements FunctionParametersBuilder {
 
@@ -58,7 +57,7 @@ public class FunctionParametersBuilderImpl implements FunctionParametersBuilder 
                                                         final SourceLine sourceLine) {
         if (parameters.size() > MAX_ALLOWED_PARAMETER_COUNT) {
             throw new JavammLineSyntaxError(sourceLine,
-                    "Max allowed function parameter count is %d", MAX_ALLOWED_PARAMETER_COUNT);
+                "Max allowed function parameter count is %d", MAX_ALLOWED_PARAMETER_COUNT);
         }
         return parameters;
     }

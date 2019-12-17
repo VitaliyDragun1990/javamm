@@ -34,9 +34,9 @@ public class ActionPaneState implements ActionState {
 
     static ActionPaneState currentState;
 
-    private static boolean undoActionEnabled = false;
+    private static boolean undoActionEnabled;
 
-    private static boolean redoActionEnabled = false;
+    private static boolean redoActionEnabled;
 
     private static Map<StateName, ActionPaneState> supportedStates;
 
@@ -83,9 +83,17 @@ public class ActionPaneState implements ActionState {
     private static Map<StateName, ActionPaneState> registerAllSupportedStates(final ActionStateManager stateManager,
                                                                               final ActionListener actionListener) {
         return Map.of(INITIAL, new InitialState(stateManager, actionListener),
-                      EDITING, new EditingState(stateManager, actionListener),
-                      RUNNING, new RunningState(stateManager, actionListener)
-            );
+            EDITING, new EditingState(stateManager, actionListener),
+            RUNNING, new RunningState(stateManager, actionListener)
+        );
+    }
+
+    static void setCurrentStateByName(final StateName stateName) {
+        currentState = getStateByName(stateName);
+    }
+
+    private static ActionPaneState getStateByName(final StateName stateName) {
+        return supportedStates.get(stateName);
     }
 
     @Override
@@ -95,14 +103,6 @@ public class ActionPaneState implements ActionState {
 
     protected void initialize() {
         // override in subclasses if certain initialization logic is required
-    }
-
-    static void setCurrentStateByName(final StateName stateName) {
-        currentState = getStateByName(stateName);
-    }
-
-    private static ActionPaneState getStateByName(final StateName stateName) {
-        return supportedStates.get(stateName);
     }
 
     enum StateName {

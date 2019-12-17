@@ -17,21 +17,10 @@
 
 package com.revenat.javamm.interpreter.component.impl.calculator;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.logical.unary.LogicalNotUnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
-
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.code.fragment.expression.TypeExpression.BOOLEAN;
-import static com.revenat.javamm.code.util.TypeUtils.getType;
-import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -39,8 +28,27 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.code.fragment.expression.TypeExpression.BOOLEAN;
+import static com.revenat.javamm.code.util.TypeUtils.getType;
+import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @DisplayName("'!' unary expression calculator")
 class LogicalNotUnaryExpressionCalculatorTest extends AbstractUnaryExpressionCalculatorTest {
+
+    static Stream<Arguments> unsupportedTypesProvider() {
+        return Stream.of(
+            Arguments.arguments(10),
+            Arguments.arguments(10.5),
+            Arguments.arguments("true"),
+            Arguments.arguments((Object) null),
+            Arguments.arguments(BOOLEAN)
+        );
+    }
 
     @Test
     @Order(1)
@@ -62,16 +70,6 @@ class LogicalNotUnaryExpressionCalculatorTest extends AbstractUnaryExpressionCal
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(value));
 
         assertErrorMessageContains(e, "Operator '!' is not supported for type: %s", getType(value));
-    }
-
-    static Stream<Arguments> unsupportedTypesProvider() {
-        return Stream.of(
-                Arguments.arguments(10),
-                Arguments.arguments(10.5),
-                Arguments.arguments("true"),
-                Arguments.arguments((Object)null),
-                Arguments.arguments(BOOLEAN)
-                );
     }
 
     @Override

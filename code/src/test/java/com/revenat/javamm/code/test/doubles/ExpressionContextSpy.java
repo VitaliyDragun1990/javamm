@@ -23,7 +23,9 @@ import com.revenat.javamm.code.fragment.UpdatableExpression;
 
 public class ExpressionContextSpy implements ExpressionContext {
     private Expression lastGetValueExpression = null;
-    private UpdatableExpression  lastSetValueExpression = null;
+
+    private UpdatableExpression lastSetValueExpression = null;
+
     private Object lastUpdateValue = null;
 
     @Override

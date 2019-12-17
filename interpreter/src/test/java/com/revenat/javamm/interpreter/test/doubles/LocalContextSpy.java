@@ -23,12 +23,15 @@ import com.revenat.javamm.interpreter.model.LocalContext;
 public class LocalContextSpy implements LocalContext {
 
     private Variable lastFinal = null;
+
     private Object lastFinalValue = null;
 
     private Variable lastVar = null;
+
     private Object lastVarValue = null;
 
     private boolean isVariableDefined = false;
+
     private Object variableValue;
 
 

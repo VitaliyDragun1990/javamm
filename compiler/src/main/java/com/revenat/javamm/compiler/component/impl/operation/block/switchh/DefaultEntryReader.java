@@ -25,6 +25,7 @@ import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.component.impl.operation.SwitchBodyEntryReader;
 
 import java.util.ListIterator;
+
 import static com.revenat.javamm.code.syntax.Keywords.DEFAULT;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateOneTokenAfterAnotherOne;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatLineEndsWithOpeningCurlyBrace;
@@ -32,7 +33,6 @@ import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUt
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class DefaultEntryReader implements SwitchBodyEntryReader<SwitchDefaultEntry> {
 

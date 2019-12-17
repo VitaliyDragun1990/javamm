@@ -17,18 +17,8 @@
 
 package com.revenat.javamm.cmd;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.SourceCode;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,10 +29,17 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 import static java.lang.String.format;
 import static java.lang.System.lineSeparator;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -87,7 +84,7 @@ class FileSourceCodeTest {
 
     @Test
     @Order(2)
-    void shouldContainFileContent() throws IOException {
+    void shouldContainFileContent() {
         final List<String> fileContent = sourceCode.getLines();
 
         assertThat(fileContent, equalTo(List.of("1", "2", "3")));
@@ -95,13 +92,13 @@ class FileSourceCodeTest {
 
     @Test
     @Order(3)
-    void shouldContainFileName() throws IOException {
+    void shouldContainFileName() {
         assertThat(sourceCode.getModuleName(), equalTo(getNameFor(tempFile)));
     }
 
     @Test
     @Order(4)
-    void shouldContainRelativePathToSourceFile() throws IOException {
+    void shouldContainRelativePathToSourceFile() {
         assertPathToSourceFile(sourceCode);
     }
 

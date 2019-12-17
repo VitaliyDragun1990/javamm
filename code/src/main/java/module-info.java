@@ -17,7 +17,6 @@
 
 /**
  * @author Vitaliy Dragun
- *
  */
 module javamm.code {
     exports com.revenat.javamm.code.fragment;

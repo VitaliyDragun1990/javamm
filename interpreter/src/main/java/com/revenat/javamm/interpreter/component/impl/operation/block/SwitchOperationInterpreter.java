@@ -28,7 +28,6 @@ import java.util.Objects;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class SwitchOperationInterpreter extends AbstractBlockOperationInterpreter<SwitchOperation> {
 

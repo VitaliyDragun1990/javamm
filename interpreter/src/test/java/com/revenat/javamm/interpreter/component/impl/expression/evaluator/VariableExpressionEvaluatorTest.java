@@ -17,17 +17,12 @@
 
 package com.revenat.javamm.interpreter.component.impl.expression.evaluator;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.VariableExpression;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
-import com.revenat.javamm.interpreter.component.impl.expression.evaluator.VariableExpressionEvaluator;
 import com.revenat.javamm.interpreter.test.doubles.VariableStub;
 import com.revenat.javamm.interpreter.test.helper.TestCurrentRuntimeManager;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,14 +33,18 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a variable expression evaluator")
 class VariableExpressionEvaluatorTest {
     private static final String VARIABLE_VALUE = "test";
+
     private static final VariableStub VARIABLE = new VariableStub("name");
+
     private static final VariableExpression VARIABLE_EXPRESSION = new VariableExpression(VARIABLE);
 
     private VariableExpressionEvaluator evaluator;
@@ -78,8 +77,8 @@ class VariableExpressionEvaluatorTest {
         TestCurrentRuntimeManager.getLocalContextSpy().setVariableDefined(false);
 
         assertThrows(
-                JavammLineRuntimeError.class,
-                () -> evaluator.evaluate(VARIABLE_EXPRESSION));
+            JavammLineRuntimeError.class,
+            () -> evaluator.evaluate(VARIABLE_EXPRESSION));
     }
 
     @Test

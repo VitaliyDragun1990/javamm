@@ -31,10 +31,9 @@ import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCur
  * operation}
  *
  * @author Vitaliy Dragun
- *
  */
 public class VariableDeclarationOperationInterpreter
-        extends AbstractOperationInterpreter<VariableDeclarationOperation> {
+    extends AbstractOperationInterpreter<VariableDeclarationOperation> {
 
     public VariableDeclarationOperationInterpreter(final ExpressionContext expressionContext) {
         super(expressionContext);

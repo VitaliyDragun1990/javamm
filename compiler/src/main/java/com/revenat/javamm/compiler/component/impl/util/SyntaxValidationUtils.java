@@ -33,7 +33,6 @@ import static java.lang.Character.isLetter;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public final class SyntaxValidationUtils {
 
@@ -68,7 +67,7 @@ public final class SyntaxValidationUtils {
         final String lastButOneToken = sourceLine.getToken(sourceLine.getTokenCount() - 2);
         if (!CLOSING_PARENTHESIS.equals(lastButOneToken)) {
             throw new JavammLineSyntaxError(sourceLine, "'%s' expected before '%s'",
-                    CLOSING_PARENTHESIS, OPENING_CURLY_BRACE);
+                CLOSING_PARENTHESIS, OPENING_CURLY_BRACE);
         }
     }
 
@@ -77,7 +76,7 @@ public final class SyntaxValidationUtils {
         final String lastButOneToken = sourceLine.getToken(sourceLine.getTokenCount() - 2);
         if (!expectedToken.equals(lastButOneToken)) {
             throw new JavammLineSyntaxError(sourceLine, "'%s' expected before '%s'",
-                    expectedToken, OPENING_CURLY_BRACE);
+                expectedToken, OPENING_CURLY_BRACE);
         }
     }
 
@@ -97,10 +96,10 @@ public final class SyntaxValidationUtils {
      * @throws JavammLineSyntaxError if validation fails
      */
     public static void validateThatFirstCharacterIsLetter(final LanguageFeature feature, final String name,
-            final SourceLine sourceLine) {
+                                                          final SourceLine sourceLine) {
         if (!isLetter(name.charAt(0))) {
             throw new JavammLineSyntaxError(sourceLine, "The %s name must start with letter: '%s'", feature.getName(),
-                    name);
+                name);
         }
     }
 
@@ -110,10 +109,10 @@ public final class SyntaxValidationUtils {
      * @throws JavammLineSyntaxError if validation fails
      */
     public static void validateThatNameIsNotKeyword(final LanguageFeature feature, final String name,
-            final SourceLine sourceLine) {
+                                                    final SourceLine sourceLine) {
         if (ALL_KEYWORDS.contains(name)) {
             throw new JavammLineSyntaxError(sourceLine, "The keyword '%s' can not be used as a %s name", name,
-                    feature.getName());
+                feature.getName());
         }
     }
 
@@ -124,7 +123,7 @@ public final class SyntaxValidationUtils {
             return (VariableExpression) lexeme;
         } else {
             throw new JavammLineSyntaxError(sourceLine, "A variable expression is expected for %s operator: '%s'",
-                    operator.getType(), operator);
+                operator.getType(), operator);
         }
     }
 

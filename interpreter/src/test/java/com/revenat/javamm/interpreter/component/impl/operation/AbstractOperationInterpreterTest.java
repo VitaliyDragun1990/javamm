@@ -17,15 +17,11 @@
 
 package com.revenat.javamm.interpreter.component.impl.operation;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.interpreter.error.TerminateInterpreterException;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionContextDummy;
 import com.revenat.javamm.interpreter.test.doubles.OperationDummy;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -33,7 +29,9 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -65,14 +63,15 @@ class AbstractOperationInterpreterTest {
     @Test
     @Order(3)
     void shouldFailToInterpretIfTerminated() {
-        abstractInterpreter.setTerminated(true);
+        abstractInterpreter.setTerminated();
 
         assertThrows(TerminateInterpreterException.class, () -> abstractInterpreter.interpret(new OperationDummy()));
     }
 
     private static class AbstractOperationInterpreterSpy extends AbstractOperationInterpreter<OperationDummy> {
         private boolean isTerminated = false;
-        private  OperationDummy interpretedOperation = null;
+
+        private OperationDummy interpretedOperation = null;
 
         public AbstractOperationInterpreterSpy(final ExpressionContext expressionContext) {
             super(expressionContext);
@@ -80,10 +79,6 @@ class AbstractOperationInterpreterTest {
 
         OperationDummy getInterpretedOperation() {
             return interpretedOperation;
-        }
-
-         void setTerminated(final boolean isTerminated) {
-            this.isTerminated = isTerminated;
         }
 
         @Override
@@ -99,6 +94,10 @@ class AbstractOperationInterpreterTest {
         @Override
         protected boolean isTerminated() {
             return isTerminated;
+        }
+
+        void setTerminated() {
+            this.isTerminated = true;
         }
     }
 }

@@ -17,22 +17,13 @@
 
 package com.revenat.javamm.compiler.component.impl.operation.simple;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.test.doubles.ExpressionDummy;
-
-import java.util.List;
-import java.util.ListIterator;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -41,7 +32,15 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+import java.util.ListIterator;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -82,7 +81,7 @@ class PrintlnOperationReaderTest {
     @Order(2)
     void shouldFailIfOpenBracketIsAbsent() {
         final JavammLineSyntaxError expected =
-                assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(PRINTLN_WITHOUT_OPEN_BRACKET, DUMMY_ITERATOR));
+            assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(PRINTLN_WITHOUT_OPEN_BRACKET, DUMMY_ITERATOR));
 
         assertThat(expected.getMessage(), containsString(("'(' expected after 'println'")));
     }
@@ -91,7 +90,7 @@ class PrintlnOperationReaderTest {
     @Order(3)
     void shouldFailIfCloseBracketIsAbsent() {
         final JavammLineSyntaxError expected =
-                assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(PRINTLN_WITHOUT_CLOSE_BRACKET, DUMMY_ITERATOR));
+            assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(PRINTLN_WITHOUT_CLOSE_BRACKET, DUMMY_ITERATOR));
 
         assertThat(expected.getMessage(), containsString(("')' expected at the end of the line")));
     }

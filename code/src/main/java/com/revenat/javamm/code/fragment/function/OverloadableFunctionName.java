@@ -29,7 +29,6 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public abstract class OverloadableFunctionName implements FunctionName {
 
@@ -98,7 +97,7 @@ public abstract class OverloadableFunctionName implements FunctionName {
                 }
                 return ALPHABET.get(index[0]++);
             }).limit(argumentCount)
-              .collect(Collectors.joining(","));
+                .collect(Collectors.joining(","));
         }
 
         private static List<String> generateAlphabet() {

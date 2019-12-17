@@ -28,7 +28,6 @@ import static java.util.Objects.requireNonNull;
  * Represents {@code if-else} operation
  *
  * @author Vitaliy Dragun
- *
  */
 public class IfElseOperation extends AbstractOperation {
 

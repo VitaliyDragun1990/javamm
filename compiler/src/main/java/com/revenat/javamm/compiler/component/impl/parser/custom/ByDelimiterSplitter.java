@@ -27,7 +27,6 @@ import static java.util.stream.Collectors.toList;
  * Splits specified source line using appropriate delimiters
  *
  * @author Vitaliy Dragun
- *
  */
 class ByDelimiterSplitter {
 
@@ -39,8 +38,8 @@ class ByDelimiterSplitter {
 
     private List<String> splitByWhitespaceDelimiters(final String line) {
         return Arrays.stream(line.trim().split("\\s+"))
-                .filter(l -> !l.isEmpty())
-                .collect(toList());
+            .filter(l -> !l.isEmpty())
+            .collect(toList());
     }
 
     private List<String> splitBySignificantDelimiters(final List<String> tokens) {

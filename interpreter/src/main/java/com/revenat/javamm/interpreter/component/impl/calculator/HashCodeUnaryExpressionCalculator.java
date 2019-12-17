@@ -23,7 +23,6 @@ import java.util.Objects;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class HashCodeUnaryExpressionCalculator extends AbstractUnaryExpressionCalculator {
 

@@ -26,7 +26,6 @@ import java.util.List;
  * Responsible for building {@linkplain Lexeme lexemes}
  *
  * @author Vitaliy Dragun
- *
  */
 public interface LexemeBuilder {
 

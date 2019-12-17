@@ -17,14 +17,9 @@
 
 package com.revenat.javamm.code.fragment.expression;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.test.doubles.ExpressionContextDummy;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -33,13 +28,16 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a null value expression")
 class NullValueExpressionTest {
-    private static ExpressionContext EXPRESSION_CONTEXT_DUMMY = new ExpressionContextDummy();
+    private static final ExpressionContext EXPRESSION_CONTEXT_DUMMY = new ExpressionContextDummy();
 
     private NullValueExpression nullValueExpression;
 

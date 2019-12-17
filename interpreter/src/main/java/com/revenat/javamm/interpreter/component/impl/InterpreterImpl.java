@@ -31,7 +31,6 @@ import static java.util.Objects.requireNonNull;
  * Simple interpreter
  *
  * @author Vitaliy Dragun
- *
  */
 public class InterpreterImpl implements Interpreter {
 

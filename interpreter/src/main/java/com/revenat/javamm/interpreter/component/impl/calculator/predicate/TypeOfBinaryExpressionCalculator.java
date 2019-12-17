@@ -29,7 +29,6 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
  * implementation for 'predicate typeof' ({@code typeof}) operator
  *
  * @author Vitaliy Dragun
- *
  */
 public class TypeOfBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 

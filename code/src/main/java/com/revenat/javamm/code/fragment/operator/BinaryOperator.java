@@ -27,7 +27,6 @@ import static com.revenat.javamm.code.syntax.Keywords.TYPEOF;
  * Represents any supported binary operator
  *
  * @author Vitaliy Dragun
- *
  */
 public enum BinaryOperator implements Operator {
     ARITHMETIC_MULTIPLICATION("*"),

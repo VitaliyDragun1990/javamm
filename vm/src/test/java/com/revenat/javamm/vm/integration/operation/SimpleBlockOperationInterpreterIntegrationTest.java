@@ -17,15 +17,8 @@
 
 package com.revenat.javamm.vm.integration.operation;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import com.revenat.javamm.vm.integration.AbstractIntegrationTest;
-
-import java.util.List;
-import java.util.stream.Stream;
-
-import static java.util.List.of;
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -36,7 +29,13 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import com.revenat.juinit.addons.ReplaceCamelCase;
+
+import java.util.List;
+import java.util.stream.Stream;
+
+import static java.util.List.of;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -55,26 +54,26 @@ public class SimpleBlockOperationInterpreterIntegrationTest extends AbstractInte
     static class BlockScopeProvider implements ArgumentsProvider {
 
         @Override
-        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
+        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) {
             return Stream.of(
-                    arguments(of(
-                            "{",
+                arguments(of(
+                    "{",
 
-                            "}"
-                    ), of()),
-                    arguments(of(
-                            "{",
+                    "}"
+                ), of()),
+                arguments(of(
+                    "{",
 
-                            "}",
-                            "println ('after block')"
-                            ), of("after block")),
-                    arguments(of(
-                            "var i = 10",
-                            "{",
-                            "   var b = i",
-                            "}",
-                            "println ('i = ' + i)"
-                   ), of("i = 10"))
+                    "}",
+                    "println ('after block')"
+                ), of("after block")),
+                arguments(of(
+                    "var i = 10",
+                    "{",
+                    "   var b = i",
+                    "}",
+                    "println ('i = ' + i)"
+                ), of("i = 10"))
             );
         }
     }

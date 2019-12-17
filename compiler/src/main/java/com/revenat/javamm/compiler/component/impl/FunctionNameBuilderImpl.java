@@ -32,7 +32,6 @@ import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUt
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class FunctionNameBuilderImpl implements FunctionNameBuilder {
 

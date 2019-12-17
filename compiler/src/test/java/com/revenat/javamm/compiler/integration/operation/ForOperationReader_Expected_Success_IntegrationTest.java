@@ -17,23 +17,20 @@
 
 package com.revenat.javamm.compiler.integration.operation;
 
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.operation.ForOperation;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
 import static java.util.List.of;
-
-import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ForOperationReader_Expected_Success_IntegrationTest
-        extends AbstractOperationReaderHappyPathIntegrationTest {
+    extends AbstractOperationReaderHappyPathIntegrationTest {
 
     @Override
     protected Class<? extends Operation> getExpectedOperationClass() {
@@ -43,92 +40,92 @@ public class ForOperationReader_Expected_Success_IntegrationTest
     @Override
     protected Stream<Arguments> validSourceLineProvider() {
         return Stream.of(
-                //  ALL PARTS PRESENT
-                arguments(of(
-                        "for ( var i = 0 ; i < 10 ; i ++ ) {",
+            //  ALL PARTS PRESENT
+            arguments(of(
+                "for ( var i = 0 ; i < 10 ; i ++ ) {",
 
-                        "}"
-                )),
-                arguments(of(
-                        "for ( i = 0 ; i < 10 ; i ++ ) {",
+                "}"
+            )),
+            arguments(of(
+                "for ( i = 0 ; i < 10 ; i ++ ) {",
 
-                        "}"
-                 )),
-                arguments(of(
-                        "for ( i ++ ; i < 10 ; i ++ ) {",
+                "}"
+            )),
+            arguments(of(
+                "for ( i ++ ; i < 10 ; i ++ ) {",
 
-                        "}"
-                )),
-                arguments(of(
-                        "for ( i = i + 1 ; i < 10 ; i = i + 1 ) {",
+                "}"
+            )),
+            arguments(of(
+                "for ( i = i + 1 ; i < 10 ; i = i + 1 ) {",
 
-                        "}"
-                )),
-                arguments(of(
-                        "for ( i = 0 ; i < 10 ; i = i + 1 ) {",
+                "}"
+            )),
+            arguments(of(
+                "for ( i = 0 ; i < 10 ; i = i + 1 ) {",
 
-                        "}"
-                )),
-                arguments(of(
-                        "for ( i = 0 ; ( a + 4 ) * ( b - 8 ) + 4 / ( ( 4 - c ) * 3 - d ) > 0 ; ++ i ) {",
+                "}"
+            )),
+            arguments(of(
+                "for ( i = 0 ; ( a + 4 ) * ( b - 8 ) + 4 / ( ( 4 - c ) * 3 - d ) > 0 ; ++ i ) {",
 
-                        "}"
-                )),
-                arguments(of(
-                        "for ( i = 2 * ( b - 4 ) / 5 ; i < 10 ; i = 2 * ( b - 4 ) / 5 ) {",
+                "}"
+            )),
+            arguments(of(
+                "for ( i = 2 * ( b - 4 ) / 5 ; i < 10 ; i = 2 * ( b - 4 ) / 5 ) {",
 
-                        "}"
-                )),
-                arguments(of(
-                        "for (println (i) ; i < 10 ; println (i) ) {",
+                "}"
+            )),
+            arguments(of(
+                "for (println (i) ; i < 10 ; println (i) ) {",
 
-                        "}"
-                 )),
-                // SOME (ALL) PARTS ARE MISSING
-                arguments(of(
-                        "for ( var i = 0 ; ; ) {",
+                "}"
+            )),
+            // SOME (ALL) PARTS ARE MISSING
+            arguments(of(
+                "for ( var i = 0 ; ; ) {",
 
-                        "}"
-                )),
-                arguments(of(
-                        "for ( ; i < 10 ; ) {",
+                "}"
+            )),
+            arguments(of(
+                "for ( ; i < 10 ; ) {",
 
-                        "}"
-                )),
-                arguments(of(
-                        "for ( ; ; i ++ ) {",
+                "}"
+            )),
+            arguments(of(
+                "for ( ; ; i ++ ) {",
 
-                        "}"
-                 )),
-                arguments(of(
-                        "for ( ; i < 10 ; i ++ ) {",
+                "}"
+            )),
+            arguments(of(
+                "for ( ; i < 10 ; i ++ ) {",
 
-                        "}"
-                )),
-                arguments(of(
-                        "for ( final i = 0 ; i < 10 ; ) {",
+                "}"
+            )),
+            arguments(of(
+                "for ( final i = 0 ; i < 10 ; ) {",
 
-                        "}"
-                 )),
-                arguments(of(
-                        "for ( ; ; ) {",
+                "}"
+            )),
+            arguments(of(
+                "for ( ; ; ) {",
 
-                        "}"
-                 )),
-                arguments(of(
-                        "for (println (i) ; ; println (i)) {",
+                "}"
+            )),
+            arguments(of(
+                "for (println (i) ; ; println (i)) {",
 
-                        "}"
-                 )),
-                // NESTED FOR
-                arguments(of(
-                        "for ( var i = 0 ; i < 10 ; i ++ ) {",
-                        "   for ( var j = 0 ; j < 10 ; j ++ ) {",
-                        "       for ( var k = 0 ; k < 10 ; k ++ ) {",
-                        "       }",
-                        "   }",
-                        "}"
-                        ))
+                "}"
+            )),
+            // NESTED FOR
+            arguments(of(
+                "for ( var i = 0 ; i < 10 ; i ++ ) {",
+                "   for ( var j = 0 ; j < 10 ; j ++ ) {",
+                "       for ( var k = 0 ; k < 10 ; k ++ ) {",
+                "       }",
+                "   }",
+                "}"
+            ))
         );
     }
 

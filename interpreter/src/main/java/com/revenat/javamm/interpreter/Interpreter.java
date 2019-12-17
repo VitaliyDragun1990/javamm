@@ -25,7 +25,6 @@ import com.revenat.javamm.interpreter.error.TerminateInterpreterException;
  * Responsible for interpreting byte code
  *
  * @author Vitaliy Dragun
- *
  */
 public interface Interpreter {
 

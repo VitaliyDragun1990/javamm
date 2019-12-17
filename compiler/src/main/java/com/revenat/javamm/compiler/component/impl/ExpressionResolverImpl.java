@@ -48,12 +48,10 @@ import static com.revenat.javamm.code.util.LexemeUtils.isClosingParenthesis;
 import static com.revenat.javamm.code.util.LexemeUtils.isOpeningParenthesis;
 import static com.revenat.javamm.code.util.LexemeUtils.isTernaryOperator;
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
-
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ExpressionResolverImpl implements ExpressionResolver {
 
@@ -69,6 +67,7 @@ public class ExpressionResolverImpl implements ExpressionResolver {
 
     private final OperatorPrecedenceResolver operatorPrecedenceResolver;
 
+    @SuppressWarnings("checkstyle:ParameterNumber")
     public ExpressionResolverImpl(final Set<ExpressionBuilder> expressionBuilders,
                                   final ComplexExpressionBuilder complexExpressionBuilder,
                                   final LexemeBuilder lexemeBuilder,
@@ -97,14 +96,14 @@ public class ExpressionResolverImpl implements ExpressionResolver {
     }
 
     private Expression resolveSimpleExpression(final List<String> expressionTokens, final SourceLine sourceLine,
-            final ExpressionBuilder builder) {
+                                               final ExpressionBuilder builder) {
         return builder.build(expressionTokens, sourceLine);
     }
 
     /**
      * var a = 1 + 3 * 5
      * var a = ( 1 + 3 ) * a
-     *
+     * <p>
      * var a = sum ( 1, 2 + b ) + 4                                              ----------> var a = x + 4
      * var a = array [ 23 + g - h ] - a                                          ----------> var a = x - 4
      * var a = sum ( array[ 23 + g ] , array [ 23 ] ) - 4 * sum ( 1 , 2 + b )   ----------> var a = x - 4 * y
@@ -150,8 +149,8 @@ public class ExpressionResolverImpl implements ExpressionResolver {
 
     private Optional<ExpressionBuilder> getAppropriateExpressionBuilder(final List<String> expressionTokens) {
         return expressionBuilders.stream()
-                .filter(b -> b.canBuild(expressionTokens))
-                .findFirst();
+            .filter(b -> b.canBuild(expressionTokens))
+            .findFirst();
     }
 
     private JavammLineSyntaxError syntaxError(final Lexeme lexeme, final SourceLine sourceLine) {
@@ -188,8 +187,8 @@ public class ExpressionResolverImpl implements ExpressionResolver {
             final List<Lexeme> falseClause = buildFalseClause(lexemes);
 
             final TernaryConditionalExpression ternary = buildTernaryExpression(predicateClause,
-                                                                                trueClause,
-                                                                                falseClause);
+                trueClause,
+                falseClause);
             final List<Lexeme> assembledLexemes = assembleAllTogether(ternary);
 
             return resolveNextTernaryIfAny(assembledLexemes);
@@ -306,17 +305,17 @@ public class ExpressionResolverImpl implements ExpressionResolver {
                                                                     final List<Lexeme> trueClause,
                                                                     final List<Lexeme> falseClause) {
             return new TernaryConditionalExpression(resolveFromLexemes(predicateClause, sourceLine),
-                                                    resolveFromLexemes(trueClause, sourceLine),
-                                                    resolveFromLexemes(falseClause, sourceLine));
+                resolveFromLexemes(trueClause, sourceLine),
+                resolveFromLexemes(falseClause, sourceLine));
         }
 
         private List<Lexeme> assembleAllTogether(final TernaryConditionalExpression ternary) {
             return Stream.of(
-                    head.stream(),
-                    Stream.of(ternary),
-                    tail.stream()
-                    ).flatMap(i -> i)
-                    .collect(Collectors.toList());
+                head.stream(),
+                Stream.of(ternary),
+                tail.stream()
+            ).flatMap(i -> i)
+                .collect(Collectors.toList());
         }
 
         private List<Lexeme> resolveNextTernaryIfAny(final List<Lexeme> assembledLexemes) {
@@ -329,13 +328,13 @@ public class ExpressionResolverImpl implements ExpressionResolver {
 
         private boolean isOperatorWithLowerPrecedence(final Lexeme lexeme) {
             return LexemeUtils.isOperator(lexeme) &&
-                    operatorPrecedenceResolver.hasLowerPrecedence((Operator) lexeme, OPERATOR);
+                operatorPrecedenceResolver.hasLowerPrecedence((Operator) lexeme, OPERATOR);
         }
 
         private List<Lexeme> requireNotEmptyClause(final List<Lexeme> l, final String clause) {
             if (l.isEmpty()) {
                 throw new JavammLineSyntaxError(sourceLine, "Ternary operator '?:' should have %s expression",
-                        clause);
+                    clause);
             }
             return l;
         }
@@ -346,7 +345,7 @@ public class ExpressionResolverImpl implements ExpressionResolver {
 
         private boolean containsTernaryConditionalOperator(final List<Lexeme> list) {
             return list.stream()
-                    .anyMatch(LexemeUtils::isTernaryOperator);
+                .anyMatch(LexemeUtils::isTernaryOperator);
         }
     }
 }

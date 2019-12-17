@@ -27,7 +27,6 @@ import java.util.List;
  * {@link SourceLine}
  *
  * @author Vitaliy Dragun
- *
  */
 public interface SourceLineReader {
 

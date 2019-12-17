@@ -17,23 +17,20 @@
 
 package com.revenat.javamm.compiler.integration.operation;
 
-import static org.junit.jupiter.params.provider.Arguments.*;
-
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.operation.ContinueOperation;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
 import static java.util.List.of;
-
-import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ContinueOperationReader_Expected_Success_IntegrationTest
-        extends AbstractOperationReaderHappyPathIntegrationTest {
+    extends AbstractOperationReaderHappyPathIntegrationTest {
 
     @Override
     protected Class<? extends Operation> getExpectedOperationClass() {
@@ -43,9 +40,9 @@ public class ContinueOperationReader_Expected_Success_IntegrationTest
     @Override
     protected Stream<Arguments> validSourceLineProvider() {
         return Stream.of(
-                arguments(of(
-                        "continue"
-                ))
+            arguments(of(
+                "continue"
+            ))
         );
     }
 }

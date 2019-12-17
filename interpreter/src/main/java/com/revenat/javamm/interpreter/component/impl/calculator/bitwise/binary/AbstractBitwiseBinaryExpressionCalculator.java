@@ -24,7 +24,6 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 abstract class AbstractBitwiseBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 

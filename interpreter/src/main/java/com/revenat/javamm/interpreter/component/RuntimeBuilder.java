@@ -25,7 +25,6 @@ import com.revenat.javamm.interpreter.model.LocalContext;
  * {@link CurrentRuntime} components.
  *
  * @author Vitaliy Dragun
- *
  */
 public interface RuntimeBuilder {
 

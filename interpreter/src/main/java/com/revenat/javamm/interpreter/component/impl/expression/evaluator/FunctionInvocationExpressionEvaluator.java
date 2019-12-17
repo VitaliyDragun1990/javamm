@@ -25,7 +25,6 @@ import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCur
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class FunctionInvocationExpressionEvaluator implements ExpressionEvaluator<FunctionInvocationExpression> {
 

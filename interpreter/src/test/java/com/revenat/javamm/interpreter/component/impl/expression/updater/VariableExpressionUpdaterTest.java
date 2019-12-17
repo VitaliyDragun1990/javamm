@@ -17,18 +17,12 @@
 
 package com.revenat.javamm.interpreter.component.impl.expression.updater;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.VariableExpression;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 import com.revenat.javamm.interpreter.test.doubles.VariableStub;
 import com.revenat.javamm.interpreter.test.helper.TestCurrentRuntimeManager;
-
-import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,14 +33,19 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a variable expression updater")
 class VariableExpressionUpdaterTest {
     private static final String UPDATED_VARIABLE_VALUE = "updated value";
+
     private static final VariableStub VARIABLE = new VariableStub("a");
+
     private static final VariableExpression VARIABLE_EXPRESSION = new VariableExpression(VARIABLE);
 
     private VariableExpressionUpdater variableExpressionUpdater;
@@ -80,7 +79,7 @@ class VariableExpressionUpdaterTest {
         TestCurrentRuntimeManager.getLocalContextSpy().setVariableDefined(false);
 
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class,
-                () -> variableExpressionUpdater.update(VARIABLE_EXPRESSION, UPDATED_VARIABLE_VALUE));
+            () -> variableExpressionUpdater.update(VARIABLE_EXPRESSION, UPDATED_VARIABLE_VALUE));
 
         assertErrorMessageContains(e, "Variable '%s' is not defined", VARIABLE);
     }

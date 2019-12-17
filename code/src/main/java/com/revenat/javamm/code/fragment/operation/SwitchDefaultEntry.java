@@ -19,7 +19,6 @@ package com.revenat.javamm.code.fragment.operation;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface SwitchDefaultEntry extends SwitchBodyEntry {
 

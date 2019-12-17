@@ -31,12 +31,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.revenat.javamm.code.syntax.Keywords.FUNCTION;
-
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class FunctionInvokerBuilderImpl implements FunctionInvokerBuilder {
 
@@ -69,11 +67,12 @@ public class FunctionInvokerBuilderImpl implements FunctionInvokerBuilder {
                 return developerFunctionInvoker.invokeMain(functionOptional.get());
             } else {
                 throw new JavammStructRuntimeError(
-                        "Main function not found, please define the main function as: '%s %s'",
-                        FUNCTION, byteCode.getMainFunctionName());
+                    "Main function not found, please define the main function as: '%s %s'",
+                    FUNCTION, byteCode.getMainFunctionName());
             }
         }
 
+        @SuppressWarnings("checkstyle:TodoComment")
         @Override
         public Object invoke(final FunctionName functionName, final List<Expression> arguments) {
             final Optional<DeveloperFunction> functionOptional = byteCode.getFunction(functionName);

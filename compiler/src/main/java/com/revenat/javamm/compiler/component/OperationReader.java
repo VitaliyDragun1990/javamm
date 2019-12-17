@@ -28,7 +28,6 @@ import java.util.ListIterator;
  * {@link Operation}.
  *
  * @author Vitaliy Dragun
- *
  */
 public interface OperationReader {
 

@@ -17,13 +17,7 @@
 
 package com.revenat.javamm.code.fragment.operator;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.stream.Stream;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -35,13 +29,24 @@ import org.junit.jupiter.params.provider.EnumSource.Mode;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.stream.Stream;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a binary operator")
 class BinaryOperatorTest {
     private static final String BINARY = "binary";
+
+    static Stream<String> allSupportedTokensProvider() {
+        return Stream.of(BinaryOperator.values())
+            .map(BinaryOperator::getCode);
+    }
 
     private void assertCanBeCreatedFrom(final String token) {
         assertThat(BinaryOperator.of(token).isPresent(), is(true));
@@ -72,9 +77,9 @@ class BinaryOperatorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "@",
-            "~",
-            "?"
+        "@",
+        "~",
+        "?"
     })
     @Order(2)
     void canNotBeCreatedFromUnsupportedToken(final String unsupportedToken) {
@@ -100,11 +105,6 @@ class BinaryOperatorTest {
     @Order(5)
     void shouldNotBeAssignmentIfItsNameDoesNotStartWithAssignmentKeyword(final BinaryOperator operator) {
         assertNotAssignmentOperator(operator);
-    }
-
-    static Stream<String> allSupportedTokensProvider() {
-        return Stream.of(BinaryOperator.values())
-                .map(BinaryOperator::getCode);
     }
 
 }

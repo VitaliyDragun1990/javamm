@@ -17,7 +17,6 @@
 
 /**
  * @author Vitaliy Dragun
- *
  */
 module javamm.vm {
     requires transitive javamm.code;

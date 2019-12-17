@@ -37,12 +37,10 @@ import java.util.Optional;
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.isClosingBlockOperation;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatLineContainsClosingCurlyBraceOnly;
-
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class BlockOperationReaderImpl implements BlockOperationReader {
     private final Collection<OperationReader> operationReaders;
@@ -114,8 +112,8 @@ public class BlockOperationReaderImpl implements BlockOperationReader {
 
     private Optional<OperationReader> findOperationReaderFor(final SourceLine sourceLine) {
         return operationReaders.stream()
-                .filter(reader -> reader.canRead(sourceLine))
-                .findFirst();
+            .filter(reader -> reader.canRead(sourceLine))
+            .findFirst();
     }
 
     private Operation readAsExpressionOperation(final SourceLine sourceLine) {

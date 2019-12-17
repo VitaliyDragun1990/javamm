@@ -35,12 +35,10 @@ import java.util.Set;
 import static com.revenat.javamm.code.syntax.Keywords.SWITCH;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.isClosingBlockOperation;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatLineContainsClosingCurlyBraceOnly;
-
 import static java.lang.String.format;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class SwitchBodyReaderImpl implements SwitchBodyReader {
     private final List<SwitchBodyEntryReader<?>> entryReaders;
@@ -84,8 +82,8 @@ public class SwitchBodyReaderImpl implements SwitchBodyReader {
 
     private JavammStructSyntaxError switchBodyLacksClosingBraceError(final String moduleName) {
         return new JavammStructSyntaxError(
-                format("'}' expected to close '%s' block statement at the end of file", SWITCH),
-                moduleName);
+            format("'}' expected to close '%s' block statement at the end of file", SWITCH),
+            moduleName);
     }
 
     private boolean isEndOfSwitchBody(final SourceLine sourceLine) {
@@ -117,14 +115,14 @@ public class SwitchBodyReaderImpl implements SwitchBodyReader {
             return new JavammLineSyntaxError(sourceLine, "Duplicate default label");
         } else {
             return new JavammLineSyntaxError(sourceLine,
-                    "Duplicate case label '%s'", ((SwitchCaseEntry) violator).getExpression());
+                "Duplicate case label '%s'", ((SwitchCaseEntry) violator).getExpression());
         }
     }
 
     private SwitchBodyEntryReader<?> getEntryReader(final SourceLine sourceLine) {
         return entryReaders.stream()
-                .filter(r -> r.canRead(sourceLine))
-                .findFirst()
-                .orElseThrow(() -> new JavammLineSyntaxError(sourceLine, "Unsupported '%s' child statement", SWITCH));
+            .filter(r -> r.canRead(sourceLine))
+            .findFirst()
+            .orElseThrow(() -> new JavammLineSyntaxError(sourceLine, "Unsupported '%s' child statement", SWITCH));
     }
 }

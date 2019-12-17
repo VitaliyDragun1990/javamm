@@ -39,9 +39,9 @@ import static java.util.Objects.requireNonNull;
  */
 public class CodeTab extends Tab implements Releasable {
 
-    private String moduleName;
-
     private final TabChangeListener tabChangeListener;
+
+    private String moduleName;
 
     private boolean changed;
 

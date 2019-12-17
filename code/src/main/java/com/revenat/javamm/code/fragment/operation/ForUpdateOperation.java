@@ -23,7 +23,6 @@ import com.revenat.javamm.code.fragment.Operation;
  * Represents update clause of 'for-loop' operation
  *
  * @author Vitaliy Dragun
- *
  */
 public interface ForUpdateOperation extends Operation {
 

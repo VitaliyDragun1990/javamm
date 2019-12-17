@@ -25,7 +25,6 @@ import com.revenat.javamm.compiler.error.JavammSyntaxError;
  * Responsible for building variables
  *
  * @author Vitaliy Dragun
- *
  */
 public interface VariableBuilder {
 

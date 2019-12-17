@@ -17,19 +17,8 @@
 
 package com.revenat.javamm.interpreter.component.impl.calculator;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.binary.SubtractionBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_SUBTRACTION;
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_SUBTRACTION;
-import static com.revenat.javamm.code.util.TypeUtils.getType;
-import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -37,9 +26,34 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_SUBTRACTION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_SUBTRACTION;
+import static com.revenat.javamm.code.util.TypeUtils.getType;
+import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @DisplayName("a subtraction '-' binary expression calculator")
 class SubtractionBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
 
+
+    static Stream<Arguments> unsubtractedPairsProvider() {
+        return Stream.of(
+            Arguments.arguments("hello", " word"),
+            Arguments.arguments("hello", true),
+            Arguments.arguments(false, true),
+            Arguments.arguments(10, true),
+            Arguments.arguments(10.5, false),
+            Arguments.arguments(null, null),
+            Arguments.arguments(null, true),
+            Arguments.arguments(null, "null"),
+            Arguments.arguments(null, 0),
+            Arguments.arguments(null, 10.0)
+        );
+    }
 
     @Test
     @Order(1)
@@ -77,25 +91,10 @@ class SubtractionBinaryExpressionCalculatorTest extends AbstractBinaryExpression
     @Order(5)
     void shouldFailToCalculateNotNumberSubtraction(final Object value1, final Object value2) {
         final JavammLineRuntimeError e = assertThrows(
-                JavammLineRuntimeError.class,
-                () -> calculate(value1, value2));
+            JavammLineRuntimeError.class,
+            () -> calculate(value1, value2));
 
         assertErrorMessageContains(e, "Operator '-' is not supported for types: %s and %s", getType(value1), getType(value2));
-    }
-
-    static Stream<Arguments> unsubtractedPairsProvider() {
-        return Stream.of(
-                Arguments.arguments("hello", " word"),
-                Arguments.arguments("hello", true),
-                Arguments.arguments(false, true),
-                Arguments.arguments(10, true),
-                Arguments.arguments(10.5, false),
-                Arguments.arguments(null, null),
-                Arguments.arguments(null, true),
-                Arguments.arguments(null, "null"),
-                Arguments.arguments(null, 0),
-                Arguments.arguments(null, 10.0)
-        );
     }
 
     @Override

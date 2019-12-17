@@ -33,7 +33,6 @@ import static java.util.stream.Collectors.toUnmodifiableList;
  * Represents interpreter runtime error
  *
  * @author Vitaliy Dragun
- *
  */
 public class JavammLineRuntimeError extends JavammRuntimeError {
     private static final long serialVersionUID = -2098638364439526984L;
@@ -45,17 +44,21 @@ public class JavammLineRuntimeError extends JavammRuntimeError {
         this.currentStackTrace = getCurrentRuntime().getCurrentStackTrace();
     }
 
-    public JavammLineRuntimeError(final String template, final Object...args) {
+    public JavammLineRuntimeError(final String template, final Object... args) {
         this(format(template, args));
+    }
+
+    private static CurrentRuntime getCurrentRuntime() {
+        return CurrentRuntimeProvider.getCurrentRuntime();
     }
 
     @Override
     public String getMessage() {
         return format("Runtime error: %s%s%s",
-                super.getMessage(),
-                System.lineSeparator(),
-                buildStackTrace()
-                );
+            super.getMessage(),
+            System.lineSeparator(),
+            buildStackTrace()
+        );
     }
 
     @Override
@@ -65,17 +68,13 @@ public class JavammLineRuntimeError extends JavammRuntimeError {
 
     private String buildStackTrace() {
         return String.join(lineSeparator(),
-                           currentStackTrace.stream()
-                               .map(this::toStackTraceString)
-                               .collect(toUnmodifiableList())
+            currentStackTrace.stream()
+                .map(this::toStackTraceString)
+                .collect(toUnmodifiableList())
         );
     }
 
     private String toStackTraceString(final StackTraceItem item) {
         return format("    at %s [%s:%s]", item.getFunction(), item.getModuleName(), item.getSourceLineNumber());
-    }
-
-    private static CurrentRuntime getCurrentRuntime() {
-        return CurrentRuntimeProvider.getCurrentRuntime();
     }
 }

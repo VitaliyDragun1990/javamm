@@ -24,13 +24,13 @@ import com.revenat.javamm.code.fragment.operation.ForInitOperation;
 import com.revenat.javamm.code.fragment.operation.ForOperation;
 import com.revenat.javamm.code.fragment.operation.VariableDeclarationOperation;
 import com.revenat.javamm.interpreter.component.CalculatorFacade;
+
 import java.util.Optional;
 
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ForOperationInterpreter extends AbstractLoopBlockOperationInterpreter<ForOperation> {
 

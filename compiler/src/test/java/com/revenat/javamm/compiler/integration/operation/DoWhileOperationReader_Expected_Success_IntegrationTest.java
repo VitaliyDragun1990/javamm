@@ -17,23 +17,20 @@
 
 package com.revenat.javamm.compiler.integration.operation;
 
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.operation.DoWhileOperation;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
 import static java.util.List.of;
-
-import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class DoWhileOperationReader_Expected_Success_IntegrationTest
-        extends AbstractOperationReaderHappyPathIntegrationTest {
+    extends AbstractOperationReaderHappyPathIntegrationTest {
 
     @Override
     protected Class<? extends Operation> getExpectedOperationClass() {
@@ -43,30 +40,30 @@ public class DoWhileOperationReader_Expected_Success_IntegrationTest
     @Override
     protected Stream<Arguments> validSourceLineProvider() {
         return Stream.of(
-                arguments(of(
-                        "do {",
+            arguments(of(
+                "do {",
 
-                        "}",
-                        "while ( i < 10 )"
-                )),
-                arguments(of(
-                        "do {",
+                "}",
+                "while ( i < 10 )"
+            )),
+            arguments(of(
+                "do {",
 
-                        "}",
-                        "while ( ( a + 4) * ( b - 8 ) + a / ( ( 4 - c ) * 3 - d) > 0 )"
-                )),
-                arguments(of(
-                        "do {",
-                        "   do {",
-                        "       do {",
+                "}",
+                "while ( ( a + 4) * ( b - 8 ) + a / ( ( 4 - c ) * 3 - d) > 0 )"
+            )),
+            arguments(of(
+                "do {",
+                "   do {",
+                "       do {",
 
-                        "       }",
-                        "       while ( i < 10 )",
-                        "   }",
-                        "   while ( i < 10 )",
-                        "}",
-                        "while ( i < 10 )"
-                ))
+                "       }",
+                "       while ( i < 10 )",
+                "   }",
+                "   while ( i < 10 )",
+                "}",
+                "while ( i < 10 )"
+            ))
         );
     }
 }

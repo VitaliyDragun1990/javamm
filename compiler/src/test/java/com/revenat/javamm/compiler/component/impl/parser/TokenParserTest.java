@@ -17,25 +17,12 @@
 
 package com.revenat.javamm.compiler.component.impl.parser;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.TokenParser;
 import com.revenat.javamm.compiler.component.impl.parser.custom.TokenParserImpl;
 import com.revenat.javamm.compiler.model.TokenParserResult;
-
-import java.util.List;
-import java.util.stream.Stream;
-
-import static java.util.function.Function.identity;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -52,7 +39,17 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.EnumSource.Mode;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static java.util.function.Function.identity;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -63,13 +60,13 @@ class TokenParserTest {
 
     @ParameterizedTest(name = "[{index}] -> [{0}]")
     @ValueSource(strings = {
-            "",
-            "\u00A0\u00A0",
-            " ",
-            "     ",
-            "\r\r\r",
-            "\t",
-            "\t\t\t",
+        "",
+        "\u00A0\u00A0",
+        " ",
+        "     ",
+        "\r\r\r",
+        "\t",
+        "\t\t\t",
 
     })
     @Order(1)
@@ -82,12 +79,12 @@ class TokenParserTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "//",
-            "//some text",
-            "//1 + 1 /* 5 - 7 */",
-            "//1 + 1 */",
-            "//1 + 1 */ /* ",
-            "//1 + 1 // 5 - 7",
+        "//",
+        "//some text",
+        "//1 + 1 /* 5 - 7 */",
+        "//1 + 1 */",
+        "//1 + 1 */ /* ",
+        "//1 + 1 // 5 - 7",
 
     })
     @Order(2)
@@ -99,7 +96,7 @@ class TokenParserTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "/*,        false",
         "1 + 1,     true",
         "/* 1 + 1,  true",
@@ -114,7 +111,7 @@ class TokenParserTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "*/,            true",
         "1 + 1 */,      true",
         "/*1 + 1 */,    true",
@@ -130,14 +127,14 @@ class TokenParserTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "\"\"" ,
-            "''",
-            "\"test\"",
-            "'test'",
-            "'should treat as single token'",
-            "'should \"treat\" as single token'",
-            "\"should treat as single token\"",
-            "\"should 'treat' as single token\"",
+        "\"\"",
+        "''",
+        "\"test\"",
+        "'test'",
+        "'should treat as single token'",
+        "'should \"treat\" as single token'",
+        "\"should treat as single token\"",
+        "\"should 'treat' as single token\"",
     })
     @Order(5)
     void shouldTreatStringsAsSingleToken(final String sourceLine) {
@@ -147,12 +144,12 @@ class TokenParserTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
-            "\"\" + \"\",                  \"\", +, \"\"",
-            "'' + '',                       '''''', +, ''''''",
-            "\"test\" + 'test',             \"test\", +, '''test'''",
-            "'test one' + 'test two',       '''test one''', +, '''test two'''",
-            "\"test one\" + 'test two',     \"test one\", +, '''test two'''",
+    @CsvSource( {
+        "\"\" + \"\",                  \"\", +, \"\"",
+        "'' + '',                       '''''', +, ''''''",
+        "\"test\" + 'test',             \"test\", +, '''test'''",
+        "'test one' + 'test two',       '''test one''', +, '''test two'''",
+        "\"test one\" + 'test two',     \"test one\", +, '''test two'''",
     })
     @Order(6)
     void shouldProcessSeveralStringsInOneLine(final String sourceLine,
@@ -166,10 +163,10 @@ class TokenParserTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "'",
-            "'without closing quote",
-            "\"",
-            "\"without closing quote"
+        "'",
+        "'without closing quote",
+        "\"",
+        "\"without closing quote"
     })
     @Order(7)
     void shouldNotFailIfStringConstantDoesNotEndWithClosingQuote(final String sourceLine) {
@@ -180,7 +177,7 @@ class TokenParserTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "b>>>=2,                            b >>>= 2",
         "b>>> =2,                           b >>> = 2",
         "b>> >=2,                           b >> >= 2",
@@ -208,7 +205,7 @@ class TokenParserTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "a + \"test\\here\",             a:+:\"test\\here\",    false",
         "a + \" /* test\",               a:+:\" /* test\",      false",
         "a + \" */ \"test\"/*\"test\",   \"test\",              true",
@@ -323,51 +320,51 @@ class TokenParserTest {
         private final List<String> expectedTokens = List.of("var", "a", "=", "3");
 
         @Override
-        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
+        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) {
             return Stream.of(
-                    multiLineCommentNotStartedBeforeAndNotStartedAfter(),
-                    multiLineCommentNotStartedBeforeButStartedAfter(),
-                    multiLineCommentStartedBeforeButNotStartedAfter(),
-                    multiLineCommentStartedBeforeAndStartedAfter()
-                    ).flatMap(identity());
+                multiLineCommentNotStartedBeforeAndNotStartedAfter(),
+                multiLineCommentNotStartedBeforeButStartedAfter(),
+                multiLineCommentStartedBeforeButNotStartedAfter(),
+                multiLineCommentStartedBeforeAndStartedAfter()
+            ).flatMap(identity());
         }
 
         private Stream<Arguments> multiLineCommentNotStartedBeforeAndNotStartedAfter() {
             return Stream.of(
-                    arguments("var a = 3", false, parserResult(expectedTokens, false)),
-                    arguments("var a = 3 // 4 - 5", false, parserResult(expectedTokens, false)),
-                    arguments("var a = 3 /* 2 + 2 */", false, parserResult(expectedTokens, false)),
-                    arguments("var a = 3 /* 2 + 2 */ // 4 - 5", false, parserResult(expectedTokens, false)),
-                    arguments("var a = /* 2 + 2 */ 3", false, parserResult(expectedTokens, false)),
-                    arguments("var a = /* 2 + 2 */ 3 // 4 - 5", false, parserResult(expectedTokens, false)),
-                    arguments("var /* 1 + 1 */ a /* 2 + 2 */ = /* 3 + 2 */ 3 /* 4 + 4 */", false, parserResult(expectedTokens, false)),
-                    arguments("var /* 1 + 1 */ a /* 2 + 2 */ = /* 3 + 2 */ 3 // 4 - 5", false, parserResult(expectedTokens, false))
-                    );
+                arguments("var a = 3", false, parserResult(expectedTokens, false)),
+                arguments("var a = 3 // 4 - 5", false, parserResult(expectedTokens, false)),
+                arguments("var a = 3 /* 2 + 2 */", false, parserResult(expectedTokens, false)),
+                arguments("var a = 3 /* 2 + 2 */ // 4 - 5", false, parserResult(expectedTokens, false)),
+                arguments("var a = /* 2 + 2 */ 3", false, parserResult(expectedTokens, false)),
+                arguments("var a = /* 2 + 2 */ 3 // 4 - 5", false, parserResult(expectedTokens, false)),
+                arguments("var /* 1 + 1 */ a /* 2 + 2 */ = /* 3 + 2 */ 3 /* 4 + 4 */", false, parserResult(expectedTokens, false)),
+                arguments("var /* 1 + 1 */ a /* 2 + 2 */ = /* 3 + 2 */ 3 // 4 - 5", false, parserResult(expectedTokens, false))
+            );
         }
 
         private Stream<Arguments> multiLineCommentNotStartedBeforeButStartedAfter() {
             return Stream.of(
-                    arguments("var a = 3 /* 2 + 2", false, parserResult(expectedTokens, true)),
-                    arguments("var a = 3 /* 2 + 2 */ /* 3 + 3", false, parserResult(expectedTokens, true)),
-                    arguments("var a = 3 /* // 2 + 2 */ /* //3 + 3", false, parserResult(expectedTokens, true))
-                    );
+                arguments("var a = 3 /* 2 + 2", false, parserResult(expectedTokens, true)),
+                arguments("var a = 3 /* 2 + 2 */ /* 3 + 3", false, parserResult(expectedTokens, true)),
+                arguments("var a = 3 /* // 2 + 2 */ /* //3 + 3", false, parserResult(expectedTokens, true))
+            );
         }
 
         private Stream<Arguments> multiLineCommentStartedBeforeButNotStartedAfter() {
             return Stream.of(
-                    arguments("2 + 2 */ var a = 3", true, parserResult(expectedTokens, false)),
-                    arguments("2 + 2 */ var a = 3 // 4 - 5", true, parserResult(expectedTokens, false)),
-                    arguments("2 + 2 */ var a = 3 /* 4 - 5 */", true, parserResult(expectedTokens, false)),
-                    arguments("// 2 + 2 */ var a = 3 /* 4 - 5 */", true, parserResult(expectedTokens, false))
-                    );
+                arguments("2 + 2 */ var a = 3", true, parserResult(expectedTokens, false)),
+                arguments("2 + 2 */ var a = 3 // 4 - 5", true, parserResult(expectedTokens, false)),
+                arguments("2 + 2 */ var a = 3 /* 4 - 5 */", true, parserResult(expectedTokens, false)),
+                arguments("// 2 + 2 */ var a = 3 /* 4 - 5 */", true, parserResult(expectedTokens, false))
+            );
         }
 
         private Stream<Arguments> multiLineCommentStartedBeforeAndStartedAfter() {
             return Stream.of(
-                    arguments("2 + 2 */ var a = 3 /* 3 + 3", true, parserResult(expectedTokens, true)),
-                    arguments("2 + 2 */ /* 3 + 3 */ var a = 3 /* 4 + 4 */ /* 5 + 5", true, parserResult(expectedTokens, true)),
-                    arguments("2 + 2 */ /* // 3 + 3 */ var a = 3 /* // 4 + 4 */ /* // 5 + 5", true, parserResult(expectedTokens, true))
-                    );
+                arguments("2 + 2 */ var a = 3 /* 3 + 3", true, parserResult(expectedTokens, true)),
+                arguments("2 + 2 */ /* 3 + 3 */ var a = 3 /* 4 + 4 */ /* 5 + 5", true, parserResult(expectedTokens, true)),
+                arguments("2 + 2 */ /* // 3 + 3 */ var a = 3 /* // 4 + 4 */ /* // 5 + 5", true, parserResult(expectedTokens, true))
+            );
         }
 
         private TokenParserResult parserResult(final List<String> tokens, final boolean isMultiLineStartedBefore) {
@@ -378,39 +375,39 @@ class TokenParserTest {
     static class ComplexExpressionProvider implements ArgumentsProvider {
 
         @Override
-        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
+        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) {
             return Stream.of(
-                    // var e = c + 2 * d - 5 / a[0]
-                    arguments("\tvar e = c+2*d-5 / a[0]\t ",
-                        List.of("var", "e", "=", "c", "+", "2", "*", "d", "-", "5", "/", "a", "[", "0", "]")),
+                // var e = c + 2 * d - 5 / a[0]
+                arguments("\tvar e = c+2*d-5 / a[0]\t ",
+                    List.of("var", "e", "=", "c", "+", "2", "*", "d", "-", "5", "/", "a", "[", "0", "]")),
 
-                    // println ("pr = " + (c + sum (4, d - 2) * 3 - 12 ) % a[3])
-                    arguments("  println (\"pr = \" + (c + sum (4, d-2) * 3-12) % a[3])",
-                        List.of("println", "(", "\"pr = \"", "+", "(", "c", "+", "sum", "(", "4", ",", "d", "-",
-                            "2", ")", "*", "3", "-", "12", ")", "%", "a", "[", "3", "]", ")")),
+                // println ("pr = " + (c + sum (4, d - 2) * 3 - 12 ) % a[3])
+                arguments("  println (\"pr = \" + (c + sum (4, d-2) * 3-12) % a[3])",
+                    List.of("println", "(", "\"pr = \"", "+", "(", "c", "+", "sum", "(", "4", ",", "d", "-",
+                        "2", ")", "*", "3", "-", "12", ")", "%", "a", "[", "3", "]", ")")),
 
-                    // println ('unary = ' + (-c) + ',' + (-3) + ',' + (+c) + ',' + (++c) + ',' + (c++) + '.')
-                    arguments("  println ('unary = ' + (-c) + ',' + (-3) + ',' + (+c) + ',' + (++c) + ',' + (c++) + '.')",
-                        List.of("println", "(", "'unary = '", "+", "(", "-", "c", ")", "+", "','", "+", "(", "-", "3", ")",
-                            "+", "','", "+", "(", "+", "c", ")", "+", "','", "+", "(", "++", "c", ")", "+", "','",
-                            "+", "(", "c", "++", ")", "+", "'.'", ")")),
+                // println ('unary = ' + (-c) + ',' + (-3) + ',' + (+c) + ',' + (++c) + ',' + (c++) + '.')
+                arguments("  println ('unary = ' + (-c) + ',' + (-3) + ',' + (+c) + ',' + (++c) + ',' + (c++) + '.')",
+                    List.of("println", "(", "'unary = '", "+", "(", "-", "c", ")", "+", "','", "+", "(", "-", "3", ")",
+                        "+", "','", "+", "(", "+", "c", ")", "+", "','", "+", "(", "++", "c", ")", "+", "','",
+                        "+", "(", "c", "++", ")", "+", "'.'", ")")),
 
-                    // var a = 'Hello ' + 2 + '5 + 678 - 6'
-                    arguments(" var a = 'Hello ' + 2 + '5 + 678 - 6'  \t \t",
-                        List.of("var", "a", "=", "'Hello '", "+", "2", "+", "'5 + 678 - 6'")),
+                // var a = 'Hello ' + 2 + '5 + 678 - 6'
+                arguments(" var a = 'Hello ' + 2 + '5 + 678 - 6'  \t \t",
+                    List.of("var", "a", "=", "'Hello '", "+", "2", "+", "'5 + 678 - 6'")),
 
-                    // var b = a > 100 ? 'true' : 'false'
-                    arguments(" var b = a > 100    ?'true':'false'  \t \t",
-                            List.of("var", "b", "=", "a", ">", "100", "?", "'true'", ":", "'false'")),
+                // var b = a > 100 ? 'true' : 'false'
+                arguments(" var b = a > 100    ?'true':'false'  \t \t",
+                    List.of("var", "b", "=", "a", ">", "100", "?", "'true'", ":", "'false'")),
 
-                    // println (a[0] > ar[a[4 - a[3]] * sum (a[1], 0 - a[1])] ? a typeof array && ar typeof array : sum (parseInt (\"12\"), parseDouble (\"12.1\")))
-                    arguments("\tprintln (a[0] > ar[a[4 - a[3]] * sum (a[1], 0 - a[1])] ? " +
-                            "a typeof array && ar typeof array : sum (parseInt (\"12\"), parseDouble (\"12.1\")))",
-                        List.of("println", "(", "a", "[", "0", "]", ">", "ar", "[", "a", "[", "4", "-", "a", "[", "3", "]",
-                            "]", "*", "sum", "(", "a", "[", "1", "]", ",", "0", "-", "a", "[", "1", "]", ")", "]",
-                            "?", "a", "typeof", "array", "&&", "ar", "typeof", "array", ":", "sum", "(",
-                            "parseInt", "(", "\"12\"", ")", ",", "parseDouble", "(", "\"12.1\"", ")", ")", ")"))
-                );
+                // println (a[0] > ar[a[4 - a[3]] * sum (a[1], 0 - a[1])] ? a typeof array && ar typeof array : sum (parseInt (\"12\"), parseDouble (\"12.1\")))
+                arguments("\tprintln (a[0] > ar[a[4 - a[3]] * sum (a[1], 0 - a[1])] ? " +
+                        "a typeof array && ar typeof array : sum (parseInt (\"12\"), parseDouble (\"12.1\")))",
+                    List.of("println", "(", "a", "[", "0", "]", ">", "ar", "[", "a", "[", "4", "-", "a", "[", "3", "]",
+                        "]", "*", "sum", "(", "a", "[", "1", "]", ",", "0", "-", "a", "[", "1", "]", ")", "]",
+                        "?", "a", "typeof", "array", "&&", "ar", "typeof", "array", ":", "sum", "(",
+                        "parseInt", "(", "\"12\"", ")", ",", "parseDouble", "(", "\"12.1\"", ")", ")", ")"))
+            );
         }
     }
 }

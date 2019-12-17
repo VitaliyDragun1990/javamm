@@ -45,7 +45,6 @@ class UnaryAssignmentOperatorBeforeExpressionProcessor extends UnaryAssignmentOp
         return (Expression) next;
     }
 
-    @Override
     public void processEntry() {
         final VariableExpression operand = requireVariableExpression(getExpression(), getOperator(), sourceLine);
         result.add(new UnaryPrefixAssignmentExpression(operand, getOperator()));

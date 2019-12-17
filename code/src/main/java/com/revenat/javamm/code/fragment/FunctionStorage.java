@@ -22,7 +22,6 @@ import java.util.Optional;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface FunctionStorage<T extends Function> extends CompiledCodeFragment {
 

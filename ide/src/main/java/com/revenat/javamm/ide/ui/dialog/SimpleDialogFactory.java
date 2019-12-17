@@ -17,7 +17,6 @@
 
 package com.revenat.javamm.ide.ui.dialog;
 
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonBar.ButtonData;
 
 /**

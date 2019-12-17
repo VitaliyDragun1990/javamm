@@ -23,7 +23,6 @@ import com.revenat.javamm.code.exception.JavammError;
  * Represents compiler syntax error
  *
  * @author Vitaliy Dragun
- *
  */
 public class JavammSyntaxError extends JavammError {
     private static final long serialVersionUID = 1134297706983921468L;

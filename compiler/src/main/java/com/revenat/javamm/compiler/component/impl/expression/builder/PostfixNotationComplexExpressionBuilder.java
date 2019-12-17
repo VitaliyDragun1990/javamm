@@ -43,12 +43,11 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 /**
  * Responsible for building {@linkplain ComplexExpression complex expressions}
  * using {@code Postfix notation} representation.
- *
+ * <p>
  * Infix -> Postfix
- *  7 - 2 * 3 -> 7 2 3 * -
+ * 7 - 2 * 3 -> 7 2 3 * -
  *
  * @author Vitaliy Dragun
- *
  */
 public class PostfixNotationComplexExpressionBuilder implements ComplexExpressionBuilder {
     private final OperatorPrecedenceResolver precedenceResolver;
@@ -147,8 +146,8 @@ public class PostfixNotationComplexExpressionBuilder implements ComplexExpressio
 
     private boolean isOperatorWithHigherOrEqualPrecedence(final Lexeme lexeme, final Operator operator) {
         return !(areBothUnary(lexeme, operator) ||
-                isBinaryWithLowerPrecedence(lexeme, operator) ||
-                isNotOperator(lexeme));
+            isBinaryWithLowerPrecedence(lexeme, operator) ||
+            isNotOperator(lexeme));
     }
 
     private void processExpression(final Lexeme lexeme, final List<Lexeme> result) {
@@ -173,7 +172,7 @@ public class PostfixNotationComplexExpressionBuilder implements ComplexExpressio
 
     private String toString(final List<Lexeme> lexemes) {
         return lexemes.stream()
-                .map(Object::toString)
-                .collect(Collectors.joining(" "));
+            .map(Object::toString)
+            .collect(Collectors.joining(" "));
     }
 }

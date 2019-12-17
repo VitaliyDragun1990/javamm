@@ -29,7 +29,6 @@ import static java.util.stream.Collectors.joining;
  * lexemes}
  *
  * @author Vitaliy Dragun
- *
  */
 public class ComplexExpression implements Expression {
     private final List<Lexeme> lexemes;
@@ -43,7 +42,6 @@ public class ComplexExpression implements Expression {
 
     /**
      * Returns lexemes that constitute {@code this} complex expression
-     *
      */
     public List<Lexeme> getLexemes() {
         return lexemes;
@@ -52,7 +50,7 @@ public class ComplexExpression implements Expression {
     @Override
     public String toString() {
         return lexemes.stream()
-                .map(Object::toString)
-                .collect(joining(" "));
+            .map(Object::toString)
+            .collect(joining(" "));
     }
 }

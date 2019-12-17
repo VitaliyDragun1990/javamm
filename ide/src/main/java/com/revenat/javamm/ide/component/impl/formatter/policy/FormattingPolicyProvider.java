@@ -31,11 +31,11 @@ public final class FormattingPolicyProvider {
     private FormattingPolicyProvider() {
     }
 
-    public static void setFormattingPolicy(FormattingPolicy formattingPolicy) {
-        FormattingPolicyProvider.formattingPolicy = requireNonNull(formattingPolicy);
-    }
-
     public static FormattingPolicy getFormattingPolicy() {
         return formattingPolicy;
+    }
+
+    public static void setFormattingPolicy(final FormattingPolicy formattingPolicy) {
+        FormattingPolicyProvider.formattingPolicy = requireNonNull(formattingPolicy);
     }
 }

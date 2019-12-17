@@ -32,7 +32,6 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class FunctionDefinitionsReaderImpl implements FunctionDefinitionsReader {
 
@@ -66,11 +65,11 @@ public class FunctionDefinitionsReaderImpl implements FunctionDefinitionsReader 
     private boolean functionWithSameNameAlreadyDefined(final FunctionName name,
                                                        final List<DeveloperFunction> definedFunctions) {
         return definedFunctions.stream()
-                .anyMatch(f -> f.getName().equals(name));
+            .anyMatch(f -> f.getName().equals(name));
     }
 
     private JavammLineSyntaxError duplicateFunctionDefinitionError(final DeveloperFunction function) {
         return new JavammLineSyntaxError(function.getDeclarationSourceLine(), "Function '%s' is already defined",
-                function.getName());
+            function.getName());
     }
 }

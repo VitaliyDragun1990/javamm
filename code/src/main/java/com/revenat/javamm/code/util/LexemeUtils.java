@@ -34,12 +34,11 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public final class LexemeUtils {
     private static final Set<UnaryOperator> UNARY_ASSIGNMENT_OPERATORS = Set.of(
-            INCREMENT,
-            DECREMENT
+        INCREMENT,
+        DECREMENT
     );
 
     private LexemeUtils() {

@@ -26,7 +26,6 @@ import java.util.ListIterator;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public abstract class UnaryAssignmentOperatorProcessor {
     protected final Lexeme current;
@@ -38,19 +37,11 @@ public abstract class UnaryAssignmentOperatorProcessor {
     protected final SourceLine sourceLine;
 
     protected UnaryAssignmentOperatorProcessor(final Lexeme current, final Lexeme next, final List<Lexeme> result,
-            final SourceLine sourceLine) {
+                                               final SourceLine sourceLine) {
         this.current = current;
         this.next = next;
         this.result = result;
         this.sourceLine = sourceLine;
-    }
-
-    protected abstract void processEntry();
-
-
-    protected JavammLineSyntaxError syntaxError(final String message,
-                                                final Object... args) {
-        return new JavammLineSyntaxError(sourceLine, message, args);
     }
 
     public static void processOperatorBeforeExpression(final Lexeme operator,
@@ -82,9 +73,14 @@ public abstract class UnaryAssignmentOperatorProcessor {
                                                                       final List<Lexeme> result,
                                                                       final SourceLine sourceLine) {
         new PossibleUnaryAssignmentOperatorAfterClosingParenthesisProcessor(expression,
-                                                                            parenthesis,
-                                                                            source,
-                                                                            result,
-                                                                            sourceLine).processEntry();
+            parenthesis,
+            source,
+            result,
+            sourceLine).processEntry();
+    }
+
+    protected JavammLineSyntaxError syntaxError(final String message,
+                                                final Object... args) {
+        return new JavammLineSyntaxError(sourceLine, message, args);
     }
 }

@@ -24,7 +24,6 @@ import com.revenat.javamm.code.fragment.UpdatableExpression;
  * Responsible for evaluating complex expressions
  *
  * @author Vitaliy Dragun
- *
  */
 public interface ExpressionContext {
 

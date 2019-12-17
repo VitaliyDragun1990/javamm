@@ -17,21 +17,12 @@
 
 package com.revenat.javamm.compiler.component.impl;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
 import com.revenat.javamm.code.fragment.SourceCode;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.compiler.component.SourceLineReader;
 import com.revenat.javamm.compiler.component.TokenParser;
 import com.revenat.javamm.compiler.model.TokenParserResult;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -40,7 +31,16 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -132,11 +132,11 @@ class SourceLineReaderTest {
     @Test
     @Order(7)
     void shouldHandleMultiLineComments() {
-        final String[] lines = { "/* var a = 10", "comment goes on", "comment ends */ var b = 10" };
+        final String[] lines = {"/* var a = 10", "comment goes on", "comment ends */ var b = 10"};
         tokenParser.defineAnswer("/* var a = 10", false, new TokenParserResult(true));
         tokenParser.defineAnswer("comment goes on", true, new TokenParserResult(true));
         tokenParser.defineAnswer("comment ends */ var b = 10", true,
-                new TokenParserResult(tokens("var", "b", "=", "10"), false));
+            new TokenParserResult(tokens("var", "b", "=", "10"), false));
 
         final List<SourceLine> sourceLines = sourceLineReader.read(sourceCode(lines));
 
@@ -166,6 +166,7 @@ class SourceLineReaderTest {
 
     private static class TokenParserStub implements TokenParser {
         private static final TokenParserResult LINE_WITHOUT_TOKENS = new TokenParserResult(false);
+
         private final Map<String, TokenParserResult> answers = new HashMap<>();
 
         public void defineAnswer(final String arg, final boolean isMultiLineStarted, final TokenParserResult answer) {

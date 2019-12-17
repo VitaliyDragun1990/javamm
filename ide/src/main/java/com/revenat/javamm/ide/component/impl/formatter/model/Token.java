@@ -30,13 +30,13 @@ public final class Token {
 
     public static final String NO_DELIMITER = "";
 
-    private Token previous;
-
-    private Token next;
-
     private final String content;
 
     private final Type type;
+
+    private Token previous;
+
+    private Token next;
 
     private String delimiterBefore;
 
@@ -64,6 +64,10 @@ public final class Token {
 
     public Optional<Token> getNext() {
         return Optional.ofNullable(next);
+    }
+
+    void setNext(final Token token) {
+        next = token;
     }
 
     public boolean equalsAny(final Collection<String> tokenContent) {
@@ -97,10 +101,6 @@ public final class Token {
 
     void setPrevious(final Token token) {
         previous = token;
-    }
-
-    void setNext(final Token token) {
-        next = token;
     }
 
     boolean equalsTo(final String tokenContent) {

@@ -21,7 +21,6 @@ import com.revenat.javamm.code.fragment.ByteCode;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface FunctionInvokerBuilder {
 

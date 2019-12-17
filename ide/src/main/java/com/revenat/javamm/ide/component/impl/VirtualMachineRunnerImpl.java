@@ -44,7 +44,7 @@ class VirtualMachineRunnerImpl implements VirtualMachineRunner {
 
     private final List<SourceCode> sourceCodes;
 
-    private ThreadRunner threadRunner;
+    private final ThreadRunner threadRunner;
 
     VirtualMachineRunnerImpl(final Console console,
                              final VirtualMachine virtualMachine,
@@ -72,6 +72,7 @@ class VirtualMachineRunnerImpl implements VirtualMachineRunner {
         threadRunner.terminate();
     }
 
+    @SuppressWarnings("checkstyle:IllegalCatch")
     private void invokeVm(final VirtualMachineRunCompletedListener listener) {
         CompletionStatus status = CompletionStatus.SUCCESS;
         try {

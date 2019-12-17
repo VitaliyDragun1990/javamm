@@ -17,16 +17,14 @@
 
 package com.revenat.javamm.compiler.integration.operation;
 
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.operation.IfElseOperation;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
 import static java.util.List.of;
-
-import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class IfElseOperationReader_Expected_Success_IntegrationTest extends AbstractOperationReaderHappyPathIntegrationTest {
 
@@ -38,80 +36,80 @@ class IfElseOperationReader_Expected_Success_IntegrationTest extends AbstractOpe
     @Override
     protected Stream<Arguments> validSourceLineProvider() {
         return Stream.of(
-                arguments(of(
-                    "if ( i < 10 ) {",
+            arguments(of(
+                "if ( i < 10 ) {",
 
-                    "}"
-                )),
-                arguments(of(
-                        "if ( ( a + 4 ) * ( b - 8 ) + 4 / ( ( 4 - c ) * 3 - d ) > 0 ) {",
+                "}"
+            )),
+            arguments(of(
+                "if ( ( a + 4 ) * ( b - 8 ) + 4 / ( ( 4 - c ) * 3 - d ) > 0 ) {",
 
-                        "}"
-                )),
-                arguments(of(
-                        "if ( i < 10 ) {",
-                        "   var a = 10",
-                        "}",
-                        "else {",
-                        "   var b = 10",
-                        "}"
-                )),
-                arguments(of(
-                        "if ( i < 10 ) {",
+                "}"
+            )),
+            arguments(of(
+                "if ( i < 10 ) {",
+                "   var a = 10",
+                "}",
+                "else {",
+                "   var b = 10",
+                "}"
+            )),
+            arguments(of(
+                "if ( i < 10 ) {",
 
-                        "}",
-                        "else if ( i < 40 ) {",
+                "}",
+                "else if ( i < 40 ) {",
 
-                        "}"
-               )),
-                arguments(of(
-                        "if ( i < 10 ) {",
+                "}"
+            )),
+            arguments(of(
+                "if ( i < 10 ) {",
 
-                        "}",
-                        "else if ( i < 40 ) {",
+                "}",
+                "else if ( i < 40 ) {",
 
-                        "}",
-                        "else {",
+                "}",
+                "else {",
 
-                        "}"
-                    )),
-                    arguments(of(
-                        "if ( i < 10 ) {",
-                        "   if ( i < 10 ) {",
+                "}"
+            )),
+            arguments(of(
+                "if ( i < 10 ) {",
+                "   if ( i < 10 ) {",
 
-                        "   }",
-                        "}",
-                        "else if ( i < 40 ) {",
-                        "   if ( i < 10 ) {",
+                "   }",
+                "}",
+                "else if ( i < 40 ) {",
+                "   if ( i < 10 ) {",
 
-                        "   }",
-                        "   else {",
+                "   }",
+                "   else {",
 
-                        "   }",
-                        "}",
-                        "else {",
+                "   }",
+                "}",
+                "else {",
 
-                        "}"
-                    )),
-                    arguments(of(
-                        "if ( i < 10 ) {",
-                        "   if ( i < 10 ) {",
-                        "       if ( i < 10 ) {",
-                        "           if ( i < 10 ) {",
+                "}"
+            )),
+            arguments(of(
+                "if ( i < 10 ) {",
+                "   if ( i < 10 ) {",
+                "       if ( i < 10 ) {",
+                "           if ( i < 10 ) {",
 
-                        "           }",
-                        "       }",
-                        "   }",
-                        "}",
-                        "else {",
-                        "   if ( i < 10 ) {",
-                        "       if ( i < 10 ) {",
+                "           }",
+                "       }",
+                "   }",
+                "}",
+                "else {",
+                "   if ( i < 10 ) {",
+                "       if ( i < 10 ) {",
 
-                        "       }",
-                        "   }",
-                        "}"
-                    ))
-       );
+                "       }",
+                "   }",
+                "}"
+            ))
+        );
     }
 
 }

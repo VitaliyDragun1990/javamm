@@ -19,6 +19,7 @@ package com.revenat.javamm.interpreter.component.impl.calculator.bitwise.binary;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_SHIFT_RIGHT_ZERO_FILL;
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_SHIFT_RIGHT_ZERO_FILL;
 
@@ -27,10 +28,9 @@ import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_S
  * implementation for binary bitwise shift right zero fill ('>>>') operator
  *
  * @author Vitaliy Dragun
- *
  */
 public final class BitwiseShiftRightZeroFillBinaryExpressionCalculator
-        extends AbstractBitwiseShiftBinaryExpressionCalculator {
+    extends AbstractBitwiseShiftBinaryExpressionCalculator {
 
     private BitwiseShiftRightZeroFillBinaryExpressionCalculator(final BinaryOperator operator) {
         super(operator);

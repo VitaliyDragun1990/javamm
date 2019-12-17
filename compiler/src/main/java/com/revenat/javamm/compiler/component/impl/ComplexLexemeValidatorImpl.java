@@ -26,7 +26,6 @@ import java.util.List;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ComplexLexemeValidatorImpl implements ComplexLexemeValidator {
 

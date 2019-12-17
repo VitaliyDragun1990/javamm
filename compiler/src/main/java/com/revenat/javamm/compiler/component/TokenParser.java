@@ -24,7 +24,6 @@ import com.revenat.javamm.compiler.model.TokenParserResult;
  * comment occurrence.
  *
  * @author Vitaliy Dragun
- *
  */
 public interface TokenParser {
 

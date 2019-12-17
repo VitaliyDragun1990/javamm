@@ -26,7 +26,6 @@ import static java.util.Objects.requireNonNull;
  * Represents any variable
  *
  * @author Vitaliy Dragun
- *
  */
 public class VariableExpression implements UpdatableExpression {
 

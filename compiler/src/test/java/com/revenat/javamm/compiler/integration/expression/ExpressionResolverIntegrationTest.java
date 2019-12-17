@@ -17,12 +17,6 @@
 
 package com.revenat.javamm.compiler.integration.expression;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.SourceLine;
@@ -32,11 +26,7 @@ import com.revenat.javamm.code.fragment.expression.TernaryConditionalExpression;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.test.builder.ComponentBuilder;
-
-import java.util.List;
-
-import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -47,7 +37,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+
+import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -69,63 +67,63 @@ public class ExpressionResolverIntegrationTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            // Unary ~
-            "5",
-            "~ 5",
-            "~ 5 + 5",
-            "~ 5 + ~ 5",
-            "~ 5 * ~ ~ ~ ~ 5",
-            "~ 5 * ~ ( ~ ( ~ 5 ) )",
+        // Unary ~
+        "5",
+        "~ 5",
+        "~ 5 + 5",
+        "~ 5 + ~ 5",
+        "~ 5 * ~ ~ ~ ~ 5",
+        "~ 5 * ~ ( ~ ( ~ 5 ) )",
 
-            // Unary -
-            "- 5",
-            "- 5 + 5",
-            "- 5 + - 5",
-            "- 5 * - + - + 5",
-            "~ 5 * - ( + ( - 5 ) )",
+        // Unary -
+        "- 5",
+        "- 5 + 5",
+        "- 5 + - 5",
+        "- 5 * - + - + 5",
+        "~ 5 * - ( + ( - 5 ) )",
 
-            // Increment
-            "a ++",
-            "++ a",
-            "a ++ + 5",
-            "5 + a ++",
-            "5 + a ++ + 5",
-            "++ a + 5",
-            "5 + ++ a",
-            "5 + ++ a + 5",
-            "+ 5 + ++ a + + + + + + 5",
-            "+ 5 + + a ++ + + + + + 5",
-            "+ 5 + ++ a + ++ a + ++ a + 5",
-            "+ 5 + a ++ + a ++ + a ++ + 5",
+        // Increment
+        "a ++",
+        "++ a",
+        "a ++ + 5",
+        "5 + a ++",
+        "5 + a ++ + 5",
+        "++ a + 5",
+        "5 + ++ a",
+        "5 + ++ a + 5",
+        "+ 5 + ++ a + + + + + + 5",
+        "+ 5 + + a ++ + + + + + 5",
+        "+ 5 + ++ a + ++ a + ++ a + 5",
+        "+ 5 + a ++ + a ++ + a ++ + 5",
 
-            // Binary assignment
-            "a += 5",
-            "a += 4 * 5",
-            "3 * ( a += 4 + 5 )"
+        // Binary assignment
+        "a += 5",
+        "a += 4 * 5",
+        "3 * ( a += 4 + 5 )"
     })
     @Order(1)
     void shouldResolveCorrectExpression(final String expression) {
         assertDoesNotThrow(() -> resolve(expression));
     }
 
-     @ParameterizedTest
-     @CsvSource({
-         "true ? 1 : 2,                 true, 1, 2",
-         "false ? 1 + 2 : 2 - 1,        false, 1 + 2, 2 - 1",
-         "a ? 1 : 2,                    a, 1, 2",
-     })
-     @Order(2)
+    @ParameterizedTest
+    @CsvSource( {
+        "true ? 1 : 2,                 true, 1, 2",
+        "false ? 1 + 2 : 2 - 1,        false, 1 + 2, 2 - 1",
+        "a ? 1 : 2,                    a, 1, 2",
+    })
+    @Order(2)
     void shouldResolveSimpleTernaryConditionalExpressions(final String expression,
                                                           final String expectedPredicateOperand,
                                                           final String expectedTrueCaseOperand,
                                                           final String expectedFalseCaseOperand) {
-         final Expression result = resolve(expression);
+        final Expression result = resolve(expression);
 
-         assertTernaryConditionalExpression(result, expectedPredicateOperand, expectedTrueCaseOperand, expectedFalseCaseOperand);
+        assertTernaryConditionalExpression(result, expectedPredicateOperand, expectedTrueCaseOperand, expectedFalseCaseOperand);
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "? 1 : 2,               Ternary operator '?:' should have predicate clause expression",
         "+= ? 1 : 2,            Ternary operator '?:' should have predicate clause expression",  // '+=' operator has lower precedence than '?:'
         "true ? : 2,            Ternary operator '?:' should have true clause expression",
@@ -139,7 +137,7 @@ public class ExpressionResolverIntegrationTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "true ? 1 : +,              Unsupported expression: +",
         "false ? - : 2,             Unsupported expression: -",
         "+ ? true : false,          Unsupported expression: +",
@@ -152,7 +150,7 @@ public class ExpressionResolverIntegrationTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "10 > a ? 1 : 2,                                            10 > a, 1, 2",
         "a / 2 + b ? 1 : 2,                                         a / 2 + b, 1, 2",
         "a + ( 2 > b ) ? 1 : 2,                                     a + ( 2 > b ), 1, 2",
@@ -172,7 +170,7 @@ public class ExpressionResolverIntegrationTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "a += 4 > b ? 10 : 20,                      4 > b",
         "a + ( ( b > 4 ) ? 10 : 20 ),               ( b > 4 )",
     })
@@ -187,7 +185,7 @@ public class ExpressionResolverIntegrationTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "a > 9 ? ( 1 + 2 - a ) : 2,                                     a > 9, ( 1 + 2 - a ) , 2",
         "a > 9 ? ( ( 1 + 2 - ( a * 2 ) ) ) : 2,                         a > 9, ( ( 1 + 2 - ( a * 2 ) ) ) , 2",
         "a > 9 ? ( true ? 10 : 20 ) : 2,                                a > 9, ( true ? 10 : 20 ) , 2",
@@ -207,7 +205,7 @@ public class ExpressionResolverIntegrationTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "a > 9 ? 1 : ( ( 2 + b ) / c ),                               a > 9, 1, ( ( 2 + b ) / c )",
         "a > 9 ? 1 : ( ( ( 2 + b ) / ( c - 2 ) ) ),                   a > 9, 1, ( ( ( 2 + b ) / ( c - 2 ) ) )",
         "a > 9 ? 1 : ( true ? ( true ? 10 : 20 ) : ( 1 + 2 - a ) ),   a > 9, 1, ( true ? ( true ? 10 : 20 ) : ( 1 + 2 - a ) )",
@@ -225,7 +223,7 @@ public class ExpressionResolverIntegrationTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "( true ? 10 : 25 + 10 ) + a,                   3, 0, true, 10, 25 + 10",
         "( ( ( true ? 10 : 25 + 10 ) ) ) + a / 2,       5, 0, true, 10, 25 + 10",
         "( a + ( true ? 10 : 25 + 10 ) ) * a / 2,       7, 1, true, 10, 25 + 10",
@@ -246,7 +244,7 @@ public class ExpressionResolverIntegrationTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "( true ? 10 : 20 ) + ( false ? 20 : 10 ),                      3, 1, false, 20, 10",
         "( ( ( true ? 10 : 20 ) + ( false ? 20 : 10 ) ) ),              3, 1, false, 20, 10",
     })
@@ -262,13 +260,13 @@ public class ExpressionResolverIntegrationTest {
         final List<Lexeme> resolved = assertPostfixComplexExpression(result).getLexemes();
         assertThat(resolved, hasSize(expectedLexemeCount));
         assertTernaryConditionalExpression(resolved.get(expectedSecondTernaryPosition),
-                                           secondTernaryExpectedPredicate,
-                                           secondTernaryExpectedTrueClause,
-                                           secondTernaryExpectedFalseClause);
+            secondTernaryExpectedPredicate,
+            secondTernaryExpectedTrueClause,
+            secondTernaryExpectedFalseClause);
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         // Constants only
         "* 5 + 5,                   Expression can not start with binary operator: '*'",
         "5 + 5 *,                   Expression can not end with binary operator: '*'",

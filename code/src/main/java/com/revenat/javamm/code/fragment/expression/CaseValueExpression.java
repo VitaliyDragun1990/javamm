@@ -21,7 +21,6 @@ import com.revenat.javamm.code.fragment.Expression;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface CaseValueExpression extends Expression {
 

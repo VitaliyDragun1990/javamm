@@ -29,17 +29,14 @@ import com.revenat.javamm.compiler.component.impl.operation.AbstractOperationRea
 import com.revenat.javamm.compiler.component.impl.operation.ForInitOperationReader;
 
 import java.util.ListIterator;
-import java.util.Optional;
 
 import static com.revenat.javamm.code.syntax.Keywords.VAR;
-
 import static java.util.Objects.requireNonNull;
 
 /**
  * Responsible for reading variable declaration operation
  *
  * @author Vitaliy Dragun
- *
  */
 public class VariableDeclarationOperationReader extends AbstractOperationReader<VariableDeclarationOperation>
     implements ForInitOperationReader {
@@ -113,14 +110,14 @@ public class VariableDeclarationOperationReader extends AbstractOperationReader<
 
     private void assertAssignmentOperatorPosition(final SourceLine sourceLine) {
         if (sourceLine.getTokenCount() > 2 &&
-                !sourceLine.getToken(ASSIGNMENT_OPERATOR_POSITION).equals("=")) {
+            !sourceLine.getToken(ASSIGNMENT_OPERATOR_POSITION).equals("=")) {
             throw new JavammLineSyntaxError("'=' is missing or has invalid position", sourceLine);
         }
     }
 
     private void assertVariableExpression(final SourceLine sourceLine) {
         if (sourceLine.getTokenCount() == 3 &&
-                sourceLine.getToken(ASSIGNMENT_OPERATOR_POSITION).equals("=")) {
+            sourceLine.getToken(ASSIGNMENT_OPERATOR_POSITION).equals("=")) {
             throw new JavammLineSyntaxError(missingExpressionErrorMessage(), sourceLine);
         }
     }

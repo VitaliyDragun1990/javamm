@@ -17,12 +17,6 @@
 
 package com.revenat.javamm.interpreter.component.impl.expression.evaluator;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
@@ -31,9 +25,7 @@ import com.revenat.javamm.interpreter.component.CalculatorFacade;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 import com.revenat.javamm.interpreter.test.helper.CustomAsserts;
 import com.revenat.javamm.interpreter.test.helper.TestCurrentRuntimeManager;
-
-import static com.revenat.javamm.code.util.TypeUtils.getType;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +42,12 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.mockito.stubbing.Answer;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import static com.revenat.javamm.code.util.TypeUtils.getType;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -65,17 +62,7 @@ class TernaryConditionalExpressionEvaluatorTest {
 
     private static final String FALSE_CLAUSE_VALUE = "false";
 
-    private CalculatorFacade calculatorFacade;
-
     private TernaryConditionalExpressionEvaluator expressionEvaluator;
-
-    @BeforeEach
-    void setUp() {
-        calculatorFacade = createCalculatorStub();
-        expressionEvaluator = new TernaryConditionalExpressionEvaluator(calculatorFacade);
-        expressionEvaluator.setExpressionContext(mock(ExpressionContext.class));
-
-    }
 
     @BeforeAll
     static void setupFakeRuntime() {
@@ -85,6 +72,14 @@ class TernaryConditionalExpressionEvaluatorTest {
     @AfterAll
     static void releaseFakeRuntime() {
         TestCurrentRuntimeManager.releaseFakeCurrentRuntime();
+    }
+
+    @BeforeEach
+    void setUp() {
+        final CalculatorFacade calculatorFacade = createCalculatorStub();
+        expressionEvaluator = new TernaryConditionalExpressionEvaluator(calculatorFacade);
+        expressionEvaluator.setExpressionContext(mock(ExpressionContext.class));
+
     }
 
     @Test
@@ -117,7 +112,7 @@ class TernaryConditionalExpressionEvaluatorTest {
     @Order(4)
     void shouldFailIfTernaryExpressionPredicateClauseEvaluatesToNonBooleanValue() {
         final TernaryConditionalExpression ternaryExpression =
-                createTernaryExpression(ANY_NON_BOOLEAN_VALUE, TRUE_CLAUSE_VALUE, FALSE_CLAUSE_VALUE);
+            createTernaryExpression(ANY_NON_BOOLEAN_VALUE, TRUE_CLAUSE_VALUE, FALSE_CLAUSE_VALUE);
 
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> expressionEvaluator.evaluate(ternaryExpression));
 
@@ -148,13 +143,13 @@ class TernaryConditionalExpressionEvaluatorTest {
 
     private Answer<?> facadeBooleanCheckBehaviour() {
         return (invocation) -> {
-                final Expression condition = invocation.getArgument(1);
-                final Object value = condition.getValue(invocation.getArgument(0));
-                if (value == Boolean.TRUE || value == Boolean.FALSE) {
-                    return value;
-                }
-                throw new JavammLineRuntimeError("Condition expression should be boolean. Current type is %s",
-                        getType(value));
-            };
+            final Expression condition = invocation.getArgument(1);
+            final Object value = condition.getValue(invocation.getArgument(0));
+            if (value == Boolean.TRUE || value == Boolean.FALSE) {
+                return value;
+            }
+            throw new JavammLineRuntimeError("Condition expression should be boolean. Current type is %s",
+                getType(value));
+        };
     }
 }

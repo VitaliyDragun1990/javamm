@@ -17,9 +17,6 @@
 
 package com.revenat.javamm.interpreter.component.impl.calculator;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
@@ -28,7 +25,7 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionContextDummy;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionStub;
 import com.revenat.javamm.interpreter.test.helper.TestCurrentRuntimeManager;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,14 +33,14 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Abstract parent class for testing all {@linkplain BinaryExpressionCalculator
  * binary expression calculator} implementations
  *
  * @author Vitaliy Dragun
- *
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)

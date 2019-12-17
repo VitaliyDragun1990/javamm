@@ -21,7 +21,6 @@ package com.revenat.javamm.code.fragment;
  * Represents variable in the compiled byte code.
  *
  * @author Vitaliy Dragun
- *
  */
 public interface Variable extends CompiledCodeFragment {
 

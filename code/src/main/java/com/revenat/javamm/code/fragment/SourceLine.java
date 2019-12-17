@@ -24,7 +24,6 @@ import java.util.Objects;
  * Represents line of the compiled code.
  *
  * @author Vitaliy Dragun
- *
  */
 public class SourceLine implements CompiledCodeFragment, Comparable<SourceLine> {
     public static final SourceLine EMPTY_SOURCE_LINE = new SourceLine("<UNDEFINED>", 0, List.of());

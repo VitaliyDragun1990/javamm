@@ -31,12 +31,11 @@ import java.util.Set;
  * string
  *
  * @author Vitaliy Dragun
- *
  */
 public final class ConstantExpression implements Expression, CaseValueExpression {
 
     private static final Set<Class<?>> SUPPORTED_CLASSES =
-            Set.of(Boolean.class, Integer.class, Double.class, String.class);
+        Set.of(Boolean.class, Integer.class, Double.class, String.class);
 
     private static final int POOL_SIZE = 12;
 

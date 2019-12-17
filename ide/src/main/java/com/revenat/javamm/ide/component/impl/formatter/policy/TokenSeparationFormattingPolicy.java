@@ -66,10 +66,6 @@ final class TokenSeparationFormattingPolicy implements FormattingPolicy {
 
             if (token.isFirst()) {
                 token.deleteDelimiterBefore();
-            } else if (token.isComment()) {
-                // preserve user specific before delimiter
-            } else if (token.previousOneIsComment()) {
-                // preserve user specific delimiter
             } else if (token.equalsAny(MANDATORY_NO_DELIMITER_BEFORE)) {
                 token.deleteDelimiterBefore();
             } else if (token.equalsAny(PREFERABLY_NO_DELIMITER_BEFORE)) {
@@ -78,7 +74,7 @@ final class TokenSeparationFormattingPolicy implements FormattingPolicy {
                 } else {
                     token.deleteDelimiterBefore();
                 }
-            } else {
+            } else if (!(token.isComment() || token.previousOneIsComment())) {
                 token.setDelimiterBefore(delimiter);
             }
 

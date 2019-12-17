@@ -17,23 +17,20 @@
 
 package com.revenat.javamm.compiler.integration.operation;
 
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.operation.ReturnOperation;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
 import static java.util.List.of;
-
-import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ReturnOperationReader_Expected_Success_IntegrationTest
-        extends AbstractOperationReaderHappyPathIntegrationTest {
+    extends AbstractOperationReaderHappyPathIntegrationTest {
 
     @Override
     protected Class<? extends Operation> getExpectedOperationClass() {
@@ -43,18 +40,18 @@ public class ReturnOperationReader_Expected_Success_IntegrationTest
     @Override
     protected Stream<Arguments> validSourceLineProvider() {
         return Stream.of(
-                arguments(of(
-                        "return"
-                )),
-                arguments(of(
-                        "return null"
-                )),
-                arguments(of(
-                        "return 1 + 2 * 6 - a"
-                )),
-                arguments(of(
-                        "return sum (1, a + 3) - sum (4, 5 + 7 * b)"
-                ))
+            arguments(of(
+                "return"
+            )),
+            arguments(of(
+                "return null"
+            )),
+            arguments(of(
+                "return 1 + 2 * 6 - a"
+            )),
+            arguments(of(
+                "return sum (1, a + 3) - sum (4, 5 + 7 * b)"
+            ))
         );
     }
 }

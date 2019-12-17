@@ -24,7 +24,6 @@ import com.revenat.javamm.interpreter.error.TerminateInterpreterException;
  * Responsible for interpreting particular type of byte-code operation
  *
  * @author Vitaliy Dragun
- *
  */
 public interface OperationInterpreter<T extends Operation> {
 

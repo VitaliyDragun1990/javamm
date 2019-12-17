@@ -19,7 +19,6 @@ package com.revenat.javamm.ide.util;
 
 import com.revenat.javamm.ide.ui.pane.TitledPane;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.SplitPane;
 import javafx.stage.Screen;
@@ -34,7 +33,8 @@ public final class UIUtils {
     }
 
     /**
-     * Centers specified {@code stage} on user's screen according to provided {@code withPercentage} and {@code heightPercentage}
+     * Centers specified {@code stage} on user's screen according to provided {@code withPercentage}
+     * and {@code heightPercentage}
      *
      * @param stage            state to center on user's screen
      * @param withPercentage   how much percent from available screen width given {@code stage} should occupy

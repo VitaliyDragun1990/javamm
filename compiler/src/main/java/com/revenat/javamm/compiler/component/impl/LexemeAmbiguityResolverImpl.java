@@ -37,14 +37,13 @@ import static com.revenat.javamm.code.util.LexemeUtils.isUnaryOperator;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class LexemeAmbiguityResolverImpl implements LexemeAmbiguityResolver {
     private static final Set<Operator> AMBIGUOUS_OPERATORS = Set.of(
-            ARITHMETIC_ADDITION,
-            ARITHMETIC_SUBTRACTION,
-            ARITHMETICAL_UNARY_PLUS,
-            ARITHMETICAL_UNARY_MINUS
+        ARITHMETIC_ADDITION,
+        ARITHMETIC_SUBTRACTION,
+        ARITHMETICAL_UNARY_PLUS,
+        ARITHMETICAL_UNARY_MINUS
     );
 
     /**
@@ -57,7 +56,7 @@ public class LexemeAmbiguityResolverImpl implements LexemeAmbiguityResolver {
      *                 lexemes
      * @param lexemes  all lexemes that already been resolved
      * @return new resolved lexeme if ambiguity was found, otherwise same lexeme
-     *         which was specified to resolve
+     * which was specified to resolve
      */
     @Override
     public Lexeme resolve(final Lexeme lexeme, final int position, final List<Lexeme> lexemes) {
@@ -85,15 +84,15 @@ public class LexemeAmbiguityResolverImpl implements LexemeAmbiguityResolver {
         final int previousLexemePosition = position - 1;
 
         return isFirstLexeme ||
-               previousLexemeIsAnOpeningParenthesis(previousLexemePosition, lexemes) ||
-               previousLexemeIsBinaryOperator(previousLexemePosition, lexemes) ||
-               previousLexemeIsAmbiguousOrNotAssignmentUnary(previousLexemePosition, lexemes);
+            previousLexemeIsAnOpeningParenthesis(previousLexemePosition, lexemes) ||
+            previousLexemeIsBinaryOperator(previousLexemePosition, lexemes) ||
+            previousLexemeIsAmbiguousOrNotAssignmentUnary(previousLexemePosition, lexemes);
     }
 
     private boolean previousLexemeIsAmbiguousOrNotAssignmentUnary(final int previousLexemePosition,
                                                                   final List<Lexeme> lexemes) {
         return previousLexemeIsAmbiguousUnary(previousLexemePosition, lexemes) ||
-               previousLexemeIsUnaryButNotAssignment(previousLexemePosition, lexemes);
+            previousLexemeIsUnaryButNotAssignment(previousLexemePosition, lexemes);
     }
 
     private boolean previousLexemeIsAmbiguousUnary(final int previousLexemePosition, final List<Lexeme> lexemes) {

@@ -24,15 +24,12 @@ import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.impl.operation.AbstractOperationReader;
 
 import java.util.ListIterator;
-import java.util.Optional;
 
 import static com.revenat.javamm.code.syntax.Keywords.RETURN;
-
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ReturnOperationReader extends AbstractOperationReader<ReturnOperation> {
 

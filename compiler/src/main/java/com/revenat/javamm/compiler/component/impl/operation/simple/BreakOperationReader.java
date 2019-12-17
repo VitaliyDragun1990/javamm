@@ -23,13 +23,11 @@ import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.component.impl.operation.AbstractOperationReader;
 
 import java.util.ListIterator;
-import java.util.Optional;
 
 import static com.revenat.javamm.code.syntax.Keywords.BREAK;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class BreakOperationReader extends AbstractOperationReader<BreakOperation> {
 

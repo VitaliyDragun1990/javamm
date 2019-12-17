@@ -51,12 +51,15 @@ import static java.util.stream.Collectors.toList;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class MainWindowController implements ActionListener, VirtualMachineRunCompletedListener,
     TabCloseConfirmationListener {
 
     private static final String INFO_VM_IS_RUNNING = "Javamm VM is running.\nWait for VM to complete or terminate it! ";
+
+    private final PaneManager paneManager = new PaneManager();
+
+    private final FileChooserFactory fileChooserFactory = buildFileChooserFactory();
 
     @FXML
     private ActionPane actionPane;
@@ -67,11 +70,7 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
     @FXML
     private SplitPane spWork;
 
-    private final PaneManager paneManager = new PaneManager();
-
     private VirtualMachineRunner virtualMachineRunner;
-
-    private final FileChooserFactory fileChooserFactory = buildFileChooserFactory();
 
     private FileChooserFactory buildFileChooserFactory() {
         return DialogFactoryProvider.createFileChooserFactoryBuilder()
@@ -207,10 +206,8 @@ public class MainWindowController implements ActionListener, VirtualMachineRunCo
     private boolean handleUserDecision(final ButtonData result, final CodeTab codeTab) {
         if (result == ButtonData.YES) {
             return !saveChanges(codeTab);
-        } else if (result == ButtonData.NO) {
-            return false;
         } else {
-            return true;
+            return result != ButtonData.NO;
         }
     }
 

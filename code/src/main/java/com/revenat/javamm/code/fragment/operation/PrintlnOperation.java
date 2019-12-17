@@ -28,7 +28,6 @@ import static java.util.Objects.requireNonNull;
  * Represents well known {@code println} operation
  *
  * @author Vitaliy Dragun
- *
  */
 public class PrintlnOperation extends AbstractOperation
     implements ForInitOperation, ForUpdateOperation {

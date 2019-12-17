@@ -25,7 +25,6 @@ import java.util.List;
  * Resolves lexeme ambiguity
  *
  * @author Vitaliy Dragun
- *
  */
 public interface LexemeAmbiguityResolver {
 
@@ -39,7 +38,7 @@ public interface LexemeAmbiguityResolver {
      *                 lexemes
      * @param lexemes  all lexemes that already been resolved
      * @return new resolved lexeme if ambiguity was found, otherwise same lexeme
-     *         which was specified to resolve
+     * which was specified to resolve
      */
     Lexeme resolve(Lexeme lexeme, int position, List<Lexeme> lexemes);
 

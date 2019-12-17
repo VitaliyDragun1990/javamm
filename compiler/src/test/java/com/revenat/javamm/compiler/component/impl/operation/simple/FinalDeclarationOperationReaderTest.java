@@ -17,11 +17,6 @@
 
 package com.revenat.javamm.compiler.component.impl.operation.simple;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.expression.NullValueExpression;
 import com.revenat.javamm.code.fragment.operation.VariableDeclarationOperation;
@@ -30,12 +25,7 @@ import com.revenat.javamm.compiler.test.doubles.ExpressionDummy;
 import com.revenat.javamm.compiler.test.doubles.ExpressionResolverSpy;
 import com.revenat.javamm.compiler.test.doubles.VariableBuilderStub;
 import com.revenat.javamm.compiler.test.doubles.VariableDummy;
-
-import java.util.List;
-import java.util.ListIterator;
-
-import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -46,7 +36,17 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+import java.util.ListIterator;
+
+import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -55,6 +55,7 @@ class FinalDeclarationOperationReaderTest {
     private static final ListIterator<SourceLine> DUMMY_CODE = List.of(SourceLine.EMPTY_SOURCE_LINE).listIterator();
 
     private VariableBuilderStub variableBuilderStub;
+
     private ExpressionResolverSpy expressionResolverStub;
 
     private FinalDeclarationOperationReader operationReader;
@@ -111,24 +112,24 @@ class FinalDeclarationOperationReaderTest {
     @Test
     @Order(5)
     void shouldFailToReadDeclarationWithoutFinalName() {
-       final JavammLineSyntaxError e =
-               assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(sourceLine("final"), DUMMY_CODE));
+        final JavammLineSyntaxError e =
+            assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(sourceLine("final"), DUMMY_CODE));
 
-       assertErrorMessageContains(e, "Final name is missing");
+        assertErrorMessageContains(e, "Final name is missing");
     }
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "final a +",
-            "final + a",
-            "final = a",
-            "final a + 3",
-            "final a + ="
-            })
+        "final a +",
+        "final + a",
+        "final = a",
+        "final a + 3",
+        "final a + ="
+    })
     @Order(6)
     void shouldFailToReadDeclarationWithMisplacedEqualSignIfAny(final String code) {
         final JavammLineSyntaxError e =
-                assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(sourceLine(code), DUMMY_CODE));
+            assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(sourceLine(code), DUMMY_CODE));
 
         assertErrorMessageContains(e, "'=' is missing or has invalid position");
     }
@@ -137,16 +138,16 @@ class FinalDeclarationOperationReaderTest {
     @Order(7)
     void shouldFailToReadDeclarationWithEqualSignButWithoutExpression() {
         final JavammLineSyntaxError e =
-                assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(sourceLine("final a ="), DUMMY_CODE));
+            assertThrows(JavammLineSyntaxError.class, () -> operationReader.read(sourceLine("final a ="), DUMMY_CODE));
 
         assertErrorMessageContains(e, "Final expression is missing");
     }
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "final a",
-            "final a = 10",
-            "final a = 10 + 2 - 1"
+        "final a",
+        "final a = 10",
+        "final a = 10 + 2 - 1"
     })
     @Order(8)
     void shouldReadCorrectFinaleDeclaration(final String declaration) {

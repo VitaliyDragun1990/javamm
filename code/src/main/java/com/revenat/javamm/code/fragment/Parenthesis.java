@@ -23,7 +23,6 @@ import java.util.Optional;
  * Special type of {@linkplain Lexeme lexeme}. Represents parenthesis.
  *
  * @author Vitaliy Dragun
- *
  */
 public enum Parenthesis implements Lexeme {
 

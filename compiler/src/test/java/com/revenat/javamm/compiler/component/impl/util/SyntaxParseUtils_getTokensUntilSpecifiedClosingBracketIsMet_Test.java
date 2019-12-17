@@ -17,19 +17,9 @@
 
 package com.revenat.javamm.compiler.component.impl.util;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
-
-import java.util.Iterator;
-import java.util.List;
-
-import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.getTokensUntilClosingBracketIsMet;
-import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -38,7 +28,14 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.Iterator;
+import java.util.List;
+
+import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.getTokensUntilClosingBracketIsMet;
+import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -55,30 +52,30 @@ class SyntaxParseUtils_getTokensUntilSpecifiedClosingBracketIsMet_Test {
 
     @ParameterizedTest
     @CsvSource(delimiter = ';', value = {
-            // VALID EXPRESSIONS
-            // ---------------- Operations and functions ------------------
-            "(; );      if ( a < 4 ) {;                                         2;     a < 4",
-            "(; );      if ( ( a < 4 ) ) {;                                     2;     ( a < 4 )",
-            "(; );      if ( ( a < 4 ) * 5 ( b - 6 ) / ( - c ) ) {;             2;     ( a < 4 ) * 5 ( b - 6 ) / ( - c )",
-            "(; );      function ( ) {;                                         2;                                      ",
-            "(; );      function ( ( 2 + 2 ) ) {;                               2;      ( 2 + 2 )",
-            "(; );      function ( sum ( max ( arr [ 3 ] , 2 ) , 5 ) , 4 ) {;   4;      max ( arr [ 3 ] , 2 ) , 5",
-            // ------------------ Array declaration with values ---------------
-            "{; };      var a = { };                                            4;  ",
-            "{; };      var a = { 5 , 6 , 7 };                                  4;     5 , 6 , 7",
-            "{; };      var a = { { 5 } , sum ( 6 , 7 ) };                      4;     { 5 } , sum ( 6 , 7 )",
-            "{; };      var a = { { 6 , { 7 } } , 3 , { { { } } } };            5;     6 , { 7 }",
-            // ------------------- Empty array declaration -------------------------
-            "[; ];      var a = array [ 4 + a ];                                5;      4 + a",
-            "[; ];      var a = array [ b [ 4 + a [ ar [ 0 ] ] ] ];             5;      b [ 4 + a [ ar [ 0 ] ] ]",
-            "[; ];      var a = array [ 4 * sum ( 3 , a [ 5 ] ) ];              5;      4 * sum ( 3 , a [ 5 ] )",
-            // INVALID EXPRESSIONS
-            "(; );      if ( a < 4 ) ) {;                                       2;      a < 4",
-            "(; );      if ( a + 4 ) * 5 < ( b - 6 ) / ( - c ) ) {;             2;      a + 4",
-            "{; };      var a = { 5 } , { 6, 7 } };                             4;      5",
-            "{; };      var a = { 6, 7 } } , 3 , } } } };                       4;      6, 7",
-            "[; ];      var a = array b 4 + a [ ar [ 0 ] ] ] ];                 9;      ar [ 0 ]",
-            "[; ];      var a = array 4 * sum [ ( 3 , a [ 5 ] ) ] ];            8;  ( 3 , a [ 5 ] )"
+        // VALID EXPRESSIONS
+        // ---------------- Operations and functions ------------------
+        "(; );      if ( a < 4 ) {;                                         2;     a < 4",
+        "(; );      if ( ( a < 4 ) ) {;                                     2;     ( a < 4 )",
+        "(; );      if ( ( a < 4 ) * 5 ( b - 6 ) / ( - c ) ) {;             2;     ( a < 4 ) * 5 ( b - 6 ) / ( - c )",
+        "(; );      function ( ) {;                                         2;                                      ",
+        "(; );      function ( ( 2 + 2 ) ) {;                               2;      ( 2 + 2 )",
+        "(; );      function ( sum ( max ( arr [ 3 ] , 2 ) , 5 ) , 4 ) {;   4;      max ( arr [ 3 ] , 2 ) , 5",
+        // ------------------ Array declaration with values ---------------
+        "{; };      var a = { };                                            4;  ",
+        "{; };      var a = { 5 , 6 , 7 };                                  4;     5 , 6 , 7",
+        "{; };      var a = { { 5 } , sum ( 6 , 7 ) };                      4;     { 5 } , sum ( 6 , 7 )",
+        "{; };      var a = { { 6 , { 7 } } , 3 , { { { } } } };            5;     6 , { 7 }",
+        // ------------------- Empty array declaration -------------------------
+        "[; ];      var a = array [ 4 + a ];                                5;      4 + a",
+        "[; ];      var a = array [ b [ 4 + a [ ar [ 0 ] ] ] ];             5;      b [ 4 + a [ ar [ 0 ] ] ]",
+        "[; ];      var a = array [ 4 * sum ( 3 , a [ 5 ] ) ];              5;      4 * sum ( 3 , a [ 5 ] )",
+        // INVALID EXPRESSIONS
+        "(; );      if ( a < 4 ) ) {;                                       2;      a < 4",
+        "(; );      if ( a + 4 ) * 5 < ( b - 6 ) / ( - c ) ) {;             2;      a + 4",
+        "{; };      var a = { 5 } , { 6, 7 } };                             4;      5",
+        "{; };      var a = { 6, 7 } } , 3 , } } } };                       4;      6, 7",
+        "[; ];      var a = array b 4 + a [ ar [ 0 ] ] ] ];                 9;      ar [ 0 ]",
+        "[; ];      var a = array 4 * sum [ ( 3 , a [ 5 ] ) ] ];            8;  ( 3 , a [ 5 ] )"
     })
     @Order(1)
     void shouldReturnTokensBetweenBracketsIgnoringValidationAndAllowingEmptyResults(final String openingBracket,
@@ -90,22 +87,22 @@ class SyntaxParseUtils_getTokensUntilSpecifiedClosingBracketIsMet_Test {
         final Iterator<String> expressionTokens = getIteratorInPosition(source, iteratorPosition);
 
         final List<String> actualTokens = getTokensUntilClosingBracketIsMet(openingBracket,
-                                                                                     closingBracket,
-                                                                                     expressionTokens,
-                                                                                     sourceLine,
-                                                                                     ALLOW_EMPTY_RESULT);
+            closingBracket,
+            expressionTokens,
+            sourceLine,
+            ALLOW_EMPTY_RESULT);
 
         assertThat(actualTokens, equalTo(toList(expected)));
     }
 
     @ParameterizedTest
     @CsvSource(delimiter = ';', value = {
-            "(; );      if ( a < 4 {;               2",
-            "(; );      function1 ( {;              2",
-            "{; };      var a = {;                  4",
-            "{; };      var a = { 5, 6, 7;          4",
-            "[; ];      var a = array [;            5",
-            "[; ];      var a = array [ 4 + a;      5",
+        "(; );      if ( a < 4 {;               2",
+        "(; );      function1 ( {;              2",
+        "{; };      var a = {;                  4",
+        "{; };      var a = { 5, 6, 7;          4",
+        "[; ];      var a = array [;            5",
+        "[; ];      var a = array [ 4 + a;      5",
     })
     @Order(3)
     void shouldFailIfClosingBracketIsMissing(final String openingBracket,
@@ -116,21 +113,21 @@ class SyntaxParseUtils_getTokensUntilSpecifiedClosingBracketIsMet_Test {
         final Iterator<String> expressionTokens = getIteratorInPosition(source, iteratorPosition);
 
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> getTokensUntilClosingBracketIsMet(openingBracket,
-                                                                closingBracket,
-                                                                expressionTokens,
-                                                                sourceLine,
-                                                                ALLOW_EMPTY_RESULT));
+            () -> getTokensUntilClosingBracketIsMet(openingBracket,
+                closingBracket,
+                expressionTokens,
+                sourceLine,
+                ALLOW_EMPTY_RESULT));
 
         assertErrorMessageContains(e, "Syntax error in '%s' [Line: %s]: Missing '%s'", ANY_MODULE_NAME, ANY_LINE_NUMBER, closingBracket);
     }
 
     @ParameterizedTest
     @CsvSource(delimiter = ';', value = {
-            "(; );      if ( );             2",
-            "(; );      for ( );            2",
-            "[; ];      var a = array [ ];  5",
-            "[; ];      a [ ] = 5;          2"
+        "(; );      if ( );             2",
+        "(; );      for ( );            2",
+        "[; ];      var a = array [ ];  5",
+        "[; ];      a [ ] = 5;          2"
     })
     @Order(4)
     void shouldFailIfExpressionBetweenBracketsIsEmptyAndEmptyResultIsProhibited(final String openingBracket,
@@ -141,14 +138,14 @@ class SyntaxParseUtils_getTokensUntilSpecifiedClosingBracketIsMet_Test {
         final Iterator<String> expressionTokens = getIteratorInPosition(source, iteratorPosition);
 
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> getTokensUntilClosingBracketIsMet(openingBracket,
-                                                                 closingBracket,
-                                                                 expressionTokens,
-                                                                 sourceLine,
-                                                                 PROHIBIT_EMPTY_RESULT));
+            () -> getTokensUntilClosingBracketIsMet(openingBracket,
+                closingBracket,
+                expressionTokens,
+                sourceLine,
+                PROHIBIT_EMPTY_RESULT));
 
         assertErrorMessageContains(e, "Syntax error in '%s' [Line: %s]: An expression is expected between '%s' and '%s'",
-                ANY_MODULE_NAME, ANY_LINE_NUMBER, openingBracket, closingBracket);
+            ANY_MODULE_NAME, ANY_LINE_NUMBER, openingBracket, closingBracket);
     }
 
     private Iterator<String> getIteratorInPosition(final String tokenString, final int iteratorPosition) {

@@ -32,7 +32,6 @@ import static com.revenat.javamm.code.syntax.Delimiters.OPENING_SQUARE_BRACKET;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public final class SyntaxParseUtils {
 
@@ -46,7 +45,7 @@ public final class SyntaxParseUtils {
                                                         final SourceLine sourceLine,
                                                         final boolean allowEmptyResult) {
         return getTokensBetweenBrackets(
-                openingBracket, closingBracket, sourceLine.getTokens(), sourceLine, allowEmptyResult
+            openingBracket, closingBracket, sourceLine.getTokens(), sourceLine, allowEmptyResult
         );
     }
 
@@ -56,16 +55,16 @@ public final class SyntaxParseUtils {
                                                         final SourceLine sourceLine,
                                                         final boolean allowEmptyResult) {
         return new SimpleTokensBetweenBracketsExtractor(openingBracket, closingBracket, allowEmptyResult, sourceLine)
-                .extract(tokens);
+            .extract(tokens);
     }
 
     public static List<String> getTokensUntilClosingBracketIsMet(final String openingBracket,
-                                                                         final String closingBracket,
-                                                                         final Iterator<String> tokens,
-                                                                         final SourceLine sourceLine,
-                                                                         final boolean allowEmptyResult) {
+                                                                 final String closingBracket,
+                                                                 final Iterator<String> tokens,
+                                                                 final SourceLine sourceLine,
+                                                                 final boolean allowEmptyResult) {
         return new AdvancedTokensBetweenBracketsExtractor(openingBracket, closingBracket)
-                .extract(tokens, sourceLine, allowEmptyResult);
+            .extract(tokens, sourceLine, allowEmptyResult);
     }
 
     public static boolean isClosingBlockOperation(final SourceLine sourceLine) {
@@ -78,14 +77,14 @@ public final class SyntaxParseUtils {
 
     public static boolean isOpeningBracket(final String token) {
         return OPENING_CURLY_BRACE.equals(token) ||
-                OPENING_PARENTHESIS.equals(token) ||
-                OPENING_SQUARE_BRACKET.equals(token);
+            OPENING_PARENTHESIS.equals(token) ||
+            OPENING_SQUARE_BRACKET.equals(token);
     }
 
     public static boolean isMatchingBrackets(final String tokenA, final String tokenB) {
         return isMatchingParentheses(tokenA, tokenB) ||
-                isMatchingSquareBrackets(tokenA, tokenB) ||
-                isMatchingCurlyBraces(tokenA, tokenB);
+            isMatchingSquareBrackets(tokenA, tokenB) ||
+            isMatchingCurlyBraces(tokenA, tokenB);
     }
 
     private static boolean isMatchingParentheses(final String tokenA, final String tokenB) {

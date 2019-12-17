@@ -26,8 +26,9 @@ import java.util.List;
 import java.util.Map;
 
 public class ExpressionBuilderStub implements ExpressionBuilder {
-    private boolean canBuild = false;
     private final Map<List<String>, Expression> expressionsToBuild = new HashMap<>();
+
+    private boolean canBuild = false;
 
     public void setCanBuild(final boolean canBuild) {
         this.canBuild = canBuild;

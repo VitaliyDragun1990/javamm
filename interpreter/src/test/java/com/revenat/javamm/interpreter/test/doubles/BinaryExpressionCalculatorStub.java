@@ -24,16 +24,10 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 
 public class BinaryExpressionCalculatorStub implements BinaryExpressionCalculator {
     private BinaryOperator supportedOperator = null;
+
     private Object calculationResult = null;
 
-    public BinaryExpressionCalculatorStub() {
-    }
-
     public BinaryExpressionCalculatorStub(final BinaryOperator supportedOperator) {
-        this.supportedOperator = supportedOperator;
-    }
-
-    public void setSupportedOperator(final BinaryOperator supportedOperator) {
         this.supportedOperator = supportedOperator;
     }
 
@@ -71,9 +65,6 @@ public class BinaryExpressionCalculatorStub implements BinaryExpressionCalculato
             return false;
         }
         final BinaryExpressionCalculatorStub other = (BinaryExpressionCalculatorStub) obj;
-        if (supportedOperator != other.supportedOperator) {
-            return false;
-        }
-        return true;
+        return supportedOperator == other.supportedOperator;
     }
 }

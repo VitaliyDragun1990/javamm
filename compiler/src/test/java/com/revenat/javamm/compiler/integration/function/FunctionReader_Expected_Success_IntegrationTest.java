@@ -17,30 +17,52 @@
 
 package com.revenat.javamm.compiler.integration.function;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import com.revenat.javamm.code.fragment.ByteCode;
 import com.revenat.javamm.compiler.integration.AbstractIntegrationTest;
-
-import java.util.List;
-import java.util.stream.Stream;
-
-import static java.util.List.of;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static java.util.List.of;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a function reader")
 public class FunctionReader_Expected_Success_IntegrationTest extends AbstractIntegrationTest {
+
+    static Stream<Arguments> validSourceLineProvider() {
+        return Stream.of(
+            arguments(of(
+                "function main() {",
+
+                "}"
+            )),
+            arguments(of(
+                "function factorial(a) {",
+
+                "}"
+            )),
+            arguments(of(
+                "function sum(a, b) {",
+
+                "}"
+            )),
+            arguments(of(
+                "function sum(a, b, c, d, e) {",
+
+                "}"
+            ))
+        );
+    }
 
     @ParameterizedTest
     @MethodSource("validSourceLineProvider")
@@ -52,30 +74,5 @@ public class FunctionReader_Expected_Success_IntegrationTest extends AbstractInt
 
     private void assertContainSingleFunctionDefinition(final ByteCode byteCode) {
         assertThat(byteCode.getAllFunctions().size(), is(1));
-    }
-
-    static Stream<Arguments> validSourceLineProvider() {
-        return Stream.of(
-                arguments(of(
-                        "function main() {",
-
-                        "}"
-                )),
-                arguments(of(
-                        "function factorial(a) {",
-
-                        "}"
-                )),
-                arguments(of(
-                        "function sum(a, b) {",
-
-                        "}"
-                )),
-                arguments(of(
-                        "function sum(a, b, c, d, e) {",
-
-                        "}"
-                ))
-        );
     }
 }

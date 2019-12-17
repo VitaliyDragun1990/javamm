@@ -91,7 +91,7 @@ class SimpleThreadRunnerTest {
 
     @Test
     @Order(5)
-    void shouldReturnFalseIfStartedAndAlreadyFinished() throws IllegalAccessException, InterruptedException {
+    void shouldReturnFalseIfStartedAndAlreadyFinished() throws InterruptedException {
         threadRunner.run(ANY_RUNNABLE, ANY_THREAD_NAME);
         waitForThreadToDie(workingThreadStub);
 

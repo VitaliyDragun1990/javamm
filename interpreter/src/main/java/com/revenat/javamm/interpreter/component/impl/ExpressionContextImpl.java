@@ -35,7 +35,6 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ExpressionContextImpl implements ExpressionContext {
@@ -78,21 +77,21 @@ public class ExpressionContextImpl implements ExpressionContext {
     }
 
     private Map<Class<? extends Expression>, ExpressionEvaluator> getExpressionEvaluators(
-                                    final Set<ExpressionEvaluator<?>> expressionEvaluators) {
+        final Set<ExpressionEvaluator<?>> expressionEvaluators) {
         return expressionEvaluators.stream()
-                .peek(this::setExpressionContextIfAware)
-                .collect(
-                        toUnmodifiableMap(
-                                ExpressionEvaluator::getExpressionClass, identity(), checkForEvaluatorDuplicates()));
+            .peek(this::setExpressionContextIfAware)
+            .collect(
+                toUnmodifiableMap(
+                    ExpressionEvaluator::getExpressionClass, identity(), checkForEvaluatorDuplicates()));
     }
 
     private Map<Class<? extends UpdatableExpression>, ExpressionUpdater> getExpressionUpdaters(
-            final Set<ExpressionUpdater<?>> expressionUpdaters) {
+        final Set<ExpressionUpdater<?>> expressionUpdaters) {
         return expressionUpdaters.stream()
-                .peek(this::setExpressionContextIfAware)
-                .collect(
-                        toUnmodifiableMap(
-                                ExpressionUpdater::getExpressionClass, identity(), checkForUpdaterDuplicates()));
+            .peek(this::setExpressionContextIfAware)
+            .collect(
+                toUnmodifiableMap(
+                    ExpressionUpdater::getExpressionClass, identity(), checkForUpdaterDuplicates()));
     }
 
     private void setExpressionContextIfAware(final Object instance) {
@@ -104,14 +103,14 @@ public class ExpressionContextImpl implements ExpressionContext {
     private BinaryOperator<ExpressionEvaluator> checkForEvaluatorDuplicates() {
         return (e1, e2) -> {
             throw configException("Duplicate of ExpressionEvaluator found: expression=%s, evaluator1=%s, evaluator2=%s",
-                    e1.getExpressionClass().getName(), e1, e2);
+                e1.getExpressionClass().getName(), e1, e2);
         };
     }
 
     private BinaryOperator<ExpressionUpdater> checkForUpdaterDuplicates() {
         return (e1, e2) -> {
             throw configException("Duplicate of ExpressionUpdater found: expression=%s, updater1=%s, updater2=%s",
-                    e1.getExpressionClass().getName(), e1, e2);
+                e1.getExpressionClass().getName(), e1, e2);
         };
     }
 

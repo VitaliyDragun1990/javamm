@@ -23,7 +23,6 @@ import com.revenat.javamm.code.fragment.Operation;
  * Represents initialization part of 'for-loop' operation
  *
  * @author Vitaliy Dragun
- *
  */
 public interface ForInitOperation extends Operation {
 

@@ -42,7 +42,8 @@ import static java.util.stream.Collectors.joining;
 
 
 /**
- * Copied from https://github.com/FXMisc/RichTextFX/blob/master/richtextfx-demos/src/main/java/org/fxmisc/richtext/demo/JavaKeywordsAsyncDemo.java
+ * Copied from https://github.com/FXMisc/RichTextFX/blob/master/richtextfx-demos
+ * /src/main/java/org/fxmisc/richtext/demo/JavaKeywordsAsyncDemo.java
  *
  * @author Vitaliy Dragun
  */
@@ -99,11 +100,6 @@ class JavammAsyncSyntaxHighlighter implements SyntaxHighlighter {
     @Override
     public void disable() {
         cleanupWhenDone.unsubscribe();
-    }
-
-    @Override
-    public void highlightNow() {
-        codeArea.setStyleSpans(0, computeHighlighting(codeArea.getText()));
     }
 
     private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {

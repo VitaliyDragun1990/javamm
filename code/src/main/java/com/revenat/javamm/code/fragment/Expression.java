@@ -22,7 +22,6 @@ import com.revenat.javamm.code.component.ExpressionContext;
  * Special type of {@linkplain Lexeme lexeme}. Represents any kind of expression
  *
  * @author Vitaliy Dragun
- *
  */
 public interface Expression extends Lexeme {
 

@@ -29,7 +29,6 @@ import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCur
  * Responsible for updating already defined {@linkplain Variable variable}
  *
  * @author Vitaliy Dragun
- *
  */
 public class VariableExpressionUpdater implements ExpressionUpdater<VariableExpression> {
 

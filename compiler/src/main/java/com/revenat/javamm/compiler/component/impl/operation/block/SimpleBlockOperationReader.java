@@ -19,14 +19,13 @@ package com.revenat.javamm.compiler.component.impl.operation.block;
 
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.Block;
+
 import java.util.ListIterator;
-import java.util.Optional;
 
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatLineContainsOpeningCurlyBraceOnly;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class SimpleBlockOperationReader extends AbstractBlockOperationReader<Block> {
 

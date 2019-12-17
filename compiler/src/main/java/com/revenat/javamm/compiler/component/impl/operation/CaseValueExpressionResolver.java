@@ -24,7 +24,6 @@ import java.util.List;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface CaseValueExpressionResolver {
 

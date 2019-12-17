@@ -55,7 +55,6 @@ class PossibleUnaryAssignmentOperatorAfterClosingParenthesisProcessor
         return (Parenthesis) next;
     }
 
-    @Override
     protected void processEntry() {
         final int expressionPosition = result.size();
         result.add(getParenthesis());

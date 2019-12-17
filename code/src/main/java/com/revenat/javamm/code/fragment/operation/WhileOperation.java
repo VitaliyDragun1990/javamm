@@ -22,8 +22,8 @@ import com.revenat.javamm.code.fragment.SourceLine;
 
 /**
  * Represents {@code while} operation
- * @author Vitaliy Dragun
  *
+ * @author Vitaliy Dragun
  */
 public class WhileOperation extends AbstractLoopOperation {
 

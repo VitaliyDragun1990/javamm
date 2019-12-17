@@ -23,25 +23,23 @@ import java.util.stream.Stream;
 import static com.revenat.javamm.code.syntax.Delimiters.IGNORED_DELIMITERS;
 import static com.revenat.javamm.code.syntax.Delimiters.SIGNIFICANT_TOKEN_DELIMITERS;
 import static com.revenat.javamm.code.syntax.Delimiters.STRING_DELIMITERS;
-
 import static java.util.stream.Collectors.toUnmodifiableSet;
 
 /**
  * Contains utility functions for syntax verification
  *
  * @author Vitaliy Dragun
- *
  */
 public final class SyntaxUtils {
 
     private static final Set<Character> LATIN_CHARS_ONLY = Stream
-            .concat(
-                    Stream.iterate('a', ch -> ch != 'z' + 1, ch -> (char) (ch + 1)),
-                    Stream.iterate('A', ch -> ch != 'Z' + 1, ch -> (char) (ch + 1))
-            ).collect(toUnmodifiableSet());
+        .concat(
+            Stream.iterate('a', ch -> ch != 'z' + 1, ch -> (char) (ch + 1)),
+            Stream.iterate('A', ch -> ch != 'Z' + 1, ch -> (char) (ch + 1))
+        ).collect(toUnmodifiableSet());
 
     private static final Set<Character> DIGITS_ONLY =
-            "0123456789".chars()
+        "0123456789".chars()
             .mapToObj(ch -> (char) ch)
             .collect(toUnmodifiableSet());
 
@@ -82,7 +80,7 @@ public final class SyntaxUtils {
         return !line.isEmpty() && IGNORED_DELIMITERS.contains(line.charAt(line.length() - 1));
     }
 
-    private static String trimIgnoredDelimiters(String line) {
+    private static String trimIgnoredDelimiters(final String line) {
         return line
             .trim()
             .replaceAll("(^\\h*)|(\\h*$)", "");
@@ -90,8 +88,8 @@ public final class SyntaxUtils {
 
     private static boolean verifyOnlyContainsAllowedSymbols(final String token) {
         return token.codePoints()
-                .mapToObj(c -> (char) c)
-                .allMatch(ch -> isLatinChar(ch) || isDigit(ch) || ch == '.');
+            .mapToObj(c -> (char) c)
+            .allMatch(ch -> isLatinChar(ch) || isDigit(ch) || ch == '.');
     }
 
     public static boolean isLatinChar(final char ch) {

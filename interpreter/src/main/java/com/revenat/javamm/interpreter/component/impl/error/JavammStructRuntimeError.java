@@ -23,13 +23,12 @@ import static java.lang.String.format;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class JavammStructRuntimeError extends JavammRuntimeError {
 
     private static final long serialVersionUID = 1L;
 
-    public JavammStructRuntimeError(final String message, final Object...args) {
+    public JavammStructRuntimeError(final String message, final Object... args) {
         super(format(message, args));
     }
 }

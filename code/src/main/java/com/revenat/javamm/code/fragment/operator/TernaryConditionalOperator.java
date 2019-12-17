@@ -22,7 +22,6 @@ import com.revenat.javamm.code.fragment.Operator;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public final class TernaryConditionalOperator implements Operator {
 

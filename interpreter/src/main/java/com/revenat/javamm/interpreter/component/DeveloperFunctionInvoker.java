@@ -26,7 +26,6 @@ import java.util.List;
  * Invokes {@linkplain DeveloperFunction developer functions}
  *
  * @author Vitaliy Dragun
- *
  */
 public interface DeveloperFunctionInvoker {
 

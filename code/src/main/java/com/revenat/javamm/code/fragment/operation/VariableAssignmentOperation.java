@@ -23,10 +23,9 @@ import com.revenat.javamm.code.fragment.expression.VariableExpression;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class VariableAssignmentOperation extends AbstractOperation
-     implements ForInitOperation, ForUpdateOperation {
+    implements ForInitOperation, ForUpdateOperation {
 
     private final VariableExpression variableExpression;
 

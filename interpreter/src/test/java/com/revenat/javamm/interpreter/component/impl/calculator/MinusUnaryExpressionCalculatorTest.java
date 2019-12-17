@@ -17,14 +17,15 @@
 
 package com.revenat.javamm.interpreter.component.impl.calculator;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.unary.MinusUnaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
@@ -32,15 +33,16 @@ import static com.revenat.javamm.code.fragment.expression.TypeExpression.DOUBLE;
 import static com.revenat.javamm.code.fragment.expression.TypeExpression.INTEGER;
 import static com.revenat.javamm.code.util.TypeUtils.getType;
 import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("a minus '-' unary expression calculator")
 class MinusUnaryExpressionCalculatorTest extends AbstractUnaryExpressionCalculatorTest {
+
+    static Stream<Object> unsupportedTypesProvider() {
+        return Stream.of(null, true, false, "10", INTEGER, DOUBLE);
+    }
 
     @Test
     @Order(1)
@@ -63,10 +65,6 @@ class MinusUnaryExpressionCalculatorTest extends AbstractUnaryExpressionCalculat
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(value));
 
         assertErrorMessageContains(e, "Operator '-' is not supported for type: %s", getType(value));
-    }
-
-    static Stream<Object> unsupportedTypesProvider() {
-        return Stream.of(null, true, false, "10", INTEGER, DOUBLE);
     }
 
     @Override

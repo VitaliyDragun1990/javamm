@@ -19,7 +19,6 @@ package com.revenat.javamm.code.util;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public final class TypeUtils {
 
@@ -40,9 +39,9 @@ public final class TypeUtils {
      * @param type   specific type to check values for
      * @param values some values to check for type
      * @return {@code true} if all specified {@code values} have specified
-     *         {@code type}, {@code false} otherwise.
+     * {@code type}, {@code false} otherwise.
      * @apiNote if any value from the provided {@code values} is null, {@code false}
-     *          will be returned
+     * will be returned
      */
     public static boolean confirmType(final Class<?> type, final Object... values) {
         for (final Object value : values) {

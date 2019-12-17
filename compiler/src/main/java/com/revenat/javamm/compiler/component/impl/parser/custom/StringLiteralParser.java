@@ -27,7 +27,6 @@ import java.util.Optional;
  * line and extracts such literal if any.
  *
  * @author Vitaliy Dragun
- *
  */
 class StringLiteralParser {
 
@@ -80,7 +79,7 @@ class StringLiteralParser {
             return quotedLiteralFrom(line, DOUBLE_QUOTE_NOTATION);
         } else {
             throw new IllegalArgumentException("Can not extract string literal from line which does not contain it. " +
-                    "Check literal presence before calling extract() with isStringLiteralPresent() method");
+                "Check literal presence before calling extract() with isStringLiteralPresent() method");
         }
     }
 
@@ -89,7 +88,7 @@ class StringLiteralParser {
         final int toPosition = getToPosition(line, fromPosition, quotedNotation);
         final String quotedString = getQuotedString(line, fromPosition, toPosition);
         final String beforeLiteralFragment = line.substring(0, fromPosition);
-        final String afterLiteralFragment = line.substring(toPosition + 1, line.length());
+        final String afterLiteralFragment = line.substring(toPosition + 1);
         return new LiteralParserResult(beforeLiteralFragment, quotedString, afterLiteralFragment);
     }
 
@@ -118,8 +117,8 @@ class StringLiteralParser {
         private final String tailFragment;
 
         private LiteralParserResult(final String headFragment,
-                            final String literal,
-                            final String tailFragment) {
+                                    final String literal,
+                                    final String tailFragment) {
             this.literal = literal;
             this.headFragment = headFragment;
             this.tailFragment = tailFragment;

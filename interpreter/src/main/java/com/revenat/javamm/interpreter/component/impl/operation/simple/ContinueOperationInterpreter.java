@@ -24,7 +24,6 @@ import com.revenat.javamm.interpreter.component.impl.operation.exception.Continu
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ContinueOperationInterpreter extends AbstractOperationInterpreter<ContinueOperation> {
 

@@ -35,10 +35,9 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class VariableAssignmentOperationReader extends AbstractOperationReader<VariableAssignmentOperation>
-     implements ForInitOperationReader, ForUpdateOperationReader {
+    implements ForInitOperationReader, ForUpdateOperationReader {
 
     private static final String ASSIGNMENT_OPERATOR = "=";
 

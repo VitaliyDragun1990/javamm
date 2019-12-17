@@ -30,7 +30,6 @@ import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCur
  * expressions}
  *
  * @author Vitaliy Dragun
- *
  */
 public class VariableExpressionEvaluator implements ExpressionEvaluator<VariableExpression> {
 

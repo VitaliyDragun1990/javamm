@@ -95,18 +95,19 @@ class CodeTemplateHelperImpl implements CodeTemplateHelper {
         for (int i = 0; i < line.length(); i++) {
             final Character ch = line.charAt(i);
             if (STRING_DELIMITERS.contains(ch)) {
-                if (ch.equals(stringDelimiter)) { // string literal ends
+                if (ch.equals(stringDelimiter)) {
                     stringDelimiter = null;
                     builder.delete(0, builder.length());
-                } else if (stringDelimiter == null) { // new string literal begins
+                } else if (stringDelimiter == null) {
                     stringDelimiter = ch;
                 }
-            } else if (stringDelimiter == null) { // not inside string literal
+            } else if (stringDelimiter == null) {
                 builder.append(ch);
             }
         }
 
-        if (stringDelimiter != null) { // string literal without ending delimiter
+        // string literal without ending delimiter
+        if (stringDelimiter != null) {
             builder.delete(0, builder.length());
         }
         return builder.toString();

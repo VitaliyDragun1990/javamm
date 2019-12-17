@@ -17,11 +17,6 @@
 
 package com.revenat.javamm.interpreter.component.impl;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.revenat.javamm.code.exception.ConfigException;
 import com.revenat.javamm.code.fragment.Operation;
 import com.revenat.javamm.code.fragment.SourceLine;
@@ -31,10 +26,7 @@ import com.revenat.javamm.interpreter.test.doubles.AbstractOperationInterpreterS
 import com.revenat.javamm.interpreter.test.doubles.OperationDummy;
 import com.revenat.javamm.interpreter.test.doubles.OperationInterpreterSpy;
 import com.revenat.javamm.interpreter.test.helper.TestCurrentRuntimeManager;
-
-import java.util.List;
-import java.util.Set;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,13 +37,21 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+import java.util.Set;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+@SuppressWarnings("SameParameterValue")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a block operation interpreter")
 class BlockOperationInterpreterTest {
     private static final OperationInterpreterSpy OPERATION_A_INTERPRETER = new OperationInterpreterSpy();
+
     private static final OperationInterpreterSpy ANOTHER_OPERATION_A_INTERPRETER = new OperationInterpreterSpy();
 
     private BlockOperationInterpreter blockInterpreter;
@@ -62,14 +62,14 @@ class BlockOperationInterpreterTest {
         TestCurrentRuntimeManager.setFakeCurrentRuntime(SourceLine.EMPTY_SOURCE_LINE);
     }
 
-    @BeforeEach
-    void setUp() {
-        TestCurrentRuntimeManager.refreshFakeCurrentRuntime();
-    }
-
     @AfterAll
     static void releaseCurrentRuntime() {
         TestCurrentRuntimeManager.releaseFakeCurrentRuntime();
+    }
+
+    @BeforeEach
+    void setUp() {
+        TestCurrentRuntimeManager.refreshFakeCurrentRuntime();
     }
 
     private Block blockOf(final Operation... operations) {
@@ -94,7 +94,7 @@ class BlockOperationInterpreterTest {
     @Order(2)
     void canNotBeCreatedWithSeveralInterpretersForSameOperation() {
         assertThrows(ConfigException.class,
-                () -> new BlockOperationInterpreterImpl(Set.of(OPERATION_A_INTERPRETER, ANOTHER_OPERATION_A_INTERPRETER)));
+            () -> new BlockOperationInterpreterImpl(Set.of(OPERATION_A_INTERPRETER, ANOTHER_OPERATION_A_INTERPRETER)));
     }
 
     @Test
@@ -112,7 +112,7 @@ class BlockOperationInterpreterTest {
 
         blockInterpreter.interpret(blockOf(new OperationDummy(), new OperationDummy()));
 
-       assertInterpreterWorked(OPERATION_A_INTERPRETER, 2);
+        assertInterpreterWorked(OPERATION_A_INTERPRETER, 2);
     }
 
     @Test

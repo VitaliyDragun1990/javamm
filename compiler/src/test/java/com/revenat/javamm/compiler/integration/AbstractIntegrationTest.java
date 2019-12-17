@@ -28,7 +28,6 @@ import java.util.List;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public abstract class AbstractIntegrationTest {
 

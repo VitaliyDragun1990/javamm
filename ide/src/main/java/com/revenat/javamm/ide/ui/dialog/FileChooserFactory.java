@@ -17,7 +17,6 @@
 
 package com.revenat.javamm.ide.ui.dialog;
 
-import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Window;
 
@@ -34,7 +33,6 @@ public interface FileChooserFactory {
     /**
      * Shows dialog window to open existing file with javamm source code in it
      *
-     * @param ownerWindow
      * @return {@linkplain Optional optional} object with chosen file in it,
      * or empty optional if the user doesn't choose any
      */
@@ -44,7 +42,6 @@ public interface FileChooserFactory {
      * Shows dialog window to save javamm source code from code editor pane to some
      * file.
      *
-     * @param ownerWindow
      * @param initialFileName desired name of the file to be saved
      * @return {@linkplain Optional optional} object with chosen file in it,
      * or empty optional if the user cancel save operation

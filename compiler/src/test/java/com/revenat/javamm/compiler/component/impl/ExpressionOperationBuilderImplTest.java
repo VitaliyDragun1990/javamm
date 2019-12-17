@@ -17,12 +17,6 @@
 
 package com.revenat.javamm.compiler.component.impl;
 
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.Variable;
@@ -35,9 +29,7 @@ import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.ExpressionOperationBuilder;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.test.helper.CustomAsserts;
-
-import java.util.List;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -48,7 +40,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import com.revenat.juinit.addons.ReplaceCamelCase;
+
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -97,7 +96,7 @@ class ExpressionOperationBuilderImplTest {
         final Expression expression = createNotAssignmentExpression();
 
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> expressionOperationBuilder.build(expression, SOURCE_LINE));
+            () -> expressionOperationBuilder.build(expression, SOURCE_LINE));
 
         CustomAsserts.assertErrorMessageContains(e, "Expression '%s' is not allowed here", SOURCE_LINE.getCommand());
     }

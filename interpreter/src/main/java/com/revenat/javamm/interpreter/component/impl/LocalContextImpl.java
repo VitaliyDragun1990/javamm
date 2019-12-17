@@ -23,11 +23,11 @@ import com.revenat.javamm.interpreter.model.LocalContext;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class LocalContextImpl implements LocalContext {
     private final Map<Variable, Object> variables = new HashMap<>();
@@ -82,8 +82,8 @@ public class LocalContextImpl implements LocalContext {
     private void assertNoSuchVariableDefined(final Variable variable) {
         if (variables.containsKey(variable)) {
             throw new JavammLineRuntimeError(
-                    "Can not set value for final '%s': variable with same name is already defined",
-                    variable.getName());
+                "Can not set value for final '%s': variable with same name is already defined",
+                variable.getName());
         }
     }
 

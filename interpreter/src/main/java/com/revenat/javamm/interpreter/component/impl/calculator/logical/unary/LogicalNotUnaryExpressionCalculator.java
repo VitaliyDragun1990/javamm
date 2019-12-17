@@ -28,7 +28,6 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
  * implementation for 'logical not' ({@code !}) operator
  *
  * @author Vitaliy Dragun
- *
  */
 public class LogicalNotUnaryExpressionCalculator extends AbstractUnaryExpressionCalculator {
 

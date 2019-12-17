@@ -17,20 +17,12 @@
 
 package com.revenat.javamm.interpreter.component.impl.operation.simple;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import com.revenat.javamm.code.component.Console;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.PrintlnOperation;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionContextDummy;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionStub;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,7 +32,13 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -52,15 +50,15 @@ class PrintlnOperationInterpreterTest {
 
     private PrintlnOperationInterpreter interpreter;
 
+    @AfterAll
+    static void setOriginalOutput() {
+        System.setOut(ORIGINAL_OUTPUT);
+    }
+
     @BeforeEach
     void setUp() {
         System.setOut(new PrintStream(memoryOutput));
         interpreter = new PrintlnOperationInterpreter(new ExpressionContextDummy(), Console.DEFAULT);
-    }
-
-    @AfterAll
-    static void setOriginalOutput() {
-        System.setOut(ORIGINAL_OUTPUT);
     }
 
     @Test
@@ -92,8 +90,8 @@ class PrintlnOperationInterpreterTest {
 
     private PrintlnOperation printlnOperation(final String text) {
         return new PrintlnOperation(
-                new SourceLine("test", 1, List.of("println", "(", text, ")")),
-                new ExpressionStub(text)
+            new SourceLine("test", 1, List.of("println", "(", text, ")")),
+            new ExpressionStub(text)
         );
     }
 }

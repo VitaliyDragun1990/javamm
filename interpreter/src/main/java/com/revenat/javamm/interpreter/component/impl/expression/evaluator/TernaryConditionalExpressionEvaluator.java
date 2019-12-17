@@ -23,10 +23,9 @@ import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class TernaryConditionalExpressionEvaluator extends AbstractExpressionEvaluator
-        implements ExpressionEvaluator<TernaryConditionalExpression> {
+    implements ExpressionEvaluator<TernaryConditionalExpression> {
 
     private final CalculatorFacade calculatorFacade;
 

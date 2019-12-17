@@ -21,7 +21,6 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public abstract class InterruptOperationException extends RuntimeException {
 

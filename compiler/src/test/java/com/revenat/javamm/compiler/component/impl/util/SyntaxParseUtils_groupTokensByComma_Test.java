@@ -17,22 +17,9 @@
 
 package com.revenat.javamm.compiler.component.impl.util;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsEmptyCollection.empty;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.groupTokensByComma;
-import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -43,7 +30,17 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.groupTokensByComma;
+import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -70,25 +67,25 @@ public class SyntaxParseUtils_groupTokensByComma_Test {
 
     @ParameterizedTest
     @CsvSource(delimiter = ';', value = {
-            "a;                                                                 a",
-            "a , b;                                                             a|b",
-            "a , ( b;                                                           a|( b",
-            "a - 2 , b + 1;                                                     a - 2|b + 1",
-            "a - 2 , b + 1 , 4 , a + ( 4 * b );                                 a - 2|b + 1|4|a + ( 4 * b )",
-            "a [ i - 8 ] , { 4 } , a + ( 4 * b );                               a [ i - 8 ]|{ 4 }|a + ( 4 * b )",
-            "sum ( 4 , a ) , { 1 , 2 } , a [ sum ( 3 , 5 ) ] );                 sum ( 4 , a )|{ 1 , 2 }|a [ sum ( 3 , 5 ) ] )",
-            "sum ( sum ( 4 , a ) , a ) , { 1 , 2 } , a [ sum ( 3 , 5 ) ] );     sum ( sum ( 4 , a ) , a )|{ 1 , 2 }|a [ sum ( 3 , 5 ) ] )",
-            "sum ( sum ( 4 , sum ( 4 , a ) ) , a ) , { 1 , 2 };                 sum ( sum ( 4 , sum ( 4 , a ) ) , a )|{ 1 , 2 }",
-            // Missing or redundant comma error is not expected here
-            "a , sum ( 4 , a ) , fun ( 3 , fun ( 3 , , 5 ) );                   a|sum ( 4 , a )|fun ( 3 , fun ( 3 , , 5 ) )",
-            "sum ( 4 , , a ) , { 1 , , 2 } , a [ sum ( 3 , , 5 ) ] );           sum ( 4 , , a )|{ 1 , , 2 }|a [ sum ( 3 , , 5 ) ] )",
+        "a;                                                                 a",
+        "a , b;                                                             a|b",
+        "a , ( b;                                                           a|( b",
+        "a - 2 , b + 1;                                                     a - 2|b + 1",
+        "a - 2 , b + 1 , 4 , a + ( 4 * b );                                 a - 2|b + 1|4|a + ( 4 * b )",
+        "a [ i - 8 ] , { 4 } , a + ( 4 * b );                               a [ i - 8 ]|{ 4 }|a + ( 4 * b )",
+        "sum ( 4 , a ) , { 1 , 2 } , a [ sum ( 3 , 5 ) ] );                 sum ( 4 , a )|{ 1 , 2 }|a [ sum ( 3 , 5 ) ] )",
+        "sum ( sum ( 4 , a ) , a ) , { 1 , 2 } , a [ sum ( 3 , 5 ) ] );     sum ( sum ( 4 , a ) , a )|{ 1 , 2 }|a [ sum ( 3 , 5 ) ] )",
+        "sum ( sum ( 4 , sum ( 4 , a ) ) , a ) , { 1 , 2 };                 sum ( sum ( 4 , sum ( 4 , a ) ) , a )|{ 1 , 2 }",
+        // Missing or redundant comma error is not expected here
+        "a , sum ( 4 , a ) , fun ( 3 , fun ( 3 , , 5 ) );                   a|sum ( 4 , a )|fun ( 3 , fun ( 3 , , 5 ) )",
+        "sum ( 4 , , a ) , { 1 , , 2 } , a [ sum ( 3 , , 5 ) ] );           sum ( 4 , , a )|{ 1 , , 2 }|a [ sum ( 3 , , 5 ) ] )",
     })
     @Order(3)
     void shouldGroupProvidedTokensByComma(final String sourceExpression, final String expectedGroups) {
         final List<String> tokens = splitBy(sourceExpression, " ");
         final List<List<String>> expectedResult = splitBy(expectedGroups, "\\|").stream()
-                .map(group -> splitBy(group, " "))
-                .collect(Collectors.toUnmodifiableList());
+            .map(group -> splitBy(group, " "))
+            .collect(Collectors.toUnmodifiableList());
 
         final List<List<String>> result = groupTokensByComma(tokens, SOURCE_LINE);
 
@@ -97,11 +94,11 @@ public class SyntaxParseUtils_groupTokensByComma_Test {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "a ,",
-            ", a",
-            "a , , b",
-            "a , b ,",
-            "sum ( 4 , a ) , { 1 , 2 } , , a [ sum ( 3 , 5 ) ] )",
+        "a ,",
+        ", a",
+        "a , , b",
+        "a , b ,",
+        "sum ( 4 , a ) , { 1 , 2 } , , a [ sum ( 3 , 5 ) ] )",
     })
     @Order(4)
     void shouldFailIfMissingValueOrRedundantCommaIsPresent(final String sourceExpression) {

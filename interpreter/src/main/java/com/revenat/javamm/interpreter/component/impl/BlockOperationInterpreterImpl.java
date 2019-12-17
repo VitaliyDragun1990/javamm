@@ -23,18 +23,18 @@ import com.revenat.javamm.code.fragment.operation.Block;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreter;
 import com.revenat.javamm.interpreter.component.BlockOperationInterpreterAware;
 import com.revenat.javamm.interpreter.component.OperationInterpreter;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BinaryOperator;
+
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 import static com.revenat.javamm.interpreter.model.CurrentRuntimeProvider.getCurrentRuntime;
-
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toUnmodifiableMap;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 @SuppressWarnings("rawtypes")
 public class BlockOperationInterpreterImpl implements BlockOperationInterpreter {
@@ -43,6 +43,7 @@ public class BlockOperationInterpreterImpl implements BlockOperationInterpreter 
     /**
      * Creates new block operation interpreter with set of operation interpreters
      * for defined operations
+     *
      * @throws ConfigException if provided set of operation interpreters contains
      *                         several interpreters for the same operation
      */
@@ -74,7 +75,7 @@ public class BlockOperationInterpreterImpl implements BlockOperationInterpreter 
     }
 
     private Map<Class<? extends Operation>, OperationInterpreter> buildOperationInterpreterMap(
-            final Set<OperationInterpreter<?>> operationInterpreters) {
+        final Set<OperationInterpreter<?>> operationInterpreters) {
         final Map<Class<? extends Operation>, OperationInterpreter> result = composeInterpreters(operationInterpreters);
         result.values().forEach(this::setBlockOperationInterpreterIfRequired);
 
@@ -82,16 +83,16 @@ public class BlockOperationInterpreterImpl implements BlockOperationInterpreter 
     }
 
     private Map<Class<? extends Operation>, OperationInterpreter> composeInterpreters(
-            final Set<OperationInterpreter<?>> operationInterpreters) {
+        final Set<OperationInterpreter<?>> operationInterpreters) {
         return operationInterpreters.stream()
-                .collect(toUnmodifiableMap(OperationInterpreter::getOperationClass, identity(), checkDuplicates()));
+            .collect(toUnmodifiableMap(OperationInterpreter::getOperationClass, identity(), checkDuplicates()));
     }
 
     private BinaryOperator<OperationInterpreter> checkDuplicates() {
         return (i1, i2) -> {
             throw new ConfigException(String.format(
-                    "Duplicate of OperationInterpreter was found for operation:=%s, interpreter1=%s, interpreter2=%s",
-                    i1.getOperationClass().getName(), i1, i2));
+                "Duplicate of OperationInterpreter was found for operation:=%s, interpreter1=%s, interpreter2=%s",
+                i1.getOperationClass().getName(), i1, i2));
         };
     }
 

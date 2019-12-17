@@ -27,7 +27,6 @@ import static java.util.stream.Collectors.joining;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class FunctionInvocationExpression implements Expression {
 
@@ -51,8 +50,8 @@ public class FunctionInvocationExpression implements Expression {
     @Override
     public String toString() {
         return String.format("%s(%s)",
-                functionName.getName(),
-                argumentList(arguments));
+            functionName.getName(),
+            argumentList(arguments));
     }
 
     private String argumentList(final List<Expression> args) {

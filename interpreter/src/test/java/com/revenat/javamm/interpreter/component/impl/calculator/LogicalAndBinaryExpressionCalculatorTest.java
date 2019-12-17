@@ -17,21 +17,11 @@
 
 package com.revenat.javamm.interpreter.component.impl.calculator;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.logical.bianry.LogicalAndBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionSpy;
-
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.code.util.TypeUtils.getType;
-import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -39,8 +29,25 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.code.util.TypeUtils.getType;
+import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @DisplayName("logical and (&&) binary expression calculator")
 public class LogicalAndBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
+
+    static Stream<Arguments> unsupportedOperandProvider() {
+        return Stream.of(
+            Arguments.arguments("Hello"),
+            Arguments.arguments((Object) null),
+            Arguments.arguments(125),
+            Arguments.arguments(150.25)
+        );
+    }
 
     @Test
     @Order(1)
@@ -85,7 +92,7 @@ public class LogicalAndBinaryExpressionCalculatorTest extends AbstractBinaryExpr
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(operand1, true));
 
         assertErrorMessageContains(e, "Operator '&&' is not supported for types: %s and %s",
-                getType(operand1), getType(operand2));
+            getType(operand1), getType(operand2));
     }
 
     @ParameterizedTest
@@ -97,16 +104,7 @@ public class LogicalAndBinaryExpressionCalculatorTest extends AbstractBinaryExpr
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(operand1, operand2));
 
         assertErrorMessageContains(e, "Operator '&&' is not supported for types: %s and %s",
-                getType(operand1), getType(operand2));
-    }
-
-    static Stream<Arguments> unsupportedOperandProvider() {
-        return Stream.of(
-                Arguments.arguments("Hello"),
-                Arguments.arguments((Object)null),
-                Arguments.arguments(125),
-                Arguments.arguments(150.25)
-                );
+            getType(operand1), getType(operand2));
     }
 
     @Override

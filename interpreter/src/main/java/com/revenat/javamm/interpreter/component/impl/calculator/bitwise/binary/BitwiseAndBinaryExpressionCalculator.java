@@ -19,6 +19,7 @@ package com.revenat.javamm.interpreter.component.impl.calculator.bitwise.binary;
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_BITWISE_AND;
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_AND;
 
@@ -27,7 +28,6 @@ import static com.revenat.javamm.code.fragment.operator.BinaryOperator.BITWISE_A
  * implementation for binary bitwise and ('&') operator
  *
  * @author Vitaliy Dragun
- *
  */
 public final class BitwiseAndBinaryExpressionCalculator extends AbstractBitwiseBinaryExpressionCalculator {
 

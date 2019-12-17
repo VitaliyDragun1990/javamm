@@ -17,17 +17,9 @@
 
 package com.revenat.javamm.vm.integration.function;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import com.revenat.javamm.code.fragment.Void;
 import com.revenat.javamm.vm.integration.AbstractIntegrationTest;
-
-import java.util.List;
-import java.util.stream.Stream;
-
-import static java.util.List.of;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -36,7 +28,12 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static java.util.List.of;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("return operation interpreter")
@@ -54,83 +51,83 @@ public class ReturnOperationInterpreterIntegrationTest extends AbstractIntegrati
     static class ReturnOperationProvider implements ArgumentsProvider {
 
         @Override
-        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
+        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) {
             return Stream.of(
-                    // 1 ---------------------------------------
-                    arguments(of(
-                            "function main(){",
-                            "   return",
-                            "   println(1)",
-                            "}"
-                    ), of()),
-                    // 2 ---------------------------------------
-                    arguments(of(
-                            "function main(){",
-                            "   println(sum(1, 2))",
-                            "}",
+                // 1 ---------------------------------------
+                arguments(of(
+                    "function main(){",
+                    "   return",
+                    "   println(1)",
+                    "}"
+                ), of()),
+                // 2 ---------------------------------------
+                arguments(of(
+                    "function main(){",
+                    "   println(sum(1, 2))",
+                    "}",
 
-                            "function sum(a, b){",
-                            "   return a + b",
-                            "}"
-                    ), of(3)),
-                    // 3 ---------------------------------------
-                    arguments(of(
-                            "function main(){",
-                            "   while(true){",
-                            "       return",
-                            "   }",
-                            "}"
-                    ), of()),
-                    // 4 ---------------------------------------
-                    arguments(of(
-                            "function main(){",
-                            "   println(sayHello())",
-                            "}",
+                    "function sum(a, b){",
+                    "   return a + b",
+                    "}"
+                ), of(3)),
+                // 3 ---------------------------------------
+                arguments(of(
+                    "function main(){",
+                    "   while(true){",
+                    "       return",
+                    "   }",
+                    "}"
+                ), of()),
+                // 4 ---------------------------------------
+                arguments(of(
+                    "function main(){",
+                    "   println(sayHello())",
+                    "}",
 
-                            "function sayHello(){",
-                            "   println('Hello')",
-                            "}"
-                   ), of("Hello", Void.INSTANCE)),
-                    // 5 ---------------------------------------
-                    arguments(of(
-                            "function main(){",
-                            "   println(sayHello())",
-                            "}",
+                    "function sayHello(){",
+                    "   println('Hello')",
+                    "}"
+                ), of("Hello", Void.INSTANCE)),
+                // 5 ---------------------------------------
+                arguments(of(
+                    "function main(){",
+                    "   println(sayHello())",
+                    "}",
 
-                            "function sayHello(){",
-                            "   println('Hello')",
-                            "   return",
-                            "}"
-                   ), of("Hello", Void.INSTANCE)),
-                    // 6 ---------------------------------------
-                    arguments(of(
-                            "function main(){",
-                            "   var a = function1()",
-                            "   var b = function2()",
-                            "   println(a typeof void)",
-                            "   println(b typeof void)",
-                            "}",
+                    "function sayHello(){",
+                    "   println('Hello')",
+                    "   return",
+                    "}"
+                ), of("Hello", Void.INSTANCE)),
+                // 6 ---------------------------------------
+                arguments(of(
+                    "function main(){",
+                    "   var a = function1()",
+                    "   var b = function2()",
+                    "   println(a typeof void)",
+                    "   println(b typeof void)",
+                    "}",
 
-                            "function function1(){",
+                    "function function1(){",
 
-                            "}",
-                            "function function2(){",
-                            "   return",
-                            "}"
-                   ), of(true, true)),
-                    // 7 ---------------------------------------
-                    arguments(of(
-                            "function main(){",
-                            "   println(calculate(1, 2))",
-                            "}",
+                    "}",
+                    "function function2(){",
+                    "   return",
+                    "}"
+                ), of(true, true)),
+                // 7 ---------------------------------------
+                arguments(of(
+                    "function main(){",
+                    "   println(calculate(1, 2))",
+                    "}",
 
-                            "function calculate(a, b){",
-                            "   return ( a + 1 ) * ( 2 * ( 32 - b )) + sum (a, b)",
-                            "}",
-                            "function sum(a, b){",
-                            "   return a + b",
-                            "}"
-                  ), of(123))
+                    "function calculate(a, b){",
+                    "   return ( a + 1 ) * ( 2 * ( 32 - b )) + sum (a, b)",
+                    "}",
+                    "function sum(a, b){",
+                    "   return a + b",
+                    "}"
+                ), of(123))
             );
         }
     }

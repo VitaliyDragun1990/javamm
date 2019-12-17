@@ -19,7 +19,6 @@ package com.revenat.javamm.code.fragment;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface FunctionName extends Comparable<FunctionName>, CompiledCodeFragment {
 

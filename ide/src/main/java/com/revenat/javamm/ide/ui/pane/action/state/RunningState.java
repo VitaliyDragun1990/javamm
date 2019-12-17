@@ -21,7 +21,6 @@ import com.revenat.javamm.ide.ui.listener.ActionListener;
 import com.revenat.javamm.ide.ui.listener.ActionStateManager;
 
 import static com.revenat.javamm.ide.ui.pane.action.state.ActionPaneState.StateName.EDITING;
-import static com.revenat.javamm.ide.ui.pane.action.state.ActionPaneState.StateName.RUNNING;
 
 /**
  * @author Vitaliy Dragun

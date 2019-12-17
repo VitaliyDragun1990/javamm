@@ -32,7 +32,6 @@ import static java.util.Objects.requireNonNull;
  * machine
  *
  * @author Vitaliy Dragun
- *
  */
 public class VirtualMachineBuilder {
 
@@ -45,8 +44,8 @@ public class VirtualMachineBuilder {
 
     public VirtualMachine build() {
         return new VirtualMachineImpl(
-                buildCompilerConfiguration().getCompiler(),
-                buildInterpreterConfigurator().getInterpreter());
+            buildCompilerConfiguration().getCompiler(),
+            buildInterpreterConfigurator().getInterpreter());
     }
 
     private CompilerConfigurator buildCompilerConfiguration() {

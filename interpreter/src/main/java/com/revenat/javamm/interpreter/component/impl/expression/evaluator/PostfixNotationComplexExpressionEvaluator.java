@@ -26,6 +26,7 @@ import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.interpreter.component.CalculatorFacade;
 import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -37,10 +38,9 @@ import static com.revenat.javamm.code.util.LexemeUtils.isUnaryOperator;
  * notation expressions}
  *
  * @author Vitaliy Dragun
- *
  */
 public class PostfixNotationComplexExpressionEvaluator extends AbstractExpressionEvaluator
-        implements ExpressionEvaluator<PostfixNotationComplexExpression> {
+    implements ExpressionEvaluator<PostfixNotationComplexExpression> {
 
     private final CalculatorFacade calculator;
 

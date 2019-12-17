@@ -21,7 +21,6 @@ import com.revenat.javamm.interpreter.model.LocalContext;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface LocalContextBuilder {
 

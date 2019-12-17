@@ -25,9 +25,7 @@ import com.revenat.javamm.interpreter.component.DeveloperFunctionInvoker;
 import com.revenat.javamm.interpreter.component.ExpressionEvaluator;
 import com.revenat.javamm.interpreter.component.ExpressionUpdater;
 import com.revenat.javamm.interpreter.component.FunctionInvokerBuilder;
-import com.revenat.javamm.interpreter.component.LocalContextBuilder;
 import com.revenat.javamm.interpreter.component.OperationInterpreter;
-import com.revenat.javamm.interpreter.component.RuntimeBuilder;
 import com.revenat.javamm.interpreter.component.impl.BlockOperationInterpreterImpl;
 import com.revenat.javamm.interpreter.component.impl.CalculatorFacadeImpl;
 import com.revenat.javamm.interpreter.component.impl.DeveloperFunctionInvokerImpl;
@@ -88,35 +86,10 @@ import java.util.Set;
  * {@link Interpreter}
  *
  * @author Vitaliy Dragun
- *
  */
 public class InterpreterConfigurator {
 
     public static final int MAX_STACK_SIZE = 10;
-
-    private final CalculatorFacade calculatorFacade;
-
-    private final Set<ExpressionEvaluator<?>> expressionEvaluators;
-
-    private final Set<ExpressionUpdater<?>> expressionUpdaters;
-
-    private final ExpressionContext expressionContext;
-
-    private final Console console;
-
-    private final Set<OperationInterpreter<?>> operationInterpreters;
-
-    private final BlockOperationInterpreter blockOperationInterpreter;
-
-    private final RuntimeBuilderImpl runtimeBuilderImpl;
-
-    private final RuntimeBuilder runtimeBuilder;
-
-    private final LocalContextBuilder localContextBuilder;
-
-    private final DeveloperFunctionInvoker developerFunctionInvoker;
-
-    private final FunctionInvokerBuilder functionInvokerBuilder;
 
     private final Interpreter interpreter;
 
@@ -124,8 +97,9 @@ public class InterpreterConfigurator {
         this(Console.DEFAULT);
     }
 
-    public InterpreterConfigurator(Console console) {
-        this.calculatorFacade = new CalculatorFacadeImpl(
+    @SuppressWarnings({"checkstyle:FinalParameters", "checkstyle:MethodLength"})
+    public InterpreterConfigurator(final Console console) {
+        final CalculatorFacade calculatorFacade = new CalculatorFacadeImpl(
             Set.of(
                 AdditionBinaryExpressionCalculator.createNormalCalculator(),
                 AdditionBinaryExpressionCalculator.createAssignmentCalculator(),
@@ -175,22 +149,20 @@ public class InterpreterConfigurator {
                 new HashCodeUnaryExpressionCalculator()
             ));
 
-        this.expressionEvaluators = Set.of(
+        final Set<ExpressionEvaluator<?>> expressionEvaluators = Set.of(
             new VariableExpressionEvaluator(),
             new PostfixNotationComplexExpressionEvaluator(calculatorFacade),
             new TernaryConditionalExpressionEvaluator(calculatorFacade),
             new FunctionInvocationExpressionEvaluator()
         );
 
-        this.expressionUpdaters = Set.of(
+        final Set<ExpressionUpdater<?>> expressionUpdaters = Set.of(
             new VariableExpressionUpdater()
         );
 
-        this.expressionContext = new ExpressionContextImpl(expressionEvaluators, expressionUpdaters);
+        final ExpressionContext expressionContext = new ExpressionContextImpl(expressionEvaluators, expressionUpdaters);
 
-        this.console = console;
-
-        this.operationInterpreters = Set.of(
+        final Set<OperationInterpreter<?>> operationInterpreters = Set.of(
             new PrintlnOperationInterpreter(expressionContext, console),
             new VariableDeclarationOperationInterpreter(expressionContext),
             new VariableAssignmentOperationInterpreter(expressionContext),
@@ -206,20 +178,17 @@ public class InterpreterConfigurator {
             new ReturnOperationInterpreter(expressionContext)
         );
 
-        this.blockOperationInterpreter = new BlockOperationInterpreterImpl(operationInterpreters);
+        final BlockOperationInterpreter blockOperationInterpreter
+            = new BlockOperationInterpreterImpl(operationInterpreters);
 
-        this.runtimeBuilderImpl = new RuntimeBuilderImpl(MAX_STACK_SIZE);
+        final RuntimeBuilderImpl runtimeBuilderImpl = new RuntimeBuilderImpl(MAX_STACK_SIZE);
 
-        this.runtimeBuilder = runtimeBuilderImpl;
+        final DeveloperFunctionInvoker developerFunctionInvoker
+            = new DeveloperFunctionInvokerImpl(runtimeBuilderImpl, blockOperationInterpreter, expressionContext);
 
-        this.localContextBuilder = runtimeBuilderImpl;
+        final FunctionInvokerBuilder functionInvokerBuilder = new FunctionInvokerBuilderImpl(developerFunctionInvoker);
 
-        this.developerFunctionInvoker =
-            new DeveloperFunctionInvokerImpl(localContextBuilder, blockOperationInterpreter, expressionContext);
-
-        this.functionInvokerBuilder = new FunctionInvokerBuilderImpl(developerFunctionInvoker);
-
-        this.interpreter = new InterpreterImpl(functionInvokerBuilder, runtimeBuilder);
+        this.interpreter = new InterpreterImpl(functionInvokerBuilder, runtimeBuilderImpl);
     }
 
     public Interpreter getInterpreter() {

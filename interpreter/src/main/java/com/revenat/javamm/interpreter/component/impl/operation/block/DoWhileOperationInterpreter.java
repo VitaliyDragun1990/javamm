@@ -23,12 +23,11 @@ import com.revenat.javamm.interpreter.component.CalculatorFacade;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class DoWhileOperationInterpreter extends AbstractLoopBlockOperationInterpreter<DoWhileOperation> {
 
     public DoWhileOperationInterpreter(final ExpressionContext expressionContext,
-                                          final CalculatorFacade calculatorFacade) {
+                                       final CalculatorFacade calculatorFacade) {
         super(expressionContext, calculatorFacade);
     }
 

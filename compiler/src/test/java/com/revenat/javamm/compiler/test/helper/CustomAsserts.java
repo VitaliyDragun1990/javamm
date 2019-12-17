@@ -17,14 +17,12 @@
 
 package com.revenat.javamm.compiler.test.helper;
 
+import static java.lang.String.format;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import static java.lang.String.format;
-
 /**
  * @author Vitaliy Dragun
- *
  */
 public class CustomAsserts {
 

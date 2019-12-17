@@ -27,7 +27,6 @@ import java.util.List;
  * Responsible for resolving expressions
  *
  * @author Vitaliy Dragun
- *
  */
 public interface ExpressionResolver {
 

@@ -26,7 +26,6 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class SwitchOperation extends AbstractOperation {
 

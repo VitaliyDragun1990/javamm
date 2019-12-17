@@ -28,7 +28,6 @@ import com.revenat.javamm.compiler.component.impl.operation.ForOperationHeader;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 class ForOperationHeaderImpl implements ForOperationHeader {
 
@@ -86,6 +85,6 @@ class ForOperationHeaderImpl implements ForOperationHeader {
     @Override
     public String toString() {
         return "ForOperationHeaderImpl [initOperation=" + initOperation + ", condition=" + condition +
-                ", updateOperation=" + updateOperation + "]";
+            ", updateOperation=" + updateOperation + "]";
     }
 }

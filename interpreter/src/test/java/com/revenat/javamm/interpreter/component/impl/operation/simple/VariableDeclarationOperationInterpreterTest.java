@@ -17,11 +17,6 @@
 
 package com.revenat.javamm.interpreter.component.impl.operation.simple;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
@@ -32,7 +27,7 @@ import com.revenat.javamm.interpreter.test.doubles.ExpressionContextDummy;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionStub;
 import com.revenat.javamm.interpreter.test.doubles.VariableStub;
 import com.revenat.javamm.interpreter.test.helper.TestCurrentRuntimeManager;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,15 +38,21 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a variable declaration operation interpreter")
 class VariableDeclarationOperationInterpreterTest {
     private static final String VARIABLE_VALUE = "test";
+
     private static final SourceLine SOURCE_LINE_DUMMY = SourceLine.EMPTY_SOURCE_LINE;
+
     private static final ExpressionContext EXPRESSION_CONTEXT_DUMMY = new ExpressionContextDummy();
+
     private static final Expression EXPRESSION_STUB = new ExpressionStub(VARIABLE_VALUE);
 
     private Variable variableStub;

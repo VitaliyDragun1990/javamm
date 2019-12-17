@@ -17,21 +17,9 @@
 
 package com.revenat.javamm.interpreter.component.impl.calculator;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.binary.ModulusBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
-
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_MODULUS;
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_MODULUS;
-import static com.revenat.javamm.code.util.TypeUtils.getType;
-import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -39,8 +27,30 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_MODULUS;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_MODULUS;
+import static com.revenat.javamm.code.util.TypeUtils.getType;
+import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @DisplayName("a modulus '%' binary expression calculator")
 class ModulusBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
+
+    static Stream<Arguments> unsupportedPairsProvider() {
+        return Stream.of(
+            Arguments.arguments(1, false),
+            Arguments.arguments(10.5, true),
+            Arguments.arguments(10, null),
+            Arguments.arguments(5.5, " hello"),
+            Arguments.arguments(null, " hello"),
+            Arguments.arguments(null, false),
+            Arguments.arguments(true, " hello")
+        );
+    }
 
     @Test
     @Order(1)
@@ -76,7 +86,7 @@ class ModulusBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalc
     @Test
     @Order(5)
     void shouldFailToCalculateModulusForIntegerAndZero() {
-        final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class,  () -> calculate(4, 0));
+        final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(4, 0));
 
         assertErrorMessageContains(e, "/ by zero");
     }
@@ -95,19 +105,7 @@ class ModulusBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalc
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(value1, value2));
 
         assertErrorMessageContains(e, "Operator '%%' is not supported for types: %s and %s",
-                getType(value1), getType(value2));
-    }
-
-    static Stream<Arguments> unsupportedPairsProvider() {
-        return Stream.of(
-                Arguments.arguments(1, false),
-                Arguments.arguments(10.5, true),
-                Arguments.arguments(10, null),
-                Arguments.arguments(5.5, " hello"),
-                Arguments.arguments(null, " hello"),
-                Arguments.arguments(null, false),
-                Arguments.arguments(true, " hello")
-                );
+            getType(value1), getType(value2));
     }
 
     @Override

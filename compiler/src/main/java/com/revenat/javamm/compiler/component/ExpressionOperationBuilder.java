@@ -23,7 +23,6 @@ import com.revenat.javamm.code.fragment.operation.ExpressionOperation;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface ExpressionOperationBuilder {
 

@@ -25,6 +25,7 @@ import java.util.List;
 
 public class ExpressionResolverSpy implements ExpressionResolver {
     private Expression expressionToResolve;
+
     private List<String> lastExpressionTokens = List.of();
 
     public List<String> getLastExpressionTokens() {

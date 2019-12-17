@@ -23,7 +23,6 @@ import com.revenat.javamm.code.fragment.Operator;
  * Resolves operator precedence
  *
  * @author Vitaliy Dragun
- *
  */
 public interface OperatorPrecedenceResolver {
 
@@ -39,7 +38,7 @@ public interface OperatorPrecedenceResolver {
      * precedence than {@code second} {@linkplain Operator operator}
      *
      * @return {@code true} if the first operator has lower precedence than the second
-     *         operator, {@code false} otherwise
+     * operator, {@code false} otherwise
      */
     boolean hasLowerPrecedence(Operator first, Operator second);
 }

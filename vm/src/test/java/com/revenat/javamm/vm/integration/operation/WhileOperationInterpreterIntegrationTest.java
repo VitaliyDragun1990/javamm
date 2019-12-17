@@ -17,28 +17,9 @@
 
 package com.revenat.javamm.vm.integration.operation;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 import com.revenat.javamm.vm.integration.AbstractIntegrationTest;
-
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeoutException;
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.vm.helper.CustomAsserts.assertErrorMessageContains;
-
-import static java.util.List.of;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -53,7 +34,22 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeoutException;
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.vm.helper.CustomAsserts.assertErrorMessageContains;
+import static java.util.List.of;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -82,9 +78,9 @@ public class WhileOperationInterpreterIntegrationTest extends AbstractIntegratio
     @Order(2)
     void shouldFailIfWhileConditionExpressionEvaluatesToNonBooleanResult() {
         final List<String> whileWithInvalidCondition = of(
-                "while ( 8 + 10 ) {",
+            "while ( 8 + 10 ) {",
 
-                "}"
+            "}"
         );
 
         final JavammRuntimeError e = assertThrows(JavammRuntimeError.class, () -> runBlock(whileWithInvalidCondition));
@@ -94,15 +90,15 @@ public class WhileOperationInterpreterIntegrationTest extends AbstractIntegratio
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "true",
-            "1 > 0",
-            "1 typeof integer"
+        "true",
+        "1 > 0",
+        "1 typeof integer"
     })
     @Order(3)
     void shouldSupportAnInterruptionOfInfiniteLoop(final String condition) throws InterruptedException, ExecutionException {
         final List<String> lines = of(
-                "while ( " + condition + " ) {",
-                "}"
+            "while ( " + condition + " ) {",
+            "}"
         );
 
         final Future<?> future = EXECUTOR_SERVICE.submit(() -> runBlock(lines));
@@ -118,22 +114,22 @@ public class WhileOperationInterpreterIntegrationTest extends AbstractIntegratio
     static class WhileOperationProvider implements ArgumentsProvider {
 
         @Override
-        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
+        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) {
             return Stream.of(
-                    arguments(of(
-                            "var i = 0",
-                            "while ( i++ < 5 ) {",
-                            "   println (i)",
-                            "}",
-                            "println ('after while')"
-                    ), of(1, 2, 3, 4, 5, "after while")),
-                    arguments(of(
-                            "var i = 0",
-                            "while ( i < 5 ) {",
-                            "   println (i++)",
-                            "}",
-                            "println ('after while')"
-                   ), of(0, 1, 2, 3, 4, "after while"))
+                arguments(of(
+                    "var i = 0",
+                    "while ( i++ < 5 ) {",
+                    "   println (i)",
+                    "}",
+                    "println ('after while')"
+                ), of(1, 2, 3, 4, 5, "after while")),
+                arguments(of(
+                    "var i = 0",
+                    "while ( i < 5 ) {",
+                    "   println (i++)",
+                    "}",
+                    "println ('after while')"
+                ), of(0, 1, 2, 3, 4, "after while"))
             );
         }
     }

@@ -28,7 +28,6 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
  * implementation for 'predicate equals' ({@code ==}) operator
  *
  * @author Vitaliy Dragun
- *
  */
 public class IsEqualsBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
 
@@ -47,7 +46,7 @@ public class IsEqualsBinaryExpressionCalculator extends AbstractBinaryExpression
 
     private boolean areBooleanAndNonBoolean(final Object value1, final Object value2) {
         return (confirmType(Boolean.class, value1) && !confirmType(Boolean.class, value2)) ||
-                (!confirmType(Boolean.class, value1) && confirmType(Boolean.class, value2));
+            (!confirmType(Boolean.class, value1) && confirmType(Boolean.class, value2));
     }
 
     private boolean calculateEquals(final Object value1, final Object value2) {

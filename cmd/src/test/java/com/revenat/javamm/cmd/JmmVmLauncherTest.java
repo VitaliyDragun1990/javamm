@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
@@ -70,7 +69,7 @@ class JmmVmLauncherTest {
     }
 
     @Test
-    void shouldFailIfMainFunctionNotFound() throws IOException {
+    void shouldFailIfMainFunctionNotFound() {
         JmmVmLauncher.main();
 
         verify(errMock)

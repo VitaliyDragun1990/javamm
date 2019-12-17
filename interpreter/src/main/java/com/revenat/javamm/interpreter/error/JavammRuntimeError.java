@@ -26,7 +26,6 @@ import java.util.List;
  * Signals about runtime error
  *
  * @author Vitaliy Dragun
- *
  */
 public abstract class JavammRuntimeError extends JavammError {
     private static final long serialVersionUID = 3854577680820104365L;

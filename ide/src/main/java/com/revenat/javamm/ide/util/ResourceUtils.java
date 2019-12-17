@@ -18,7 +18,6 @@
 package com.revenat.javamm.ide.util;
 
 import com.revenat.javamm.code.exception.ConfigException;
-
 import javafx.fxml.FXMLLoader;
 
 import java.io.IOException;
@@ -54,12 +53,12 @@ public final class ResourceUtils {
      * @param resource  {@code *.fxml} resource to load data from
      */
     public static void loadFromFxmlResource(final Object component, final String resource) {
-        FXMLLoader fxmlLoader = createLoader(component, resource);
+        final FXMLLoader fxmlLoader = createLoader(component, resource);
         loadResource(fxmlLoader);
     }
 
     private static FXMLLoader createLoader(final Object component, final String resource) {
-        FXMLLoader fxmlLoader = new FXMLLoader(component.getClass().getResource(resource));
+        final FXMLLoader fxmlLoader = new FXMLLoader(component.getClass().getResource(resource));
         fxmlLoader.setRoot(component);
         fxmlLoader.setController(component);
         return fxmlLoader;
@@ -68,7 +67,7 @@ public final class ResourceUtils {
     private static void loadResource(final FXMLLoader fxmlLoader) {
         try {
             fxmlLoader.load();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }

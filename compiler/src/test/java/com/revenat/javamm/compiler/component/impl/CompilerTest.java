@@ -17,16 +17,6 @@
 
 package com.revenat.javamm.compiler.component.impl;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.quality.Strictness.LENIENT;
-
 import com.revenat.javamm.code.fragment.ByteCode;
 import com.revenat.javamm.code.fragment.FunctionName;
 import com.revenat.javamm.code.fragment.Operation;
@@ -38,11 +28,7 @@ import com.revenat.javamm.compiler.Compiler;
 import com.revenat.javamm.compiler.component.FunctionDefinitionsReader;
 import com.revenat.javamm.compiler.component.FunctionNameBuilder;
 import com.revenat.javamm.compiler.component.SourceLineReader;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -55,8 +41,21 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.quality.Strictness.LENIENT;
+
+@SuppressWarnings("SameParameterValue")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("compiler")
@@ -127,10 +126,10 @@ class CompilerTest {
             when(functionName.getName()).thenReturn("function" + i);
             final Block functionBody = new Block(mock(Operation.class), ANY_SOURCE_LINE);
             final DeveloperFunction dummy = new DeveloperFunction.Builder()
-                    .setBody(functionBody)
-                    .setName(functionName)
-                    .setDeclarationSourceLine(ANY_SOURCE_LINE)
-                    .build();
+                .setBody(functionBody)
+                .setName(functionName)
+                .setDeclarationSourceLine(ANY_SOURCE_LINE)
+                .build();
             functions.add(dummy);
         }
         return functions;

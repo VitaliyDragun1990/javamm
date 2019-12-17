@@ -26,7 +26,6 @@ import com.revenat.javamm.interpreter.error.JavammRuntimeError;
  * variable/final is already defined in this local context.
  *
  * @author Vitaliy Dragun
- *
  */
 public interface LocalContext {
 

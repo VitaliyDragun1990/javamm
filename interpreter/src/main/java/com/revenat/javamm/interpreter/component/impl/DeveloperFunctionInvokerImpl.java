@@ -37,7 +37,6 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class DeveloperFunctionInvokerImpl implements DeveloperFunctionInvoker {
 

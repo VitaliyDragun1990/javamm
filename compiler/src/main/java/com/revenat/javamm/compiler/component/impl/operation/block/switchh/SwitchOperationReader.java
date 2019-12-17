@@ -27,7 +27,6 @@ import com.revenat.javamm.compiler.component.impl.operation.block.AbstractBlockO
 
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Optional;
 
 import static com.revenat.javamm.code.syntax.Keywords.SWITCH;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.getTokensBetweenBrackets;
@@ -37,7 +36,6 @@ import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUt
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class SwitchOperationReader extends AbstractBlockOperationReader<SwitchOperation> {
 
@@ -76,13 +74,13 @@ public class SwitchOperationReader extends AbstractBlockOperationReader<SwitchOp
     protected SwitchOperation get(final SourceLine sourceLine, final ListIterator<SourceLine> sourceCode) {
         final Expression condition = getCondition(sourceLine);
         final List<SwitchBodyEntry> entries =
-                bodyReader.read(sourceLine.getModuleName(), sourceCode, getBlockOperationReader());
+            bodyReader.read(sourceLine.getModuleName(), sourceCode, getBlockOperationReader());
         return new SwitchOperation(sourceLine, condition, entries);
     }
 
     private Expression getCondition(final SourceLine sourceLine) {
         final List<String> expressionTokens =
-                getTokensBetweenBrackets(OPENING_PARENTHESIS, CLOSING_PARENTHESIS, sourceLine, false);
+            getTokensBetweenBrackets(OPENING_PARENTHESIS, CLOSING_PARENTHESIS, sourceLine, false);
         return expressionResolver.resolve(expressionTokens, sourceLine);
     }
 }

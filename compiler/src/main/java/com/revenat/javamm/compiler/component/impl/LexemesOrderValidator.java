@@ -38,7 +38,6 @@ import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUt
  * Validates that specified lexemes are in valid order
  *
  * @author Vitaliy Dragun
- *
  */
 final class LexemesOrderValidator {
 
@@ -90,7 +89,7 @@ final class LexemesOrderValidator {
         if (isOperator(lastLexeme)) {
             final Operator operator = (Operator) lastLexeme;
             throw syntaxError("Expression can not end with %s operator: '%s'",
-                    operator.getType(), operator);
+                operator.getType(), operator);
         }
     }
 
@@ -129,14 +128,14 @@ final class LexemesOrderValidator {
 
     private boolean isPreviousLexemeIsOperatorWithHigherPrecedence(final Lexeme operator) {
         return lastValidatedLexeme != null &&
-                isOperator(lastValidatedLexeme) &&
-                operatorPrecedenceResolver.hasLowerPrecedence((Operator) operator, (Operator) lastValidatedLexeme);
+            isOperator(lastValidatedLexeme) &&
+            operatorPrecedenceResolver.hasLowerPrecedence((Operator) operator, (Operator) lastValidatedLexeme);
     }
 
     private void assertNoExpressionsWithoutBinaryInBetween(final Lexeme lexemeToCheck) {
         if (isExpression(lexemeToCheck) && expressionWithoutBinary != null) {
             throw syntaxError("A binary operator is expected between expressions: '%s' and '%s'",
-                    expressionWithoutBinary, lexemeToCheck);
+                expressionWithoutBinary, lexemeToCheck);
         } else if (isExpression(lexemeToCheck)) {
             expressionWithoutBinary = lexemeToCheck;
         } else if (isBinaryOperator(lexemeToCheck)) {
@@ -164,7 +163,7 @@ final class LexemesOrderValidator {
         }
         if (isOperator(current) && isClosingParenthesis(next)) {
             throw syntaxError("An expression is expected for %s operator: '%s'",
-                    ((Operator) current).getType(), current);
+                ((Operator) current).getType(), current);
         }
     }
 
@@ -172,7 +171,7 @@ final class LexemesOrderValidator {
                                                    final Lexeme next) {
         if (isBinaryOperator(current) && isBinaryOperator(next)) {
             throw syntaxError("An expression is expected between binary operators: '%s' and '%s'",
-                    current, next);
+                current, next);
         }
     }
 

@@ -29,7 +29,6 @@ import static com.revenat.javamm.code.syntax.SyntaxUtils.trimAllWhitespaceCharac
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class TokenParserImpl implements TokenParser {
 

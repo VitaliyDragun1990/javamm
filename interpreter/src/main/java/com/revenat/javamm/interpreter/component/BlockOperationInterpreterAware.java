@@ -19,7 +19,6 @@ package com.revenat.javamm.interpreter.component;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface BlockOperationInterpreterAware {
 

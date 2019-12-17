@@ -22,7 +22,6 @@ package com.revenat.javamm.code.fragment;
  * executed by the interpreter.
  *
  * @author Vitaliy Dragun
- *
  */
 public interface Operation extends CompiledCodeFragment {
 

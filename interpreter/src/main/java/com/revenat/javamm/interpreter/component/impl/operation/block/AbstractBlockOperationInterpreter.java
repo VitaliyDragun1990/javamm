@@ -28,10 +28,9 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 abstract class AbstractBlockOperationInterpreter<T extends Operation> extends AbstractOperationInterpreter<T>
-        implements BlockOperationInterpreterAware {
+    implements BlockOperationInterpreterAware {
 
     private BlockOperationInterpreter blockOperationInterpreter;
 

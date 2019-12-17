@@ -29,7 +29,6 @@ import java.util.List;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class CaseValueExpressionResolverImpl implements CaseValueExpressionResolver {
 
@@ -47,7 +46,7 @@ public class CaseValueExpressionResolverImpl implements CaseValueExpressionResol
     }
 
     private void requireSingleTokenOnly(final List<String> expressionTokens, final SourceLine sourceLine) {
-        if (expressionTokens.isEmpty() || expressionTokens.size() > 1) {
+        if (expressionTokens.size() != 1) {
             throw new JavammLineSyntaxError(sourceLine, "A constant expected between 'case' and ':'");
         }
     }

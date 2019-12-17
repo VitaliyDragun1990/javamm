@@ -18,12 +18,10 @@
 package com.revenat.javamm.interpreter.component.impl.operation.exception;
 
 import static com.revenat.javamm.code.syntax.Keywords.RETURN;
-
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ReturnOperationException extends InterruptOperationException {
 

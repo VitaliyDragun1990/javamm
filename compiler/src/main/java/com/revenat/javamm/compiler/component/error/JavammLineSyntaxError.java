@@ -27,14 +27,13 @@ import static java.util.Objects.requireNonNull;
  * Signals that particular source line contains syntax error
  *
  * @author Vitaliy Dragun
- *
  */
 public class JavammLineSyntaxError extends JavammSyntaxError {
     private static final long serialVersionUID = -529150170431648757L;
 
     public JavammLineSyntaxError(final String message, final SourceLine sourceLine) {
         super(format("Syntax error in '%s' [Line: %s]: %s",
-                sourceLine.getModuleName(), sourceLine.getLineNumber(), requireNonNull(message)));
+            sourceLine.getModuleName(), sourceLine.getLineNumber(), requireNonNull(message)));
     }
 
     public JavammLineSyntaxError(final SourceLine sourceLine, final String messageTemplate, final Object... args) {

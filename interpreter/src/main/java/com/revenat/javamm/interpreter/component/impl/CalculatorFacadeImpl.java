@@ -36,7 +36,6 @@ import java.util.Set;
 
 import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 import static com.revenat.javamm.code.util.TypeUtils.getType;
-
 import static java.lang.System.lineSeparator;
 import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
@@ -45,7 +44,6 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class CalculatorFacadeImpl implements CalculatorFacade {
 
@@ -88,7 +86,7 @@ public class CalculatorFacadeImpl implements CalculatorFacade {
             return (boolean) value;
         } else {
             throw new JavammLineRuntimeError("Condition expression should be boolean. Current type is %s",
-                    getType(value));
+                getType(value));
         }
     }
 
@@ -105,17 +103,17 @@ public class CalculatorFacadeImpl implements CalculatorFacade {
     }
 
     private Map<BinaryOperator, BinaryExpressionCalculator> buildBinaryExpressionCalculatorRegistry(
-            final Set<BinaryExpressionCalculator> binaryExpressionCalculators) {
+        final Set<BinaryExpressionCalculator> binaryExpressionCalculators) {
         return binaryExpressionCalculators
-                .stream()
-                .collect(toUnmodifiableMap(BinaryExpressionCalculator::getOperator, identity()));
+            .stream()
+            .collect(toUnmodifiableMap(BinaryExpressionCalculator::getOperator, identity()));
     }
 
     private Map<UnaryOperator, UnaryExpressionCalculator> buildUnaryExpressionCalculatorRegistry(
-            final Set<UnaryExpressionCalculator> unaryExpressionCalculators) {
+        final Set<UnaryExpressionCalculator> unaryExpressionCalculators) {
         return unaryExpressionCalculators
-                .stream()
-                .collect(toUnmodifiableMap(UnaryExpressionCalculator::getOperator, identity()));
+            .stream()
+            .collect(toUnmodifiableMap(UnaryExpressionCalculator::getOperator, identity()));
     }
 
     private void assertAllOperatorsSupported() {

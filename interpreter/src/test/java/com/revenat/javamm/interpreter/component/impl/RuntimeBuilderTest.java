@@ -17,11 +17,9 @@
 
 package com.revenat.javamm.interpreter.component.impl;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import com.revenat.javamm.interpreter.component.FunctionInvoker;
 import com.revenat.javamm.interpreter.component.RuntimeBuilder;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -33,7 +31,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)

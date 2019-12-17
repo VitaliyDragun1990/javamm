@@ -21,7 +21,6 @@ import com.revenat.javamm.code.fragment.CompiledCodeFragment;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface SwitchBodyEntry extends CompiledCodeFragment {
 

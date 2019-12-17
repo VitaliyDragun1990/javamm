@@ -17,31 +17,29 @@
 
 package com.revenat.javamm.compiler.integration.operation;
 
-import static org.junit.jupiter.params.provider.Arguments.arguments;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
 import static java.util.List.of;
-
-import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class BreakOperationReader_Expected_Fail_IntegrationTest
-        extends AbstractOperationReaderInvalidValuesIntegrationTest {
+    extends AbstractOperationReaderInvalidValuesIntegrationTest {
 
     @Override
     protected Stream<Arguments> invalidSourceLineProvider() {
         return Stream.of(
-                arguments(
-                        of(
-                                "break }"
-                        ), "Syntax error in 'module1' [Line: 2]: 'break' expected only"),
-                arguments(
-                        of(
-                                "break loop"
+            arguments(
+                of(
+                    "break }"
+                ), "Syntax error in 'module1' [Line: 2]: 'break' expected only"),
+            arguments(
+                of(
+                    "break loop"
                 ), "Syntax error in 'module1' [Line: 2]: 'break' expected only")
         );
     }

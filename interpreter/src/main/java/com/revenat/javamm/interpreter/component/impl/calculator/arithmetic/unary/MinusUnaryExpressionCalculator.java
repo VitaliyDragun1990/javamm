@@ -25,7 +25,6 @@ import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
  * implementation for 'arithmetical unary minus' ({@code -}) operator
  *
  * @author Vitaliy Dragun
- *
  */
 public class MinusUnaryExpressionCalculator extends AbstractArithmeticUnaryExpressionCalculator {
 

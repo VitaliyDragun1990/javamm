@@ -25,7 +25,6 @@ import static java.util.Objects.requireNonNull;
  * needed.
  *
  * @author Vitaliy Dragun
- *
  */
 public final class CurrentRuntimeProvider {
     private static final ThreadLocal<CurrentRuntime> CURRENT_RUNTIME_THREAD_LOCAL = new ThreadLocal<>();

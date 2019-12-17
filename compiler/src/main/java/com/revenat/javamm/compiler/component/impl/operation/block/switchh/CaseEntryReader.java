@@ -32,12 +32,10 @@ import java.util.Objects;
 import static com.revenat.javamm.code.syntax.Keywords.CASE;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatLineEndsWithOpeningCurlyBrace;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateTokenRightBeforeOpeningCurlyBrace;
-
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class CaseEntryReader implements SwitchBodyEntryReader<SwitchCaseEntry> {
 
@@ -118,8 +116,8 @@ public class CaseEntryReader implements SwitchBodyEntryReader<SwitchCaseEntry> {
         @Override
         public boolean equals(final Object other) {
             return other != null &&
-                    getClass().equals(other.getClass()) &&
-                    compareExpressionsWith((CaseEntry) other);
+                getClass().equals(other.getClass()) &&
+                compareExpressionsWith((CaseEntry) other);
         }
 
         private boolean compareExpressionsWith(final CaseEntry another) {

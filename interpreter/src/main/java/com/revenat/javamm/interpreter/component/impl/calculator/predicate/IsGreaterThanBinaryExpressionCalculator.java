@@ -27,7 +27,6 @@ import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeErro
  * implementation for 'predicate greater than' ({@code >}) operator
  *
  * @author Vitaliy Dragun
- *
  */
 public class IsGreaterThanBinaryExpressionCalculator extends AbstractBinaryExpressionCalculator {
     private final IsLessThanOrEqualsBinaryExpressionCalculator oppositeCalculator;

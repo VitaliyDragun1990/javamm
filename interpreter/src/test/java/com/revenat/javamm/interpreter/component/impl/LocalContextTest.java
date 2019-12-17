@@ -17,19 +17,13 @@
 
 package com.revenat.javamm.interpreter.component.impl;
 
-import static org.hamcrest.CoreMatchers.sameInstance;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.Variable;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
 import com.revenat.javamm.interpreter.model.LocalContext;
 import com.revenat.javamm.interpreter.test.doubles.VariableStub;
 import com.revenat.javamm.interpreter.test.helper.TestCurrentRuntimeManager;
-
-import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,15 +34,23 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a local context")
 class LocalContextTest {
     private static final Variable VARIABLE = new VariableStub("var");
+
     private static final Variable FINAL = new VariableStub("final");
+
     private static final Object FINAL_VALUE = "final value";
+
     private static final Object VAR_VALUE = "variable value";
 
     protected LocalContext localContext;
@@ -97,7 +99,7 @@ class LocalContextTest {
         @Order(3)
         void shouldFailIfGetVariableValue() {
             final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class,
-                    () -> localContext.getVariableValue(VARIABLE));
+                () -> localContext.getVariableValue(VARIABLE));
 
             assertErrorMessageContains(e, "Variable '%s' is not defined", VARIABLE);
         }
@@ -106,7 +108,7 @@ class LocalContextTest {
         @Order(4)
         void shouldFailIfGetFinalValue() {
             final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class,
-                    () -> localContext.getVariableValue(FINAL));
+                () -> localContext.getVariableValue(FINAL));
 
             assertErrorMessageContains(e, "Variable '%s' is not defined", FINAL);
         }
@@ -149,8 +151,8 @@ class LocalContextTest {
         @Order(2)
         void shouldFailToSetValueFoThatFinal() {
             final JavammLineRuntimeError e = assertThrows(
-                    JavammLineRuntimeError.class,
-                    () -> localContext.setFinalValue(FINAL, "new final value"));
+                JavammLineRuntimeError.class,
+                () -> localContext.setFinalValue(FINAL, "new final value"));
 
             assertErrorMessageContains(e, "can not be changed");
         }
@@ -161,8 +163,8 @@ class LocalContextTest {
             final Variable nameLikeFinal = new VariableStub("final");
 
             final JavammLineRuntimeError e = assertThrows(
-                    JavammLineRuntimeError.class,
-                    () -> localContext.setFinalValue(nameLikeFinal, VAR_VALUE));
+                JavammLineRuntimeError.class,
+                () -> localContext.setFinalValue(nameLikeFinal, VAR_VALUE));
 
             assertErrorMessageContains(e, "can not be changed");
         }
@@ -201,8 +203,8 @@ class LocalContextTest {
             final Variable nameLikeVar = new VariableStub("var");
 
             final JavammLineRuntimeError e = assertThrows(
-                    JavammLineRuntimeError.class,
-                    () -> localContext.setFinalValue(nameLikeVar, FINAL_VALUE));
+                JavammLineRuntimeError.class,
+                () -> localContext.setFinalValue(nameLikeVar, FINAL_VALUE));
 
             assertErrorMessageContains(e, "variable with same name is already defined");
         }

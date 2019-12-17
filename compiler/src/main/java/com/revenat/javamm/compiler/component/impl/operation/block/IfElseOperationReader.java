@@ -34,12 +34,10 @@ import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.g
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateClosingParenthesisBeforeOpeningCurlyBrace;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateOpeningParenthesisAfterTokenInPosition;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatLineEndsWithOpeningCurlyBrace;
-
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class IfElseOperationReader extends AbstractBlockOperationReader<IfElseOperation> {
 
@@ -77,7 +75,7 @@ public class IfElseOperationReader extends AbstractBlockOperationReader<IfElseOp
 
     private Expression getCondition(final SourceLine sourceLine) {
         final List<String> expressionTokens =
-                getTokensBetweenBrackets(OPENING_PARENTHESIS, CLOSING_PARENTHESIS, sourceLine, false);
+            getTokensBetweenBrackets(OPENING_PARENTHESIS, CLOSING_PARENTHESIS, sourceLine, false);
         return expressionResolver.resolve(expressionTokens, sourceLine);
     }
 
@@ -94,8 +92,8 @@ public class IfElseOperationReader extends AbstractBlockOperationReader<IfElseOp
                                                  final Block trueBlock,
                                                  final Optional<Block> falseBlock) {
         return falseBlock
-                .map(block -> new IfElseOperation(sourceLine, condition, trueBlock, block))
-                .orElseGet(() -> new IfElseOperation(sourceLine, condition, trueBlock));
+            .map(block -> new IfElseOperation(sourceLine, condition, trueBlock, block))
+            .orElseGet(() -> new IfElseOperation(sourceLine, condition, trueBlock));
     }
 
     private Optional<Block> tryToFindElseBlockOnNextLine(final ListIterator<SourceLine> codeIterator) {
@@ -130,7 +128,7 @@ public class IfElseOperationReader extends AbstractBlockOperationReader<IfElseOp
     }
 
     private Optional<Block> readElseBlock(final ListIterator<SourceLine> codeIterator,
-                                                final SourceLine sourceLine) {
+                                          final SourceLine sourceLine) {
         validateElseClause(sourceLine);
         return Optional.of(getNextBlock(sourceLine, codeIterator));
     }

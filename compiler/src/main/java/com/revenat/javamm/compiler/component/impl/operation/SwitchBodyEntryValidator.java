@@ -21,7 +21,6 @@ import com.revenat.javamm.code.fragment.operation.SwitchBodyEntry;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface SwitchBodyEntryValidator {
 

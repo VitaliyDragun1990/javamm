@@ -28,7 +28,6 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 class AdvancedTokensBetweenBracketsExtractor {
 
@@ -67,7 +66,7 @@ class AdvancedTokensBetweenBracketsExtractor {
                                              final SourceLine sourceLine) {
         if (emptyResultWhileNotAllowed(result, allowEmptyResult)) {
             throw new JavammLineSyntaxError(sourceLine, "An expression is expected between '%s' and '%s'",
-                    openingBracket, closingBracket);
+                openingBracket, closingBracket);
         }
         return result;
     }

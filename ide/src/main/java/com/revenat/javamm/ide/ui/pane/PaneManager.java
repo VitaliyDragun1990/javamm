@@ -52,6 +52,7 @@ public class PaneManager {
         return pane;
     }
 
+    @SuppressWarnings("unchecked")
     private <T> Optional<T> find(final SplitPane splitPane, final Class<T> paneClass) {
         return splitPane.getItems().stream()
             .filter(n -> n.getClass() == paneClass)

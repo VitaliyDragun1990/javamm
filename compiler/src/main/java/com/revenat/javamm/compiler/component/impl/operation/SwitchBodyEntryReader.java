@@ -25,7 +25,6 @@ import java.util.ListIterator;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface SwitchBodyEntryReader<T extends SwitchBodyEntry> {
 

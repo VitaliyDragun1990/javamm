@@ -17,8 +17,6 @@
 
 package com.revenat.javamm.code.syntax;
 
-import com.revenat.javamm.code.util.ExceptionUtils;
-
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -31,7 +29,6 @@ import static com.revenat.javamm.code.util.ExceptionUtils.wrapCheckedException;
  * Contains Javamm reserved keywords
  *
  * @author Vitaliy Dragun
- *
  */
 public final class Keywords {
 

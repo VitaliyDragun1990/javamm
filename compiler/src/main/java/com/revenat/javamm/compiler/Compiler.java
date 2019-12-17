@@ -26,7 +26,6 @@ import com.revenat.javamm.compiler.error.JavammSyntaxError;
  * byte code.
  *
  * @author Vitaliy Dragun
- *
  */
 public interface Compiler {
 

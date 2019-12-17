@@ -29,7 +29,6 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class SwitchBodyEntryValidatorImpl implements SwitchBodyEntryValidator {
 

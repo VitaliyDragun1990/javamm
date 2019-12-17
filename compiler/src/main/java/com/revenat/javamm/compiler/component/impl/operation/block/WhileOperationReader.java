@@ -22,21 +22,19 @@ import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.operation.Block;
 import com.revenat.javamm.code.fragment.operation.WhileOperation;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
+
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Optional;
 
 import static com.revenat.javamm.code.syntax.Keywords.WHILE;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.getTokensBetweenBrackets;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateClosingParenthesisBeforeOpeningCurlyBrace;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateOpeningParenthesisAfterTokenInPosition;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatLineEndsWithOpeningCurlyBrace;
-
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class WhileOperationReader extends AbstractBlockOperationReader<WhileOperation> {
 
@@ -71,7 +69,7 @@ public class WhileOperationReader extends AbstractBlockOperationReader<WhileOper
 
     private Expression getCondition(final SourceLine sourceLine) {
         final List<String> expressionTokens =
-                getTokensBetweenBrackets(OPENING_PARENTHESIS, CLOSING_PARENTHESIS, sourceLine, false);
+            getTokensBetweenBrackets(OPENING_PARENTHESIS, CLOSING_PARENTHESIS, sourceLine, false);
         return expressionResolver.resolve(expressionTokens, sourceLine);
     }
 

@@ -25,7 +25,6 @@ import java.util.List;
  * Represents result of {@link TokenParser} processing
  *
  * @author Vitaliy Dragun
- *
  */
 public class TokenParserResult {
 

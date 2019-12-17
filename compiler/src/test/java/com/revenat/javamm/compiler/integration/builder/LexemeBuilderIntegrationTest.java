@@ -17,11 +17,6 @@
 
 package com.revenat.javamm.compiler.integration.builder;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.Parenthesis;
 import com.revenat.javamm.code.fragment.SourceLine;
@@ -33,16 +28,7 @@ import com.revenat.javamm.code.fragment.operator.UnaryOperator;
 import com.revenat.javamm.compiler.component.LexemeBuilder;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.test.builder.ComponentBuilder;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
-
-import static java.util.Map.entry;
-import static java.util.stream.Collectors.toList;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -52,7 +38,17 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
+import static java.util.Map.entry;
+import static java.util.stream.Collectors.toList;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -62,38 +58,52 @@ class LexemeBuilderIntegrationTest {
     private static final SourceLine SOURCE_LINE = SourceLine.EMPTY_SOURCE_LINE;
 
     private static final String CE = "CE"; // constant expression
+
     private static final String VE = "VE"; // variable expression
+
     private static final String OP = "OP"; // opening parenthesis
+
     private static final String CP = "CP"; // closing parenthesis
+
     private static final String BA = "BA"; // binary addition
+
     private static final String BS = "BS"; // binary subtraction
+
     private static final String BD = "BD"; // binary division
+
     private static final String BM = "BM"; // binary multiplication
+
     private static final String BG = "BG"; // binary greater than
+
     private static final String UP = "UP"; // unary plus
+
     private static final String UM = "UM"; // unary minus
+
     private static final String UI = "UI"; // unary increment
+
     private static final String UD = "UD"; // unary decrement
+
     private static final String TC = "TC"; // ternary conditional
+
     private static final String TS = "TS"; // ternary separator
 
     private static final Map<String, Class<? extends Lexeme>> LEXEMES = Map.ofEntries(
-            entry(CE, ConstantExpression.class),
-            entry(VE, VariableExpression.class),
-            entry(OP, Parenthesis.OPENING_PARENTHESIS.getClass()),
-            entry(CP, Parenthesis.CLOSING_PARENTHESIS.getClass()),
-            entry(BA, BinaryOperator.ARITHMETIC_ADDITION.getClass()),
-            entry(BS, BinaryOperator.ARITHMETIC_SUBTRACTION.getClass()),
-            entry(BD, BinaryOperator.ARITHMETIC_DIVISION.getClass()),
-            entry(BM, BinaryOperator.ARITHMETIC_MULTIPLICATION.getClass()),
-            entry(BG, BinaryOperator.PREDICATE_GREATER_THAN.getClass()),
-            entry(UP, UnaryOperator.ARITHMETICAL_UNARY_PLUS.getClass()),
-            entry(UM, UnaryOperator.ARITHMETICAL_UNARY_MINUS.getClass()),
-            entry(UI, UnaryOperator.INCREMENT.getClass()),
-            entry(UD, UnaryOperator.DECREMENT.getClass()),
-            entry(TC, TernaryConditionalOperator.OPERATOR.getClass()),
-            entry(TS, TernaryConditionalOperator.SEPARATOR.getClass())
-            );
+        entry(CE, ConstantExpression.class),
+        entry(VE, VariableExpression.class),
+        entry(OP, Parenthesis.OPENING_PARENTHESIS.getClass()),
+        entry(CP, Parenthesis.CLOSING_PARENTHESIS.getClass()),
+        entry(BA, BinaryOperator.ARITHMETIC_ADDITION.getClass()),
+        entry(BS, BinaryOperator.ARITHMETIC_SUBTRACTION.getClass()),
+        entry(BD, BinaryOperator.ARITHMETIC_DIVISION.getClass()),
+        entry(BM, BinaryOperator.ARITHMETIC_MULTIPLICATION.getClass()),
+        entry(BG, BinaryOperator.PREDICATE_GREATER_THAN.getClass()),
+        entry(UP, UnaryOperator.ARITHMETICAL_UNARY_PLUS.getClass()),
+        entry(UM, UnaryOperator.ARITHMETICAL_UNARY_MINUS.getClass()),
+        entry(UI, UnaryOperator.INCREMENT.getClass()),
+        entry(UD, UnaryOperator.DECREMENT.getClass()),
+        entry(TC, TernaryConditionalOperator.OPERATOR.getClass()),
+        entry(TS, TernaryConditionalOperator.SEPARATOR.getClass())
+    );
 
     private LexemeBuilder lexemeBuilder;
 
@@ -103,7 +113,7 @@ class LexemeBuilderIntegrationTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "a,                                   VE",
         "2,                                   CE",
         "1 + 2,                               CE:BA:CE",
@@ -119,7 +129,7 @@ class LexemeBuilderIntegrationTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "[ a,                [",
         "10 + @,             @",
         "10 + :,             :",
@@ -135,7 +145,7 @@ class LexemeBuilderIntegrationTest {
     }
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "true ? 10 : 20,                   CE:TC:CE:TS:CE",
         "true ? false ? a : b : 20,        CE:TC:CE:TC:VE:TS:VE:TS:CE",
     })
@@ -153,7 +163,7 @@ class LexemeBuilderIntegrationTest {
         assertThat(actualLexemes, hasSize(expectedLexemeTypes.size()));
 
         for (int i = 0; i < actualLexemes.size(); i++) {
-            final Lexeme actual =  actualLexemes.get(i);
+            final Lexeme actual = actualLexemes.get(i);
             final Class<? extends Lexeme> expectedType = expectedLexemeTypes.get(i);
 
             assertThat(actual, instanceOf(expectedType));

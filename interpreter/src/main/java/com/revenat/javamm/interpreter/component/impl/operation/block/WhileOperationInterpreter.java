@@ -23,12 +23,11 @@ import com.revenat.javamm.interpreter.component.CalculatorFacade;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class WhileOperationInterpreter extends AbstractLoopBlockOperationInterpreter<WhileOperation> {
 
     public WhileOperationInterpreter(final ExpressionContext expressionContext,
-            final CalculatorFacade calculatorFacade) {
+                                     final CalculatorFacade calculatorFacade) {
         super(expressionContext, calculatorFacade);
     }
 

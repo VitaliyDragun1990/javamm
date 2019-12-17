@@ -17,31 +17,29 @@
 
 package com.revenat.javamm.compiler.integration.operation;
 
-import static org.junit.jupiter.params.provider.Arguments.arguments;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
 import static java.util.List.of;
-
-import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ContinueOperationReader_Expected_Fail_IntegrationTest
-        extends AbstractOperationReaderInvalidValuesIntegrationTest {
+    extends AbstractOperationReaderInvalidValuesIntegrationTest {
 
     @Override
     protected Stream<Arguments> invalidSourceLineProvider() {
         return Stream.of(
-                arguments(
-                        of(
-                                "continue }"
-                        ), "Syntax error in 'module1' [Line: 2]: 'continue' expected only"),
-                arguments(
-                        of(
-                                "continue loop"
+            arguments(
+                of(
+                    "continue }"
+                ), "Syntax error in 'module1' [Line: 2]: 'continue' expected only"),
+            arguments(
+                of(
+                    "continue loop"
                 ), "Syntax error in 'module1' [Line: 2]: 'continue' expected only")
         );
     }

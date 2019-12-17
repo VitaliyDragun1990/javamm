@@ -24,7 +24,6 @@ import com.revenat.javamm.code.fragment.Expression;
  * Represents {@code null} expression
  *
  * @author Vitaliy Dragun
- *
  */
 public final class NullValueExpression implements Expression, CaseValueExpression {
     private static final NullValueExpression INSTANCE = new NullValueExpression();

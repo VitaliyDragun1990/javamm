@@ -17,21 +17,9 @@
 
 package com.revenat.javamm.interpreter.component.impl.calculator;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.binary.MultiplicationBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
-
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_MULTIPLICATION;
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_MULTIPLICATION;
-import static com.revenat.javamm.code.util.TypeUtils.getType;
-import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -39,9 +27,33 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_MULTIPLICATION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_MULTIPLICATION;
+import static com.revenat.javamm.code.util.TypeUtils.getType;
+import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 @DisplayName("a multiplication '*' binary expression calculator")
 class MultiplicationBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
+
+    static Stream<Arguments> unsupportedPairsProvider() {
+        return Stream.of(
+            Arguments.arguments(1, true),
+            Arguments.arguments(2.5, false),
+            Arguments.arguments(10, " hello"),
+            Arguments.arguments(10.5, " hello"),
+            Arguments.arguments(10.5, null),
+            Arguments.arguments(null, 10),
+            Arguments.arguments("hello ", " world"),
+            Arguments.arguments("hello ", null),
+            Arguments.arguments("hello ", false)
+        );
+    }
 
     @Test
     @Order(1)
@@ -76,21 +88,7 @@ class MultiplicationBinaryExpressionCalculatorTest extends AbstractBinaryExpress
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(value1, value2));
 
         assertErrorMessageContains(e, "Operator '*' is not supported for types: %s and %s",
-                getType(value1), getType(value2));
-    }
-
-    static Stream<Arguments> unsupportedPairsProvider() {
-        return Stream.of(
-                Arguments.arguments(1, true),
-                Arguments.arguments(2.5, false),
-                Arguments.arguments(10, " hello"),
-                Arguments.arguments(10.5, " hello"),
-                Arguments.arguments(10.5, null),
-                Arguments.arguments(null, 10),
-                Arguments.arguments("hello ", " world"),
-                Arguments.arguments("hello ", null),
-                Arguments.arguments("hello ", false)
-                );
+            getType(value1), getType(value2));
     }
 
     @Override

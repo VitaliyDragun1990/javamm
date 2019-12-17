@@ -17,7 +17,6 @@
 
 /**
  * @author Vitaliy Dragun
- *
  */
 module javamm.ide {
     requires javamm.code;
@@ -42,7 +41,9 @@ module javamm.ide {
 
     exports com.revenat.javamm.ide to javafx.graphics;
     exports com.revenat.javamm.ide.controller to javafx.fxml;
+    exports com.revenat.javamm.ide.component to javafx.fxml;
     exports com.revenat.javamm.ide.ui.pane.action to javafx.fxml;
+    exports com.revenat.javamm.ide.ui.listener to javafx.fxml;
 
     opens com.revenat.javamm.ide.controller to javafx.fxml;
     opens com.revenat.javamm.ide.ui.pane to javafx.fxml;

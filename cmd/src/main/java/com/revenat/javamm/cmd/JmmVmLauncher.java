@@ -18,27 +18,24 @@
 package com.revenat.javamm.cmd;
 
 import com.revenat.javamm.code.fragment.SourceCode;
-import com.revenat.javamm.code.util.ExceptionUtils;
 import com.revenat.javamm.compiler.error.JavammSyntaxError;
 import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 import com.revenat.javamm.vm.VirtualMachine;
 import com.revenat.javamm.vm.VirtualMachineBuilder;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 import static com.revenat.javamm.code.util.ExceptionUtils.wrapCheckedException;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public final class JmmVmLauncher {
 
     private JmmVmLauncher() {
     }
 
-    public static void main(final String... args) throws IOException {
+    public static void main(final String... args) {
         final VirtualMachine vm = new VirtualMachineBuilder().build();
 
         try {

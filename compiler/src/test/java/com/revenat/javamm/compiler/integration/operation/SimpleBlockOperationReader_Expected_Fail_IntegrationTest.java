@@ -17,36 +17,34 @@
 
 package com.revenat.javamm.compiler.integration.operation;
 
-import static org.junit.jupiter.params.provider.Arguments.arguments;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.stream.Stream;
 
 import static java.util.List.of;
-
-import org.junit.jupiter.params.provider.Arguments;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class SimpleBlockOperationReader_Expected_Fail_IntegrationTest
-        extends AbstractOperationReaderInvalidValuesIntegrationTest {
+    extends AbstractOperationReaderInvalidValuesIntegrationTest {
 
     @Override
     protected Stream<Arguments> invalidSourceLineProvider() {
         return named(Stream.of(
-                arguments(
-                        of(
-                                "{ test"
-                        ), "Syntax error in 'module1' [Line: 2]: '{' expected only"),
-                arguments(
-                        of(
-                                "{ {"
-                        ), "Syntax error in 'module1' [Line: 2]: '{' expected only"),
-                arguments(
-                        of(
-                                "{ } {"
-                                ), "Syntax error in 'module1' [Line: 2]: '{' expected only")
-                ), "block");
+            arguments(
+                of(
+                    "{ test"
+                ), "Syntax error in 'module1' [Line: 2]: '{' expected only"),
+            arguments(
+                of(
+                    "{ {"
+                ), "Syntax error in 'module1' [Line: 2]: '{' expected only"),
+            arguments(
+                of(
+                    "{ } {"
+                ), "Syntax error in 'module1' [Line: 2]: '{' expected only")
+        ), "block");
     }
 }

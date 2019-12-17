@@ -17,22 +17,11 @@
 
 package com.revenat.javamm.interpreter.component.impl.calculator;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.revenat.javamm.code.fragment.expression.TypeExpression;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.calculator.predicate.IsNotEqualsBinaryExpressionCalculator;
 import com.revenat.javamm.interpreter.component.impl.error.JavammLineRuntimeError;
-
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.code.fragment.expression.TypeExpression.BOOLEAN;
-import static com.revenat.javamm.code.util.TypeUtils.getType;
-import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -40,8 +29,28 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.code.fragment.expression.TypeExpression.BOOLEAN;
+import static com.revenat.javamm.code.util.TypeUtils.getType;
+import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @DisplayName("is not equals binary expression calculator")
 class IsNotEqualsBinaryExpressionCalculatorTest extends AbstractBinaryExpressionCalculatorTest {
+
+    static Stream<Arguments> incompatiblePairsProvider() {
+        return Stream.of(
+            Arguments.arguments(0, false),
+            Arguments.arguments(false, 0),
+            Arguments.arguments(10.5, true),
+            Arguments.arguments(null, false),
+            Arguments.arguments("hello", false),
+            Arguments.arguments(BOOLEAN, false)
+        );
+    }
 
     @Test
     @Order(1)
@@ -58,7 +67,7 @@ class IsNotEqualsBinaryExpressionCalculatorTest extends AbstractBinaryExpression
         assertThat(calculate(TypeExpression.BOOLEAN, TypeExpression.BOOLEAN), is(false));
         assertThat(calculate(false, false), is(false));
         assertThat(calculate(true, true), is(false));
-        assertThat(calculate((Object)null, null), is(false));
+        assertThat(calculate((Object) null, null), is(false));
     }
 
     @Test
@@ -88,18 +97,7 @@ class IsNotEqualsBinaryExpressionCalculatorTest extends AbstractBinaryExpression
         final JavammLineRuntimeError e = assertThrows(JavammLineRuntimeError.class, () -> calculate(value1, value2));
 
         assertErrorMessageContains(e, "Operator '!=' is not supported for types: %s and %s",
-                getType(value1), getType(value2));
-    }
-
-    static Stream<Arguments> incompatiblePairsProvider() {
-        return Stream.of(
-                Arguments.arguments(0, false),
-                Arguments.arguments(false, 0),
-                Arguments.arguments(10.5, true),
-                Arguments.arguments(null, false),
-                Arguments.arguments("hello", false),
-                Arguments.arguments(BOOLEAN, false)
-                );
+            getType(value1), getType(value2));
     }
 
     @Override

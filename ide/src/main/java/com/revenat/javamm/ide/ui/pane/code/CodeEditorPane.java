@@ -111,12 +111,14 @@ public final class CodeEditorPane extends StackPane implements Releasable {
         Files.writeString(file.toPath(), codeArea.getText());
     }
 
+    @SuppressWarnings("rawtypes")
     boolean undo() {
         final UndoManager undoManager = codeArea.getUndoManager();
         undoManager.undo();
         return undoManager.isUndoAvailable();
     }
 
+    @SuppressWarnings("rawtypes")
     boolean redo() {
         final UndoManager undoManager = codeArea.getUndoManager();
         undoManager.redo();

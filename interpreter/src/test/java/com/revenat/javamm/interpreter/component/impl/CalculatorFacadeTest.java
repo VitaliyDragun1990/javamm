@@ -17,10 +17,6 @@
 
 package com.revenat.javamm.interpreter.component.impl;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.exception.ConfigException;
 import com.revenat.javamm.code.fragment.Expression;
@@ -33,14 +29,7 @@ import com.revenat.javamm.interpreter.test.doubles.BinaryExpressionCalculatorStu
 import com.revenat.javamm.interpreter.test.doubles.ExpressionContextDummy;
 import com.revenat.javamm.interpreter.test.doubles.ExpressionDummy;
 import com.revenat.javamm.interpreter.test.doubles.UnaryExpressionCalculatorStub;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
-import static com.revenat.javamm.code.fragment.operator.UnaryOperator.ARITHMETICAL_UNARY_PLUS;
-import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -48,22 +37,33 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.HashSet;
+import java.util.Set;
 
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
+import static com.revenat.javamm.code.fragment.operator.UnaryOperator.ARITHMETICAL_UNARY_PLUS;
+import static com.revenat.javamm.interpreter.test.helper.CustomAsserts.assertErrorMessageContains;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+@SuppressWarnings("SameParameterValue")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a binary calculator facade")
 class CalculatorFacadeTest {
     private static final ExpressionContext DUMMY_EXPRESSION_CONTEXT = new ExpressionContextDummy();
+
     private static final Expression OPERAND_1 = new ExpressionDummy();
+
     private static final Expression OPERAND_2 = new ExpressionDummy();
 
     private CalculatorFacade calculatorFacade;
 
-    private Set<BinaryExpressionCalculator> calculatorsFor(final BinaryOperator...operators) {
+    private Set<BinaryExpressionCalculator> calculatorsFor(final BinaryOperator... operators) {
         final Set<BinaryExpressionCalculator> calculators = new HashSet<>();
 
-        for(final BinaryOperator operator : operators) {
+        for (final BinaryOperator operator : operators) {
             final BinaryExpressionCalculatorStub calculator = new BinaryExpressionCalculatorStub(operator);
             calculators.add(calculator);
         }
@@ -71,10 +71,10 @@ class CalculatorFacadeTest {
         return calculators;
     }
 
-    private Set<UnaryExpressionCalculator> calculatorsFor(final UnaryOperator...operators) {
+    private Set<UnaryExpressionCalculator> calculatorsFor(final UnaryOperator... operators) {
         final Set<UnaryExpressionCalculator> calculators = new HashSet<>();
 
-        for(final UnaryOperator operator : operators) {
+        for (final UnaryOperator operator : operators) {
             final UnaryExpressionCalculatorStub calculator = new UnaryExpressionCalculatorStub(operator);
             calculators.add(calculator);
         }
@@ -125,7 +125,7 @@ class CalculatorFacadeTest {
         final Set<UnaryExpressionCalculator> allUnaryCalculators = calculatorsFor(UnaryOperator.values());
 
         final ConfigException e =
-                assertThrows(ConfigException.class, () -> new CalculatorFacadeImpl(notAllBinaryCalculators, allUnaryCalculators));
+            assertThrows(ConfigException.class, () -> new CalculatorFacadeImpl(notAllBinaryCalculators, allUnaryCalculators));
 
         assertErrorMessageContains(e, "Missing calculator for binary operator: %s", ARITHMETIC_ADDITION);
     }
@@ -137,7 +137,7 @@ class CalculatorFacadeTest {
         final Set<UnaryExpressionCalculator> notAllUnaryCalculators = calculatorsForAllOperatorsExcept(ARITHMETICAL_UNARY_PLUS);
 
         final ConfigException e =
-                assertThrows(ConfigException.class, () -> new CalculatorFacadeImpl(allBinaryCalculators, notAllUnaryCalculators));
+            assertThrows(ConfigException.class, () -> new CalculatorFacadeImpl(allBinaryCalculators, notAllUnaryCalculators));
 
         assertErrorMessageContains(e, "Missing calculator for unary operator: %s", ARITHMETICAL_UNARY_PLUS);
     }
@@ -151,10 +151,10 @@ class CalculatorFacadeTest {
         calculatorFacade = new CalculatorFacadeImpl(allBinaryCalculators, allUnaryCalculators);
 
         final Object result = calculatorFacade.calculate(
-                                                         DUMMY_EXPRESSION_CONTEXT,
-                                                         OPERAND_1,
-                                                         ARITHMETIC_ADDITION,
-                                                         OPERAND_2);
+            DUMMY_EXPRESSION_CONTEXT,
+            OPERAND_1,
+            ARITHMETIC_ADDITION,
+            OPERAND_2);
 
         assertThat(result, equalTo(5));
     }

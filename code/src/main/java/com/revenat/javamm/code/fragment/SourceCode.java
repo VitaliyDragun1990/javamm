@@ -21,8 +21,8 @@ import java.util.List;
 
 /**
  * Represents raw source code.
- * @author Vitaliy Dragun
  *
+ * @author Vitaliy Dragun
  */
 public interface SourceCode {
 

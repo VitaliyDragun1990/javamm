@@ -17,18 +17,9 @@
 
 package com.revenat.javamm.code.fragment.expression;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.EnumSource;
-
 import com.revenat.javamm.code.syntax.Keywords;
 import com.revenat.javamm.code.test.doubles.ExpressionContextDummy;
-
-import java.util.stream.Stream;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -36,16 +27,44 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.stream.Stream;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a type expression")
 class TypeExpressionTest {
     private static final String UNSUPPORTED = "long";
+
+    private static Stream<Arguments> backendToSupportTypes() {
+        return Stream.of(
+            arguments(Keywords.BOOLEAN, Boolean.class),
+            arguments(Keywords.INTEGER, Integer.class),
+            arguments(Keywords.DOUBLE, Double.class),
+            arguments(Keywords.STRING, String.class)
+        );
+    }
+
+    private static Stream<Arguments> typeExpressionToKeyword() {
+        return Stream.of(
+            arguments(TypeExpression.BOOLEAN, Keywords.BOOLEAN),
+            arguments(TypeExpression.STRING, Keywords.STRING),
+            arguments(TypeExpression.INTEGER, Keywords.INTEGER),
+            arguments(TypeExpression.DOUBLE, Keywords.DOUBLE)
+        );
+    }
 
     private void assertType(final TypeExpression expression, final Class<?> expectedType) {
         assertThat(expression.getType(), is(expectedType));
@@ -62,10 +81,10 @@ class TypeExpressionTest {
     @ParameterizedTest
     @Order(1)
     @ValueSource(strings = {
-            Keywords.STRING,
-            Keywords.INTEGER,
-            Keywords.DOUBLE,
-            Keywords.BOOLEAN,
+        Keywords.STRING,
+        Keywords.INTEGER,
+        Keywords.DOUBLE,
+        Keywords.BOOLEAN,
     })
     void shouldAllowToCheckIfTypeIsSupported(final String typeKeyword) {
         assertSupports(typeKeyword);
@@ -76,6 +95,7 @@ class TypeExpressionTest {
     void shouldAllowToCheckIfTypeIsUnsupported() {
         assertDoesNotSupport(UNSUPPORTED);
     }
+
     @ParameterizedTest
     @Order(3)
     @MethodSource("backendToSupportTypes")
@@ -101,23 +121,5 @@ class TypeExpressionTest {
     @MethodSource("typeExpressionToKeyword")
     void shouldHoldKeywordWhichItRepresents(final TypeExpression expression, final String keyword) {
         assertThat(expression.getKeyword(), is(keyword));
-    }
-
-    private static Stream<Arguments> backendToSupportTypes() {
-        return Stream.of(
-                arguments(Keywords.BOOLEAN, Boolean.class),
-                arguments(Keywords.INTEGER, Integer.class),
-                arguments(Keywords.DOUBLE, Double.class),
-                arguments(Keywords.STRING, String.class)
-                );
-    }
-
-    private static Stream<Arguments> typeExpressionToKeyword() {
-        return Stream.of(
-                arguments(TypeExpression.BOOLEAN, Keywords.BOOLEAN),
-                arguments(TypeExpression.STRING, Keywords.STRING),
-                arguments(TypeExpression.INTEGER, Keywords.INTEGER),
-                arguments(TypeExpression.DOUBLE, Keywords.DOUBLE)
-                );
     }
 }

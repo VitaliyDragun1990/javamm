@@ -98,7 +98,8 @@ class VirtualMachineRunnerImplTest {
     @Order(2)
     void shouldReturnStatusSyntaxErrorIfRunFailsWithSyntaxError() {
         doAnswer(runInSameThread()).when(threadRunnerMock).run(any(), any());
-        doThrow(new JavammSyntaxError("Syntax error") {}).when(virtualMachineMock).run(any());
+        doThrow(new JavammSyntaxError("Syntax error") {
+        }).when(virtualMachineMock).run(any());
 
         virtualMachineRunner.run(listenerMock);
 
@@ -111,7 +112,8 @@ class VirtualMachineRunnerImplTest {
     @Order(3)
     void shouldReturnStatusRuntimeErrorIfRunFailsWithRuntimeError() {
         doAnswer(runInSameThread()).when(threadRunnerMock).run(any(), any());
-        doThrow(new JavammRuntimeError("Test") {}).when(virtualMachineMock).run(any());
+        doThrow(new JavammRuntimeError("Test") {
+        }).when(virtualMachineMock).run(any());
 
         virtualMachineRunner.run(listenerMock);
 

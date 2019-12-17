@@ -23,7 +23,6 @@ import com.revenat.javamm.code.component.ExpressionContext;
  * Represents expression which value can be updated
  *
  * @author Vitaliy Dragun
- *
  */
 public interface UpdatableExpression extends Expression {
 

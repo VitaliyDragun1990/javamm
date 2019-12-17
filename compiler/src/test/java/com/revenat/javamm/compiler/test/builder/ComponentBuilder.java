@@ -46,7 +46,6 @@ import java.util.Set;
  * Creates fully configured components for integration testing
  *
  * @author Vitaliy Dragun
- *
  */
 public final class ComponentBuilder {
     private final VariableBuilder variableBuilder = new VariableBuilderImpl();
@@ -55,13 +54,13 @@ public final class ComponentBuilder {
         new OperatorPrecedenceResolverImpl(CompilerConfigurator.OPERATOR_PRECEDENCE_REGISTRY);
 
     private final ComplexExpressionBuilder complexExpressionBuilder =
-            new PostfixNotationComplexExpressionBuilder(operatorPrecedenceResolver);
+        new PostfixNotationComplexExpressionBuilder(operatorPrecedenceResolver);
 
     private final SingleTokenExpressionBuilder singleTokenExpressionBuilder =
-            new SingleTokenExpressionBuilderImpl(variableBuilder);
+        new SingleTokenExpressionBuilderImpl(variableBuilder);
 
     private final Set<ExpressionBuilder> expressionBuilders = Set.of(
-            singleTokenExpressionBuilder
+        singleTokenExpressionBuilder
     );
 
     private final LexemeAmbiguityResolver lexemeAmbiguityResolver = new LexemeAmbiguityResolverImpl();
@@ -69,21 +68,21 @@ public final class ComponentBuilder {
     private final FunctionNameBuilder functionNameBuilder = new FunctionNameBuilderImpl();
 
     private final LexemeBuilder lexemeBuilder = new LexemeBuilderImpl(singleTokenExpressionBuilder,
-                                                                      functionNameBuilder,
-                                                                      lexemeAmbiguityResolver);
+        functionNameBuilder,
+        lexemeAmbiguityResolver);
 
     private final ComplexLexemeValidator lexemeValidator = new ComplexLexemeValidatorImpl(operatorPrecedenceResolver);
 
     private final UnaryAssignmentExpressionResolver unaryAssignmentExpressionResolver =
-            new UnaryAssignmentExpressionResolverImpl();
+        new UnaryAssignmentExpressionResolverImpl();
 
     private final ExpressionResolver expressionResolver = new ExpressionResolverImpl(
-            expressionBuilders,
-            complexExpressionBuilder,
-            lexemeBuilder,
-            lexemeValidator,
-            unaryAssignmentExpressionResolver,
-            operatorPrecedenceResolver
+        expressionBuilders,
+        complexExpressionBuilder,
+        lexemeBuilder,
+        lexemeValidator,
+        unaryAssignmentExpressionResolver,
+        operatorPrecedenceResolver
     );
 
     public ExpressionResolver buildExpressionResolver() {

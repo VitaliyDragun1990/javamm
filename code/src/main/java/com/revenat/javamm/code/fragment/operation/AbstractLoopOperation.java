@@ -24,7 +24,6 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public abstract class AbstractLoopOperation extends AbstractOperation {
 

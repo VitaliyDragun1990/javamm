@@ -21,15 +21,12 @@ import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.compiler.component.ExpressionResolver;
 import com.revenat.javamm.compiler.component.VariableBuilder;
 
-import java.util.Optional;
-
 import static com.revenat.javamm.code.syntax.Keywords.FINAL;
 
 /**
  * Responsible for reading final declaration operation
  *
  * @author Vitaliy Dragun
- *
  */
 public class FinalDeclarationOperationReader extends VariableDeclarationOperationReader {
 

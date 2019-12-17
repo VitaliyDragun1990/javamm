@@ -36,13 +36,11 @@ import static com.revenat.javamm.code.syntax.Keywords.FALSE;
 import static com.revenat.javamm.code.syntax.Keywords.NULL;
 import static com.revenat.javamm.code.syntax.Keywords.TRUE;
 import static com.revenat.javamm.code.syntax.SyntaxUtils.isValidSyntaxToken;
-
 import static java.util.Objects.requireNonNull;
 
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class SingleTokenExpressionBuilderImpl implements SingleTokenExpressionBuilder {
     private final VariableBuilder variableBuilder;
@@ -54,8 +52,8 @@ public class SingleTokenExpressionBuilderImpl implements SingleTokenExpressionBu
     @Override
     public boolean canBuild(final List<String> tokens) {
         return tokens.size() == 1 &&
-                isValidSyntaxToken(tokens.get(0)) &&
-                !SIGNIFICANT_TOKEN_DELIMITERS.contains(tokens.get(0));
+            isValidSyntaxToken(tokens.get(0)) &&
+            !SIGNIFICANT_TOKEN_DELIMITERS.contains(tokens.get(0));
     }
 
     /**
@@ -116,7 +114,7 @@ public class SingleTokenExpressionBuilderImpl implements SingleTokenExpressionBu
             throw new JavammLineSyntaxError(sourceLine, "%s expected at the end of the string token", openDelimiter);
         } else if (delimitersDoNotMatch(token, openDelimiter)) {
             throw new JavammLineSyntaxError(sourceLine,
-                    "%s expected at the end of the string literal instead of %s", openDelimiter, getLastChar(token));
+                "%s expected at the end of the string literal instead of %s", openDelimiter, getLastChar(token));
         }
         return stringWithoutDelimiters(token);
     }

@@ -25,7 +25,6 @@ import com.revenat.javamm.interpreter.model.LocalContext;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class RuntimeBuilderImpl implements RuntimeBuilder, LocalContextBuilder {
 

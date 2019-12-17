@@ -26,61 +26,44 @@ public interface ActionStateManager {
 
     void disableNewAction();
 
-    boolean isNewActionEnabled();
-
 
     void enableOpenAction();
 
     void disableOpenAction();
-
-    boolean isOpenActionEnabled();
 
 
     void enableSaveAction();
 
     void disableSaveAction();
 
-    boolean isSaveActionEnabled();
-
 
     void enableExitAction();
 
     void disableExitAction();
-
-    boolean isExitActionEnabled();
 
 
     void enableUndoAction();
 
     void disableUndoAction();
 
-    boolean isUndoActionEnabled();
-
 
     void enableRedoAction();
 
     void disableRedoAction();
-
-    boolean isRedoActionEnabled();
 
 
     void enableFormatAction();
 
     void disableFormatAction();
 
-    boolean isFormatActionEnabled();
-
 
     void enableRunAction();
 
     void disableRunAction();
-
-    boolean isRunActionEnabled();
 
 
     void enableTerminateAction();
 
     void disableTerminateAction();
 
-    boolean isTerminatedActionEnabled();
 }

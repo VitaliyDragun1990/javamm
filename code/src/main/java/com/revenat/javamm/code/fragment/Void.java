@@ -21,7 +21,6 @@ import static com.revenat.javamm.code.syntax.Keywords.VOID;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public final class Void {
 

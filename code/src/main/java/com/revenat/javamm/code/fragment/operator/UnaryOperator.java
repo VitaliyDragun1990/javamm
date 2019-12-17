@@ -25,7 +25,6 @@ import java.util.Optional;
  * Represents any supported unary operator
  *
  * @author Vitaliy Dragun
- *
  */
 public enum UnaryOperator implements Operator {
 

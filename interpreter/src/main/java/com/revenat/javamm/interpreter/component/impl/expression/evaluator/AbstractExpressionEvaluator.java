@@ -24,7 +24,6 @@ import java.util.Objects;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 abstract class AbstractExpressionEvaluator implements ExpressionContextAware {
     private ExpressionContext expressionContext;

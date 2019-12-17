@@ -17,26 +17,10 @@
 
 package com.revenat.javamm.vm.integration.function;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 import com.revenat.javamm.interpreter.model.StackTraceItem;
 import com.revenat.javamm.vm.integration.AbstractIntegrationTest;
-
-import java.util.List;
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.interpreter.InterpreterConfigurator.MAX_STACK_SIZE;
-import static com.revenat.javamm.vm.helper.CustomAsserts.assertErrorMessageContains;
-
-import static java.lang.String.format;
-import static java.lang.System.lineSeparator;
-import static java.util.stream.Collectors.joining;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -44,7 +28,19 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.interpreter.InterpreterConfigurator.MAX_STACK_SIZE;
+import static com.revenat.javamm.vm.helper.CustomAsserts.assertErrorMessageContains;
+import static java.lang.String.format;
+import static java.lang.System.lineSeparator;
+import static java.util.stream.Collectors.joining;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -55,23 +51,23 @@ public class StackTraceIntegrationTest extends AbstractIntegrationTest {
     @Order(1)
     void shouldThrowRuntimeErrorWithStackTrace() {
         final List<String> lines = List.of(
-                "function main() {",
-                "   first()",
-                "}",
+            "function main() {",
+            "   first()",
+            "}",
 
-                "function first() {",
-                "   second()",
-                "}",
+            "function first() {",
+            "   second()",
+            "}",
 
-                "function second() {",
-                "   var a = 1 / 0",
-                "}"
+            "function second() {",
+            "   var a = 1 / 0",
+            "}"
         );
 
         final String expectedStackTrace = Stream.of(
-                format("    at second() [%s:8]", MODULE_NAME),
-                format("    at first() [%s:5]", MODULE_NAME),
-                format("    at main() [%s:2]", MODULE_NAME)
+            format("    at second() [%s:8]", MODULE_NAME),
+            format("    at first() [%s:5]", MODULE_NAME),
+            format("    at main() [%s:2]", MODULE_NAME)
         ).collect(joining(lineSeparator()));
 
         final JavammRuntimeError e = assertThrows(JavammRuntimeError.class, () -> runCode(lines));
@@ -88,17 +84,17 @@ public class StackTraceIntegrationTest extends AbstractIntegrationTest {
     @Order(2)
     void shouldThrowStackOverflowErrorIfStackSizeExceedsMaxLimit() {
         final List<String> lines = List.of(
-                "function main() {",
-                "   main()",
-                "}"
+            "function main() {",
+            "   main()",
+            "}"
         );
 
         final String expectedStackTrace =
-                Stream.generate(() -> format("    at main() [%s:2]", MODULE_NAME))
+            Stream.generate(() -> format("    at main() [%s:2]", MODULE_NAME))
                 .limit(MAX_STACK_SIZE)
                 .collect(joining(lineSeparator()));
         final String expectedErrorMessage =
-                buildErrorMsg(format("Stack overflow error. Max stack size is %d", MAX_STACK_SIZE), expectedStackTrace);
+            buildErrorMsg(format("Stack overflow error. Max stack size is %d", MAX_STACK_SIZE), expectedStackTrace);
 
         final JavammRuntimeError e = assertThrows(JavammRuntimeError.class, () -> runCode(lines));
 
@@ -109,8 +105,8 @@ public class StackTraceIntegrationTest extends AbstractIntegrationTest {
     @Order(3)
     void shouldThrowRuntimeErrorWithoutStackTraceIfNoFunctionWasInvoked() {
         final List<String> lines = List.of(
-                "function test() {",
-                "}"
+            "function test() {",
+            "}"
         );
 
         final JavammRuntimeError e = assertThrows(JavammRuntimeError.class, () -> runCode(lines));

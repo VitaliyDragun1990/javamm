@@ -27,7 +27,6 @@ import java.util.List;
  * Responsible for invocation of any {@linkplain Function function}
  *
  * @author Vitaliy Dragun
- *
  */
 public interface FunctionInvoker {
 

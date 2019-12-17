@@ -24,7 +24,6 @@ import com.revenat.javamm.code.component.ExpressionContext;
  * {@linkplain ExpressionContext expression context} to be provided
  *
  * @author Vitaliy Dragun
- *
  */
 public interface ExpressionContextAware {
 

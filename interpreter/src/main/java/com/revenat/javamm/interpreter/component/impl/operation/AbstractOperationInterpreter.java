@@ -26,7 +26,6 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public abstract class AbstractOperationInterpreter<T extends Operation> implements OperationInterpreter<T> {
     protected final ExpressionContext expressionContext;

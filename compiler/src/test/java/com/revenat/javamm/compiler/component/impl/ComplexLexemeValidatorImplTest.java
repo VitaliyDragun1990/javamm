@@ -17,8 +17,6 @@
 
 package com.revenat.javamm.compiler.component.impl;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.Parenthesis;
@@ -32,19 +30,7 @@ import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.test.doubles.ExpressionDummy;
 import com.revenat.javamm.compiler.test.doubles.ExpressionStub;
 import com.revenat.javamm.compiler.test.doubles.VariableDummy;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.code.fragment.Parenthesis.CLOSING_PARENTHESIS;
-import static com.revenat.javamm.code.fragment.Parenthesis.OPENING_PARENTHESIS;
-import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
-
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toUnmodifiableList;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -57,7 +43,19 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import com.revenat.juinit.addons.ReplaceCamelCase;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.code.fragment.Parenthesis.CLOSING_PARENTHESIS;
+import static com.revenat.javamm.code.fragment.Parenthesis.OPENING_PARENTHESIS;
+import static com.revenat.javamm.compiler.test.helper.CustomAsserts.assertErrorMessageContains;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toUnmodifiableList;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -99,7 +97,7 @@ class ComplexLexemeValidatorImplTest {
     @Order(2)
     void shouldFailIfFirstLexemeIsBinaryOperator() {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> validate(ANY_BINARY_OPERATOR, ANY_EXPRESSION));
+            () -> validate(ANY_BINARY_OPERATOR, ANY_EXPRESSION));
 
         assertErrorMessageContains(e, "Expression can not start with binary operator: '%s'", ANY_BINARY_OPERATOR);
     }
@@ -108,7 +106,7 @@ class ComplexLexemeValidatorImplTest {
     @Order(3)
     void shouldFailIfLastLexemeIsBinaryOperator() {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> validate(ANY_EXPRESSION, ANY_BINARY_OPERATOR));
+            () -> validate(ANY_EXPRESSION, ANY_BINARY_OPERATOR));
 
         assertErrorMessageContains(e, "Expression can not end with binary operator: '%s'", ANY_BINARY_OPERATOR);
     }
@@ -117,7 +115,7 @@ class ComplexLexemeValidatorImplTest {
     @Order(4)
     void shouldFailIfLastLexemeIsUnaryOperator() {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> validate(ANY_EXPRESSION, ANY_UNARY_OPERATOR));
+            () -> validate(ANY_EXPRESSION, ANY_UNARY_OPERATOR));
 
         assertErrorMessageContains(e, "Expression can not end with unary operator: '%s'", ANY_UNARY_OPERATOR);
     }
@@ -126,27 +124,27 @@ class ComplexLexemeValidatorImplTest {
     @Order(5)
     void shouldFailIfNoExpressionBetweenTwoBinaryOperators() {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> validate(ANY_EXPRESSION, ANY_BINARY_OPERATOR, ANY_BINARY_OPERATOR, ANY_EXPRESSION));
+            () -> validate(ANY_EXPRESSION, ANY_BINARY_OPERATOR, ANY_BINARY_OPERATOR, ANY_EXPRESSION));
 
         assertErrorMessageContains(e, "An expression is expected between binary operators: '%s' and '%s'",
-                ANY_BINARY_OPERATOR, ANY_BINARY_OPERATOR);
+            ANY_BINARY_OPERATOR, ANY_BINARY_OPERATOR);
     }
 
     @Test
     @Order(6)
     void shouldFailIfNoBinaryOperatorBetweenTwoExpressions() {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> validate(ANY_EXPRESSION, ANY_EXPRESSION));
+            () -> validate(ANY_EXPRESSION, ANY_EXPRESSION));
 
         assertErrorMessageContains(e, "A binary operator is expected between expressions: '%s' and '%s'", ANY_EXPRESSION,
-                ANY_EXPRESSION);
+            ANY_EXPRESSION);
     }
 
     @Test
     @Order(7)
     void shouldFailIfBinaryOperatorRightAfterOpeningParenthesis() {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> validate(OPENING_PARENTHESIS, ANY_BINARY_OPERATOR, ANY_EXPRESSION));
+            () -> validate(OPENING_PARENTHESIS, ANY_BINARY_OPERATOR, ANY_EXPRESSION));
 
         assertErrorMessageContains(e, "An expression is expected for binary operator: '%s'", ANY_BINARY_OPERATOR);
     }
@@ -155,7 +153,7 @@ class ComplexLexemeValidatorImplTest {
     @Order(8)
     void shouldFailIfBinaryOperatorRightBeforeClosingParenthesis() {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> validate(ANY_EXPRESSION, ANY_BINARY_OPERATOR, CLOSING_PARENTHESIS));
+            () -> validate(ANY_EXPRESSION, ANY_BINARY_OPERATOR, CLOSING_PARENTHESIS));
 
         assertErrorMessageContains(e, "An expression is expected for binary operator: '%s'", ANY_BINARY_OPERATOR);
     }
@@ -164,7 +162,7 @@ class ComplexLexemeValidatorImplTest {
     @Order(9)
     void shouldFailIfUnaryOperatorRightBeforeClosingParenthesis() {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> validate(ANY_EXPRESSION, ANY_UNARY_OPERATOR, CLOSING_PARENTHESIS));
+            () -> validate(ANY_EXPRESSION, ANY_UNARY_OPERATOR, CLOSING_PARENTHESIS));
 
         assertErrorMessageContains(e, "An expression is expected for unary operator: '%s'", ANY_UNARY_OPERATOR);
     }
@@ -173,7 +171,7 @@ class ComplexLexemeValidatorImplTest {
     @Order(10)
     void shouldFailIfBinaryOperatorAfterUnaryOperator() {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> validate(ANY_EXPRESSION, ANY_UNARY_OPERATOR, ANY_BINARY_OPERATOR, ANY_EXPRESSION));
+            () -> validate(ANY_EXPRESSION, ANY_UNARY_OPERATOR, ANY_BINARY_OPERATOR, ANY_EXPRESSION));
 
         assertErrorMessageContains(e, "An expression is expected for binary operator: '%s'", ANY_BINARY_OPERATOR);
     }
@@ -182,7 +180,7 @@ class ComplexLexemeValidatorImplTest {
     @Order(11)
     void shouldFailIfNoLexemeBetweenOpeningAndClosingParenthesis() {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> validate(ANY_EXPRESSION, OPENING_PARENTHESIS, CLOSING_PARENTHESIS));
+            () -> validate(ANY_EXPRESSION, OPENING_PARENTHESIS, CLOSING_PARENTHESIS));
 
         assertErrorMessageContains(e, "Parentheses are incorrectly placed");
     }
@@ -191,7 +189,7 @@ class ComplexLexemeValidatorImplTest {
     @Order(12)
     void shouldFailIfNoLexemeBetweenClosingAndOpeningParenthesis() {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> validate(ANY_EXPRESSION, CLOSING_PARENTHESIS, OPENING_PARENTHESIS));
+            () -> validate(ANY_EXPRESSION, CLOSING_PARENTHESIS, OPENING_PARENTHESIS));
 
         assertErrorMessageContains(e, "Parentheses are incorrectly placed");
     }
@@ -202,7 +200,7 @@ class ComplexLexemeValidatorImplTest {
     void shouldFailIfNoBinaryOperatorBetweenTwoExpressionsIgnoringParentheses(final List<Lexeme> lexemes,
                                                                               final String expectedError) {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> validate(lexemes.toArray(new Lexeme[0])));
+            () -> validate(lexemes.toArray(new Lexeme[0])));
 
         assertErrorMessageContains(e, expectedError);
     }
@@ -211,7 +209,7 @@ class ComplexLexemeValidatorImplTest {
     @Order(14)
     void shouldFailIfFirstOperandOfBinaryAssignmentOperatorIsNotVariableExpression() {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> validate(ANY_EXPRESSION, ANY_BINARY_ASSIGNMENT_OPERATOR, ANY_EXPRESSION));
+            () -> validate(ANY_EXPRESSION, ANY_BINARY_ASSIGNMENT_OPERATOR, ANY_EXPRESSION));
 
         assertErrorMessageContains(e, "A variable expression is expected for binary operator: '%s'", ANY_BINARY_ASSIGNMENT_OPERATOR);
     }
@@ -226,17 +224,17 @@ class ComplexLexemeValidatorImplTest {
     @Order(16)
     void shouldFailIfVariableExpressionFollowedByBinaryAssignmentOperatorPrecededByAnyOperatorWithHigherPrecedence() {
         final JavammLineSyntaxError e = assertThrows(JavammLineSyntaxError.class,
-                () -> validate(ANY_EXPRESSION, ANY_BINARY_OPERATOR, VARIABLE_EXPRESSION, ANY_BINARY_ASSIGNMENT_OPERATOR, ANY_EXPRESSION));
+            () -> validate(ANY_EXPRESSION, ANY_BINARY_OPERATOR, VARIABLE_EXPRESSION, ANY_BINARY_ASSIGNMENT_OPERATOR, ANY_EXPRESSION));
 
         assertErrorMessageContains(e, "A variable expression is expected for binary operator: '%s'", ANY_BINARY_ASSIGNMENT_OPERATOR);
     }
 
-//    @Disabled
+    //    @Disabled
     @Test
     @Order(17)
     void shouldPassIfVariableExpressionFollowedByBinaryAssignmentOperatorNotPrecededByAnyOperatorWithHigherPrecedence() {
         assertDoesNotThrow(() -> validate(ANY_EXPRESSION, ANY_BINARY_OPERATOR, OPENING_PARENTHESIS,
-                        VARIABLE_EXPRESSION, ANY_BINARY_ASSIGNMENT_OPERATOR, ANY_EXPRESSION, CLOSING_PARENTHESIS));
+            VARIABLE_EXPRESSION, ANY_BINARY_ASSIGNMENT_OPERATOR, ANY_EXPRESSION, CLOSING_PARENTHESIS));
     }
 
     static final class InvalidLexemeCombinationWithParenthesesProvider implements ArgumentsProvider {
@@ -250,16 +248,16 @@ class ComplexLexemeValidatorImplTest {
             final String errorMessage = "A binary operator is expected between expressions: '1' and '2'";
 
             return Arrays.stream(Parenthesis.values())
-                    .map(parenthesis -> IntStream.range(1, MAX_PARENTHESES_REPEAT_COUNT + 1)
-                            .mapToObj(repeatCount -> Stream.generate(() -> parenthesis).limit(repeatCount))
-                            .map(parenthesisRepeatStream -> Arguments.arguments(
-                                    Stream.of(
-                                            Stream.of(expression1),
-                                            parenthesisRepeatStream,
-                                            Stream.of(expression2)
-                                            ).flatMap(identity()).collect(toUnmodifiableList()),
-                                    errorMessage
-                                    ))).flatMap(identity());
+                .map(parenthesis -> IntStream.range(1, MAX_PARENTHESES_REPEAT_COUNT + 1)
+                    .mapToObj(repeatCount -> Stream.generate(() -> parenthesis).limit(repeatCount))
+                    .map(parenthesisRepeatStream -> Arguments.arguments(
+                        Stream.of(
+                            Stream.of(expression1),
+                            parenthesisRepeatStream,
+                            Stream.of(expression2)
+                        ).flatMap(identity()).collect(toUnmodifiableList()),
+                        errorMessage
+                    ))).flatMap(identity());
             /*
             return
                 1 ( 2

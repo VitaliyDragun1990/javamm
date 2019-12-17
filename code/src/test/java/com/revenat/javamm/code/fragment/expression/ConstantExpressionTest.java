@@ -17,16 +17,9 @@
 
 package com.revenat.javamm.code.fragment.expression;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.component.ExpressionContext;
 import com.revenat.javamm.code.test.doubles.ExpressionContextDummy;
-
-import java.util.stream.Stream;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -36,13 +29,40 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import com.revenat.juinit.addons.ReplaceCamelCase;
+
+import java.util.stream.Stream;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a constant expression")
 class ConstantExpressionTest {
     private static final ExpressionContext DUMMY_CONTEXT = new ExpressionContextDummy();
+
+    private static Stream<Arguments> supportedLiterals() {
+        return Stream.of(
+            Arguments.arguments("test"),
+            Arguments.arguments(1),
+            Arguments.arguments(10, 5),
+            Arguments.arguments(true),
+            Arguments.arguments(false)
+        );
+    }
+
+    private static Stream<Arguments> unsupportedLiterals() {
+        return Stream.of(
+            Arguments.arguments(null, "null value is not allowed"),
+            Arguments.arguments(10.5F, "Unsupported value type"),
+            Arguments.arguments(100L, "Unsupported value type")
+        );
+    }
 
     @ParameterizedTest
     @Order(1)
@@ -88,24 +108,6 @@ class ConstantExpressionTest {
         assertNotEquals(ConstantExpression.valueOf("true"), ConstantExpression.valueOf(true));
         assertNotEquals(ConstantExpression.valueOf("true"), null);
         assertNotEquals(ConstantExpression.valueOf("true"), new Object());
-    }
-
-    private static Stream<Arguments> supportedLiterals() {
-        return Stream.of(
-                Arguments.arguments("test"),
-                Arguments.arguments(1),
-                Arguments.arguments(10,5),
-                Arguments.arguments(true),
-                Arguments.arguments(false)
-                );
-    }
-    
-    private static Stream<Arguments> unsupportedLiterals() {
-        return Stream.of(
-                Arguments.arguments(null, "null value is not allowed"),
-                Arguments.arguments(10.5F, "Unsupported value type"),
-                Arguments.arguments(100L, "Unsupported value type")
-                );
     }
 
     private void assertValue(final ConstantExpression constantExpression, final Object value) {

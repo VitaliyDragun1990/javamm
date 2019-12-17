@@ -17,18 +17,12 @@
 
 package com.revenat.javamm.compiler.component.impl.util;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.syntax.Keywords;
 import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.LanguageFeature;
 import com.revenat.javamm.compiler.error.JavammSyntaxError;
-
-import java.util.stream.Stream;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -39,14 +33,24 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.stream.Stream;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("syntax validation utils")
 class SyntaxValidationUtilsTest {
     private static final SourceLine DUMMY_SOURCE_LINE = SourceLine.EMPTY_SOURCE_LINE;
+
     private static final LanguageFeature LANGUAGE_FEATURE = LanguageFeature.VARIABLE;
+
+    static Stream<String> keywordProvider() {
+        return Keywords.ALL_KEYWORDS.stream();
+    }
 
     private void validateFirstCharacterIsLetter(final String name) {
         SyntaxValidationUtils.validateThatFirstCharacterIsLetter(LANGUAGE_FEATURE, name, DUMMY_SOURCE_LINE);
@@ -81,8 +85,8 @@ class SyntaxValidationUtilsTest {
         @Order(2)
         void shouldFailForNonLetterFirstCharacter(final String name) {
             final JavammLineSyntaxError e = assertThrows(
-                    JavammLineSyntaxError.class,
-                    () -> validateFirstCharacterIsLetter(name));
+                JavammLineSyntaxError.class,
+                () -> validateFirstCharacterIsLetter(name));
             assertFirstCharacterIsNotLetterErrorMessage(e, name);
         }
     }
@@ -104,13 +108,9 @@ class SyntaxValidationUtilsTest {
         @Order(2)
         void shouldFailForKeyword(final String name) {
             final JavammLineSyntaxError e = assertThrows(
-                    JavammLineSyntaxError.class,
-                    () -> validateThatNameIsNotKeyword(name));
+                JavammLineSyntaxError.class,
+                () -> validateThatNameIsNotKeyword(name));
             assertNameIsNotKeywordErrorMessage(e, name);
         }
-    }
-
-    static Stream<String> keywordProvider() {
-        return Keywords.ALL_KEYWORDS.stream();
     }
 }

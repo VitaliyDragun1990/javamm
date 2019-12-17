@@ -30,7 +30,6 @@ import static java.util.stream.Collectors.toUnmodifiableMap;
  * Represents any built-in type
  *
  * @author Vitaliy Dragun
- *
  */
 public enum TypeExpression implements Expression, CaseValueExpression {
 
@@ -45,8 +44,8 @@ public enum TypeExpression implements Expression, CaseValueExpression {
     VOID(com.revenat.javamm.code.fragment.Void.class);
 
     private static final Map<String, TypeExpression> ALL_TYPES = Arrays
-            .stream(TypeExpression.values())
-            .collect(toUnmodifiableMap(TypeExpression::getKeyword, identity()));
+        .stream(TypeExpression.values())
+        .collect(toUnmodifiableMap(TypeExpression::getKeyword, identity()));
 
     private final Class<?> clazz;
 

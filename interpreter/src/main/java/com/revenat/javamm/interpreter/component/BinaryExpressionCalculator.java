@@ -26,7 +26,6 @@ import com.revenat.javamm.interpreter.error.JavammRuntimeError;
  * Calculates expressions with {@linkplain BinaryOperator binary operator}
  *
  * @author Vitaliy Dragun
- *
  */
 public interface BinaryExpressionCalculator extends ExpressionCalculator {
 
@@ -34,7 +33,6 @@ public interface BinaryExpressionCalculator extends ExpressionCalculator {
      * Returns {@linkplain BinaryOperator binary operator} that expression
      * calculator can handle
      */
-    @Override
     BinaryOperator getOperator();
 
     /**

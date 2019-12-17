@@ -28,7 +28,6 @@ import java.util.List;
  * closing bracket.
  *
  * @author Vitaliy Dragun
- *
  */
 class SimpleTokensBetweenBracketsExtractor {
 
@@ -43,7 +42,7 @@ class SimpleTokensBetweenBracketsExtractor {
     private final boolean allowEmptyResult;
 
     SimpleTokensBetweenBracketsExtractor(final String openingBracket, final String closingBracket,
-            final boolean allowEmptyResult, final SourceLine sourceLine) {
+                                         final boolean allowEmptyResult, final SourceLine sourceLine) {
         this.openingBracket = openingBracket;
         this.closingBracket = closingBracket;
         this.allowEmptyResult = allowEmptyResult;
@@ -87,7 +86,7 @@ class SimpleTokensBetweenBracketsExtractor {
     }
 
     private List<String> getTokensBetweenBrackets(final List<String> tokens, final int openingBracketPosition,
-            final int closingBracketsPosition) {
+                                                  final int closingBracketsPosition) {
         final List<String> tokensBetweenBrackets = tokens.subList(openingBracketPosition + 1, closingBracketsPosition);
 
         validateSize(tokensBetweenBrackets);

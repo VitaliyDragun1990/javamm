@@ -29,7 +29,6 @@ import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMEN
  * implementation for binary division operator
  *
  * @author Vitaliy Dragun
- *
  */
 public final class DivisionBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
 

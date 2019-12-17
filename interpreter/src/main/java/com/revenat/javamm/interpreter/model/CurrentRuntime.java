@@ -29,7 +29,6 @@ import java.util.List;
  * moment.
  *
  * @author Vitaliy Dragun
- *
  */
 public interface CurrentRuntime {
 

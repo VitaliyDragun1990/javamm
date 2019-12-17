@@ -27,7 +27,6 @@ import com.revenat.javamm.interpreter.error.TerminateInterpreterException;
  * code into byte code and interpreting that byte code afterwards.
  *
  * @author Vitaliy Dragun
- *
  */
 public interface VirtualMachine {
 

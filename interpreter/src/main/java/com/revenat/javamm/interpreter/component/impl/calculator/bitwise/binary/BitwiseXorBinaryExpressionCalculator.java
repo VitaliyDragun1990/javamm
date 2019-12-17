@@ -25,7 +25,6 @@ import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
  * implementation for binary bitwise xor ('^') operator
  *
  * @author Vitaliy Dragun
- *
  */
 public final class BitwiseXorBinaryExpressionCalculator extends AbstractBitwiseBinaryExpressionCalculator {
 

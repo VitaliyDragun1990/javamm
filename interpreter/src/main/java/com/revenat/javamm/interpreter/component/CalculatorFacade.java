@@ -27,7 +27,6 @@ import com.revenat.javamm.code.fragment.operator.UnaryOperator;
  * {@linkplain UnaryOperator unary operators}
  *
  * @author Vitaliy Dragun
- *
  */
 public interface CalculatorFacade {
 

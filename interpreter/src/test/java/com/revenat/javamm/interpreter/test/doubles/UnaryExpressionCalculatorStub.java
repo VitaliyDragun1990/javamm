@@ -24,24 +24,13 @@ import com.revenat.javamm.interpreter.component.UnaryExpressionCalculator;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class UnaryExpressionCalculatorStub implements UnaryExpressionCalculator {
     private UnaryOperator supportedOperator = null;
+
     private Object calculationResult = null;
 
-    public UnaryExpressionCalculatorStub() {
-    }
-
     public UnaryExpressionCalculatorStub(final UnaryOperator supportedOperator) {
-        this.supportedOperator = supportedOperator;
-    }
-
-    public void setCalculationResult(final Object calculationResult) {
-        this.calculationResult = calculationResult;
-    }
-
-    public void setSupportedOperator(final UnaryOperator supportedOperator) {
         this.supportedOperator = supportedOperator;
     }
 
@@ -75,9 +64,6 @@ public class UnaryExpressionCalculatorStub implements UnaryExpressionCalculator 
             return false;
         }
         final UnaryExpressionCalculatorStub other = (UnaryExpressionCalculatorStub) obj;
-        if (supportedOperator != other.supportedOperator) {
-            return false;
-        }
-        return true;
+        return supportedOperator == other.supportedOperator;
     }
 }

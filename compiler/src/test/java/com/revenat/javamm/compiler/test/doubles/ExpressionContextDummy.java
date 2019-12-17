@@ -23,7 +23,6 @@ import com.revenat.javamm.code.fragment.UpdatableExpression;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ExpressionContextDummy implements ExpressionContext {
 

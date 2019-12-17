@@ -21,7 +21,6 @@ import com.revenat.javamm.code.fragment.SourceLine;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ContinueOperation extends AbstractOperation {
 

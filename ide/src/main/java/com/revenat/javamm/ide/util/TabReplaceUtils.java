@@ -55,7 +55,7 @@ public final class TabReplaceUtils {
         Nodes.addInputMap(codeArea, InputMap.consume(
             EventPattern.keyPressed(KeyCode.V, SHORTCUT_DOWN),
             e -> Optional.ofNullable(Clipboard.getSystemClipboard().getString())
-            .ifPresent(text -> codeArea.replaceSelection(replaceTabulations(text)))
+                .ifPresent(text -> codeArea.replaceSelection(replaceTabulations(text)))
         ));
     }
 

@@ -17,24 +17,10 @@
 
 package com.revenat.javamm.code.fragment.expression;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
-
 import com.revenat.javamm.code.fragment.Lexeme;
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.code.test.helper.MockUtils;
-
-import java.util.List;
-import java.util.stream.Stream;
-
-import static com.revenat.javamm.code.fragment.expression.ConstantExpression.valueOf;
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
-import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_ADDITION;
-import static com.revenat.javamm.code.fragment.operator.UnaryOperator.DECREMENT;
-import static com.revenat.javamm.code.fragment.operator.UnaryOperator.INCREMENT;
-import static com.revenat.javamm.code.test.helper.MockUtils.variable;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.MethodOrderer;
@@ -51,7 +37,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+import java.util.stream.Stream;
+
+import static com.revenat.javamm.code.fragment.expression.ConstantExpression.valueOf;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
+import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_ADDITION;
+import static com.revenat.javamm.code.fragment.operator.UnaryOperator.DECREMENT;
+import static com.revenat.javamm.code.fragment.operator.UnaryOperator.INCREMENT;
+import static com.revenat.javamm.code.test.helper.MockUtils.variable;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
@@ -83,18 +80,18 @@ class PostfixNotationComplexExpressionTest {
     static class NotBinaryAssignmentExpressionProvider implements ArgumentsProvider {
 
         @Override
-        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) throws Exception {
+        public Stream<? extends Arguments> provideArguments(final ExtensionContext context) {
             return Stream.of(
-                    arguments(
-                            createPostfixExpression("a ++ --", variable("a"), INCREMENT, DECREMENT)),
-                    arguments(
-                            createPostfixExpression("a++", variable("a"), INCREMENT)),
-                    arguments(
-                            createPostfixExpression("a + 1", variable("a"), valueOf(1), ARITHMETIC_ADDITION)),
-                    arguments(
-                            createPostfixExpression("2 + a", valueOf(1), variable("a"), ARITHMETIC_ADDITION)),
-                    arguments(
-                            createPostfixExpression("2 + a += 3", valueOf(2), variable("a"), ASSIGNMENT_ADDITION, ARITHMETIC_ADDITION))
+                arguments(
+                    createPostfixExpression("a ++ --", variable("a"), INCREMENT, DECREMENT)),
+                arguments(
+                    createPostfixExpression("a++", variable("a"), INCREMENT)),
+                arguments(
+                    createPostfixExpression("a + 1", variable("a"), valueOf(1), ARITHMETIC_ADDITION)),
+                arguments(
+                    createPostfixExpression("2 + a", valueOf(1), variable("a"), ARITHMETIC_ADDITION)),
+                arguments(
+                    createPostfixExpression("2 + a += 3", valueOf(2), variable("a"), ASSIGNMENT_ADDITION, ARITHMETIC_ADDITION))
             );
         }
 

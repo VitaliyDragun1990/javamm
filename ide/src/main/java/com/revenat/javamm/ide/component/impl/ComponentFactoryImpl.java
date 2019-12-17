@@ -116,28 +116,28 @@ final class ComponentFactoryImpl implements ComponentFactory {
         Builder() {
         }
 
-        Builder addExecutorService(final ExecutorService executorService) {
-            this.executorService = requireNonNull(executorService);
+        Builder addExecutorService(final ExecutorService executor) {
+            this.executorService = requireNonNull(executor);
             return this;
         }
 
-        Builder addCodeTemplateHelper(final CodeTemplateHelper codeTemplateHelper) {
-            this.codeTemplateHelper = requireNonNull(codeTemplateHelper);
+        Builder addCodeTemplateHelper(final CodeTemplateHelper templateHelper) {
+            this.codeTemplateHelper = requireNonNull(templateHelper);
             return this;
         }
 
-        Builder addNewLineHelper(final NewLineHelper newLineHelper) {
-            this.newLineHelper = requireNonNull(newLineHelper);
+        Builder addNewLineHelper(final NewLineHelper nlHelper) {
+            this.newLineHelper = requireNonNull(nlHelper);
             return this;
         }
 
-        Builder addPairedTokensHelper(final PairedTokensHelper pairedTokensHelper) {
-            this.pairedTokensHelper = requireNonNull(pairedTokensHelper);
+        Builder addPairedTokensHelper(final PairedTokensHelper ptHelper) {
+            this.pairedTokensHelper = requireNonNull(ptHelper);
             return this;
         }
 
-        Builder addCodeFormatter(final CodeFormatter codeFormatter) {
-            this.codeFormatter = requireNonNull(codeFormatter);
+        Builder addCodeFormatter(final CodeFormatter cFormatter) {
+            this.codeFormatter = requireNonNull(cFormatter);
             return this;
         }
 

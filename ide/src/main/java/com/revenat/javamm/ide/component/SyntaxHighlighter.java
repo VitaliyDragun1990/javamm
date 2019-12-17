@@ -28,5 +28,4 @@ public interface SyntaxHighlighter {
 
     void disable();
 
-    void highlightNow();
 }

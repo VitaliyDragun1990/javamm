@@ -23,13 +23,7 @@ import com.revenat.javamm.code.fragment.Operator;
  * Calculates expressions that contain {@linkplain Operator operator}
  *
  * @author Vitaliy Dragun
- *
  */
 public interface ExpressionCalculator {
 
-    /**
-     * Returns particular {@linkplain Operator operator} this expression calculator
-     * can handle
-     */
-    Operator getOperator();
 }

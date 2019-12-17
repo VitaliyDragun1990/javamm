@@ -26,7 +26,6 @@ import java.util.List;
  * Represents expression with assignment unary operator in postfix position
  *
  * @author Vitaliy Dragun
- *
  */
 public class UnaryPostfixAssignmentExpression extends UnaryAssignmentExpression {
 
@@ -39,7 +38,7 @@ public class UnaryPostfixAssignmentExpression extends UnaryAssignmentExpression 
         final Object oldValue = getOperand().getValue(expressionContext);
 
         final Object newValue = new PostfixNotationComplexExpression(List.of(getOperand(), getOperator()), toString())
-                .getValue(expressionContext);
+            .getValue(expressionContext);
         getOperand().setValue(expressionContext, newValue);
 
         return oldValue;

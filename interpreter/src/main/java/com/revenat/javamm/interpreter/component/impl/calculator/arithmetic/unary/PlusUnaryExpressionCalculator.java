@@ -28,7 +28,6 @@ import static com.revenat.javamm.code.util.TypeUtils.confirmType;
  * implementation for 'arithmetical unary plus' ({@code +}) operator
  *
  * @author Vitaliy Dragun
- *
  */
 public class PlusUnaryExpressionCalculator extends AbstractUnaryExpressionCalculator {
 

@@ -22,7 +22,6 @@ import com.revenat.javamm.code.fragment.function.DeveloperFunction;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public interface StackTraceItem {
 

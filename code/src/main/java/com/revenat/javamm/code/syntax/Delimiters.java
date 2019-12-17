@@ -32,8 +32,8 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
  * Contains all possible delimiters supported in the Javamm language syntax
  *
  * @author Vitaliy Dragun
- *
  */
+@SuppressWarnings("ALL")
 public final class Delimiters {
 
     public static final String START_MULTI_LINE_COMMENT = "/*";
@@ -79,27 +79,27 @@ public final class Delimiters {
      * <> - angle brackets
      */
     private static final Set<String> NOT_OPERATOR_TOKEN_DELIMITERS = Set.of(
-            OPENING_PARENTHESIS, CLOSING_PARENTHESIS,
-            OPENING_CURLY_BRACE, CLOSING_CURLY_BRACE,
-            OPENING_SQUARE_BRACKET, CLOSING_SQUARE_BRACKET,
-            ":",
-            ",",
-            ";"
+        OPENING_PARENTHESIS, CLOSING_PARENTHESIS,
+        OPENING_CURLY_BRACE, CLOSING_CURLY_BRACE,
+        OPENING_SQUARE_BRACKET, CLOSING_SQUARE_BRACKET,
+        ":",
+        ",",
+        ";"
     );
 
     public static final Set<String> SIGNIFICANT_TOKEN_DELIMITERS =
-            Stream.of(
-                    OPERATOR_TOKEN_DELIMITERS.stream(),
-                    NOT_OPERATOR_TOKEN_DELIMITERS.stream()
-            ).flatMap(identity())
+        Stream.of(
+            OPERATOR_TOKEN_DELIMITERS.stream(),
+            NOT_OPERATOR_TOKEN_DELIMITERS.stream()
+        ).flatMap(identity())
             .collect(toUnmodifiableSet());
 
     public static final Set<String> SIGNIFICANT_TOKEN_DELIMITERS_WITH_COMMENTS =
-            Stream.of(
-                    OPERATOR_TOKEN_DELIMITERS.stream(),
-                    NOT_OPERATOR_TOKEN_DELIMITERS.stream(),
-                    Stream.of(START_MULTI_LINE_COMMENT, END_MULTI_LINE_COMMENT, START_SINGLE_LINE_COMMENT)
-                    ).flatMap(identity())
+        Stream.of(
+            OPERATOR_TOKEN_DELIMITERS.stream(),
+            NOT_OPERATOR_TOKEN_DELIMITERS.stream(),
+            Stream.of(START_MULTI_LINE_COMMENT, END_MULTI_LINE_COMMENT, START_SINGLE_LINE_COMMENT)
+        ).flatMap(identity())
             .collect(toUnmodifiableSet());
 
     private Delimiters() {
@@ -107,23 +107,23 @@ public final class Delimiters {
 
     private static Set<String> operatorTokenDelimiters() {
         return Stream.of(
-                binaryOperatorTokenProvider(),
-                unaryOperatorTokenProvider(),
-                ternaryOperatorTokenProvider(),
-                Stream.of("=")
+            binaryOperatorTokenProvider(),
+            unaryOperatorTokenProvider(),
+            ternaryOperatorTokenProvider(),
+            Stream.of("=")
         ).flatMap(identity())
-         .collect(toUnmodifiableSet());
+            .collect(toUnmodifiableSet());
     }
 
     private static Stream<String> binaryOperatorTokenProvider() {
         return Arrays.stream(BinaryOperator.values())
-                .filter(op -> op != BinaryOperator.PREDICATE_TYPEOF)
-                .map(BinaryOperator::getCode);
+            .filter(op -> op != BinaryOperator.PREDICATE_TYPEOF)
+            .map(BinaryOperator::getCode);
     }
 
     private static Stream<String> unaryOperatorTokenProvider() {
         return Arrays.stream(UnaryOperator.values())
-                .map(UnaryOperator::getCode);
+            .map(UnaryOperator::getCode);
     }
 
     private static Stream<String> ternaryOperatorTokenProvider() {

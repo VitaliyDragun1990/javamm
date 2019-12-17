@@ -49,7 +49,7 @@ import static org.mockito.Mockito.mock;
 @DisplayName("an operator precedence resolver")
 class OperatorPrecedenceResolverImplTest {
 
-    private OperatorPrecedenceResolver operatorPrecedenceResolver =
+    private final OperatorPrecedenceResolver operatorPrecedenceResolver =
         new OperatorPrecedenceResolverImpl(CompilerConfigurator.OPERATOR_PRECEDENCE_REGISTRY);
 
     @Test

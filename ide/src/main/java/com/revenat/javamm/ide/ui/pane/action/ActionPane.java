@@ -48,12 +48,13 @@ import static com.revenat.javamm.ide.util.ResourceUtils.loadFromFxmlResource;
 import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
-// TODO: ask whether to save changes before running VM
+
 /**
  * Manages state of the action pane control elements
  *
  * @author Vitaliy Dragun
  */
+@SuppressWarnings("unused")
 public final class ActionPane extends VBox implements ActionStateManager, VirtualMachineRunCompletedListener,
     TabChangeListener {
 
@@ -257,11 +258,6 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
     }
 
     @Override
-    public boolean isNewActionEnabled() {
-        return !miNew.isDisable();
-    }
-
-    @Override
     public void disableNewAction() {
         miNew.setDisable(true);
     }
@@ -269,11 +265,6 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
     @Override
     public void enableOpenAction() {
         miOpen.setDisable(false);
-    }
-
-    @Override
-    public boolean isOpenActionEnabled() {
-        return !miOpen.isDisable();
     }
 
     @Override
@@ -287,11 +278,6 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
     }
 
     @Override
-    public boolean isSaveActionEnabled() {
-        return !miSave.isDisable();
-    }
-
-    @Override
     public void disableSaveAction() {
         miSave.setDisable(true);
     }
@@ -299,11 +285,6 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
     @Override
     public void enableExitAction() {
         miExit.setDisable(false);
-    }
-
-    @Override
-    public boolean isExitActionEnabled() {
-        return !miExit.isDisable();
     }
 
     @Override
@@ -317,11 +298,6 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
     }
 
     @Override
-    public boolean isUndoActionEnabled() {
-        return !miUndo.isDisable();
-    }
-
-    @Override
     public void disableUndoAction() {
         miUndo.setDisable(true);
     }
@@ -329,11 +305,6 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
     @Override
     public void enableRedoAction() {
         miRedo.setDisable(false);
-    }
-
-    @Override
-    public boolean isRedoActionEnabled() {
-        return !miRedo.isDisable();
     }
 
     @Override
@@ -347,11 +318,6 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
     }
 
     @Override
-    public boolean isFormatActionEnabled() {
-        return !miFormat.isDisable();
-    }
-
-    @Override
     public void disableFormatAction() {
         miFormat.setDisable(true);
     }
@@ -362,11 +328,6 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
     }
 
     @Override
-    public boolean isRunActionEnabled() {
-        return !miRun.isDisable();
-    }
-
-    @Override
     public void disableRunAction() {
         miRun.setDisable(true);
     }
@@ -374,11 +335,6 @@ public final class ActionPane extends VBox implements ActionStateManager, Virtua
     @Override
     public void enableTerminateAction() {
         miTerminate.setDisable(false);
-    }
-
-    @Override
-    public boolean isTerminatedActionEnabled() {
-        return !miTerminate.isDisable();
     }
 
     @Override

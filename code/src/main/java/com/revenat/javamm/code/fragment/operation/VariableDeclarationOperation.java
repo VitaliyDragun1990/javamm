@@ -27,7 +27,6 @@ import static java.util.Objects.requireNonNull;
  * Represents variable declaration operation
  *
  * @author Vitaliy Dragun
- *
  */
 public final class VariableDeclarationOperation extends AbstractOperation
     implements ForInitOperation {

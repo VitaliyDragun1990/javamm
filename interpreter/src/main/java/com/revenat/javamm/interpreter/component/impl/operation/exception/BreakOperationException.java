@@ -21,7 +21,6 @@ import static com.revenat.javamm.code.syntax.Keywords.BREAK;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class BreakOperationException extends InterruptOperationException {
 

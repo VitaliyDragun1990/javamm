@@ -27,18 +27,12 @@ import static com.revenat.javamm.code.util.TypeUtils.getType;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public abstract class AbstractBinaryExpressionCalculator implements BinaryExpressionCalculator {
     private final BinaryOperator operator;
 
     protected AbstractBinaryExpressionCalculator(final BinaryOperator operator) {
         this.operator = operator;
-    }
-
-    @Override
-    public BinaryOperator getOperator() {
-        return operator;
     }
 
     @Override
@@ -53,10 +47,15 @@ public abstract class AbstractBinaryExpressionCalculator implements BinaryExpres
 
     protected abstract Object calculate(Object value1, Object value2);
 
+    @Override
+    public BinaryOperator getOperator() {
+        return operator;
+    }
+
     protected final JavammLineRuntimeError createNotSupportedTypesError(final Object value1, final Object value2) {
         return new JavammLineRuntimeError("Operator '%s' is not supported for types: %s and %s",
-                operator.getCode(),
-                getType(value1),
-                getType(value2));
+            operator.getCode(),
+            getType(value1),
+            getType(value2));
     }
 }

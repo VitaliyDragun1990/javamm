@@ -19,6 +19,7 @@ package com.revenat.javamm.interpreter.component.impl.calculator.arithmetic.bina
 
 import com.revenat.javamm.code.fragment.operator.BinaryOperator;
 import com.revenat.javamm.interpreter.component.BinaryExpressionCalculator;
+
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ARITHMETIC_ADDITION;
 import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMENT_ADDITION;
 
@@ -27,8 +28,8 @@ import static com.revenat.javamm.code.fragment.operator.BinaryOperator.ASSIGNMEN
  * implementation for binary addition operator
  *
  * @author Vitaliy Dragun
- *
  */
+@SuppressWarnings("RedundantCast")
 public final class AdditionBinaryExpressionCalculator extends AbstractArithmeticBinaryExpressionCalculator {
 
     private AdditionBinaryExpressionCalculator(final BinaryOperator operator) {

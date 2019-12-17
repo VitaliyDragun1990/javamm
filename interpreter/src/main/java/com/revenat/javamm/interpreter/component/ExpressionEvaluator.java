@@ -23,9 +23,8 @@ import com.revenat.javamm.interpreter.error.JavammRuntimeError;
 /**
  * Responsible for evaluating expressions
  *
- * @author Vitaliy Dragun
  * @param <T> type of expression to evaluate
- *
+ * @author Vitaliy Dragun
  */
 public interface ExpressionEvaluator<T extends Expression> {
 

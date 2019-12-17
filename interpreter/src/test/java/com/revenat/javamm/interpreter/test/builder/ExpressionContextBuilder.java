@@ -28,10 +28,10 @@ import java.util.Set;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class ExpressionContextBuilder {
     private final Set<ExpressionEvaluator<?>> evaluators;
+
     private final Set<ExpressionUpdater<?>> updaters;
 
     public ExpressionContextBuilder() {

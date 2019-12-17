@@ -36,12 +36,10 @@ import static com.revenat.javamm.code.syntax.Keywords.FUNCTION;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxParseUtils.getTokensBetweenBrackets;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateClosingParenthesisBeforeOpeningCurlyBrace;
 import static com.revenat.javamm.compiler.component.impl.util.SyntaxValidationUtils.validateThatLineEndsWithOpeningCurlyBrace;
-
 import static java.util.Objects.requireNonNull;
 
 /**
  * @author Vitaliy Dragun
- *
  */
 public class FunctionReaderImpl implements FunctionReader {
 
@@ -88,10 +86,10 @@ public class FunctionReaderImpl implements FunctionReader {
                                             final List<Variable> parameters,
                                             final Block body) {
         return new DeveloperFunction.Builder()
-                .setName(name)
-                .setBody(body)
-                .setParameters(parameters)
-                .build();
+            .setName(name)
+            .setBody(body)
+            .setParameters(parameters)
+            .build();
     }
 
     private SourceLine requireValidFunctionDefinition(final ListIterator<SourceLine> sourceCode) {
@@ -129,7 +127,7 @@ public class FunctionReaderImpl implements FunctionReader {
         }
     }
 
-    private JavammLineSyntaxError syntaxError(final SourceLine sourceLine, final String message, final Object...args) {
+    private JavammLineSyntaxError syntaxError(final SourceLine sourceLine, final String message, final Object... args) {
         return new JavammLineSyntaxError(sourceLine, message, args);
     }
 }

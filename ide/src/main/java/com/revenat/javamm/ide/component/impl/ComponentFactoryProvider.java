@@ -33,6 +33,7 @@ import static java.lang.String.format;
 /**
  * @author Vitaliy Dragun
  */
+@SuppressWarnings("SpellCheckingInspection")
 public final class ComponentFactoryProvider {
 
     static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
@@ -62,6 +63,7 @@ public final class ComponentFactoryProvider {
         return componentFactory;
     }
 
+    @SuppressWarnings("unused")
     public static void setComponentFactory(final ComponentFactory componentFactory) {
         ComponentFactoryProvider.componentFactory = componentFactory;
     }
@@ -73,7 +75,8 @@ public final class ComponentFactoryProvider {
 
             .addTemplate(format("if(%s) {\n\t\n}", CURSOR), "i", "if")
             .addTemplate(format("if(%s) {\n\t\n}\nelse {\n\t\n}", CURSOR), "ifel", "ife", "ie")
-            .addTemplate(format("switch(%s) {\n\tcase 1:{\n\t\tbreak\n\t}\n\tcase 2:{\n\t\tbreak\n\t}\n\tdefault:{\n\t\t\n\t}\n}",
+            .addTemplate(format("switch(%s) {\n\tcase 1:{\n\t\tbreak\n\t}\n\tcase 2:{\n\t\tbreak\n\t}\n\tdefault" +
+                    ":{\n\t\t\n\t}\n}",
                 CURSOR), "s", "sw", "swi", "swit", "switc", "switch")
             .addTemplate(format("default:{\n\t%s\n}", CURSOR), "de", "df", "def", "defa", "defau", "defaul", "default")
             .addTemplate(format("case %s:{\n\tbreak\n}", CURSOR), "ca", "cas", "case")

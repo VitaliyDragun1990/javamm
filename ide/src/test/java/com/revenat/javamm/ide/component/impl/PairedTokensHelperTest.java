@@ -42,7 +42,7 @@ class PairedTokensHelperTest {
     private CodeArea codeArea;
 
     @ParameterizedTest
-    @CsvSource({
+    @CsvSource( {
         "[,]",
         "{,}",
         "(,)",

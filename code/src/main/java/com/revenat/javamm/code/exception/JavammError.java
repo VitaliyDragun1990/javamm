@@ -23,7 +23,6 @@ import static java.util.Objects.requireNonNull;
  * Represents user error
  *
  * @author Vitaliy Dragun
- *
  */
 public class JavammError extends RuntimeException {
     private static final long serialVersionUID = -1522137327290886414L;

@@ -38,9 +38,9 @@ public final class Line {
 
     private final String originalContent;
 
-    private String significantContent;
-
     private final List<Token> tokens;
+
+    private String significantContent;
 
     private String indentation;
 
@@ -78,12 +78,12 @@ public final class Line {
         this.indentation = requireNonNull(indentation);
     }
 
-    public void setSignificantContent(final String significantContent) {
-        this.significantContent = requireNonNull(significantContent);
-    }
-
     public StringIterator getSignificantContent() {
         return new StringIterator(significantContent);
+    }
+
+    public void setSignificantContent(final String significantContent) {
+        this.significantContent = requireNonNull(significantContent);
     }
 
     public String getOriginalContent() {

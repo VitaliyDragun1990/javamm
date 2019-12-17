@@ -112,9 +112,9 @@ class CodeFormatterTest {
             "",
             "line2"
         );
-        final List<String> unformattedSourceCode = Arrays.asList(sourceCode.split("\n"));
+        final List<String> unFormattedSourceCode = Arrays.asList(sourceCode.split("\n"));
 
-        assertThat(codeFormatter.format(unformattedSourceCode), equalTo(expectedResult));
+        assertThat(codeFormatter.format(unFormattedSourceCode), equalTo(expectedResult));
     }
 
     @ParameterizedTest
@@ -132,14 +132,14 @@ class CodeFormatterTest {
     })
     @Order(6)
     void shouldLeaveNoMoreThanOneEmptyLineBeforeFirstLineWithCode(final String sourceCode) {
-        final List<String> unformattedSourceCode = Arrays.asList(sourceCode.split("\n"));
+        final List<String> unFormattedSourceCode = Arrays.asList(sourceCode.split("\n"));
         final List<String> expectedResult = List.of(
             "",
             "line1",
             "line2"
         );
 
-        assertThat(codeFormatter.format(unformattedSourceCode), equalTo(expectedResult));
+        assertThat(codeFormatter.format(unFormattedSourceCode), equalTo(expectedResult));
     }
 
     @ParameterizedTest
@@ -153,13 +153,13 @@ class CodeFormatterTest {
     })
     @Order(7)
     void shouldLeaveNoEmptyLinesAfterLastLineWithCode(final String sourceCode) {
-        final List<String> unformattedSourceCode = Arrays.asList(sourceCode.split("\n"));
+        final List<String> unFormattedSourceCode = Arrays.asList(sourceCode.split("\n"));
         final List<String> expectedResult = List.of(
             "line1",
             "line2"
         );
 
-        assertThat(codeFormatter.format(unformattedSourceCode), equalTo(expectedResult));
+        assertThat(codeFormatter.format(unFormattedSourceCode), equalTo(expectedResult));
     }
 
     @ParameterizedTest
@@ -173,10 +173,10 @@ class CodeFormatterTest {
     })
     @Order(8)
     void shouldProvideOnlyOneSpaceBetweenTokens(final String line) {
-        final List<String> unformattedCode = List.of(line);
+        final List<String> unFormattedCode = List.of(line);
         final List<String> expectedResult = List.of("var a = 1 + 2 * 5 / 8");
 
-        assertThat(codeFormatter.format(unformattedCode), equalTo(expectedResult));
+        assertThat(codeFormatter.format(unFormattedCode), equalTo(expectedResult));
     }
 
     @ParameterizedTest
@@ -192,13 +192,13 @@ class CodeFormatterTest {
     })
     @Order(9)
     void shouldNotLeftSpaceBeforeTheFollowingTokens(final String token,
-                                                    final String unformattedLine,
+                                                    final String unFormattedLine,
                                                     final String expectedFormattedResult) {
-        final List<String> unformattedCode = List.of(unformattedLine);
+        final List<String> unFormattedCode = List.of(unFormattedLine);
         final List<String> expectedResult = List.of(expectedFormattedResult);
 
         assertThat("Expected no empty space before token: " + token,
-            codeFormatter.format(unformattedCode), equalTo(expectedResult));
+            codeFormatter.format(unFormattedCode), equalTo(expectedResult));
     }
 
     @ParameterizedTest
@@ -209,19 +209,19 @@ class CodeFormatterTest {
     })
     @Order(10)
     void shouldNotLeftSpaceAfterTheFollowingTokens(final String token,
-                                                   final String unformattedLine,
+                                                   final String unFormattedLine,
                                                    final String expectedFormattedResult) {
-        final List<String> unformattedCode = List.of(unformattedLine);
+        final List<String> unFormattedCode = List.of(unFormattedLine);
         final List<String> expectedResult = List.of(expectedFormattedResult);
 
         assertThat("Expected no empty space after token: " + token,
-            codeFormatter.format(unformattedCode), equalTo(expectedResult));
+            codeFormatter.format(unFormattedCode), equalTo(expectedResult));
     }
 
     @Test
     @Order(11)
     void shouldAddAppropriateTabulationToCodeInsideAnyBlock() {
-        List<String> unformattedCode = List.of(
+        List<String> unFormattedCode = List.of(
             "{",
             "{",
             "{",
@@ -240,13 +240,13 @@ class CodeFormatterTest {
             "}"
         );
 
-        assertThat(codeFormatter.format(unformattedCode), equalTo(expectedResult));
+        assertThat(codeFormatter.format(unFormattedCode), equalTo(expectedResult));
     }
 
     @Test
     @Order(12)
     void shouldNormalizeTabulationForCodeInsideAnyBlock() {
-        List<String> unformattedCode = List.of(
+        List<String> unFormattedCode = List.of(
             "  {",
             "\t\t\t{",
             "\u00A0\u00A0\u00A0\u00A0{\u00A0\u00A0\u00A0\u00A0",
@@ -265,7 +265,7 @@ class CodeFormatterTest {
             "}"
         );
 
-        assertThat(codeFormatter.format(unformattedCode), equalTo(expectedResult));
+        assertThat(codeFormatter.format(unFormattedCode), equalTo(expectedResult));
     }
 
     @ParameterizedTest
@@ -277,16 +277,16 @@ class CodeFormatterTest {
     @Order(13)
     void shouldNotFormatLineCommentsExceptTrim(String line) {
         final String[] args = line.split("\\|");
-        List<String> unformattedCode = List.of(args[0]);
+        List<String> unFormattedCode = List.of(args[0]);
         List<String> expectedResult = List.of(args[1]);
 
-        assertThat(codeFormatter.format(unformattedCode), equalTo(expectedResult));
+        assertThat(codeFormatter.format(unFormattedCode), equalTo(expectedResult));
     }
 
     @Test
     @Order(14)
     void shouldAddAppropriateTabulationToLineCommentsInsideAnyBlock() {
-        List<String> unformattedCode = List.of(
+        List<String> unFormattedCode = List.of(
             "  {",
             "   // comment    ",
             "  var a=6 // var \u00A0 a = 3 + 4     ",
@@ -299,17 +299,17 @@ class CodeFormatterTest {
             TABULATION + "// comment",
             TABULATION + "var a = 6 // var \u00A0 a = 3 + 4",
             TABULATION + "// var \u00A0 a = 3 + 4",
-            TABULATION + "a = 5" + TABULATION + TABULATION +"// var a = ( 3 + 4 ) + array [ a [ 4 + f ] ]",
+            TABULATION + "a = 5" + TABULATION + TABULATION + "// var a = ( 3 + 4 ) + array [ a [ 4 + f ] ]",
             "}"
         );
 
-        assertThat(codeFormatter.format(unformattedCode), equalTo(expectedResult));
+        assertThat(codeFormatter.format(unFormattedCode), equalTo(expectedResult));
     }
 
     @Test
     @Order(15)
     void shouldAddAppropriateTabulationAndTrimMultilineComments() {
-        List<String> unformattedCode = List.of(
+        List<String> unFormattedCode = List.of(
             "  {",
             "/* multi                    line",
             "  ** comment               ",
@@ -326,13 +326,13 @@ class CodeFormatterTest {
             "}"
         );
 
-        assertThat(codeFormatter.format(unformattedCode), equalTo(expectedResult));
+        assertThat(codeFormatter.format(unFormattedCode), equalTo(expectedResult));
     }
 
     @Test
     @Order(16)
     void shouldPreserveInitialFormattingOfMultilineCommentsInsideCode() {
-        List<String> unformattedCode = List.of(
+        List<String> unFormattedCode = List.of(
             "  {",
             "for ( var i=0;/* // test   comment */ i<9; /*\u00A0test\u00A0comment\u00A0*/ i++ ) /*test comment*/ {",
             "}",
@@ -345,7 +345,7 @@ class CodeFormatterTest {
             "}"
         );
 
-        assertThat(codeFormatter.format(unformattedCode), equalTo(expectedResult));
+        assertThat(codeFormatter.format(unFormattedCode), equalTo(expectedResult));
     }
 
     @ParameterizedTest
@@ -379,7 +379,7 @@ class CodeFormatterTest {
     @Test
     @Order(19)
     void shouldCorrectlyDistinguishArrayWithValuesDeclarationFromBlockOfCode() {
-        List<String> unformattedCode = List.of(
+        List<String> unFormattedCode = List.of(
             "{",
             "var a={2,c,5}",
             "if(c > 2){",
@@ -396,13 +396,13 @@ class CodeFormatterTest {
             "}"
         );
 
-        assertThat(codeFormatter.format(unformattedCode), equalTo(expectedResult));
+        assertThat(codeFormatter.format(unFormattedCode), equalTo(expectedResult));
     }
 
     @Test
     @Order(20)
     void shouldFormatCodeEvenIfOpeningCurlyBraceIsMissing() {
-        List<String> unformattedCode = List.of(
+        List<String> unFormattedCode = List.of(
             "{",
             "var a={2,c,5}",
             "\t\t}",
@@ -417,14 +417,14 @@ class CodeFormatterTest {
             "}"
         );
 
-        final List<String> formattedCode = assertDoesNotThrow(() -> codeFormatter.format(unformattedCode));
+        final List<String> formattedCode = assertDoesNotThrow(() -> codeFormatter.format(unFormattedCode));
         assertThat(formattedCode, equalTo(expectedResult));
     }
 
     @Test
     @Order(21)
     void shouldFormatCodeEvenIfClosingCurlyBraceIsMissing() {
-        List<String> unformattedCode = List.of(
+        List<String> unFormattedCode = List.of(
             "{",
             "{",
             "{",
@@ -439,7 +439,7 @@ class CodeFormatterTest {
             TABULATION + TABULATION + "}"
         );
 
-        final List<String> formattedCode = assertDoesNotThrow(() -> codeFormatter.format(unformattedCode));
+        final List<String> formattedCode = assertDoesNotThrow(() -> codeFormatter.format(unFormattedCode));
         assertThat(formattedCode, equalTo(expectedResult));
     }
 }

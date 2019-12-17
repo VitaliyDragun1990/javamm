@@ -17,10 +17,6 @@
 
 package com.revenat.javamm.compiler.component.impl.expression.builder;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.revenat.javamm.code.fragment.Expression;
 import com.revenat.javamm.code.fragment.SourceLine;
 import com.revenat.javamm.code.fragment.Variable;
@@ -33,17 +29,7 @@ import com.revenat.javamm.compiler.component.error.JavammLineSyntaxError;
 import com.revenat.javamm.compiler.test.doubles.ExpressionContextDummy;
 import com.revenat.javamm.compiler.test.doubles.VariableBuilderStub;
 import com.revenat.javamm.compiler.test.doubles.VariableDummy;
-
-import java.util.List;
-
-import static com.revenat.javamm.code.syntax.Keywords.BOOLEAN;
-import static com.revenat.javamm.code.syntax.Keywords.DOUBLE;
-import static com.revenat.javamm.code.syntax.Keywords.FALSE;
-import static com.revenat.javamm.code.syntax.Keywords.INTEGER;
-import static com.revenat.javamm.code.syntax.Keywords.NULL;
-import static com.revenat.javamm.code.syntax.Keywords.STRING;
-import static com.revenat.javamm.code.syntax.Keywords.TRUE;
-
+import com.revenat.juinit.addons.ReplaceCamelCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -54,21 +40,34 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.revenat.juinit.addons.ReplaceCamelCase;
+import java.util.List;
+
+import static com.revenat.javamm.code.syntax.Keywords.BOOLEAN;
+import static com.revenat.javamm.code.syntax.Keywords.DOUBLE;
+import static com.revenat.javamm.code.syntax.Keywords.FALSE;
+import static com.revenat.javamm.code.syntax.Keywords.INTEGER;
+import static com.revenat.javamm.code.syntax.Keywords.NULL;
+import static com.revenat.javamm.code.syntax.Keywords.STRING;
+import static com.revenat.javamm.code.syntax.Keywords.TRUE;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a single token expression builder")
 class SingleTokenExpressionBuilderTest {
     private static final SourceLine DUMMY_SOURCE_LINE = SourceLine.EMPTY_SOURCE_LINE;
+
     private static final Variable DUMMY_VARIABLE = new VariableDummy();
 
-    private VariableBuilderStub variableBuilderStub;
     private SingleTokenExpressionBuilder expressionBuilder;
 
     @BeforeEach
     void setUp() {
-        variableBuilderStub = new VariableBuilderStub();
+        final VariableBuilderStub variableBuilderStub = new VariableBuilderStub();
         variableBuilderStub.setVariableToBuild(DUMMY_VARIABLE);
         expressionBuilder = new SingleTokenExpressionBuilderImpl(variableBuilderStub);
     }
@@ -104,11 +103,11 @@ class SingleTokenExpressionBuilderTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-            "#",
-            "$",
-            "{",
-            "+",
-            "переменная"
+        "#",
+        "$",
+        "{",
+        "+",
+        "переменная"
     })
     @Order(1)
     void canNotBuildExpressionsWithUnsupportedTokens(final String token) {
@@ -116,77 +115,77 @@ class SingleTokenExpressionBuilderTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { INTEGER, DOUBLE, BOOLEAN, STRING })
+    @ValueSource(strings = {INTEGER, DOUBLE, BOOLEAN, STRING})
     @Order(2)
     void shouldSupportTypeLiterals(final String typeLiteral) {
         assertSupport(typeLiteral);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "'test'", "\"test\"" })
+    @ValueSource(strings = {"'test'", "\"test\""})
     @Order(3)
     void shouldSupportStringLiterals(final String stringLiteral) {
         assertSupport(stringLiteral);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { TRUE, FALSE })
+    @ValueSource(strings = {TRUE, FALSE})
     @Order(4)
     void shouldSupportBooleanLiterals(final String booleanLiteral) {
         assertSupport(booleanLiteral);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "1", "100", "0" })
+    @ValueSource(strings = {"1", "100", "0"})
     @Order(5)
     void shouldSupportIntegerLiterals(final String intLiteral) {
         assertSupport(intLiteral);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "1.025", "0.25", ".25" })
+    @ValueSource(strings = {"1.025", "0.25", ".25"})
     @Order(6)
     void shouldSupportDecimalLiterals(final String decimalLiteral) {
         assertSupport(decimalLiteral);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "a", "varA", "person1" })
+    @ValueSource(strings = {"a", "varA", "person1"})
     @Order(6)
     void shouldSupportValidVariableNames(final String variableName) {
         assertSupport(variableName);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { INTEGER, DOUBLE, BOOLEAN, STRING })
+    @ValueSource(strings = {INTEGER, DOUBLE, BOOLEAN, STRING})
     @Order(7)
     void shouldBuildTypeExpressionForTypeLiteralToken(final String token) {
         assertExpressionType(token, TypeExpression.class);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "10", "1", "99999999" })
+    @ValueSource(strings = {"10", "1", "99999999"})
     @Order(8)
     void shouldBuildConstantExpressionForIntegerLiteralToken(final String token) {
         assertConstantExpression(token, Integer.class);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "10.5", "0.255", ".255" })
+    @ValueSource(strings = {"10.5", "0.255", ".255"})
     @Order(9)
     void shouldBuildConstantExpressionForDoubleLiteralToken(final String token) {
         assertConstantExpression(token, Double.class);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "'test'", "\"hello\"" })
+    @ValueSource(strings = {"'test'", "\"hello\""})
     @Order(10)
     void shouldBuildConstantExpressionForStringLiteralToken(final String token) {
         assertConstantExpression(token, String.class);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { TRUE, FALSE })
+    @ValueSource(strings = {TRUE, FALSE})
     @Order(11)
     void shouldBuildConstantExpressionForBooleanLiteralToken(final String token) {
         assertConstantExpression(token, Boolean.class);
@@ -212,7 +211,7 @@ class SingleTokenExpressionBuilderTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = { "a", "b", "varA"})
+    @ValueSource(strings = {"a", "b", "varA"})
     @Order(15)
     void shouldBuildVariableExpressionForVariableNameToken(final String token) {
         assertExpressionType(token, VariableExpression.class);

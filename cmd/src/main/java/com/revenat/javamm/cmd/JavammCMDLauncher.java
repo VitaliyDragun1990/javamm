@@ -30,9 +30,9 @@ import static com.revenat.javamm.code.util.ExceptionUtils.wrapCheckedException;
 /**
  * @author Vitaliy Dragun
  */
-public final class JmmVmLauncher {
+public final class JavammCMDLauncher {
 
-    private JmmVmLauncher() {
+    private JavammCMDLauncher() {
     }
 
     public static void main(final String... args) {

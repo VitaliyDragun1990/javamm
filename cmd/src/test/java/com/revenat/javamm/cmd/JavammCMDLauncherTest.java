@@ -42,7 +42,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 @DisplayNameGeneration(ReplaceCamelCase.class)
 @DisplayName("a javamm virtual machine launcher")
-class JmmVmLauncherTest {
+class JavammCMDLauncherTest {
 
     private static final PrintStream REAL_ERR = System.err;
 
@@ -63,14 +63,14 @@ class JmmVmLauncherTest {
     void shouldLaunchVirtualMachineIfFileWithSourceCodeSpecifiedAsArguments(@TempDir Path sourceFileDir) throws IOException {
         Path testSourceFile = createFileWithContent(sourceFileDir, "test.javamm", List.of("function main() {", "}"));
 
-        JmmVmLauncher.main(testSourceFile.toString());
+        JavammCMDLauncher.main(testSourceFile.toString());
 
         verify(errMock, never()).println(anyString());
     }
 
     @Test
     void shouldFailIfMainFunctionNotFound() {
-        JmmVmLauncher.main();
+        JavammCMDLauncher.main();
 
         verify(errMock)
             .println(contains("Runtime error: Main function not found, please define the main function as: 'function main()'"));

@@ -29,7 +29,7 @@ import static com.revenat.javamm.ide.util.UIUtils.centerByScreen;
 /**
  * @author Vitaliy Dragun
  */
-public class JavammIDEApplication extends Application {
+public class JavammIDELauncher extends Application {
 
     private static final double DEFAULT_WIDTH_PERCENTAGE = 0.8;
 

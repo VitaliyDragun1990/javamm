@@ -1,0 +1,3 @@
+function main() {
+    println(div(10, 2))
+}

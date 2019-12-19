@@ -96,6 +96,14 @@ This product requires Mockito:
    * https://site.mockito.org
 
 -------------------------------------------------------------------------------
+This product requires Hamcrest:
+
+ * LICENSE:
+   * https://github.com/hamcrest/JavaHamcrest/blob/master/LICENSE.txt (BSD License)
+ * HOMEPAGE:
+   * http://hamcrest.org/JavaHamcrest/
+
+-------------------------------------------------------------------------------
 This product requires Apache Commons Lang3:
 
  * LICENSE:

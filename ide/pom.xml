@@ -12,7 +12,6 @@
     <description>Simple GUI IDE for javamm programming language</description>
 
     <properties>
-        <javafx.version>11.0.2</javafx.version>
         <ikonli.icons.version>2.4.0</ikonli.icons.version>
         <apache.commons.lang3.version>3.9</apache.commons.lang3.version>
     </properties>

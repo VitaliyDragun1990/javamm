@@ -112,20 +112,15 @@ public final class TestCurrentRuntimeManager {
 
         @Override
         public FunctionInvoker getCurrentFunctionInvoker() {
-            // TODO Auto-generated method stub
             return null;
         }
 
         @Override
         public void enterToFunction(final DeveloperFunction developerFunction) {
-            // TODO Auto-generated method stub
-
         }
 
         @Override
         public void exitFromFunction() {
-            // TODO Auto-generated method stub
-
         }
 
         @Override

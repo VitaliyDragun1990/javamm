@@ -432,6 +432,16 @@
                               message="${indent}Setup instructions${line.separator}"/>
                         <echo append="true" file="@{dest}/README.txt"
                               message="${indent}---------${line.separator}"/>
+
+                        <echo append="true" file="@{dest}/README.txt"
+                              message="${indent}Before run, set environment variables:${line.separator}"/>
+                        <echo append="true" file="@{dest}/README.txt"
+                              message="${indent}- JAVA_HOME - a location of OpenJDK 11 or later;${line.separator}"/>
+                        <echo append="true" file="@{dest}/README.txt"
+                              message="${indent}- OPENJFX_HOME - a location of JavaFX SDK 11 or later;${line.separator}"/>
+                        <echo append="true" file="@{dest}/README.txt"
+                              message="${line.separator}"/>
+
                         <echo append="true" file="@{dest}/README.txt"
                               message="${indent}For Linux:${line.separator}"/>
                         <echo append="true" file="@{dest}/README.txt"

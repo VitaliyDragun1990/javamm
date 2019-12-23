@@ -48,25 +48,19 @@ public class CurrentRuntimeDummy implements CurrentRuntime {
 
     @Override
     public FunctionInvoker getCurrentFunctionInvoker() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public void enterToFunction(final DeveloperFunction developerFunction) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public void exitFromFunction() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
     public List<StackTraceItem> getCurrentStackTrace() {
-        // TODO Auto-generated method stub
         return null;
     }
 }
